@@ -14,8 +14,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
