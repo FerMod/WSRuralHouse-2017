@@ -1,0 +1,11 @@
+/.DS_Store
+/Etiquetas.properties
+/Etiquetas_en.properties
+/Etiquetas_es.properties
+/Etiquetas_eus.properties
+/businessLogic/
+/configuration/
+/dataAccess/
+/domain/
+/exceptions/
+/gui/

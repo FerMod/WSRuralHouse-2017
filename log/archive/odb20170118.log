@@ -1,0 +1,1418 @@
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:31:53 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\resources\ruralHouses.odb' is opened by 10816@U102188
+
+[2017-01-18 10:31:53 #2 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:31:53 #3 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:35:35 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\resources\ruralHouses.odb' is opened by 7404@U102188
+
+[2017-01-18 10:35:35 #2 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 10:35:35 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:35:35 #4 type.registry] 
+New type domain.Offer
+
+[2017-01-18 10:35:35 #5 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 10:35:35 #6 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:35:35 #7 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:41:20 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\resources\ruralHouses.odb' is opened by 7172@U102188
+
+[2017-01-18 10:41:20 #2 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 10:41:20 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:41:20 #4 type.registry] 
+New type domain.Offer
+
+[2017-01-18 10:41:20 #5 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 10:41:20 #6 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:41:20 #7 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:43:07 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\resources\ruralHouses.odb' is opened by 3804@U102188
+
+[2017-01-18 10:43:07 #2 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 10:43:07 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:43:07 #4 type.registry] 
+New type domain.Offer
+
+[2017-01-18 10:43:07 #5 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 10:43:07 #6 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:43:07 #7 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:44:22 #1 server] 
+Server on port 6137 has started by 9648@U102188
+
+[2017-01-18 10:44:30 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 9648@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:44:31 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:44:31 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:44:31 #3 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+[2017-01-18 10:45:18 #3 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 9648@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:46:06 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\resources\ruralHouses.odb' is opened by 7512@U102188
+
+[2017-01-18 10:46:06 #2 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 10:46:06 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:46:06 #4 type.registry] 
+New type domain.Offer
+
+[2017-01-18 10:46:06 #5 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 10:46:06 #6 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:46:06 #7 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+[2017-01-18 10:50:34 #4 server] 
+Server on port 6137 has stopped by 9648@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:50:51 #1 server] 
+Server on port 6137 has started by 8212@U102188
+
+[2017-01-18 10:50:58 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 8212@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:50:58 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:50:58 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:51:52 #3 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 8212@U102188
+
+[2017-01-18 10:52:04 #4 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 8212@U102188
+
+[2017-01-18 10:52:16 #5 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 8212@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:52:51 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 10:53:00 #6 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 8212@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:53:00 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:53:00 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:54:09 #7 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 8212@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:54:16 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:55:16 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 10:55:25 #8 server] 
+Server on port 6137 has stopped by 8212@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:55:33 #1 server] 
+Server on port 6137 has started by 11616@U102188
+
+[2017-01-18 10:55:35 #2 server] 
+Server on port 6137 has stopped by 11616@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:57:50 #1 server] 
+Server on port 6137 has started by 3220@U102188
+
+[2017-01-18 10:58:00 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 3220@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 10:58:01 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 10:58:01 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 10:58:26 #3 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 3220@U102188
+
+[2017-01-18 10:58:42 #4 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 3220@U102188
+
+[2017-01-18 10:59:02 #5 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 3220@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 11:22:30 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\resources\ruralHouses.odb' is opened by 2036@U102188
+
+[2017-01-18 11:22:30 #2 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 11:22:30 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 11:22:30 #4 type.registry] 
+New type domain.Offer
+
+[2017-01-18 11:22:30 #5 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 11:22:30 #6 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 11:22:30 #7 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:08:10 #1 server] 
+Server on port 6137 has started by 7500@U102188
+
+[2017-01-18 13:08:16 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:08:16 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:08:16 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:08:16 #3 type.registry] 
+New type java.util.ArrayList$Itr
+
+[2017-01-18 13:08:16 #4 *] 
+java.lang.NullPointerException
+	at com.objectdb.o.ERM.h(ERM.java:67)
+	at com.objectdb.o.TVS.g(TVS.java:104)
+	at com.objectdb.o.TVS.g(TVS.java:93)
+	at com.objectdb.jpa.EMImpl.remove(EMImpl.java:438)
+	at dataAccess.DataAccess.initializeDB(DataAccess.java:93)
+	at businessLogic.FacadeImplementationWS.<init>(FacadeImplementationWS.java:45)
+	at businessLogic.BusinessLogicServer.<init>(BusinessLogicServer.java:99)
+	at businessLogic.BusinessLogicServer.main(BusinessLogicServer.java:32)
+
+[2017-01-18 13:09:53 #3 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:10:04 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:10:10 #4 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:10:10 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:10:10 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:11:03 #5 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7500@U102188
+
+[2017-01-18 13:11:23 #6 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7500@U102188
+
+[2017-01-18 13:11:49 #7 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:12:16 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:12:21 #8 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:12:22 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:12:22 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:13:26 #9 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:13:34 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:13:39 #10 server] 
+Server on port 6137 has stopped by 7500@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:14:01 #1 server] 
+Server on port 6137 has started by 7768@U102188
+
+[2017-01-18 13:14:06 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:14:06 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:14:06 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:17:07 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:17:07 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:17:57 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:17:57 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:18:25 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:18:25 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:22:48 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:23:36 #3 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:24:38 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:24:44 #4 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:24:45 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:24:45 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:27:19 #5 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:27:31 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:27:37 #6 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is opened by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:27:37 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:27:37 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:32:42 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:32:47 #7 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is opened by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:32:47 #1 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 13:32:47 #2 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:32:47 #3 type.registry] 
+New type domain.Offer
+
+[2017-01-18 13:32:47 #4 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 13:32:47 #5 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:32:47 #6 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+[2017-01-18 13:33:01 #8 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is closed by 7768@U102188
+
+[2017-01-18 13:33:07 #9 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is opened by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:33:07 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:33:07 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:33:10 #10 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is closed by 7768@U102188
+
+[2017-01-18 13:33:14 #11 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\resources\ruralHouses.odb' is closed by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:33:22 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:33:26 #12 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is opened by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:33:26 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:33:26 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:35:44 #13 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is closed by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:35:57 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:36:47 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:36:53 #14 server] 
+Server on port 6137 has stopped by 7768@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:37:58 #1 server] 
+Server on port 6137 has started by 7504@U102188
+
+[2017-01-18 13:38:05 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is opened by 7504@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:38:05 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:38:05 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:41:01 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:41:06 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:41:06 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:41:17 #3 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is closed by 7504@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:41:25 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:41:30 #4 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is opened by 7504@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:41:30 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:41:30 #2 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:59:14 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:59:20 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:59:20 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 13:59:27 #5 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is closed by 7504@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:59:35 #1 server] 
+java.net.BindException: Address already in use: JVM_Bind
+	at java.net.DualStackPlainSocketImpl.bind0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketBind(Unknown Source)
+	at java.net.AbstractPlainSocketImpl.bind(Unknown Source)
+	at java.net.PlainSocketImpl.bind(Unknown Source)
+	at java.net.ServerSocket.bind(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at java.net.ServerSocket.<init>(Unknown Source)
+	at com.objectdb.o.SMR.I(SMR.java:259)
+	at com.objectdb.o.SMR.n(SMR.java:159)
+	at com.objectdb.o.TOL.run(TOL.java:116)
+	at com.objectdb.Server.runCommand(Server.java:200)
+	at com.objectdb.Server.run(Server.java:104)
+	at com.objectdb.Server.main(Server.java:63)
+
+[2017-01-18 13:59:39 #6 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is opened by 7504@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 13:59:39 #1 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 13:59:39 #2 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 14:01:13 #7 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017\db\ruralHouses.odb' is closed by 7504@U102188
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:19:41 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 6520@U102188
+
+[2017-01-18 14:19:42 #2 type.registry] 
+New type domain.RuralHouse
+
+[2017-01-18 14:19:42 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:19:42 #4 type.registry] 
+New type domain.Offer
+
+[2017-01-18 14:19:42 #5 type.registry] 
+New type java.util.Vector<domain.Offer>
+
+[2017-01-18 14:19:42 #6 type] 
+Type domain.Offer is not enhanced.
+
+[2017-01-18 14:19:42 #7 type.registry] 
+New type java.util.Vector<java.lang.Object>
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:20:52 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 1-5)
+
+[2017-01-18 14:20:52 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10720@U102188
+
+[2017-01-18 14:20:52 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:20:52 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:22:56 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 6-6)
+
+[2017-01-18 14:22:56 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10960@U102188
+
+[2017-01-18 14:22:56 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:22:56 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:23:52 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 7-7)
+
+[2017-01-18 14:23:52 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 12104@U102188
+
+[2017-01-18 14:23:52 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:23:53 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:29:05 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 8-8)
+
+[2017-01-18 14:29:05 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11512@U102188
+
+[2017-01-18 14:29:05 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:29:05 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:29:26 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 9-9)
+
+[2017-01-18 14:29:26 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 7300@U102188
+
+[2017-01-18 14:29:26 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:29:26 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:30:13 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 10-10)
+
+[2017-01-18 14:30:14 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11304@U102188
+
+[2017-01-18 14:30:14 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:30:14 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:30:58 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 11-11)
+
+[2017-01-18 14:30:58 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 6980@U102188
+
+[2017-01-18 14:30:58 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:30:58 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:35:34 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 12-12)
+
+[2017-01-18 14:35:35 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 12268@U102188
+
+[2017-01-18 14:35:35 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:35:35 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:36:15 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 13-13)
+
+[2017-01-18 14:36:15 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 12072@U102188
+
+[2017-01-18 14:36:15 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:36:16 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:36:49 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 14-14)
+
+[2017-01-18 14:36:49 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 6636@U102188
+
+[2017-01-18 14:36:49 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:36:49 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:40:15 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 15-15)
+
+[2017-01-18 14:40:16 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 9640@U102188
+
+[2017-01-18 14:40:16 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:40:16 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:41:02 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 16-16)
+
+[2017-01-18 14:41:02 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10136@U102188
+
+[2017-01-18 14:41:02 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:41:02 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:41:21 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 17-17)
+
+[2017-01-18 14:41:21 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10604@U102188
+
+[2017-01-18 14:41:21 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:41:21 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:41:55 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 18-18)
+
+[2017-01-18 14:41:55 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11184@U102188
+
+[2017-01-18 14:41:56 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:41:56 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:42:22 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 19-19)
+
+[2017-01-18 14:42:22 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 6372@U102188
+
+[2017-01-18 14:42:22 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:42:22 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:44:59 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 20-20)
+
+[2017-01-18 14:44:59 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10904@U102188
+
+[2017-01-18 14:44:59 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:44:59 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:45:45 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 21-21)
+
+[2017-01-18 14:45:45 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 9396@U102188
+
+[2017-01-18 14:45:45 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:45:45 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:45:58 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 22-22)
+
+[2017-01-18 14:45:58 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11956@U102188
+
+[2017-01-18 14:45:58 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:45:58 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:46:37 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 23-23)
+
+[2017-01-18 14:46:37 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 7052@U102188
+
+[2017-01-18 14:46:37 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:46:37 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:47:03 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 24-24)
+
+[2017-01-18 14:47:03 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 1412@U102188
+
+[2017-01-18 14:47:03 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:47:03 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:47:40 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 25-25)
+
+[2017-01-18 14:47:40 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10972@U102188
+
+[2017-01-18 14:47:41 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:47:41 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 14:48:12 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 26-26)
+
+[2017-01-18 14:48:12 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10460@U102188
+
+[2017-01-18 14:48:12 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 14:48:12 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:18:03 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 27-27)
+
+[2017-01-18 17:18:03 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 9320@U102188
+
+[2017-01-18 17:18:03 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:18:03 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:21:09 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 28-28)
+
+[2017-01-18 17:21:09 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 9876@U102188
+
+[2017-01-18 17:21:09 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:21:09 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:21:50 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 29-29)
+
+[2017-01-18 17:21:50 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 6740@U102188
+
+[2017-01-18 17:21:50 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:21:50 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:22:43 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 30-30)
+
+[2017-01-18 17:22:43 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 8196@U102188
+
+[2017-01-18 17:22:43 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:22:43 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:28:01 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 31-31)
+
+[2017-01-18 17:28:01 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11216@U102188
+
+[2017-01-18 17:28:01 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:28:01 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:38:03 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 32-32)
+
+[2017-01-18 17:38:03 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11520@U102188
+
+[2017-01-18 17:38:03 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:38:03 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:44:05 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 33-33)
+
+[2017-01-18 17:44:05 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11664@U102188
+
+[2017-01-18 17:44:05 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:44:05 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:45:29 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 34-34)
+
+[2017-01-18 17:45:29 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10628@U102188
+
+[2017-01-18 17:45:29 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:45:29 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 17:52:01 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 35-35)
+
+[2017-01-18 17:52:01 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11260@U102188
+
+[2017-01-18 17:52:01 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 17:52:01 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:10:52 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 36-36)
+
+[2017-01-18 18:10:52 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 4552@U102188
+
+[2017-01-18 18:10:52 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:10:52 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:12:57 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 37-37)
+
+[2017-01-18 18:12:57 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 9132@U102188
+
+[2017-01-18 18:12:57 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:12:57 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:14:31 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 38-38)
+
+[2017-01-18 18:14:31 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 1968@U102188
+
+[2017-01-18 18:14:32 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:14:32 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:15:20 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 39-39)
+
+[2017-01-18 18:15:20 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11732@U102188
+
+[2017-01-18 18:15:20 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:15:20 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:15:41 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 40-40)
+
+[2017-01-18 18:15:41 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11652@U102188
+
+[2017-01-18 18:15:41 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:15:41 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:16:08 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 41-41)
+
+[2017-01-18 18:16:08 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 8544@U102188
+
+[2017-01-18 18:16:08 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:16:08 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:35:31 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 42-42)
+
+[2017-01-18 18:35:31 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 6312@U102188
+
+[2017-01-18 18:35:31 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:35:31 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:37:13 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 43-46)
+
+[2017-01-18 18:37:13 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11428@U102188
+
+[2017-01-18 18:37:13 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:37:13 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:39:44 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 47-48)
+
+[2017-01-18 18:39:44 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 11372@U102188
+
+[2017-01-18 18:39:44 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:39:44 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:40:29 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 49-50)
+
+[2017-01-18 18:40:30 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 10000@U102188
+
+[2017-01-18 18:40:30 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:40:30 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:41:53 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 51-53)
+
+[2017-01-18 18:41:53 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 9932@U102188
+
+[2017-01-18 18:41:53 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:41:53 #4 type] 
+Type domain.Offer is not enhanced.
+
+------------------------------------------------------------------------------------------------------------------------
+
+[2017-01-18 18:51:52 #1 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' has been recovered (tr. 54-54)
+
+[2017-01-18 18:51:52 #2 store] 
+Database 'C:\Users\jipgosaa\Documents\workspace-sts-3.8.2.RELEASE\WSRuralHouse-2017int\ruralHouses.odb' is opened by 7072@U102188
+
+[2017-01-18 18:51:53 #3 type] 
+Type domain.RuralHouse is not enhanced.
+
+[2017-01-18 18:51:53 #4 type] 
+Type domain.Offer is not enhanced.
+

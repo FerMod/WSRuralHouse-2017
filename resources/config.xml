@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <businessLogic local="true"> 
+	<businessLogicNode>0.0.0.0</businessLogicNode>
+	<businessLogicPort>1099</businessLogicPort>
+	<businessLogicName>RuralHouses</businessLogicName>
+  </businessLogic>
+  <database local="true">
+	<databaseNode>0.0.0.0</databaseNode>
+	<dbFilename>resources\ruralHouses.odb</dbFilename>
+	<dataBaseOpenMode>initialize</dataBaseOpenMode>
+	<databasePort>6136</databasePort>
+	<user>admin</user>
+	<password>admin</password>
+  </database>
+<locale>en</locale>
+</config>
