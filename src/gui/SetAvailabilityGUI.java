@@ -18,7 +18,7 @@ import exceptions.OverlappingOfferException;
 import exceptions.BadDatesException;
 
 public class SetAvailabilityGUI extends JFrame  {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private JComboBox<RuralHouse> jComboBox1;
@@ -40,20 +40,15 @@ public class SetAvailabilityGUI extends JFrame  {
 	private JLabel jLabel5 = new JLabel();
 	private final JLabel lblNewLabel = new JLabel("");
 
-	public SetAvailabilityGUI(Vector<RuralHouse> v)
-	{
-		try
-		{
+	public SetAvailabilityGUI(Vector<RuralHouse> v) {
+		try {
 			jbInit(v);
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void jbInit(Vector<RuralHouse> v) throws Exception
-	{
+	private void jbInit(Vector<RuralHouse> v) throws Exception {
 
 		this.getContentPane().setLayout(null);
 		this.setSize(new Dimension(513, 433));
@@ -78,30 +73,23 @@ public class SetAvailabilityGUI extends JFrame  {
 		jTextField3.setText("0");
 		jButton1.setText(ResourceBundle.getBundle("Etiquetas").getString("Accept"));
 		jButton1.setBounds(new Rectangle(100, 360, 130, 30));
-		jTextField3.addFocusListener(new FocusListener()
-		{
-			public void focusGained(FocusEvent e)
-			{
+		jTextField3.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent e) {
 			}
 
-			public void focusLost(FocusEvent e)
-			{
+			public void focusLost(FocusEvent e)	{
 				jTextField3_focusLost();
 			}
 		});
-		jButton1.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
+		jButton1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				jButton1_actionPerformed(e);
 			}
 		});
 		jButton2.setText("Cancel");
 		jButton2.setBounds(new Rectangle(270, 360, 130, 30));
-		jButton2.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
+		jButton2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				jButton2_actionPerformed(e);
 			}
 		});
@@ -112,18 +100,13 @@ public class SetAvailabilityGUI extends JFrame  {
 		jCalendar2.setBounds(new Rectangle(260, 100, 220, 165));
 
 		// Code for  JCalendar
-		this.jCalendar1.addPropertyChangeListener(new PropertyChangeListener()
-		{
-			public void propertyChange(PropertyChangeEvent propertychangeevent)
-			{
-				if (propertychangeevent.getPropertyName().equals("locale"))
-				{
+		this.jCalendar1.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent propertychangeevent) {
+				if (propertychangeevent.getPropertyName().equals("locale")) {
 					jCalendar1.setLocale((Locale) propertychangeevent.getNewValue());
 					DateFormat dateformat = DateFormat.getDateInstance(1, jCalendar1.getLocale());
 					jTextField1.setText(dateformat.format(calendarInicio.getTime()));
-				}
-				else if (propertychangeevent.getPropertyName().equals("calendar"))
-				{
+				} else if (propertychangeevent.getPropertyName().equals("calendar")) {
 					calendarInicio = (Calendar) propertychangeevent.getNewValue();
 					DateFormat dateformat1 = DateFormat.getDateInstance(1, jCalendar1.getLocale());
 					jTextField1.setText(dateformat1.format(calendarInicio.getTime()));
@@ -132,18 +115,13 @@ public class SetAvailabilityGUI extends JFrame  {
 			} 
 		});
 
-		this.jCalendar2.addPropertyChangeListener(new PropertyChangeListener()
-		{
-			public void propertyChange(PropertyChangeEvent propertychangeevent)
-			{
-				if (propertychangeevent.getPropertyName().equals("locale"))
-				{
+		this.jCalendar2.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent propertychangeevent) {
+				if (propertychangeevent.getPropertyName().equals("locale")) {
 					jCalendar2.setLocale((Locale) propertychangeevent.getNewValue());
 					DateFormat dateformat = DateFormat.getDateInstance(1, jCalendar2.getLocale());
 					jTextField2.setText(dateformat.format(calendarFin.getTime()));
-				}
-				else if (propertychangeevent.getPropertyName().equals("calendar"))
-				{
+				} else if (propertychangeevent.getPropertyName().equals("calendar")) {
 					calendarFin = (Calendar) propertychangeevent.getNewValue();
 					DateFormat dateformat1 = DateFormat.getDateInstance(1, jCalendar2.getLocale());
 					jTextField2.setText(dateformat1.format(calendarFin.getTime()));
@@ -170,8 +148,8 @@ public class SetAvailabilityGUI extends JFrame  {
 
 		getContentPane().add(lblNewLabel);
 	}
-	private Date trim(Date date) {
 
+	private Date trim(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.set(Calendar.MILLISECOND, 0);
@@ -181,8 +159,7 @@ public class SetAvailabilityGUI extends JFrame  {
 		return calendar.getTime();
 	}
 
-	private void jButton1_actionPerformed(ActionEvent e)
-	{
+	private void jButton1_actionPerformed(ActionEvent e) {
 		RuralHouse ruralHouse=((RuralHouse)jComboBox1.getSelectedItem());
 
 		// The next instruction creates a java.util.Date object from the date selected in the JCalendar object
@@ -212,29 +189,25 @@ public class SetAvailabilityGUI extends JFrame  {
 			jLabel5.setText(jTextField3.getText()+ " "+ ResourceBundle.getBundle("Etiquetas").getString("PriceNotValid"));
 		} catch (OverlappingOfferException e1) {
 			jLabel5.setText(ResourceBundle.getBundle("Etiquetas").getString("OverlappingOffer"));
-		}
-		catch (BadDatesException e1) {
+		} catch (BadDatesException e1) {
 			jLabel5.setText(ResourceBundle.getBundle("Etiquetas").getString("LastDayBefore"));
 		} catch (Exception e1) {
 
 			e1.printStackTrace();
 		}
 	}
-	private void jButton2_actionPerformed(ActionEvent e)
-	{
+
+	private void jButton2_actionPerformed(ActionEvent e) {
 		this.setVisible(false);
 	}
 
-	private void jTextField3_focusLost()
-	{
-		try
-		{
+	private void jTextField3_focusLost() {
+		try {
 			new Integer (jTextField3.getText());
 			jLabel5.setText("");
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			jLabel5.setText(ResourceBundle.getBundle("Etiquetas").getString("ErrorNumber"));
 		}
 	}
+
 }
