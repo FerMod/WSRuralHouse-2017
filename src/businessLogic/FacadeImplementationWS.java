@@ -38,9 +38,14 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 		System.out.println(">> FacadeImplementationWS: createRuralHouse=> description= " + description + " city= " + city);
 
 		DataAccess dbManager = new DataAccess();	
-		RuralHouse ruralHouse = dbManager.createRuralHouse(description, city);
-		dbManager.close();
-		
+		RuralHouse ruralHouse = null;
+
+		try {
+			ruralHouse = dbManager.createRuralHouse(description, city);
+		} finally {
+			dbManager.close();
+		}
+
 		System.out.println("<< FacadeImplementationWS: createRuralHouse => " + ruralHouse);
 		return ruralHouse;
 	}
@@ -49,33 +54,45 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 		System.out.println(">> FacadeImplementationWS: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
 
 		DataAccess dbManager = new DataAccess();
-		Offer o = null;
-		if (firstDay.compareTo(lastDay) >= 0) {
+		Offer offer = null;
+
+		try {
+			if (firstDay.compareTo(lastDay) >= 0) {
+				throw new BadDatesException();
+			}
+
+			if (!dbManager.existsOverlappingOffer(ruralHouse,firstDay,lastDay)) {
+				offer = dbManager.createOffer(ruralHouse,firstDay,lastDay,price);		
+			}
+		} finally {
 			dbManager.close();
-			throw new BadDatesException();
 		}
 
-		boolean b = dbManager.existsOverlappingOffer(ruralHouse,firstDay,lastDay); 
-		if (!b) o = dbManager.createOffer(ruralHouse,firstDay,lastDay,price);		
-
-		dbManager.close();
-		System.out.println("<< FacadeImplementationWS: createOffer=> O= "+o);
-		return o;
+		System.out.println("<< FacadeImplementationWS: createOffer=> O= " + offer);
+		return offer;
 	}
 
 	public void login(String username, String password) throws AuthException, AccountNotFoundException {
 		DataAccess dbManager = new DataAccess();
-		dbManager.login(username, password);
-		dbManager.close();
+		try {
+			dbManager.login(username, password);
+		} finally {
+			dbManager.close();
+		}
 	}
 
 	public User createUser(String username, String password, Role role) throws DuplicatedEntityException {
 		System.out.println(">> FacadeImplementationWS: createUser=> username= " + username + " password= " + password + " role=" + role);
 
 		DataAccess dbManager = new DataAccess();
-		User user = dbManager.createUser(username, password, role);
-		dbManager.close();
-		
+		User user = null;
+
+		try {
+			user = dbManager.createUser(username, password, role);
+		} finally {
+			dbManager.close();
+		}
+
 		System.out.println("<< FacadeImplementationWS: createUser=> " + user);		
 		return user;
 	}
@@ -106,17 +123,13 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 
 	public void close() {
 		DataAccess dbManager=new DataAccess();
-
 		dbManager.close();
-
 	}
 
 	public void initializeBD(){
-
 		DataAccess dbManager=new DataAccess();
 		dbManager.initializeDB();
 		dbManager.close();
-
 	}
 
 }
