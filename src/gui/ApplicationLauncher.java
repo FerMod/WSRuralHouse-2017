@@ -66,9 +66,6 @@ public class ApplicationLauncher {
 			 */
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
-
-
-
 		} catch (Exception e) {	
 			JOptionPane.showMessageDialog(null,	"An error has occurred:\n " + e.toString(), "ERROR!", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Error in ApplicationLauncher: "+e.toString());
