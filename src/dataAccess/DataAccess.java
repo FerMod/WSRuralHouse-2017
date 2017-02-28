@@ -132,6 +132,15 @@ public class DataAccess  {
 		return user;
 	}
 
+	public Role getRole(String username) {
+		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
+				+ "FROM User u "
+				+ "WHERE u.username = :username ", User.class)
+				.setParameter("username", username);
+		List<User> result = query.getResultList();
+		return result.get(0).getRole();
+	}
+
 	public boolean existsUser(String username) {
 		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
 				+ "FROM User u "

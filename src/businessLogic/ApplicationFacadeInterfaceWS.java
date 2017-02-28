@@ -4,6 +4,7 @@ import java.util.Vector;
 import java.util.Date;
 
 
+
 //import domain.Booking;
 import domain.Offer;
 import domain.RuralHouse;
@@ -20,7 +21,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 @WebService
 public interface ApplicationFacadeInterfaceWS  {
-	
+
 	/**
 	 * Creates a rural house and stores it in the database.
 	 * 
@@ -56,6 +57,15 @@ public interface ApplicationFacadeInterfaceWS  {
 	 */
 	@WebMethod
 	User createUser(String username, String password, Role role) throws DuplicatedEntityException;
+
+	/**
+	 * Get the account role.
+	 * 
+	 * @param username the name of the account
+	 * @return the role assigned to the account
+	 */
+	@WebMethod
+	Role getRole(String username);
 
 	/**
 	 * This method retrieves the existing rural houses 

@@ -97,6 +97,13 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 		return user;
 	}
 
+	public Role getRole(String username) {
+		DataAccess dbManager = new DataAccess();
+		Role role = dbManager.getRole(username);
+		dbManager.close();
+		return role;
+	}
+
 	public Vector<RuralHouse> getAllRuralHouses()  {
 		System.out.println(">> FacadeImplementationWS: getAllRuralHouses");
 
