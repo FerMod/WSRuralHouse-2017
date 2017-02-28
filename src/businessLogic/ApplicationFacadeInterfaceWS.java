@@ -22,7 +22,7 @@ import javax.security.auth.login.AccountNotFoundException;
 public interface ApplicationFacadeInterfaceWS  {
 	
 	/**
-	 * Creates a rural house and stores it in the data base.
+	 * Creates a rural house and stores it in the database.
 	 * 
 	 * @param description the name of the rural house
 	 * @param city the name of the city
@@ -32,7 +32,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	RuralHouse createRuralHouse(String description, String city) throws DuplicatedEntityException;
 
 	/**
-	 * Creates an offer and stores it in the data base.
+	 * Creates an offer and stores it in the database.
 	 * 
 	 * @param ruralHouse the rural house that the offer is going to apply
 	 * @param firstDay the start date of the offer
@@ -46,7 +46,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) throws OverlappingOfferException, BadDatesException;
 
 	/**
-	 * Creates an user and stores it in the data base.
+	 * Creates an user and stores it in the database.
 	 * 
 	 * @param username the name of the account
 	 * @param password the password of the account
@@ -77,7 +77,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) ;
 
 	/**
-	 * Inititialize the data base.
+	 * Inititialize the database.
 	 */
 	@WebMethod
 	void initializeBD();
@@ -94,7 +94,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	void login(String username, String password) throws AuthException, AccountNotFoundException;
 
 	/**
-	 * Close the data base
+	 * Close the database
 	 */
 	@WebMethod
 	void close();
