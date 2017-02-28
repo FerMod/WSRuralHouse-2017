@@ -25,6 +25,9 @@ import java.awt.Font;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+
+import businessLogic.ApplicationFacadeInterfaceWS;
+
 import javax.swing.UIManager;
 
 import java.awt.Color;
@@ -114,15 +117,17 @@ public class LoginPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
+
 						DataAccess dbManager = new DataAccess();
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
 							dbManager.login(username, password);
-							if(getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
-								JOptionPane.showMessageDialog(sharedFrame,	"The " + getRole(username) +" view is not implemented jet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+							System.out.println(dbManager.getRole(username));
+							if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
+								JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented jet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
 							} else {
-								JFrame jframe = new MainGUI(getRole(username));						
+								JFrame jframe = new MainGUI(dbManager.getRole(username));						
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 							}
@@ -137,11 +142,7 @@ public class LoginPanel extends JPanel {
 		}
 		return btnLogin;
 	}
-
-	private Role getRole(String username) {
-		return null;
-	}
-
+	
 	private boolean fieldsFilled() {
 		if(textFieldUsername.getText().trim().equals("")){
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
