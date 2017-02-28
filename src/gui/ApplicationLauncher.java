@@ -1,5 +1,9 @@
 package gui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.Locale;
 
@@ -19,20 +23,23 @@ public class ApplicationLauncher {
 
 	public static void main(String[] args) {
 
-		ConfigXML c = ConfigXML.getInstance();
-
-		System.out.println(c.getLocale());
-
-		Locale.setDefault(new Locale(c.getLocale()));
-
-
-
-		System.out.println("Locale: "+Locale.getDefault());
-
-		SharedFrame sharedFrame = new SharedFrame();
-		sharedFrame.setVisible(true);
+		initErrorLog();
 
 		try {
+			ConfigXML c = ConfigXML.getInstance();
+
+			System.out.println(c.getLocale());
+
+			Locale.setDefault(new Locale(c.getLocale()));
+
+
+
+			System.out.println("Locale: "+Locale.getDefault());
+
+			SharedFrame sharedFrame = new SharedFrame();
+			sharedFrame.setVisible(true);
+
+
 
 			ApplicationFacadeInterfaceWS appFacadeInterface;
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
@@ -68,12 +75,23 @@ public class ApplicationLauncher {
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
 		} catch (Exception e) {	
-			JOptionPane.showMessageDialog(null,	"An error has occurred:\n " + e.toString(), "ERROR!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,	"An error has occurred:\n " + e.getStackTrace(), "ERROR!", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Error in ApplicationLauncher: "+e.toString());
 		}
-		
+
 		//a.pack();
 
+	}
+
+	private static void initErrorLog() {
+		try {
+			File file = new File("ErrorLog.txt");
+			FileOutputStream fos = new FileOutputStream(file, true);
+			PrintStream ps = new PrintStream(fos);
+			System.setErr(ps);
+		} catch (FileNotFoundException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR!", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 }
