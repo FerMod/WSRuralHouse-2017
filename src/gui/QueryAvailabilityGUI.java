@@ -48,18 +48,22 @@ public class QueryAvailabilityGUI extends JFrame {
 
 	// private static configuration.ConfigXML c;
 
-	public QueryAvailabilityGUI() {
+	public QueryAvailabilityGUI()
+	{
 
-		try	{
+		try
+		{
 			jbInit();
 		}
-		catch(Exception e) {
+		catch(Exception e)
+		{
 			e.printStackTrace();
 		}
 
 	}
 
-	private void jbInit() throws Exception {
+	private void jbInit() throws Exception
+	{
 
 		ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
 
@@ -84,8 +88,10 @@ public class QueryAvailabilityGUI extends JFrame {
 		jTextField3.setText("0");
 		jButton1.setText(ResourceBundle.getBundle("Etiquetas").getString("Accept"));
 		jButton1.setBounds(new Rectangle(55, 455, 130, 30));
-		jButton1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		jButton1.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				jButton1_actionPerformed(e);
 			}
 		});
@@ -93,16 +99,21 @@ public class QueryAvailabilityGUI extends JFrame {
 		jButton2.setBounds(new Rectangle(230, 455, 130, 30));
 
 
-		jTextField3.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
+		jTextField3.addFocusListener(new FocusListener()
+		{
+			public void focusGained(FocusEvent e)
+			{
 			}
 
-			public void focusLost(FocusEvent e) {
+			public void focusLost(FocusEvent e)
+			{
 				jTextField3_focusLost();
 			}
 		});
-		jButton2.addActionListener(new ActionListener()	{
-			public void actionPerformed(ActionEvent e) {
+		jButton2.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				jButton2_actionPerformed(e);
 			}
 		});
@@ -128,7 +139,9 @@ public class QueryAvailabilityGUI extends JFrame {
 		});
 
 		scrollPane.setViewportView(table);
-		tableModel = new DefaultTableModel(null, columnNames);
+		tableModel = new DefaultTableModel(
+				null,
+				columnNames);
 
 		table.setModel(tableModel);
 		this.getContentPane().add(jCalendar1, null);
@@ -149,13 +162,18 @@ public class QueryAvailabilityGUI extends JFrame {
 		getContentPane().add(labelNoOffers);
 
 		// Codigo para el JCalendar
-		this.jCalendar1.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent propertychangeevent)	{
-				if (propertychangeevent.getPropertyName().equals("locale"))	{
+		this.jCalendar1.addPropertyChangeListener(new PropertyChangeListener()
+		{
+			public void propertyChange(PropertyChangeEvent propertychangeevent)
+			{
+				if (propertychangeevent.getPropertyName().equals("locale"))
+				{
 					jCalendar1.setLocale((Locale) propertychangeevent.getNewValue());
 					DateFormat dateformat = DateFormat.getDateInstance(1, jCalendar1.getLocale());
 					jTextField2.setText(dateformat.format(calendarMio.getTime()));
-				} else if (propertychangeevent.getPropertyName().equals("calendar")) {
+				}
+				else if (propertychangeevent.getPropertyName().equals("calendar"))
+				{
 					calendarMio = (Calendar) propertychangeevent.getNewValue();
 					DateFormat dateformat1 = DateFormat.getDateInstance(1, jCalendar1.getLocale());
 					jTextField2.setText(dateformat1.format(calendarMio.getTime()));
@@ -167,20 +185,24 @@ public class QueryAvailabilityGUI extends JFrame {
 
 	}
 
-	private void jButton2_actionPerformed(ActionEvent e) {
+	private void jButton2_actionPerformed(ActionEvent e)
+	{
 		this.setVisible(false);
 	}
 
 
-	private void jTextField3_focusLost() {
-		try {
+	private void jTextField3_focusLost()
+	{
+		try
+		{
 			new Integer (jTextField3.getText());
 			jLabel4.setText("");
-		} catch (NumberFormatException ex) {
+		}
+		catch (NumberFormatException ex)
+		{
 			jLabel4.setText(ResourceBundle.getBundle("Etiquetas").getString("ErrorNumber"));
 		}
 	}
-
 	private Date trim(Date date) {
 
 		Calendar calendar = Calendar.getInstance();
@@ -192,7 +214,8 @@ public class QueryAvailabilityGUI extends JFrame {
 		return calendar.getTime();
 	}
 
-	private void jButton1_actionPerformed(ActionEvent e) {		
+	private void jButton1_actionPerformed(ActionEvent e)
+	{		
 
 		Calendar calendar = Calendar.getInstance();
 
@@ -213,6 +236,7 @@ public class QueryAvailabilityGUI extends JFrame {
 
 		//    	System.out.println("firstDay= "+firstDay+" lastDay= "+lastDay);
 
+
 		try {
 			ApplicationFacadeInterfaceWS facade=MainGUI.getBusinessLogic();
 
@@ -222,13 +246,9 @@ public class QueryAvailabilityGUI extends JFrame {
 			Enumeration<Offer> en=v.elements();
 			Offer of;
 			tableModel.setDataVector(null, columnNames);
-			
-			if (!en.hasMoreElements()) {
-				
+			if (!en.hasMoreElements())
 				labelNoOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("NoOffers"));
-				
-			} else {
-				
+			else {
 				labelNoOffers.setText(ResourceBundle.getBundle("Etiquetas").getString("SelectOffer"));
 
 				while (en.hasMoreElements()) {
@@ -250,14 +270,11 @@ public class QueryAvailabilityGUI extends JFrame {
 
 					tableModel.addRow(row);						
 				}
-				
 			}
+
 
 		} catch (Exception e1) {
 
 			labelNoOffers.setText(e1.getMessage());
-		}
-		
-	}	
-	
+		}}	
 }
