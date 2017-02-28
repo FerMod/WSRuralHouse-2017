@@ -1,7 +1,7 @@
 package exceptions;
 
 /** 
- * Thrown when is attempted to add an existing entity to the data base.
+ * Thrown when is attempted to add an existing entity to the database.
  */
 public class DuplicatedEntityException extends Exception {
 
