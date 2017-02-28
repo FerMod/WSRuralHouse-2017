@@ -35,18 +35,17 @@ public class ApplicationLauncher {
 		try {
 
 			ApplicationFacadeInterfaceWS appFacadeInterface;
-			//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-			//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 
 			if (c.isBusinessLogicLocal()) {
 
 				appFacadeInterface = new FacadeImplementationWS();
 
-
 			} else { //Si es remoto
 
-				//String serviceName="http://localhost:9999/ws/ruralHouses?wsdl";
+				//String serviceName = "http://localhost:9999/ws/ruralHouses?wsdl";
 				String serviceName= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName()+"?wsdl";
 
 				//URL url = new URL("http://localhost:9999/ws/ruralHouses?wsdl");
@@ -61,17 +60,19 @@ public class ApplicationLauncher {
 
 				appFacadeInterface = service.getPort(ApplicationFacadeInterfaceWS.class);
 			} 
-			/*if (c.getDataBaseOpenMode().equals("initialize")) 
-				appFacadeInterface.initializeBD();
-			 */
+
+			//if (c.getDataBaseOpenMode().equals("initialize")) {
+			//    appFacadeInterface.initializeBD();
+			//}
+
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
 		} catch (Exception e) {	
 			JOptionPane.showMessageDialog(null,	"An error has occurred:\n " + e.toString(), "ERROR!", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Error in ApplicationLauncher: "+e.toString());
 		}
+		
 		//a.pack();
-
 
 	}
 

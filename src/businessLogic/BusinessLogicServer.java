@@ -24,6 +24,7 @@ public class BusinessLogicServer extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextArea textArea;
+	@SuppressWarnings("unused")
 	private ApplicationFacadeInterfaceWS server;
 	private String service;
 
