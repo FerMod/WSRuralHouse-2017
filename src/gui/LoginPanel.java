@@ -2,24 +2,31 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataAccess.DataAccess;
+import domain.User.Role;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
+
 import exceptions.AuthException;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.JButton;
+
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
+
 import java.awt.Color;
 
 @SuppressWarnings("serial")
@@ -112,9 +119,14 @@ public class LoginPanel extends JPanel {
 						String password = String.valueOf(passwordField.getPassword());
 						try {
 							dbManager.login(username, password);
-							JFrame jframe = new MainGUI();						
-							jframe.setVisible(true);
-							sharedFrame.dispose();
+							if(getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
+								JOptionPane.showMessageDialog(sharedFrame,	"The " + getRole(username) +" view is not implemented jet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+							} else {
+								JFrame jframe = new MainGUI(getRole(username));						
+								jframe.setVisible(true);
+								sharedFrame.dispose();
+							}
+
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
 							JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							
@@ -124,6 +136,10 @@ public class LoginPanel extends JPanel {
 			});
 		}
 		return btnLogin;
+	}
+
+	private Role getRole(String username) {
+		return null;
 	}
 
 	private boolean fieldsFilled() {
@@ -179,14 +195,14 @@ public class LoginPanel extends JPanel {
 		return lblPassword;
 	}
 
-//	private int exitQuestion() {
-//		int reply = JOptionPane.showConfirmDialog(null, "Seguro que desea salir?", null, JOptionPane.YES_NO_OPTION);
-//		if (reply == JOptionPane.YES_OPTION) {
-//			//[TODO]: Close here db conection
-//			System.exit(0);
-//		}
-//		return reply;
-//	}
+	//	private int exitQuestion() {
+	//		int reply = JOptionPane.showConfirmDialog(null, "Seguro que desea salir?", null, JOptionPane.YES_NO_OPTION);
+	//		if (reply == JOptionPane.YES_OPTION) {
+	//			//[TODO]: Close here db conection
+	//			System.exit(0);
+	//		}
+	//		return reply;
+	//	}
 
 	private JLabel getLblLogin() {
 		if (lblLogin == null) {

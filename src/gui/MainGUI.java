@@ -8,6 +8,7 @@ package gui;
 import javax.swing.*;
 
 import domain.RuralHouse;
+import domain.User.Role;
 import businessLogic.ApplicationFacadeInterfaceWS;
 
 import java.awt.Color;
@@ -30,7 +31,9 @@ public class MainGUI extends JFrame {
 	private JButton btnAddRuralHouse = null;
 	private JButton btnSetAvailability = null;
 	private JButton btnQueryAvailability = null;
-	
+
+	private Role role;
+
 	private static ApplicationFacadeInterfaceWS appFacadeInterface;
 
 	public static ApplicationFacadeInterfaceWS getBusinessLogic(){
@@ -53,25 +56,30 @@ public class MainGUI extends JFrame {
 	 */
 	public MainGUI() {
 		super();
-//		addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowClosing(WindowEvent e) {
-//				ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
-//				try {
-//					//if (ConfigXML.getInstance().isBusinessLogicLocal()) facade.close();
-//				} catch (Exception e1) {
-//					// TODO Auto-generated catch block
-//					System.out.println("Error: "+e1.toString()+" , probably problems with Business Logic or Database");
-//				}
-//				System.exit(1);
-//			}
-//		});
+		//		addWindowListener(new WindowAdapter() {
+		//			@Override
+		//			public void windowClosing(WindowEvent e) {
+		//				ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
+		//				try {
+		//					//if (ConfigXML.getInstance().isBusinessLogicLocal()) facade.close();
+		//				} catch (Exception e1) {
+		//					// TODO Auto-generated catch block
+		//					System.out.println("Error: "+e1.toString()+" , probably problems with Business Logic or Database");
+		//				}
+		//				System.exit(1);
+		//			}
+		//		});
 
 		initialize();
 		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	public MainGUI(Role role) {
 
+		this.role = role;
+
+		initialize();
+	}
 
 	/**
 	 * This method initializes this
@@ -82,10 +90,37 @@ public class MainGUI extends JFrame {
 		// this.setSize(271, 295);
 		this.setSize(495, 290);
 		Locale.setDefault(new Locale("en"));
-		this.setContentPane(getJContentPane());
+		this.setContentPane(getJContentPane(role));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainTitle"));
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Get screen dimension
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Set the screen location to the center of the screen
+	}
+
+	public JPanel getJContentPane(Role role) {
+		switch (role) {
+		case CLIENT:
+			return getClientContentPane();
+		case OWNER:
+			return getOwnerContentPane();
+		case ADMIN:
+			return getAdminContentPane();
+		case SUPER_ADMIN:
+			return getAdminContentPane();
+		default:
+			//[TODO]: Throw exception when the user role content pane is not defined 
+			return null;
+		}
+	}
+
+
+	private JPanel getAdminContentPane() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private JPanel getClientContentPane() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -93,7 +128,7 @@ public class MainGUI extends JFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJContentPane() {
+	private JPanel getOwnerContentPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new GridLayout(5, 1, 0, 0));
