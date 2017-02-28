@@ -20,14 +20,13 @@ import java.awt.event.ActionEvent;
 
 public class BusinessLogicServer extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7811026526400972222L;
+
 	private final JPanel contentPanel = new JPanel();
-	JTextArea textArea;
-	ApplicationFacadeInterfaceWS server;
-	String service;
+	private JTextArea textArea;
+	private ApplicationFacadeInterfaceWS server;
+	private String service;
+
 	/**
 	 * Launch the application.
 	 */
@@ -51,63 +50,61 @@ public class BusinessLogicServer extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
-		{
-			textArea = new JTextArea();
-			contentPanel.add(textArea);
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						textArea.append("\n\n\nClosing the server... ");
-					    
-							//server.close();
-						
-						System.exit(1);
-					}
-				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+
+		textArea = new JTextArea();
+		contentPanel.add(textArea);
+
+		JPanel buttonPane = new JPanel();
+		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(buttonPane, BorderLayout.SOUTH);
+
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textArea.append("\n\n\nClosing the server... ");
+
+				//server.close();
+
+				System.exit(1);
 			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
-		
+		});
+
+		okButton.setActionCommand("OK");
+		buttonPane.add(okButton);
+		getRootPane().setDefaultButton(okButton);
+
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setActionCommand("Cancel");
+		buttonPane.add(cancelButton);
+
 		ConfigXML c=ConfigXML.getInstance();
 
 
 		if (c.isBusinessLogicLocal()) {
 			textArea.append("\nERROR, the business logic is configured as local");
-		}
-		else {
-		try {
-			
-			if (!c.isDatabaseLocal()) {
-				textArea.append("\nWARNING: Please be sure ObjectdbManagerServer is launched\n           in machine: "+c.getDatabaseNode()+" port: "+c.getDatabasePort()+"\n");
-//				textArea.append("\n java -cp objectdb.jar com.objectdb.Server -port "+c.getDatabasePort()+" start");
-				this.setVisible(true);			
+		} else {
+
+			try {
+
+				if (!c.isDatabaseLocal()) {
+					textArea.append("\nWARNING: Please be sure ObjectdbManagerServer is launched\n           in machine: "+c.getDatabaseNode()+" port: "+c.getDatabasePort()+"\n");
+					//textArea.append("\n java -cp objectdb.jar com.objectdb.Server -port "+c.getDatabasePort()+" start");
+					this.setVisible(true);			
+				}
+
+				service= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName();
+
+				Endpoint.publish(service, new FacadeImplementationWS());
+
+				textArea.append("\n\nRunning service at:\n\t" + service);
+				textArea.append("\n\n\nPress button to exit this server... ");
+
+			} catch (Exception e) {
+				textArea.append(e.toString());
 			}
 
-			service= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName();
-				
-			Endpoint.publish(service, new FacadeImplementationWS());
-
-			textArea.append("\n\nRunning service at:\n\t" + service);
-			textArea.append("\n\n\nPress button to exit this server... ");
-			
-		} catch (Exception e) {
-			textArea.append(e.toString());
 		}
 
 	}
-	}
-}
 
+}
