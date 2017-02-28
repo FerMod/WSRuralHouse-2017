@@ -26,8 +26,6 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
-import businessLogic.ApplicationFacadeInterfaceWS;
-
 import javax.swing.UIManager;
 
 import java.awt.Color;
