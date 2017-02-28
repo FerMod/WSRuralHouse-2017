@@ -3,8 +3,6 @@ package businessLogic;
 import java.util.Vector;
 import java.util.Date;
 
-
-
 //import domain.Booking;
 import domain.Offer;
 import domain.RuralHouse;

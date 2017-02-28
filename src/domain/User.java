@@ -25,6 +25,9 @@ public class User implements Serializable {
 	@Enumerated
 	private Role role;
 	
+	/**
+	 * Role of the user account
+	 */
 	public enum Role {
 		CLIENT(1),
 		OWNER(2),

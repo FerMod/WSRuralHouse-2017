@@ -4,7 +4,6 @@ package gui;
  * @author Software Engineering teachers
  */
 
-
 import javax.swing.*;
 
 import domain.RuralHouse;
@@ -71,9 +70,13 @@ public class MainGUI extends JFrame {
 		//		});
 
 		initialize();
-		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 	}
 
+	/**
+	 * Constructor of {@code MainGUI}, to set the view mode of the entered role. 
+	 * @param role the user account role type
+	 */
 	public MainGUI(Role role) {
 
 		this.role = role;
@@ -82,12 +85,9 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
-	 * This method initializes this
-	 * 
-	 * @return void
+	 * Initialize {@code MainGUI} components and settings
 	 */
 	private void initialize() {
-		// this.setSize(271, 295);
 		this.setSize(495, 290);
 		Locale.setDefault(new Locale("en"));
 		this.setContentPane(getJContentPane(role));
@@ -112,14 +112,13 @@ public class MainGUI extends JFrame {
 		}
 	}
 
-
+	//[TODO]: Content pane of admin role
 	private JPanel getAdminContentPane() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	//[TODO]: Content pane of client role
 	private JPanel getClientContentPane() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

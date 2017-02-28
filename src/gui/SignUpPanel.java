@@ -24,8 +24,9 @@ import dataAccess.DataAccess;
 import domain.User.Role;
 import exceptions.DuplicatedEntityException;
 
-@SuppressWarnings("serial")
 public class SignUpPanel extends JPanel {
+	
+	private static final long serialVersionUID = -2764750885506622368L;
 
 	private SharedFrame sharedFrame;
 	private JTextField textFieldUsername;

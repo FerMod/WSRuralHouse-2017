@@ -40,12 +40,17 @@ public class NewRuralHouseWindow extends JDialog {
 		setTitle("New Rural House");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 242, 240);
+		
 		Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/rural_house.png"));
 		setIconImage(icon);
+		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Get screen dimension
 		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Set the screen location to the center of the screen
+		
 		initialize();
+		
 		getRootPane().setDefaultButton(btnAdd);
+		
 	}
 
 	private void initialize() {
@@ -162,4 +167,5 @@ public class NewRuralHouseWindow extends JDialog {
 		}
 		return lblNewRuralHouse;
 	}
+	
 }
