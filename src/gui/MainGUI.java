@@ -19,6 +19,8 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 
@@ -55,19 +57,20 @@ public class MainGUI extends JFrame {
 	 */
 	public MainGUI() {
 		super();
-		//		addWindowListener(new WindowAdapter() {
-		//			@Override
-		//			public void windowClosing(WindowEvent e) {
-		//				ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
-		//				try {
-		//					//if (ConfigXML.getInstance().isBusinessLogicLocal()) facade.close();
-		//				} catch (Exception e1) {
-		//					// TODO Auto-generated catch block
-		//					System.out.println("Error: "+e1.toString()+" , probably problems with Business Logic or Database");
-		//				}
-		//				System.exit(1);
-		//			}
-		//		});
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				//ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
+				try {
+					//if (ConfigXML.getInstance().isBusinessLogicLocal()) facade.close();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Error: "+e1.toString()+" , probably problems with Business Logic or Database");
+				}
+				System.exit(1);
+			}
+		});
 
 		initialize();
 
@@ -78,7 +81,8 @@ public class MainGUI extends JFrame {
 	 * @param role the user account role type
 	 */
 	public MainGUI(Role role) {
-
+		super();
+		
 		this.role = role;
 
 		initialize();
@@ -89,11 +93,21 @@ public class MainGUI extends JFrame {
 	 */
 	private void initialize() {
 		this.setSize(495, 290);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Exit when pressed the "X" top corner button
 		Locale.setDefault(new Locale("en"));
 		this.setContentPane(getJContentPane(role));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainTitle"));
+		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Get screen dimension
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Set the screen location to the center of the screen
+		
+		WindowAdapter exitListener = new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exitQuestion();
+			}
+		};
+		this.addWindowListener(exitListener);
 	}
 
 	public JPanel getJContentPane(Role role) {
@@ -116,7 +130,7 @@ public class MainGUI extends JFrame {
 	private JPanel getAdminContentPane() {
 		return null;
 	}
-	
+
 	//[TODO]: Content pane of client role
 	private JPanel getClientContentPane() {
 		return null;
@@ -274,6 +288,15 @@ public class MainGUI extends JFrame {
 		btnSetAvailability.setText(ResourceBundle.getBundle("Etiquetas").getString("SetAvailability"));
 		btnQueryAvailability.setText(ResourceBundle.getBundle("Etiquetas").getString("QueryAvailability"));		
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainTitle"));
+	}
+	
+	public int exitQuestion() {
+		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", null, JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION) {
+			appFacadeInterface.close();
+			System.exit(0);
+		}
+		return reply;
 	}
 
 } // @jve:decl-index=0:visual-constraint="0,0"
