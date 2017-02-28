@@ -12,7 +12,7 @@
 hs_err_pid*
 
 # Odb logs
-/log/
+log/*
 
 # Odb backup file
-/resources/*.odb$
+resources/*.odb$
