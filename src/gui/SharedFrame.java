@@ -1,7 +1,9 @@
 package gui;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
@@ -18,7 +20,9 @@ public class SharedFrame extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 260, 398);
-
+		Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/login.png"));
+		setIconImage(icon);
+		
 		loginPanel = new LoginPanel(this);
 		signUpPanel = new SignUpPanel(this);
 
