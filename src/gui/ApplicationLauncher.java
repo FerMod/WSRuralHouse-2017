@@ -1,5 +1,10 @@
 package gui;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Locale;
 
@@ -70,10 +75,14 @@ public class ApplicationLauncher {
 
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
-		} catch (Exception e) {	
-			FileLog.generateFile(e.getMessage(), true);
+		} catch (Exception e) {
+			
 			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + FileLog.getAbsolutePath() + "\"\n");
-			e.printStackTrace();
+			try {
+				FileLog.generateFile(e, true);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + FileLog.getAbsolutePath() + "\"", "Error!", JOptionPane.ERROR_MESSAGE);
 		}
 
