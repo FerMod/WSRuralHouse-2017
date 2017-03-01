@@ -42,6 +42,7 @@ public final class FileLog {
 		PrintWriter pw = new PrintWriter(new BufferedWriter(w));
 		pw.println("\n### " + getCurrentDate() + " ###");
 		exception.printStackTrace(pw);
+		pw.println(System.getProperty("line.separator"));
 		pw.close();
 	}
 

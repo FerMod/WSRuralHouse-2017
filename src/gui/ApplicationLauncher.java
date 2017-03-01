@@ -1,10 +1,7 @@
 package gui;
 
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.Locale;
 
@@ -20,20 +17,17 @@ import configuration.ConfigXML;
 
 public class ApplicationLauncher {
 
-
-
 	public static void main(String[] args) {
+		
 		try {
+			
 			FileLog.FILE_NAME = "error.log";
-
 
 			ConfigXML c = ConfigXML.getInstance();
 
 			System.out.println(c.getLocale());
 
 			Locale.setDefault(new Locale(c.getLocale()));
-
-
 
 			System.out.println("Locale: "+Locale.getDefault());
 
