@@ -23,8 +23,6 @@ public class ApplicationLauncher {
 
 	public static void main(String[] args) {
 
-		initErrorLog();
-
 		try {
 			ConfigXML c = ConfigXML.getInstance();
 
@@ -75,23 +73,20 @@ public class ApplicationLauncher {
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
 		} catch (Exception e) {	
+			try {
+				File file = new File("error.log");
+				FileOutputStream fos = new FileOutputStream(file, true);
+				PrintStream ps = new PrintStream(fos);
+				System.setErr(ps);
+			} catch (FileNotFoundException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR!", JOptionPane.ERROR_MESSAGE);
+			}
 			JOptionPane.showMessageDialog(null,	"An error has occurred:\n " + e.getStackTrace(), "ERROR!", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Error in ApplicationLauncher: "+e.toString());
 		}
 
 		//a.pack();
 
-	}
-
-	private static void initErrorLog() {
-		try {
-			File file = new File("ErrorLog.txt");
-			FileOutputStream fos = new FileOutputStream(file, true);
-			PrintStream ps = new PrintStream(fos);
-			System.setErr(ps);
-		} catch (FileNotFoundException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR!", JOptionPane.ERROR_MESSAGE);
-		}
 	}
 
 }
