@@ -1,9 +1,5 @@
 package gui;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.net.URL;
 import java.util.Locale;
 
@@ -12,18 +8,20 @@ import javax.swing.UIManager;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import configuration.ConfigXML;
-
 import businessLogic.ApplicationFacadeInterfaceWS;
 import businessLogic.FacadeImplementationWS;
+import businessLogic.util.FileLog;
+import configuration.ConfigXML;
 
 public class ApplicationLauncher {
 
 
 
 	public static void main(String[] args) {
-
 		try {
+			FileLog.FILE_NAME = "error.log";
+
+
 			ConfigXML c = ConfigXML.getInstance();
 
 			System.out.println(c.getLocale());
@@ -73,16 +71,10 @@ public class ApplicationLauncher {
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
 		} catch (Exception e) {	
-			try {
-				File file = new File("error.log");
-				FileOutputStream fos = new FileOutputStream(file, true);
-				PrintStream ps = new PrintStream(fos);
-				System.setErr(ps);
-			} catch (FileNotFoundException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR!", JOptionPane.ERROR_MESSAGE);
-			}
-			JOptionPane.showMessageDialog(null,	"An error has occurred:\n " + e.getStackTrace(), "ERROR!", JOptionPane.ERROR_MESSAGE);
-			System.out.println("Error in ApplicationLauncher: "+e.toString());
+			FileLog.generateFile(e.getMessage(), true);
+			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + FileLog.getAbsolutePath() + "\"\n");
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + FileLog.getAbsolutePath() + "\"", "Error!", JOptionPane.ERROR_MESSAGE);
 		}
 
 		//a.pack();
