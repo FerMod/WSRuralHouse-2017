@@ -10,12 +10,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public final class FileLog {
+public final class LogFile {
 
 	public static String PATH = "log/";
 	public static String FILE_NAME = "app.log";
 
-	private FileLog() {
+	private LogFile() {
 	}
 
 	public static String getPath() {
