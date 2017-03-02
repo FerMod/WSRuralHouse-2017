@@ -7,13 +7,42 @@ public class DuplicatedEntityException extends Exception {
 
 	private static final long serialVersionUID = 2564825147116821092L;
 
-	private Entity entInfo;
+	private Error error;
+
+	public enum Error {
+		UNKNOWN(0, "Unknown error."),
+		DUPLICATED_USERNAME(1, "The username is already in use by annother account."),
+		DUPLICATED_EMAIL(2, "The email adress is already in use by annother account.");
+
+		private final int code;
+		private final String description;
+
+		private Error(int code, String description) {
+			this.code = code;
+			this.description = description;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		@Override
+		public String toString() {
+			return code + ": " + description;
+		}
+
+	}
 
 	/**
 	 * Constructs a {@code DuplicatedEntityException} with a default message.
 	 */
 	public DuplicatedEntityException() {
 		super("Attempted to create an entity that already exists.");
+		this.error = Error.UNKNOWN;
 	}
 
 	/**
@@ -24,41 +53,26 @@ public class DuplicatedEntityException extends Exception {
 	 */
 	public DuplicatedEntityException(String s) {
 		super(s);
+		this.error = Error.UNKNOWN;
 	}
 
-	public Entity getEntity() {
-		return entInfo;
+	/**
+	 * Constructs a {@code DuplicatedEntityException} with the specified error code.
+	 *
+	 * @param   s   the detail message.
+	 * 
+	 */
+	public DuplicatedEntityException(Error error) {
+		super(error.getDescription());
+		this.error = error;
 	}
 
-	public Entity addEntityInfo(String entityName, String entityValue) {
-		return entInfo = new Entity(entityName, entityValue);
-	}
-
-	public class Entity extends DuplicatedEntityException {
-
-		private static final long serialVersionUID = -3164649154662306727L;
-
-		private String name;
-		private String value;
-
-		public Entity(String name, String value) {
-			this.name = name;
-			this.value = value;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		@Override
-		public String toString() {
-			return "[" + name + ": " + value + "]";
-		}
-
+	/**
+	 * Return the error that has been thrown.
+	 * @return the error
+	 */
+	public Error getError() {
+		return error;
 	}
 
 }
