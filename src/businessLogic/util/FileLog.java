@@ -40,8 +40,9 @@ public final class FileLog {
 
 		Writer w = new FileWriter(getPath(), append);
 		PrintWriter pw = new PrintWriter(new BufferedWriter(w));
-		pw.println("\n### " + getCurrentDate() + " ###");
+		pw.println("### " + getCurrentDate() + " ###");
 		exception.printStackTrace(pw);
+		pw.print(System.getProperty("line.separator"));
 		pw.close();
 	}
 
