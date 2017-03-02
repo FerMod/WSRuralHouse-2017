@@ -30,7 +30,6 @@ public class DataAccess  {
 	protected static EntityManagerFactory emf;
 	protected static EntityManager  db;
 
-
 	ConfigXML c;
 
 	public DataAccess()  {
@@ -118,18 +117,33 @@ public class DataAccess  {
 		return ruralHouse;
 	}
 
-	public User createUser(String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> DataAccess: createUser=> username= " + username + " password= " + password + " role= " + role);
+	public User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+		System.out.println(">> DataAccess: createUser=> email=" + email + " username=" + username + " password=" + password + " role=" + role);
 		User user = null;
 		if(!existsUser(username)) {
-			db.getTransaction().begin();
-			user = new User(username, password, role);
-			db.persist(user);
-			db.getTransaction().commit();
+			if(!existsEmail(email)) {
+				db.getTransaction().begin();
+				user = new User(email, username, password, role);
+				db.persist(user);
+				db.getTransaction().commit();
+			} else {
+				System.out.println(email);
+				throw new DuplicatedEntityException().addEntityInfo("email", email);
+			}
 		} else {
-			throw new DuplicatedEntityException();
+			System.out.println(email);
+			throw new DuplicatedEntityException().addEntityInfo("username", username);
 		}
 		return user;
+	}
+
+	public boolean validDni(String dni) {
+		return dni.toUpperCase().matches("\\d{8}" + controlLetter(dni));
+	}
+
+	private char controlLetter(String dni) {
+		char[] controlLetter = {'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
+		return controlLetter[Integer.parseInt(dni.substring(8)) % 23];
 	}
 
 	public Role getRole(String username) {
@@ -144,8 +158,17 @@ public class DataAccess  {
 	public boolean existsUser(String username) {
 		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
 				+ "FROM User u "
-				+ "WHERE u.username = :username ", User.class)
+				+ "WHERE u.username = :username", User.class)
 				.setParameter("username", username);
+		List<User> result = query.getResultList();
+		return !result.isEmpty();
+	}
+
+	public boolean existsEmail(String email) {
+		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
+				+ "FROM User u "
+				+ "WHERE u.email = :email", User.class)
+				.setParameter("email", email);
 		List<User> result = query.getResultList();
 		return !result.isEmpty();
 	}
@@ -206,15 +229,6 @@ public class DataAccess  {
 		return res;
 	}
 
-	public <T> boolean exists(Class<T> entityClass, Object primaryKey) {
-		try{
-			return db.find(entityClass.getSuperclass(), primaryKey) != null;
-		} catch (Exception e){
-			System.out.println("Error: "+e.toString());
-			return false;
-		}
-	}
-
 	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws  OverlappingOfferException{
 		try{
 			RuralHouse rhn = db.find(RuralHouse.class, rh.getHouseNumber());
@@ -225,7 +239,6 @@ public class DataAccess  {
 		}
 		return false;
 	}
-
 
 	public void close(){
 		db.close();

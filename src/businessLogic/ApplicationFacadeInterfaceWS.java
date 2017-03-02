@@ -54,7 +54,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
 	@WebMethod
-	User createUser(String username, String password, Role role) throws DuplicatedEntityException;
+	 User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
 	/**
 	 * Get the account role.

@@ -20,6 +20,8 @@ public class User implements Serializable {
 	@GeneratedValue
 	private Integer id;
 	@Id
+	private String email;
+	@Id
 	private String username;
 	private String password;
 	@Enumerated
@@ -46,7 +48,8 @@ public class User implements Serializable {
 		
 	}
 	
-	public User(String username, String password, Role role) {
+	public User(String email, String username, String password, Role role) {
+		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.role = role;
@@ -55,11 +58,19 @@ public class User implements Serializable {
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public String getUser() {
 		return username;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public void setDescription(String username) {
 		this.username = username;
 	}

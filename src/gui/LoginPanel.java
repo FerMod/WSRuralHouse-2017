@@ -19,16 +19,24 @@ import javax.swing.JSeparator;
 import exceptions.AuthException;
 
 import javax.security.auth.login.AccountNotFoundException;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
+import businessLogic.util.TextPrompt;
+
 import javax.swing.UIManager;
 
 import java.awt.Color;
+import java.awt.Component;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel {
@@ -54,10 +62,10 @@ public class LoginPanel extends JPanel {
 		initialize();		
 	}
 
-	private void initialize() {			
-		add(getLblUsername());
+	private void initialize() {				
+		//		add(getLblUsername());
 		add(getTextFieldUsername());
-		add(getLblPassword());
+		//		add(getLblPassword());
 		add(getPasswordField());
 		add(getSeparator());
 		add(getBtnLogin());	
@@ -74,7 +82,7 @@ public class LoginPanel extends JPanel {
 	private JButton getBtnLoginGuest() {
 		if(btnLoginGuest == null) {
 			btnLoginGuest = new JButton("Login As Guest");
-			btnLoginGuest.setBounds(20, 232, 204, 28);
+			btnLoginGuest.setBounds(20, 222, 204, 28);
 			btnLoginGuest.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -88,10 +96,11 @@ public class LoginPanel extends JPanel {
 	private JButton getBtnSignUp() {
 		if(btnSignUp == null) {
 			btnSignUp = new JButton("Sign Up");
-			btnSignUp.setBounds(20, 325, 204, 28);
+			btnSignUp.setBounds(20, 319, 204, 28);
 			btnSignUp.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					sharedFrame.setSize(sharedFrame.getWidth()+100, sharedFrame.getHeight());
 					sharedFrame.showSignUpPanel();
 				}
 			});
@@ -102,7 +111,7 @@ public class LoginPanel extends JPanel {
 	private JLabel getLblInfo() {
 		if(lblInfo == null) {
 			lblInfo = new JLabel("Dont have an account?");
-			lblInfo.setBounds(20, 300, 204, 14);
+			lblInfo.setBounds(20, 294, 204, 14);
 		}
 		return lblInfo;
 	}
@@ -110,7 +119,7 @@ public class LoginPanel extends JPanel {
 	private JButton getBtnLogin() {
 		if(btnLogin == null) {
 			btnLogin = new JButton("Login");
-			btnLogin.setBounds(20, 193, 204, 28);
+			btnLogin.setBounds(20, 171, 204, 28);
 			btnLogin.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -140,7 +149,7 @@ public class LoginPanel extends JPanel {
 		}
 		return btnLogin;
 	}
-	
+
 	private boolean fieldsFilled() {
 		if(textFieldUsername.getText().trim().equals("")){
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
@@ -163,7 +172,14 @@ public class LoginPanel extends JPanel {
 	private JPasswordField getPasswordField() {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
-			passwordField.setBounds(20, 139, 204, 28);
+			passwordField.setBounds(20, 115, 204, 30);
+			passwordField.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			TextPrompt tp = new TextPrompt(passwordField);
+			tp.setText("Password");
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
+			//ImageIcon imageIcon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/password.png")));
+			//tp.setIcon(imageIcon);
 		}
 		return passwordField;
 	}
@@ -179,9 +195,16 @@ public class LoginPanel extends JPanel {
 	private JTextField getTextFieldUsername() {
 		if(textFieldUsername == null) {
 			textFieldUsername = new JTextField();
-			textFieldUsername.setToolTipText("");
-			textFieldUsername.setBounds(20, 75, 204, 28);
+			textFieldUsername.setFont(new Font("Segoe UI", Font.BOLD, 12));
+			textFieldUsername.setBounds(20, 62, 204, 30);
 			textFieldUsername.setColumns(10);
+			textFieldUsername.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			TextPrompt tp = new TextPrompt(textFieldUsername);
+			tp.setText("Username");
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);
+			//ImageIcon imageIcon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/username.png")));
+			//tp.setIcon(imageIcon);
 		}
 		return textFieldUsername;
 	}
@@ -193,15 +216,6 @@ public class LoginPanel extends JPanel {
 		}
 		return lblPassword;
 	}
-
-	//	private int exitQuestion() {
-	//		int reply = JOptionPane.showConfirmDialog(null, "Seguro que desea salir?", null, JOptionPane.YES_NO_OPTION);
-	//		if (reply == JOptionPane.YES_OPTION) {
-	//			//[TODO]: Close here db conection
-	//			System.exit(0);
-	//		}
-	//		return reply;
-	//	}
 
 	private JLabel getLblLogin() {
 		if (lblLogin == null) {

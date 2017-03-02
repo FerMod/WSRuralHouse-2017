@@ -7,10 +7,17 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.security.auth.login.AccountNotFoundException;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,50 +27,79 @@ import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
+import businessLogic.util.TextPrompt;
 import dataAccess.DataAccess;
 import domain.User.Role;
+import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
+import javax.swing.UIManager;
+import java.awt.Color;
+import javax.swing.border.LineBorder;
 
 public class SignUpPanel extends JPanel {
-	
+
 	private static final long serialVersionUID = -2764750885506622368L;
+
+	/**
+	 * 	<pre>
+	 *	^                   # start of the line
+	 *	[_A-Za-z0-9-\\+]+   # must start with string in the bracket [ ], must contains one or more (+)
+	 *	(                   # start of group #1
+	 *	\\.[_A-Za-z0-9-]+   # follow by a dot "." and string in the bracket [ ], must contains one or more (+)
+	 *	)*                  # end of group 1, this group is optional (*)
+	 *	<tt>@</tt>                   # must contains a "@" symbol
+	 *	[A-Za-z0-9-]+       # follow by string in the bracket [ ], must contains one or more (+)
+	 *	(                   # start of group 2 - first level TLD checking
+	 *	\\.[A-Za-z0-9]+     # follow by a dot "." and string in the bracket [ ], must contains one or more (+)
+	 *	)*                  # end of group 2, this group is optional (*)
+	 *	(                   # start of group 3 - second level TLD checking
+	 *	\\.[A-Za-z]{2,}     # follow by a dot "." and string in the bracket [ ], with minimum length of 2
+	 *	)                   # end of group 3
+	 *	$                   # end of the line
+	 *	</pre>
+	 */
+	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	private SharedFrame sharedFrame;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
-	private JPasswordField repeatPasswordField;
+	private JPasswordField confirmPasswordField;
 	private JLabel lblUsername;
 	private JLabel lblPassword;
 	private JButton btnSignUp;
 	private JButton btnCancel;
-	private JLabel lblRepeatPassword;
+	private JLabel lblConfirmPassword;
 	private JLabel lblSignUp;
 	private JPanel accountType;
 	private JRadioButton rbClient;
 	private JRadioButton rbOwner;
 	private JLabel lblAccountType;
 
+	private Image img;
+
 	private Role role;
+	private JPanel panel;
+	private JTextField textFieldEmail;
+	//	private JScrollPane scrollPane;
 
-	public SignUpPanel(SharedFrame sharedFrame) {		
+	public SignUpPanel(SharedFrame sharedFrame) {
 		this.sharedFrame = sharedFrame;
-
+		img = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/required_field.png"));
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
+
+		// setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		// setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
 		initialize();
 
 	}
 
 	private void initialize() {
-		add(getLblUsername());
-		add(getTextFieldUsername());		
-		add(getLblPassword());
-		add(getPasswordField());		
+		add(getPanel());
+		//		add(getScrollPane());
 		add(getBtnSignUp());
 		add(getBtnCancel());
-		add(getRepeatPasswordField());
-		add(getLblRepeatPassword());
 		add(getLblSignUp());
 		add(getAccountType());
 		add(getLblAccountType());
@@ -130,34 +166,33 @@ public class SignUpPanel extends JPanel {
 			lblSignUp.setBorder(new TitledBorder(null, "", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 			lblSignUp.setHorizontalAlignment(SwingConstants.CENTER);
 			lblSignUp.setFont(new Font("Tahoma", Font.BOLD, 15));
-			lblSignUp.setBounds(10, 11, 234, 28);
+			lblSignUp.setBounds(10, 11, 338, 28);
 		}
 		return lblSignUp;
 	}
 
-	private JLabel getLblRepeatPassword() {
-		if(lblRepeatPassword == null) {
-			lblRepeatPassword = new JLabel("Repeat Password:");
-			lblRepeatPassword.setBounds(20, 246, 204, 14);
+	private JPasswordField getConfirmPasswordField() {
+		if(confirmPasswordField == null) {
+			confirmPasswordField = new JPasswordField();
+			confirmPasswordField.setBounds(182, 95, 150, 28);
+			confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			TextPrompt tp = new TextPrompt(confirmPasswordField);
+			tp.setText("Confirm password");
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
+			tp.setIcon(new ImageIcon(img));
 		}
-		return lblRepeatPassword;
-	}
-
-	private JPasswordField getRepeatPasswordField() {
-		if(repeatPasswordField == null) {
-			repeatPasswordField = new JPasswordField();
-			repeatPasswordField.setBounds(20, 271, 204, 28);
-		}
-		return repeatPasswordField;
+		return confirmPasswordField;
 	}
 
 	private JButton getBtnCancel() {
 		if(btnCancel == null) {
 			btnCancel = new JButton("Cancel");
-			btnCancel.setBounds(135, 327, 115, 33);
+			btnCancel.setBounds(182, 319, 115, 33);
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					sharedFrame.showLoginPanel();					
+					sharedFrame.setSize(sharedFrame.getWidth()-100, sharedFrame.getHeight());
+					sharedFrame.showLoginPanel();
 				}
 			});
 		}
@@ -167,22 +202,29 @@ public class SignUpPanel extends JPanel {
 	private JButton getBtnSignUp() {
 		if(btnSignUp == null) {
 			btnSignUp = new JButton("Sign Up");
-			btnSignUp.setBounds(10, 327, 115, 33);
+			btnSignUp.setBounds(55, 319, 115, 33);
 			btnSignUp.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
 						if(passwordMatch()) {
 							DataAccess dbManager = new DataAccess();
+							String email = textFieldEmail.getText();
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
-								dbManager.createUser(username, password, role);
-								sharedFrame.showLoginPanel();
-								JOptionPane.showMessageDialog(sharedFrame,	"Account successfuly created", "Account created", JOptionPane.INFORMATION_MESSAGE);
+								dbManager.createUser(email, username, password, role);
+								dbManager.login(username, password);
+								JFrame jframe = new MainGUI(dbManager.getRole(username));	
+								jframe.setVisible(true);
+								sharedFrame.dispose();
+								JOptionPane.showMessageDialog(jframe,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
 							} catch(DuplicatedEntityException ex) {
 								System.err.println(ex.getMessage());
-								JOptionPane.showMessageDialog(sharedFrame,	"The username " + username + " is already in use.\nTry with another one.", "Username in use", JOptionPane.WARNING_MESSAGE);
+								JOptionPane.showMessageDialog(sharedFrame,	"The " + ex.getEntity().getName() +  " " + ex.getEntity().getValue() + " is already in use.\nTry with another one.", ex.getEntity().getName() + " in use", JOptionPane.WARNING_MESSAGE);
+							} catch (AuthException | AccountNotFoundException ex) {
+								System.err.println(ex.getMessage());
+								JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							
 							}
 						}
 					}
@@ -193,32 +235,48 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean fieldsFilled() {
-		if(textFieldUsername.getText().trim().equals("")){
+		if(textFieldEmail.getText().equals("")) {
+			JOptionPane.showMessageDialog(sharedFrame,	"The field \"email\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
+			return false;
+		} else if(textFieldUsername.getText().trim().equals("")){
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(passwordField.getPassword()).equals("")) {
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
-		} else if(String.valueOf(repeatPasswordField.getPassword()).equals("")) {
-			JOptionPane.showMessageDialog(sharedFrame,	"The field \"repeat password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
+		} else if(String.valueOf(confirmPasswordField.getPassword()).equals("")) {
+			JOptionPane.showMessageDialog(sharedFrame,	"The field \"confirm password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		return true;
 	}
 
 	private boolean passwordMatch() {
-		if(!Arrays.equals(passwordField.getPassword(), repeatPasswordField.getPassword())) {
+		if(!Arrays.equals(passwordField.getPassword(), confirmPasswordField.getPassword())) {
 			JOptionPane.showMessageDialog(sharedFrame,	"The two passwords does not match.", "Password mismatch", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		return true;
+	}
 
+	private boolean checkEmailFormat() {
+		if(textFieldEmail.getText().matches(EMAIL_PATTERN)) {
+			JOptionPane.showMessageDialog(sharedFrame,	"The two passwords does not match.", "Password mismatch", JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
 	private JPasswordField getPasswordField() {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
-			passwordField.setBounds(20, 207, 204, 28);
+			passwordField.setBounds(20, 95, 150, 28);
+			passwordField.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			TextPrompt tp = new TextPrompt(passwordField);
+			tp.setText("Password");
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
+			tp.setIcon(new ImageIcon(img));
 		}
 		return passwordField;
 	}
@@ -226,26 +284,41 @@ public class SignUpPanel extends JPanel {
 	private JTextField getTextFieldUsername() {
 		if(textFieldUsername == null) {
 			textFieldUsername = new JTextField();
-			textFieldUsername.setBounds(20, 143, 204, 28);
+			textFieldUsername.setFont(new Font("Segoe UI", Font.BOLD, 12));
+			textFieldUsername.setBounds(20, 54, 312, 28);
 			textFieldUsername.setColumns(10);
+			textFieldUsername.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			TextPrompt tp = new TextPrompt(textFieldUsername);
+			tp.setText("Username");
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);
+			tp.setIcon(new ImageIcon(img));	
 		}
 		return textFieldUsername;
-	}
-
-	private JLabel getLblPassword() {
-		if(lblPassword == null) {
-			lblPassword = new JLabel("Password:");
-			lblPassword.setBounds(20, 182, 204, 14);
-		}
-		return lblPassword;
 	}
 
 	private JLabel getLblUsername() {
 		if(lblUsername == null) {
 			lblUsername = new JLabel("Username:");
-			lblUsername.setBounds(20, 118, 204, 14);
+			lblUsername.setBounds(20, 11, 204, 14);
 		}
 		return lblUsername;
+	}
+
+	private JLabel getLblPassword() {
+		if(lblPassword == null) {
+			lblPassword = new JLabel("Password:");
+			lblPassword.setBounds(20, 75, 204, 14);
+		}
+		return lblPassword;
+	}
+
+	private JLabel getLblConfirmPassword() {
+		if(lblConfirmPassword == null) {
+			lblConfirmPassword = new JLabel("Confirm Password:");
+			lblConfirmPassword.setBounds(20, 139, 204, 14);
+		}
+		return lblConfirmPassword;
 	}
 
 	private JLabel getLblAccountType() {
@@ -256,4 +329,36 @@ public class SignUpPanel extends JPanel {
 		return lblAccountType;
 	}
 
+	private JTextField getTextFieldEmail() {
+		if(textFieldEmail == null) {
+			textFieldEmail = new JTextField();
+			textFieldEmail.setFont(new Font("Segoe UI", Font.BOLD, 12));
+			textFieldEmail.setColumns(10);
+			textFieldEmail.setBounds(20, 13, 312, 28);
+			textFieldEmail.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			TextPrompt tp = new TextPrompt(textFieldEmail);
+			tp.setText("email");
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
+			tp.setIcon(new ImageIcon(img));
+		}
+		return textFieldEmail;
+	}
+
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 0, true), "* Required information", TitledBorder.RIGHT, TitledBorder.BOTTOM, null, new Color(255, 0, 0)));
+			panel.setBounds(0, 118, 360, 157);
+			panel.setLayout(null);
+			//panel.add(getLblUsername());
+			panel.add(getTextFieldUsername());
+			//panel.add(getLblPassword());
+			panel.add(getPasswordField());
+			panel.add(getConfirmPasswordField());
+			panel.add(getTextFieldEmail());
+			//panel.add(getLblConfirmPassword());
+		}
+		return panel;
+	}
 }

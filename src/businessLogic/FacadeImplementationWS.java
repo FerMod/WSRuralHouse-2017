@@ -81,14 +81,14 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 		}
 	}
 
-	public User createUser(String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> FacadeImplementationWS: createUser=> username= " + username + " password= " + password + " role=" + role);
+	public User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+		System.out.println(">> FacadeImplementationWS: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
 
 		DataAccess dbManager = new DataAccess();
 		User user = null;
 
 		try {
-			user = dbManager.createUser(username, password, role);
+			user = dbManager.createUser(email, username, password, role);
 		} finally {
 			dbManager.close();
 		}
@@ -138,6 +138,6 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 		dbManager.initializeDB();
 		dbManager.close();
 	}
-
+	
 }
 
