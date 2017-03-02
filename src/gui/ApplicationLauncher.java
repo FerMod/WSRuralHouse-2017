@@ -1,6 +1,7 @@
 package gui;
 
 
+import java.awt.Window;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -12,16 +13,16 @@ import javax.xml.ws.Service;
 
 import businessLogic.ApplicationFacadeInterfaceWS;
 import businessLogic.FacadeImplementationWS;
-import businessLogic.util.FileLog;
+import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 
 public class ApplicationLauncher {
 
 	public static void main(String[] args) {
-		
+
 		try {
-			
-			FileLog.FILE_NAME = "error.log";
+
+			LogFile.FILE_NAME = "error.log";
 
 			ConfigXML c = ConfigXML.getInstance();
 
@@ -40,6 +41,7 @@ public class ApplicationLauncher {
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
 			if (c.isBusinessLogicLocal()) {
 
@@ -70,14 +72,16 @@ public class ApplicationLauncher {
 			MainGUI.setBussinessLogic(appFacadeInterface);
 
 		} catch (Exception e) {
-			
-			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + FileLog.getAbsolutePath() + "\"\n");
+
+			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\n");
 			try {
-				FileLog.generateFile(e, true);
+				LogFile.generateFile(e, true);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + FileLog.getAbsolutePath() + "\"", "Error!", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"", "Error!", JOptionPane.ERROR_MESSAGE);
+			
 		}
 
 		//a.pack();

@@ -49,9 +49,6 @@ public class SetAvailabilityGUI extends JFrame  {
 	}
 
 	private void jbInit(Vector<RuralHouse> v) throws Exception {
-		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Get screen dimension
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Set the screen location to the center of the screen
 
 		this.getContentPane().setLayout(null);
 		this.setSize(new Dimension(513, 433));
