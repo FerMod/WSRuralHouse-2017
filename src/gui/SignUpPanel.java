@@ -10,7 +10,6 @@ import javax.swing.JPasswordField;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,7 +31,6 @@ import dataAccess.DataAccess;
 import domain.User.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
-import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
@@ -175,7 +173,7 @@ public class SignUpPanel extends JPanel {
 		if(confirmPasswordField == null) {
 			confirmPasswordField = new JPasswordField();
 			confirmPasswordField.setBounds(182, 95, 150, 28);
-			confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(confirmPasswordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(confirmPasswordField);
 			tp.setText("Confirm password");
 			tp.setStyle(Font.BOLD);
@@ -207,7 +205,7 @@ public class SignUpPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
-						if(passwordMatch()) {
+						if(passwordMatch() && correctEmailFormat()) {
 							DataAccess dbManager = new DataAccess();
 							String email = textFieldEmail.getText();
 							String username = textFieldUsername.getText();
@@ -218,10 +216,11 @@ public class SignUpPanel extends JPanel {
 								JFrame jframe = new MainGUI(dbManager.getRole(username));	
 								jframe.setVisible(true);
 								sharedFrame.dispose();
-								JOptionPane.showMessageDialog(jframe,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
 							} catch(DuplicatedEntityException ex) {
 								System.err.println(ex.getMessage());
-								JOptionPane.showMessageDialog(sharedFrame,	"The " + ex.getEntity().getName() +  " " + ex.getEntity().getValue() + " is already in use.\nTry with another one.", ex.getEntity().getName() + " in use", JOptionPane.WARNING_MESSAGE);
+								System.out.println(ex.getError().toString());
+								JOptionPane.showMessageDialog(sharedFrame,	ex.getError().getDescription() + "\nTry with another one.", "Already in use!", JOptionPane.WARNING_MESSAGE);
 							} catch (AuthException | AccountNotFoundException ex) {
 								System.err.println(ex.getMessage());
 								JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							
@@ -259,9 +258,9 @@ public class SignUpPanel extends JPanel {
 		return true;
 	}
 
-	private boolean checkEmailFormat() {
-		if(textFieldEmail.getText().matches(EMAIL_PATTERN)) {
-			JOptionPane.showMessageDialog(sharedFrame,	"The two passwords does not match.", "Password mismatch", JOptionPane.WARNING_MESSAGE);
+	private boolean correctEmailFormat() {
+		if(!textFieldEmail.getText().matches(EMAIL_PATTERN)) {
+			JOptionPane.showMessageDialog(sharedFrame,	"The email dont have the correct format.", "Invalid email format", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		return true;
@@ -271,7 +270,7 @@ public class SignUpPanel extends JPanel {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
 			passwordField.setBounds(20, 95, 150, 28);
-			passwordField.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(passwordField);
 			tp.setText("Password");
 			tp.setStyle(Font.BOLD);
@@ -335,7 +334,7 @@ public class SignUpPanel extends JPanel {
 			textFieldEmail.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldEmail.setColumns(10);
 			textFieldEmail.setBounds(20, 13, 312, 28);
-			textFieldEmail.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			textFieldEmail.setBorder(BorderFactory.createCompoundBorder(textFieldEmail.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(textFieldEmail);
 			tp.setText("email");
 			tp.setStyle(Font.BOLD);

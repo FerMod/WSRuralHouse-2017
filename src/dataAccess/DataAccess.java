@@ -22,6 +22,7 @@ import domain.User;
 import domain.User.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
+import exceptions.DuplicatedEntityException.Error;
 import exceptions.OverlappingOfferException;
 
 public class DataAccess  {
@@ -127,12 +128,10 @@ public class DataAccess  {
 				db.persist(user);
 				db.getTransaction().commit();
 			} else {
-				System.out.println(email);
-				throw new DuplicatedEntityException().addEntityInfo("email", email);
+				throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
 			}
 		} else {
-			System.out.println(email);
-			throw new DuplicatedEntityException().addEntityInfo("username", username);
+			throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
 		}
 		return user;
 	}

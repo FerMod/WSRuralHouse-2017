@@ -129,7 +129,7 @@ public class LoginPanel extends JPanel {
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
-							dbManager.login(username, password);
+							dbManager.login(username, password); //[TODO]: Login con correo electronico
 							System.out.println(dbManager.getRole(username));
 							if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
 								JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented jet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
@@ -173,7 +173,7 @@ public class LoginPanel extends JPanel {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
 			passwordField.setBounds(20, 115, 204, 30);
-			passwordField.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(passwordField);
 			tp.setText("Password");
 			tp.setStyle(Font.BOLD);
