@@ -296,6 +296,7 @@ public class SignUpPanel extends JPanel {
 		return textFieldUsername;
 	}
 
+	@SuppressWarnings("unused")
 	private JLabel getLblUsername() {
 		if(lblUsername == null) {
 			lblUsername = new JLabel("Username:");
@@ -304,6 +305,7 @@ public class SignUpPanel extends JPanel {
 		return lblUsername;
 	}
 
+	@SuppressWarnings("unused")
 	private JLabel getLblPassword() {
 		if(lblPassword == null) {
 			lblPassword = new JLabel("Password:");
@@ -312,6 +314,7 @@ public class SignUpPanel extends JPanel {
 		return lblPassword;
 	}
 
+	@SuppressWarnings("unused")
 	private JLabel getLblConfirmPassword() {
 		if(lblConfirmPassword == null) {
 			lblConfirmPassword = new JLabel("Confirm Password:");

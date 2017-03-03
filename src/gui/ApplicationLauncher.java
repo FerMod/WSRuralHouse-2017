@@ -1,7 +1,5 @@
 package gui;
 
-
-import java.awt.Window;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;

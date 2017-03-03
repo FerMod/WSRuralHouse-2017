@@ -20,14 +20,8 @@ import exceptions.AuthException;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
-
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
@@ -36,7 +30,6 @@ import businessLogic.util.TextPrompt;
 import javax.swing.UIManager;
 
 import java.awt.Color;
-import java.awt.Component;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel {
@@ -184,6 +177,7 @@ public class LoginPanel extends JPanel {
 		return passwordField;
 	}
 
+	@SuppressWarnings("unused")
 	private JLabel getLblUsername() {
 		if(lblUsername == null) {
 			lblUsername = new JLabel("Username:");
@@ -209,6 +203,7 @@ public class LoginPanel extends JPanel {
 		return textFieldUsername;
 	}
 
+	@SuppressWarnings("unused")
 	private JLabel getLblPassword() {
 		if(lblPassword == null) {
 			lblPassword = new JLabel("Password:");
