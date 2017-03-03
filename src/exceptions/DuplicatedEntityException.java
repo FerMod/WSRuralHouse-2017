@@ -10,7 +10,7 @@ public class DuplicatedEntityException extends Exception {
 	private Error error;
 
 	public enum Error {
-		UNKNOWN(0, "Unknown error."),
+		DUPLICATED_ENTITY(0, "The entity already exist."),
 		DUPLICATED_USERNAME(1, "The username is already in use by annother account."),
 		DUPLICATED_EMAIL(2, "The email adress is already in use by annother account.");
 
@@ -42,7 +42,7 @@ public class DuplicatedEntityException extends Exception {
 	 */
 	public DuplicatedEntityException() {
 		super("Attempted to create an entity that already exists.");
-		this.error = Error.UNKNOWN;
+		this.error = Error.DUPLICATED_ENTITY;
 	}
 
 	/**
@@ -53,13 +53,13 @@ public class DuplicatedEntityException extends Exception {
 	 */
 	public DuplicatedEntityException(String s) {
 		super(s);
-		this.error = Error.UNKNOWN;
+		this.error = Error.DUPLICATED_ENTITY;
 	}
 
 	/**
 	 * Constructs a {@code DuplicatedEntityException} with the specified error code.
 	 *
-	 * @param   s   the detail message.
+	 * @param   error   the error type.
 	 * 
 	 */
 	public DuplicatedEntityException(Error error) {
@@ -69,7 +69,7 @@ public class DuplicatedEntityException extends Exception {
 
 	/**
 	 * Return the error that has been thrown.
-	 * @return the error
+	 * @return the error type
 	 */
 	public Error getError() {
 		return error;

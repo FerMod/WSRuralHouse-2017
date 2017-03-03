@@ -79,8 +79,7 @@ public class DataAccess  {
 			db.getTransaction().commit();
 			System.out.println("Db initialized");
 
-		}
-		catch (Exception e){
+		} catch (Exception e){
 			e.printStackTrace();
 		}
 	}
