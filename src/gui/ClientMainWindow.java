@@ -11,6 +11,20 @@ import javax.swing.JTable;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+
+import javax.swing.JToolBar;
+import javax.swing.JMenuBar;
+import javax.swing.border.EtchedBorder;
+import java.awt.Component;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.SoftBevelBorder;
 
 public class ClientMainWindow extends JFrame {
 
@@ -28,6 +42,7 @@ public class ClientMainWindow extends JFrame {
 			{"Jane", "White", "Speed reading", new Integer(20), new Boolean(true)},
 			{"Joe", "Brown", "Pool", new Integer(10), new Boolean(false)}
 	};
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -79,6 +94,10 @@ public class ClientMainWindow extends JFrame {
 		gbc_centerPanel.gridy = 1;
 		getContentPane().add(centerPanel, gbc_centerPanel);
 
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
 		JPanel bottomPanel = new JPanel();
 		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
 		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
@@ -92,6 +111,241 @@ public class ClientMainWindow extends JFrame {
 
 		JButton btnNewButton_1 = new JButton("New button");
 		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
+		
+		table_1 = new JTable();
+		centerPanel.add(table_1);
+
+		JPanel bottomPanel = new JPanel();
+		GridBagConstraints gbc_bottomPanel = new GridBagConstraints();
+		gbc_bottomPanel.anchor = GridBagConstraints.NORTH;
+		gbc_bottomPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_bottomPanel.gridx = 0;
+		gbc_bottomPanel.gridy = 2;
+		getContentPane().add(bottomPanel, gbc_bottomPanel);
+
+		JButton btnNewButton = new JButton("New button");
+		bottomPanel.add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("New button");
+		bottomPanel.add(btnNewButton_1);
+
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setOpaque(false);
+		menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		setJMenuBar(menuBar);
+
+		JButton btnLogOut = new JButton("Log Out");
+		btnLogOut.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		btnLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnLogOut.setPreferredSize(new Dimension(40, 20));
+		menuBar.add(btnLogOut);
 
 		//		table = new JTable(null, columnNames);
 		//        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
