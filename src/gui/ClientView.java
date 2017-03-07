@@ -123,9 +123,9 @@ public class ClientView extends JFrame {
 		btnNewButton.setBounds(117, 99, 129, 23);
 		contentPane.add(btnNewButton);
 		
-		JButton button = new JButton("Fecha de entrada");
-		button.setBounds(245, 99, 129, 23);
-		contentPane.add(button);
+		JButton btnFechaDeSalida = new JButton("Fecha de salida");
+		btnFechaDeSalida.setBounds(245, 99, 129, 23);
+		contentPane.add(btnFechaDeSalida);
 		
 		JLabel lblComodidades = new JLabel("Comodidades");
 		lblComodidades.setBounds(10, 224, 86, 14);
