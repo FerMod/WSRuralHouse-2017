@@ -1,8 +1,6 @@
 package gui;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-
 import java.awt.GridBagLayout;
 import java.awt.Image;
 
@@ -19,19 +17,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
-
-import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JTable;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.regex.PatternSyntaxException;
 import java.awt.Component;
