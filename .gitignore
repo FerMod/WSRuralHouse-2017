@@ -24,7 +24,7 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.settings/
+/.settings/
 .loadpath
 .recommenders
 
@@ -78,4 +78,4 @@ local.properties
 /log/
 
 .DStore
-/.DS_Store
+.DS_Store
