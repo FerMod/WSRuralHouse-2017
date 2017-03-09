@@ -1,14 +1,33 @@
 package gui;
 
-import javax.swing.JFrame;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.PatternSyntaxException;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
@@ -18,23 +37,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
-import java.util.concurrent.ThreadLocalRandom;
 
-import javax.swing.JTable;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.regex.PatternSyntaxException;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import businessLogic.util.TextPrompt;
+import domain.User.Role;
 
-public class ClientMainWindow extends JFrame {
+public class ClientMainWindow extends JPanel {
 
-	private boolean DEBUG = true;
+	private static boolean DEBUG = true;
 
 	private static final long serialVersionUID = 3063325462028186709L;
 
@@ -42,10 +51,12 @@ public class ClientMainWindow extends JFrame {
 	private JTable table;
 	private TableModel tableModel;
 	private TableRowSorter<TableModel> sorter;
-	private JPanel topPanel, bottomPanel;
-	private JScrollPane centerPanel;
-	private GridBagLayout gridBagLayout;
-	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
+	//	private JPanel topPanel, bottomPanel;
+	private JScrollPane tableScrollPanel;
+	//	private GridBagLayout gridBagLayout;
+	//	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
+	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
+	private Role role;
 
 	/**
 	 * Launch the application.
@@ -54,9 +65,18 @@ public class ClientMainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientMainWindow frame = new ClientMainWindow();
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					frame.setVisible(true);
+					Role role = getWindowRole();
+					if(role != null) {
+						JFrame frame = new JFrame();
+						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+						frame.setMinimumSize(new Dimension(400, 300));
+						frame.setSize(700, 365);
+						frame.getContentPane().add(new ClientMainWindow(role));
+						//frame.pack();
+						frame.setLocationRelativeTo(null);
+						frame.setVisible(true);
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -65,45 +85,71 @@ public class ClientMainWindow extends JFrame {
 	}
 
 	/**
+	 * Only to debug the windows
+	 * @return the chosen role
+	 */
+	private static Role getWindowRole() {
+		String[] options = new String[] {"CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
+		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		switch (response) {
+		case 0:
+			return Role.CLIENT;
+		case 1:
+			return Role.OWNER;
+		case 2:
+			return Role.ADMIN;
+		case 3:
+			return Role.SUPER_ADMIN;
+		default:
+			return null;
+		}
+	}
+
+	/**
 	 * Create the frame.
 	 */
-	public ClientMainWindow() {	
+	public ClientMainWindow(Role role) {
 
-		getContentPane().setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(getGridBagLayout());
+		this.role = role;
+		setLayout(new GridBagLayout());
 
-		GridBagConstraints gbc;
-
-		gbc = getGbcTopPanel();
+		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.LINE_START;
+
+		//		//GridBagConstraints variables
+		//		gbc.ipadx = 0;
+		//		gbc.ipady = 0;
+		//		gbc.weightx = 0.0;
+		//		gbc.weighty = 1.0;
+		//		gbc.anchor = GridBagConstraints.PAGE_END;
+		//		gbc.insets = new Insets(10,0,0,0);
+		//		gbc.gridwidth = 2;
+		//		gbc.gridheight = 1;
+		//		gbc.gridx = 1;
+		//		gbc.gridy = 2;
+
+		gbc.ipady = 10;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.gridwidth = 2;
+		gbc.insets = new Insets(20, 10, 10, 10);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.insets = new Insets(10, 10, 10, 10);
-		getContentPane().add(getSearchField(), gbc);
+		add(getSearchField(), gbc);
 
-		gbc = getGbcCenterPanel();
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.weightx = 0.5;
+		gbc.weighty = 1;
+
+		gbc.gridwidth = 3;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		gbc.insets = new Insets(10, 10, 10, 10);
-		getContentPane().add(getCenterPanel(), gbc);
-		getCenterPanel().setViewportView(getTable());
+		add(getTableScrollPanel(), gbc);
 
-		//getCenterPanel().add(getTable());
-
-		//Create the scroll pane and add the table to it.
-		//		JScrollPane scrollPane = new JScrollPane(getTable());
-		//Add the scroll pane to this panel.
-		//		getCenterPanel().add(scrollPane);
-
-		getContentPane().add(getBottomPanel(), getGbcBottomPanel());
-
-		JButton btnNewButton = new JButton("New button");
-		bottomPanel.add(btnNewButton);
-
-		JButton btnNewButton_1 = new JButton("New button");
-		bottomPanel.add(btnNewButton_1);
+		setupRoleWindow(role);
 
 		/*
 		JMenuBar menuBar = new JMenuBar();
@@ -118,25 +164,96 @@ public class ClientMainWindow extends JFrame {
 		menuBar.add(btnLogOut);
 		 */
 
-		//		table = new JTable(null, columnNames);
-		//        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-		//        table.setFillsViewportHeight(true);
-		//	
-		//        panel_2.add(table);
-
 		//[FIXME] Just a prank, bro.
-		tableModel.randomImage();
+		tableModel.setRandomImages();
 		updateRowHeights();
 
 	}
 
+	public void setupRoleWindow(Role role) {
+		switch (role) {
+		case CLIENT:
+			setupClientWindow();
+			break;
+		case OWNER:
+			setupOwnerWindow();
+			break;
+		case ADMIN:
+			setupAdminWindow();
+			break;
+		case SUPER_ADMIN:
+			setupSuperAdminWindow();
+			break;
+		default:
+			//[TODO]: Throw exception when the user role content pane is not defined 
+			System.exit(1);
+			break;
+		}
+	}
+
+	private void setupClientWindow() {
+
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		gbc.anchor = GridBagConstraints.PAGE_START;		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0;
+		gbc.gridwidth = 1;
+
+		gbc.insets = new Insets(10, 100, 10, 100);
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		add(getBtnDetails(), gbc);
+
+
+	}
+
+	private void setupOwnerWindow() {
+
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		gbc.anchor = GridBagConstraints.PAGE_START;		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0;
+		gbc.gridwidth = 1;
+
+		gbc.insets = new Insets(10, 50, 10, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		add(getBtnAdd(), gbc);
+
+		gbc.insets = new Insets(10, 5, 10, 5);
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		add(getBtnEdit(), gbc);
+
+		gbc.insets = new Insets(10, 5, 10, 50);
+		gbc.gridx = 2;
+		gbc.gridy = 2;
+		add(getBtnRemove(), gbc);
+
+	}
+
+	private void setupAdminWindow() {
+		// TODO Auto-generated method stub
+	}
+
+	private void setupSuperAdminWindow() {
+		// TODO Auto-generated method stub
+	}
+
+	/*
 	private JPanel getTopPanel() {
 		if(topPanel == null) {
 			topPanel = new JPanel();
 		}
 		return topPanel;
 	}
+	 */
 
+	/*
 	private GridBagConstraints getGbcTopPanel() {
 		if(gbcTopPanel == null) {
 			gbcTopPanel = new GridBagConstraints();
@@ -148,14 +265,16 @@ public class ClientMainWindow extends JFrame {
 		}
 		return gbcTopPanel;
 	}
+	 */
 
-	private JScrollPane getCenterPanel() {
-		if(centerPanel == null) {
-			centerPanel = new JScrollPane();
+	private JScrollPane getTableScrollPanel() {
+		if(tableScrollPanel == null) {
+			tableScrollPanel = new JScrollPane(getTable());
 		}
-		return centerPanel;
+		return tableScrollPanel;
 	}
 
+	/*
 	private GridBagConstraints getGbcCenterPanel() {
 		if(gbcCenterPanel == null) {
 			gbcCenterPanel = new GridBagConstraints();
@@ -166,29 +285,36 @@ public class ClientMainWindow extends JFrame {
 		}
 		return gbcCenterPanel;
 	}
+	 */
 
+	/*
 	private JPanel getBottomPanel() {
 		if(bottomPanel == null) {
 			bottomPanel = new JPanel();
+			//			bottomPanel.add(getBtnAdd());
+			//			bottomPanel.add(getBtnEdit());
+			//			bottomPanel.add(getBtnRemove());
 		}
 		return bottomPanel;
 	}
+	 */
 
+	/*
 	private GridBagConstraints getGbcBottomPanel() {
 		if(gbcBottomPanel == null) {
 			gbcBottomPanel = new GridBagConstraints();
-			gbcBottomPanel.anchor = GridBagConstraints.NORTH;
+			gbcBottomPanel.anchor = GridBagConstraints.PAGE_END;
 			gbcBottomPanel.fill = GridBagConstraints.HORIZONTAL;
 			gbcBottomPanel.gridx = 0;
 			gbcBottomPanel.gridy = 2;
 		}
 		return gbcBottomPanel;
 	}
+	 */
 
 	private JTextField getSearchField() {
 		if(searchField == null) {
 			searchField = new JTextField();
-			//			searchField.setColumns(10);
 			//Whenever filterText changes, invoke refreshTableContent().
 			searchField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -210,6 +336,10 @@ public class ClientMainWindow extends JFrame {
 			});
 
 		}
+		TextPrompt tp = new TextPrompt(searchField);
+		tp.setText("Search...");
+		tp.setStyle(Font.BOLD);
+		tp.setAlpha(128);	
 		return searchField;
 	}
 
@@ -228,6 +358,7 @@ public class ClientMainWindow extends JFrame {
 		}
 	}
 
+	/*
 	private GridBagLayout getGridBagLayout() {
 		if(gridBagLayout == null) {
 			gridBagLayout = new GridBagLayout();
@@ -238,6 +369,7 @@ public class ClientMainWindow extends JFrame {
 		}
 		return gridBagLayout;
 	}
+	 */
 
 	private JTable getTable() {
 		if(table == null) {
@@ -255,17 +387,35 @@ public class ClientMainWindow extends JFrame {
 
 				@Override
 				public void valueChanged(ListSelectionEvent event) {
-					int viewRow = table.getSelectedRow();
-					if (viewRow < 0) {
+					int row = table.getSelectedRow();
+					if (row < 0) {
 						//Selection got filtered away.
 						System.out.println("");
 					} else {
-						int modelRow = table.convertRowIndexToModel(viewRow);
-						System.out.println(String.format("Selected Row in view: %d. Selected Row in model: %d.", viewRow, modelRow));
+						//FIXME Add method to enable the buttons available to the current role window
+						if(role == Role.CLIENT) {
+							btnDetails.setEnabled(true);
+						}
+						int modelRow = table.convertRowIndexToModel(row);
+						System.out.println(String.format("Selected Row in view: %d. Selected Row in model: %d.", row, modelRow));
 					}
 				}
 
 			});
+
+			table.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent me) {
+					JTable table =(JTable) me.getSource();
+					Point p = me.getPoint();
+					int row = table.rowAtPoint(p);
+					if (me.getClickCount() == 2) {
+						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			});
+
+			tableScrollPanel = new JScrollPane(table);
 
 		}
 		return table;
@@ -282,9 +432,47 @@ public class ClientMainWindow extends JFrame {
 		}
 	}
 
+	private JButton getBtnAdd() {
+		if (btnAdd == null) {
+			btnAdd = new JButton("Add");
+		}
+		return btnAdd;
+	}
+
+	private JButton getBtnEdit() {
+		if (btnEdit == null) {
+			btnEdit = new JButton("Edit");
+		}
+		return btnEdit;
+	}
+
+	private JButton getBtnRemove() {
+		if (btnRemove == null) {
+			btnRemove = new JButton("Remove");
+		}
+		return btnRemove;
+	}
+
+	private JButton getBtnDetails() {
+		if (btnDetails == null) {
+			btnDetails = new JButton("Details");
+			btnDetails.setEnabled(false);
+			btnDetails.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,	"\"Details\" button pressed.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
+		}
+		return btnDetails;
+	}
+
 	private class TableModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = 1L;
+
+		private int width;
+		private int height;
 
 		private String[] columnNames = {"Image", "First Name", "Last Name", "Sport", "# of Years", "Vegetarian"};
 
@@ -298,23 +486,36 @@ public class ClientMainWindow extends JFrame {
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
-		public void randomImage() {
+		private TableModel() {
+			this.width = 50;
+			this.height = 50;
+		}
+
+		public void setRandomImages() {		
 			for (Object[] object: data) {
-				object[0] = getImage();
+				// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
+				int randomNum = ThreadLocalRandom.current().nextInt(0, images.length);
+				object[0] = getImage(images[randomNum]);
 			}
 		}
 
-		private ImageIcon getImage() {
-			// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
-			int randomNum = ThreadLocalRandom.current().nextInt(0, images.length);
-			BufferedImage img;
+		//			// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
+		//			for (int i = 0; i < data.length; i++) {
+		//				int randomNum = ThreadLocalRandom.current().nextInt(0, data.length);
+		//				System.out.println(images[randomNum]);
+		//				setValueAt(i, 0, new ImageIcon(images[randomNum]));
+		//			}
+
+		private ImageIcon getImage(String path) {
+			BufferedImage bufferedImage;
+			ImageIcon imageIcon = null;
 			try {
-				img = ImageIO.read(getClass().getResource(images[randomNum]));
-				return new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+				bufferedImage = ImageIO.read(getClass().getResource(path));
+				imageIcon =  new ImageIcon(bufferedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return null;
+			return imageIcon;
 		}
 
 		@Override
@@ -332,16 +533,36 @@ public class ClientMainWindow extends JFrame {
 			return data[row][col];
 		}
 
+		public void setValueAt(int row, int col, ImageIcon value) {
+			data[row][col] = getScaledImage(value);
+		}
+
+		private ImageIcon getScaledImage(ImageIcon imageIcon) {
+			return new ImageIcon(imageIcon.getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH));
+		}
+
+		public void setValueAt(int row, int col, Object value) {
+			data[row][col] = value;
+		}
+
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
 
-		public String[] getColumns() {
-			return columnNames;
+		public int getDefaultImageWidth() {
+			return width;
 		}
 
-		public Object[][] getData() {
-			return data;
+		public void setDefaultImageWidth(int width) {
+			this.width = width;
+		}
+
+		public int getDefaultImageHeight() {
+			return height;
+		}
+
+		public void setDefaultImageHeight(int height) {
+			this.height = height;
 		}
 
 		/*
@@ -372,10 +593,7 @@ public class ClientMainWindow extends JFrame {
 		 */
 		public void setValueAt(Object value, int row, int col) {
 			if (DEBUG) {
-				System.out.println("Setting value at " + row + "," + col
-						+ " to " + value
-						+ " (an instance of "
-						+ value.getClass() + ")");
+				System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of "+ value.getClass() + ")");
 			}
 
 			data[row][col] = value;
@@ -400,6 +618,7 @@ public class ClientMainWindow extends JFrame {
 			}
 			System.out.println("--------------------------");
 		}
+
 	}
 
 }
