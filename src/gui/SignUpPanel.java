@@ -26,11 +26,12 @@ import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
-import businessLogic.util.TextPrompt;
 import dataAccess.DataAccess;
 import domain.User.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
+import gui.components.TextPrompt;
+
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
