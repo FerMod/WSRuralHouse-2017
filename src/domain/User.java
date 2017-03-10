@@ -31,6 +31,7 @@ public class User implements Serializable {
 	 * Role of the user account
 	 */
 	public enum Role {
+		GUEST(0),
 		CLIENT(1),
 		OWNER(2),
 		ADMIN(3),
