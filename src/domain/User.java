@@ -15,10 +15,6 @@ public class User implements Serializable {
 	
 	private static final long serialVersionUID = -8104656861921494420L;
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8104656861921494420L;
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
