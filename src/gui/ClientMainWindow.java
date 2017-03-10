@@ -13,22 +13,31 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.NumericShaper.Range;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -72,7 +81,6 @@ public class ClientMainWindow extends JPanel {
 						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 						frame.setMinimumSize(new Dimension(400, 300));
 						frame.setSize(700, 365);
-						frame.getContentPane().add(new ClientMainWindow(role));
 						//frame.pack();
 						frame.setLocationRelativeTo(null);
 						frame.setVisible(true);
@@ -89,16 +97,18 @@ public class ClientMainWindow extends JPanel {
 	 * @return the chosen role
 	 */
 	private static Role getWindowRole() {
-		String[] options = new String[] {"CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
+		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
 		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		switch (response) {
 		case 0:
-			return Role.CLIENT;
+			return Role.GUEST;
 		case 1:
-			return Role.OWNER;
+			return Role.CLIENT;
 		case 2:
-			return Role.ADMIN;
+			return Role.OWNER;
 		case 3:
+			return Role.ADMIN;
+		case 4:
 			return Role.SUPER_ADMIN;
 		default:
 			return null;
@@ -106,11 +116,10 @@ public class ClientMainWindow extends JPanel {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the panel.
 	 */
-	public ClientMainWindow(Role role) {
-
-		this.role = role;
+	public ClientMainWindow() {
+		
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -172,6 +181,9 @@ public class ClientMainWindow extends JPanel {
 
 	public void setupRoleWindow(Role role) {
 		switch (role) {
+		case GUEST:
+			setupGuestWindow();
+			break;
 		case CLIENT:
 			setupClientWindow();
 			break;
@@ -189,6 +201,10 @@ public class ClientMainWindow extends JPanel {
 			System.exit(1);
 			break;
 		}
+	}
+	
+	private void setupGuestWindow() {
+		// TODO Auto-generated method stub
 	}
 
 	private void setupClientWindow() {

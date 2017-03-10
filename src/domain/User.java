@@ -9,10 +9,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import javax.persistence.*;
 
-@SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class User implements Serializable {
+	
+	private static final long serialVersionUID = -8104656861921494420L;
 	
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
