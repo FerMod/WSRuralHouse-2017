@@ -1,12 +1,14 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -19,16 +21,21 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.TabbedPaneUI;
 
 import domain.User.Role;
+import gui.components.ui.CustomTabbedPaneUI;
+
+import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -1810393566512302281L;
-	
+
 	private JPanel contentPane;
 	private Role role;
-	
+	private JTabbedPane tabbedPane;
+
 	/**
 	 * Launch the application.
 	 */
@@ -38,7 +45,7 @@ public class MainWindow extends JFrame {
 				try {
 					Role role = getWindowRole();
 					if(role != null) {
-						JFrame frame = new JFrame();
+						MainWindow frame = new MainWindow(role);
 						frame.setVisible(true);
 					}
 				} catch (Exception e) {
@@ -47,7 +54,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 	}
-	
+
 	/**
 	 * Only to debug the windows
 	 * @return the chosen role
@@ -70,31 +77,84 @@ public class MainWindow extends JFrame {
 			return null;
 		}
 	}
-	
-	public void setupRoleWindow(Role role) {
+
+	/**
+	 * Create the frame.
+	 */
+	public MainWindow(Role role) {
+		this.role = role;
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setMinimumSize(new Dimension(400, 300));
+		setSize(700, 365);
+		getRolePanel(role);
+		//setJMenuBar(getRoleMenuBar());
+		//frame.pack();
+
+
+		contentPane = new JPanel();
+//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setUI(new CustomTabbedPaneUI());
+		//contentPane.add(tabbedPane);
+		tabbedPane.addTab("Rural Houses", getRolePanel(role));
+		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
+		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
+		tabbedPane.addTab("", new TextArea("Inifinite posibilities...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmaybe(?)"));
+
+		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
+		//			@Override
+		//			public void mouseDragged(MouseEvent e) {}
+		//			@Override
+		//			public void mouseMoved(MouseEvent e){
+		//				adjustCursor(e);
+		//			}
+		//		});
+
+		contentPane.add(tabbedPane);
+
+		setLocationRelativeTo(null);
+
+	}
+
+	//	private void adjustCursor(MouseEvent e) {
+	//
+	//		TabbedPaneUI ui = tabbedPane.getUI();
+	//
+	//		int index = ui.tabForCoordinate(tabbedPane, e.getX(), e.getY());
+	//
+	//		if (index >= 0) {
+	//			tabbedPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	//		} else {
+	//			tabbedPane.setCursor(null);
+	//		}
+	//
+	//	}
+
+	public JPanel getRolePanel(Role role) {
 		switch (role) {
 		case GUEST:
-			setupGuestWindow();
-			break;
+			//return new GuestMainPanel();
+			return null;
 		case CLIENT:
-			setupClientWindow();
-			break;
+			return new ClientMainPanel();
 		case OWNER:
-			setupOwnerWindow();
-			break;
+			return new OwnerMainPanel();
 		case ADMIN:
-			setupAdminWindow();
-			break;
+			//return new AdminMainPanel();
+			return null;
 		case SUPER_ADMIN:
-			setupSuperAdminWindow();
-			break;
+			//return new SuperAdminMainPanel();
+			return null;
 		default:
 			//[TODO]: Throw exception when the user role content pane is not defined 
 			System.exit(1);
-			break;
+			return null;
 		}
 	}
-	
+
 	private static JMenuBar getRoleMenuBar() {
 		//Where the GUI is created:
 		JMenuBar menuBar;
@@ -109,21 +169,19 @@ public class MainWindow extends JFrame {
 		//Build the first menu.
 		menu = new JMenu("A Menu");
 		menu.setMnemonic(KeyEvent.VK_A);
-		menu.getAccessibleContext().setAccessibleDescription(
-		        "The only menu in this program that has menu items");
-		menuBar.add(menu);
+		menu.getAccessibleContext().setAccessibleDescription("The only menu in this program that has menu items");
 
 		//a group of JMenuItems
 		menuItem = new JMenuItem("A text-only menu item",
-		                         KeyEvent.VK_T);
+				KeyEvent.VK_T);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
+				KeyEvent.VK_1, ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription(
-		        "This doesn't really do anything");
+				"This doesn't really do anything");
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Both text and icon",
-		                         new ImageIcon("images/middle.gif"));
+				new ImageIcon("images/middle.gif"));
 		menuItem.setMnemonic(KeyEvent.VK_B);
 		menu.add(menuItem);
 
@@ -161,8 +219,7 @@ public class MainWindow extends JFrame {
 		submenu.setMnemonic(KeyEvent.VK_S);
 
 		menuItem = new JMenuItem("An item in the submenu");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(
-		        KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Another item");
@@ -172,31 +229,10 @@ public class MainWindow extends JFrame {
 		//Build second menu in the menu bar.
 		menu = new JMenu("Another Menu");
 		menu.setMnemonic(KeyEvent.VK_N);
-		menu.getAccessibleContext().setAccessibleDescription(
-		        "This menu does nothing");
+		menu.getAccessibleContext().setAccessibleDescription("This menu does nothing");
 		menuBar.add(menu);
 
 		return menuBar;
-		
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public MainWindow(Role tole) {
-		this.role = role;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setMinimumSize(new Dimension(400, 300));
-		setSize(700, 365);
-		getContentPane().add(new ClientMainWindow(role));
-		setJMenuBar(getRoleMenuBar());
-		//frame.pack();
-		setLocationRelativeTo(null);
-		
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
 	}
 
 }

@@ -17,6 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 
 import exceptions.AuthException;
+import gui.components.TextPrompt;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.BorderFactory;
@@ -24,9 +25,6 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-
-import businessLogic.util.TextPrompt;
-
 import javax.swing.UIManager;
 
 import java.awt.Color;
