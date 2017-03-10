@@ -47,10 +47,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
-import businessLogic.util.TextPrompt;
 import domain.User.Role;
+import gui.components.TextPrompt;
 
-public class ClientMainWindow extends JPanel {
+public class ClientMainPanel extends JPanel {
 
 	private static boolean DEBUG = true;
 
@@ -67,58 +67,58 @@ public class ClientMainWindow extends JPanel {
 	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
 	private Role role;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Role role = getWindowRole();
-					if(role != null) {
-						JFrame frame = new JFrame();
-						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-						frame.setMinimumSize(new Dimension(400, 300));
-						frame.setSize(700, 365);
-						//frame.pack();
-						frame.setLocationRelativeTo(null);
-						frame.setVisible(true);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Only to debug the windows
-	 * @return the chosen role
-	 */
-	private static Role getWindowRole() {
-		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		switch (response) {
-		case 0:
-			return Role.GUEST;
-		case 1:
-			return Role.CLIENT;
-		case 2:
-			return Role.OWNER;
-		case 3:
-			return Role.ADMIN;
-		case 4:
-			return Role.SUPER_ADMIN;
-		default:
-			return null;
-		}
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Role role = getWindowRole();
+//					if(role != null) {
+//						JFrame frame = new JFrame();
+//						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+//						frame.setMinimumSize(new Dimension(400, 300));
+//						frame.setSize(700, 365);
+//						//frame.pack();
+//						frame.setLocationRelativeTo(null);
+//						frame.setVisible(true);
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+//
+//	/**
+//	 * Only to debug the windows
+//	 * @return the chosen role
+//	 */
+//	private static Role getWindowRole() {
+//		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
+//		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+//		switch (response) {
+//		case 0:
+//			return Role.GUEST;
+//		case 1:
+//			return Role.CLIENT;
+//		case 2:
+//			return Role.OWNER;
+//		case 3:
+//			return Role.ADMIN;
+//		case 4:
+//			return Role.SUPER_ADMIN;
+//		default:
+//			return null;
+//		}
+//	}
 
 	/**
 	 * Create the panel.
 	 */
-	public ClientMainWindow() {
+	public ClientMainPanel() {
 		
 		setLayout(new GridBagLayout());
 
@@ -158,7 +158,7 @@ public class ClientMainWindow extends JPanel {
 		gbc.gridy = 1;
 		add(getTableScrollPanel(), gbc);
 
-		setupRoleWindow(role);
+		setupClientWindow();
 
 		/*
 		JMenuBar menuBar = new JMenuBar();
@@ -179,34 +179,6 @@ public class ClientMainWindow extends JPanel {
 
 	}
 
-	public void setupRoleWindow(Role role) {
-		switch (role) {
-		case GUEST:
-			setupGuestWindow();
-			break;
-		case CLIENT:
-			setupClientWindow();
-			break;
-		case OWNER:
-			setupOwnerWindow();
-			break;
-		case ADMIN:
-			setupAdminWindow();
-			break;
-		case SUPER_ADMIN:
-			setupSuperAdminWindow();
-			break;
-		default:
-			//[TODO]: Throw exception when the user role content pane is not defined 
-			System.exit(1);
-			break;
-		}
-	}
-	
-	private void setupGuestWindow() {
-		// TODO Auto-generated method stub
-	}
-
 	private void setupClientWindow() {
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -223,41 +195,6 @@ public class ClientMainWindow extends JPanel {
 		add(getBtnDetails(), gbc);
 
 
-	}
-
-	private void setupOwnerWindow() {
-
-		GridBagConstraints gbc = new GridBagConstraints();
-
-		gbc.anchor = GridBagConstraints.PAGE_START;		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0;
-		gbc.gridwidth = 1;
-
-		gbc.insets = new Insets(10, 50, 10, 5);
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		add(getBtnAdd(), gbc);
-
-		gbc.insets = new Insets(10, 5, 10, 5);
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		add(getBtnEdit(), gbc);
-
-		gbc.insets = new Insets(10, 5, 10, 50);
-		gbc.gridx = 2;
-		gbc.gridy = 2;
-		add(getBtnRemove(), gbc);
-
-	}
-
-	private void setupAdminWindow() {
-		// TODO Auto-generated method stub
-	}
-
-	private void setupSuperAdminWindow() {
-		// TODO Auto-generated method stub
 	}
 
 	/*
@@ -395,7 +332,7 @@ public class ClientMainWindow extends JPanel {
 			table.setRowSorter(sorter);
 			table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 			table.getTableHeader().setReorderingAllowed(false);
-			table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//			table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 			//When selection changes, provide user with row numbers for both view and model.
