@@ -1,16 +1,18 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.PopupMenu;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+
 import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -18,10 +20,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.TabbedPaneUI;
+import javax.swing.border.BevelBorder;
 
 import domain.User.Role;
 import gui.components.ui.CustomTabbedPaneUI;
@@ -47,6 +49,8 @@ public class MainWindow extends JFrame {
 					if(role != null) {
 						MainWindow frame = new MainWindow(role);
 						frame.setVisible(true);
+					} else {
+						System.exit(1);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -84,15 +88,15 @@ public class MainWindow extends JFrame {
 	public MainWindow(Role role) {
 		this.role = role;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setMinimumSize(new Dimension(400, 300));
-		setSize(700, 365);
+		setMinimumSize(new Dimension(600, 465));
+		setSize(700, 565);
 		getRolePanel(role);
 		//setJMenuBar(getRoleMenuBar());
 		//frame.pack();
-
+		pack();
 
 		contentPane = new JPanel();
-//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
@@ -103,15 +107,15 @@ public class MainWindow extends JFrame {
 		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
 		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
 		tabbedPane.addTab("", new TextArea("Inifinite posibilities...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmaybe(?)"));
-
-		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
-		//			@Override
-		//			public void mouseDragged(MouseEvent e) {}
-		//			@Override
-		//			public void mouseMoved(MouseEvent e){
-		//				adjustCursor(e);
-		//			}
-		//		});
+		tabbedPane.addTab("Log Out", new TextArea(""));
+//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
+//			@Override
+//			public void mouseDragged(MouseEvent e) {}
+//			@Override
+//			public void mouseMoved(MouseEvent e){
+//				adjustCursor(e);
+//			}
+//		});
 
 		contentPane.add(tabbedPane);
 
@@ -155,7 +159,7 @@ public class MainWindow extends JFrame {
 		}
 	}
 
-	private static JMenuBar getRoleMenuBar() {
+	private JMenuBar getRoleMenuBar() {
 		//Where the GUI is created:
 		JMenuBar menuBar;
 		JMenu menu, submenu;
@@ -172,16 +176,12 @@ public class MainWindow extends JFrame {
 		menu.getAccessibleContext().setAccessibleDescription("The only menu in this program that has menu items");
 
 		//a group of JMenuItems
-		menuItem = new JMenuItem("A text-only menu item",
-				KeyEvent.VK_T);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(
-				KeyEvent.VK_1, ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription(
-				"This doesn't really do anything");
+		menuItem = new JMenuItem("A text-only menu item", KeyEvent.VK_T);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("This doesn't really do anything");
 		menu.add(menuItem);
 
-		menuItem = new JMenuItem("Both text and icon",
-				new ImageIcon("images/middle.gif"));
+		menuItem = new JMenuItem("Both text and icon", new ImageIcon("images/middle.gif"));
 		menuItem.setMnemonic(KeyEvent.VK_B);
 		menu.add(menuItem);
 

@@ -1,10 +1,8 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,33 +11,25 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.NumericShaper.Range;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -67,59 +57,59 @@ public class ClientMainPanel extends JPanel {
 	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
 	private Role role;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Role role = getWindowRole();
-//					if(role != null) {
-//						JFrame frame = new JFrame();
-//						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-//						frame.setMinimumSize(new Dimension(400, 300));
-//						frame.setSize(700, 365);
-//						//frame.pack();
-//						frame.setLocationRelativeTo(null);
-//						frame.setVisible(true);
-//					}
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-//
-//	/**
-//	 * Only to debug the windows
-//	 * @return the chosen role
-//	 */
-//	private static Role getWindowRole() {
-//		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-//		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-//		switch (response) {
-//		case 0:
-//			return Role.GUEST;
-//		case 1:
-//			return Role.CLIENT;
-//		case 2:
-//			return Role.OWNER;
-//		case 3:
-//			return Role.ADMIN;
-//		case 4:
-//			return Role.SUPER_ADMIN;
-//		default:
-//			return null;
-//		}
-//	}
+	//	/**
+	//	 * Launch the application.
+	//	 */
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					Role role = getWindowRole();
+	//					if(role != null) {
+	//						JFrame frame = new JFrame();
+	//						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+	//						frame.setMinimumSize(new Dimension(400, 300));
+	//						frame.setSize(700, 365);
+	//						//frame.pack();
+	//						frame.setLocationRelativeTo(null);
+	//						frame.setVisible(true);
+	//					}
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
+	//
+	//	/**
+	//	 * Only to debug the windows
+	//	 * @return the chosen role
+	//	 */
+	//	private static Role getWindowRole() {
+	//		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
+	//		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+	//		switch (response) {
+	//		case 0:
+	//			return Role.GUEST;
+	//		case 1:
+	//			return Role.CLIENT;
+	//		case 2:
+	//			return Role.OWNER;
+	//		case 3:
+	//			return Role.ADMIN;
+	//		case 4:
+	//			return Role.SUPER_ADMIN;
+	//		default:
+	//			return null;
+	//		}
+	//	}
 
 	/**
 	 * Create the panel.
 	 */
 	public ClientMainPanel() {
-		
+
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -142,14 +132,14 @@ public class ClientMainPanel extends JPanel {
 		gbc.weighty = 0;
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		gbc.gridwidth = 2;
-		gbc.insets = new Insets(20, 10, 10, 10);
+		gbc.insets = new Insets(20, 10, 0, 10);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		add(getSearchField(), gbc);
 
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.insets = new Insets(0, 10, 10, 10);
 		gbc.weightx = 0.5;
 		gbc.weighty = 1;
 
@@ -268,6 +258,7 @@ public class ClientMainPanel extends JPanel {
 	private JTextField getSearchField() {
 		if(searchField == null) {
 			searchField = new JTextField();
+			searchField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 			//Whenever filterText changes, invoke refreshTableContent().
 			searchField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -332,8 +323,12 @@ public class ClientMainPanel extends JPanel {
 			table.setRowSorter(sorter);
 			table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 			table.getTableHeader().setReorderingAllowed(false);
-//			table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			table.setFocusable(false);
+			table.setShowVerticalLines(false);
+			table.setIntercellSpacing(new Dimension(0, 1));		
+			table.getTableHeader().setUI(null);
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -434,7 +429,10 @@ public class ClientMainPanel extends JPanel {
 				{new ImageIcon("/img/house00.png"), "John", "Doe", "Rowing", new Integer(3), new Boolean(true) },
 				{new ImageIcon("/img/house00.png"), "Sue", "Black", "Knitting", new Integer(2), new Boolean(false) },
 				{new ImageIcon("/img/house00.png"), "Jane", "White", "Speed reading", new Integer(20), new Boolean(true) },
-				{new ImageIcon("/img/house00.png"), "Joe", "Brown", "Pool", new Integer(10), new Boolean(false) }
+				{new ImageIcon("/img/house00.png"), "Joe", "Brown", "Pool", new Integer(10), new Boolean(false) },
+				{new ImageIcon("/img/house00.png"), "Paco", "Jones", "Anotha", new Integer(20), new Boolean(false) },
+				{new ImageIcon("/img/house00.png"), "Shpee", "Shpee", "Cloacker", new Integer(30), new Boolean(true) },
+				{new ImageIcon("/img/house00.png"), "Jam", "Jammies", "Speed sleep", new Integer(1), new Boolean(false) },
 		};
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
