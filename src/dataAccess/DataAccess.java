@@ -237,7 +237,22 @@ public class DataAccess  {
 		}
 		return false;
 	}
-
+	
+	/*
+	 *  Método para obtener de una casa rural las ofertas por un rango de precio definido por el usuario (pendiente revisión, se quiere para todas).
+	 */
+	public Vector<Offer> getOffersByPrice(RuralHouse rh, int min, int max) {
+		System.out.println(">> DataAccess: getOffersByPrice");
+		Vector<Offer> rho=rh.offers;
+		Vector<Offer> res= new Vector<>();
+		for(Offer of : rho) {
+			if(of.getPrice() > min && of.getPrice() < max){
+				res.add(of);
+			}
+		}
+		return res;
+	}
+	
 	public void close(){
 		db.close();
 		System.out.println("DataBase closed");
