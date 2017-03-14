@@ -17,6 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 
 import exceptions.AuthException;
+import gui.components.TextPrompt;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.BorderFactory;
@@ -24,9 +25,6 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-
-import businessLogic.util.TextPrompt;
-
 import javax.swing.UIManager;
 
 import java.awt.Color;
@@ -144,10 +142,15 @@ public class LoginPanel extends JPanel {
 	}
 
 	private boolean fieldsFilled() {
+		clearFieldsColors();
 		if(textFieldUsername.getText().trim().equals("")){
+			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldUsername.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(passwordField.getPassword()).equals("")) {
+			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			passwordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -166,7 +169,8 @@ public class LoginPanel extends JPanel {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
 			passwordField.setBounds(20, 115, 204, 30);
-			passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			//passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(passwordField);
 			tp.setText("Password");
 			tp.setStyle(Font.BOLD);
@@ -192,7 +196,7 @@ public class LoginPanel extends JPanel {
 			textFieldUsername.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldUsername.setBounds(20, 62, 204, 30);
 			textFieldUsername.setColumns(10);
-			textFieldUsername.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 			TextPrompt tp = new TextPrompt(textFieldUsername);
 			tp.setText("Username");
 			tp.setStyle(Font.BOLD);
@@ -221,5 +225,10 @@ public class LoginPanel extends JPanel {
 			lblLogin.setBounds(10, 11, 234, 28);
 		}
 		return lblLogin;
+	}
+	
+	public void clearFieldsColors() {
+		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 	}
 }

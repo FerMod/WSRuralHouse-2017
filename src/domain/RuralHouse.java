@@ -25,6 +25,10 @@ public class RuralHouse implements Serializable {
 	private Integer houseNumber;
 	private String description;
 	private String city; 
+	private int ownerId;
+	private int reviewId;
+
+
 	public Vector<Offer> offers;
 
 	public RuralHouse() {
@@ -62,6 +66,21 @@ public class RuralHouse implements Serializable {
 		this.city = city;
 	}
 
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public int getReviewId() {
+		return reviewId;
+	}
+
+	public void setReviewId(int reviewId) {
+		this.reviewId = reviewId;
+	}
 	
 		
 	/**

@@ -7,12 +7,18 @@ import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+
 import javax.persistence.*;
 
-@SuppressWarnings("serial")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class User implements Serializable {
+	
+	private static final long serialVersionUID = -8104656861921494420L;
 	
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
@@ -31,6 +37,7 @@ public class User implements Serializable {
 	 * Role of the user account
 	 */
 	public enum Role {
+		GUEST(0),
 		CLIENT(1),
 		OWNER(2),
 		ADMIN(3),

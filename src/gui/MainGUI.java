@@ -93,14 +93,20 @@ public class MainGUI extends JFrame {
 	 */
 	private void initialize() {
 		this.setSize(495, 290);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Exit when pressed the "X" top corner button
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Do nothing when pressed the "X" top corner button
 		Locale.setDefault(new Locale("en"));
 		this.setContentPane(getJContentPane(role));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainTitle"));
 		
+		//Layer out its subcomponents, to later center the frame
+		//Caution: Its time consuming, must be done after adding all the components to the frame
+		this.validate();
+		this.setLocationRelativeTo(null); 
+		
+		/*FIXME The old code lines to center the lines
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Get screen dimension
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Set the screen location to the center of the screen
-		
+		*/
 		WindowAdapter exitListener = new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
