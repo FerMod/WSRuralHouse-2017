@@ -20,7 +20,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import domain.User.Role;
 import gui.components.ui.CustomTabbedPaneUI;
-import gui.DebugWindow;
+import gui.ConsoleWindow;
 import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
@@ -80,7 +80,7 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow(Role role) {
 		
-		DebugWindow consoleOutput = new DebugWindow();
+		ConsoleWindow consoleOutput = new ConsoleWindow();
 		consoleOutput.setVisible(true);
 		
 		this.role = role;

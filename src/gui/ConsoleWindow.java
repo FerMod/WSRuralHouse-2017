@@ -19,7 +19,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-public class DebugWindow {
+public class ConsoleWindow {
 
 	private JFrame frame;
 	private CapturePane capturePane;
@@ -30,7 +30,7 @@ public class DebugWindow {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new DebugWindow();
+				new ConsoleWindow();
 			}
 		});
 
@@ -42,7 +42,7 @@ public class DebugWindow {
 	//
 	//		this.type = type;
 
-	public DebugWindow() {
+	public ConsoleWindow() {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
