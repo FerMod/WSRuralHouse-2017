@@ -20,7 +20,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import domain.User.Role;
 import gui.components.ui.CustomTabbedPaneUI;
-
+import gui.DebugWindow;
 import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
@@ -58,17 +58,17 @@ public class MainWindow extends JFrame {
 	 */
 	private static Role getWindowRole() {
 		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		String response = (String)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		switch (response) {
-		case 0:
+		case "GUEST":
 			return Role.GUEST;
-		case 1:
+		case "CLIENT":
 			return Role.CLIENT;
-		case 2:
+		case "OWNER":
 			return Role.OWNER;
-		case 3:
+		case "ADMIN":
 			return Role.ADMIN;
-		case 4:
+		case "SUPER_ADMIN":
 			return Role.SUPER_ADMIN;
 		default:
 			return null;
@@ -79,6 +79,10 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow(Role role) {
+		
+		DebugWindow consoleOutput = new DebugWindow();
+		consoleOutput.setVisible(true);
+		
 		this.role = role;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(600, 465));
