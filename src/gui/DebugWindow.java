@@ -51,8 +51,9 @@ public final class DebugWindow extends JFrame {
 				ps = System.err;
 				System.setErr(new PrintStream(new StreamCapturer("SYTEM.ERR", capturePane, ps)));
 
-				System.out.println("Hi!");
-				//System.err.println("Im error");
+				System.out.println("Hi! Im normal text.");
+				System.out.println("Im in this TextArea, but I also appear in the console!");
+				System.err.println("Hi! Im error!");
 			}            
 		});
 
