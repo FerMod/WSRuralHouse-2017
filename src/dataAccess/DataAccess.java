@@ -17,9 +17,11 @@ import javax.security.auth.login.AccountNotFoundException;
 import configuration.ConfigXML;
 //import domain.Booking;
 import domain.Offer;
+import domain.Owner;
 import domain.RuralHouse;
-import domain.User;
-import domain.User.Role;
+import domain.AbstractUser;
+import domain.AbstractUser.Role;
+import domain.Client;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import exceptions.DuplicatedEntityException.Error;
@@ -117,13 +119,13 @@ public class DataAccess  {
 		return ruralHouse;
 	}
 
-	public User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
 		System.out.println(">> DataAccess: createUser=> email=" + email + " username=" + username + " password=" + password + " role=" + role);
-		User user = null;
+		AbstractUser user = null;
 		if(!existsUser(username)) {
 			if(!existsEmail(email)) {
 				db.getTransaction().begin();
-				user = new User(email, username, password, role);
+				user = getNewUser(email, username, password, role);
 				db.persist(user);
 				db.getTransaction().commit();
 			} else {
@@ -133,6 +135,23 @@ public class DataAccess  {
 			throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
 		}
 		return user;
+	}
+	
+	private AbstractUser getNewUser(String email, String username, String password, Role role) {
+		switch (role) {
+		case GUEST:
+			return null;//new Client(email, username, password);
+		case CLIENT:
+			return new Client(email, username, password);
+		case OWNER:
+			return new Owner(email, username, password);
+		case ADMIN:
+			return null;
+		case SUPER_ADMIN:
+			return null;
+		default:
+			return null;
+		}
 	}
 
 	public boolean validDni(String dni) {
@@ -145,29 +164,29 @@ public class DataAccess  {
 	}
 
 	public Role getRole(String username) {
-		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
+		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 				+ "FROM User u "
-				+ "WHERE u.username = :username ", User.class)
+				+ "WHERE u.username = :username ", AbstractUser.class)
 				.setParameter("username", username);
-		List<User> result = query.getResultList();
+		List<AbstractUser> result = query.getResultList();
 		return result.get(0).getRole();
 	}
 
 	public boolean existsUser(String username) {
-		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
+		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 				+ "FROM User u "
-				+ "WHERE u.username = :username", User.class)
+				+ "WHERE u.username = :username", AbstractUser.class)
 				.setParameter("username", username);
-		List<User> result = query.getResultList();
+		List<AbstractUser> result = query.getResultList();
 		return !result.isEmpty();
 	}
 
 	public boolean existsEmail(String email) {
-		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
+		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 				+ "FROM User u "
-				+ "WHERE u.email = :email", User.class)
+				+ "WHERE u.email = :email", AbstractUser.class)
 				.setParameter("email", email);
-		List<User> result = query.getResultList();
+		List<AbstractUser> result = query.getResultList();
 		return !result.isEmpty();
 	}
 
@@ -183,20 +202,20 @@ public class DataAccess  {
 	}
 
 	public void login(String username, String password) throws AuthException, AccountNotFoundException {	
-		TypedQuery<User> query = db.createQuery("SELECT DISTINCT u "
+		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 				+ "FROM User u "
-				+ "WHERE u.username = :username ", User.class)
+				+ "WHERE u.username = :username ", AbstractUser.class)
 				.setParameter("username", username);
-		List<User> result = query.getResultList();
+		List<AbstractUser> result = query.getResultList();
 		if(!result.isEmpty()) {
-			User user = result.get(0);
+			AbstractUser user = result.get(0);
 			authenticate(user, password);
 		} else {
 			throw new AccountNotFoundException("Account not found.");
 		}
 	}
 
-	private void authenticate(User user, String password) throws AuthException {
+	private void authenticate(AbstractUser user, String password) throws AuthException {
 		if(!password.equals(user.getPassword())) {
 			throw new AuthException("Authentification failed.");
 		}

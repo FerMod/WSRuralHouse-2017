@@ -30,7 +30,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import dataAccess.DataAccess;
-import domain.User.Role;
+import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;

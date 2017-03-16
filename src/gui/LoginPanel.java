@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataAccess.DataAccess;
-import domain.User.Role;
+import domain.AbstractUser.Role;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;

@@ -13,8 +13,8 @@ import dataAccess.DataAccess;
 //import domain.Booking;
 import domain.Offer;
 import domain.RuralHouse;
-import domain.User;
-import domain.User.Role;
+import domain.AbstractUser;
+import domain.AbstractUser.Role;
 
 import exceptions.AuthException;
 import exceptions.BadDatesException;
@@ -81,11 +81,11 @@ public final class FacadeImplementationWS  implements ApplicationFacadeInterface
 		}
 	}
 
-	public User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
 		System.out.println(">> FacadeImplementationWS: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
 
 		DataAccess dbManager = new DataAccess();
-		User user = null;
+		AbstractUser user = null;
 
 		try {
 			user = dbManager.createUser(email, username, password, role);

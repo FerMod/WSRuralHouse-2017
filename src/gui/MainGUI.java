@@ -7,7 +7,7 @@ package gui;
 import javax.swing.*;
 
 import domain.RuralHouse;
-import domain.User.Role;
+import domain.AbstractUser.Role;
 import businessLogic.ApplicationFacadeInterfaceWS;
 
 import java.awt.Color;

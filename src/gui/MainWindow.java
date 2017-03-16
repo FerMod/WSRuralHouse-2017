@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import domain.User.Role;
+import domain.AbstractUser.Role;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.ConsoleWindow;
 import javax.swing.JTabbedPane;

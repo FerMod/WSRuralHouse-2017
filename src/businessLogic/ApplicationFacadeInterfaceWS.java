@@ -6,8 +6,8 @@ import java.util.Date;
 //import domain.Booking;
 import domain.Offer;
 import domain.RuralHouse;
-import domain.User;
-import domain.User.Role;
+import domain.AbstractUser;
+import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
@@ -54,7 +54,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
 	@WebMethod
-	 User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+	 AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
 	/**
 	 * Get the account role.

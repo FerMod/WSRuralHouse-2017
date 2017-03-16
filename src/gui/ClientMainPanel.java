@@ -37,7 +37,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
-import domain.User.Role;
+import domain.AbstractUser.Role;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {

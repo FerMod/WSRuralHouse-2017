@@ -9,28 +9,26 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class Owner {
-	
-	@XmlID
-	@XmlJavaTypeAdapter(IntegerAdapter.class)
-	@Id
-	private int idOwner;
-	
-	public Owner(int idOwner) {
-		this.idOwner = idOwner;
+public class Owner extends AbstractUser {
+
+	private static final long serialVersionUID = -3896660403851368689L;
+
+	public Owner(String email, String username, String password) {
+		super(email, username, password, Role.OWNER);
 	}
 
 	public int getIdOwner() {
-		return idOwner;
+		return super.getId();
 	}
 
-	public void setIdOwner(int idOwner) {
-		this.idOwner = idOwner;
+	@Override
+	public Role getRole() {
+		return Role.OWNER;
 	}
 
 	@Override
 	public String toString() {
-		return "Owner [idOwner=" + idOwner + "]";
+		return super.toString();
 	}
-	
+
 }
