@@ -139,8 +139,6 @@ public class DataAccess  {
 	
 	private AbstractUser getNewUser(String email, String username, String password, Role role) {
 		switch (role) {
-		case GUEST:
-			return null;//new Client(email, username, password);
 		case CLIENT:
 			return new Client(email, username, password);
 		case OWNER:

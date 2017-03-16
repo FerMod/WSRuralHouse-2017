@@ -57,11 +57,9 @@ public class MainWindow extends JFrame {
 	 * @return the chosen role
 	 */
 	private static Role getWindowRole() {
-		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
+		String[] options = new String[] {"CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
 		String response = (String)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		switch (response) {
-		case "GUEST":
-			return Role.GUEST;
 		case "CLIENT":
 			return Role.CLIENT;
 		case "OWNER":
@@ -136,9 +134,6 @@ public class MainWindow extends JFrame {
 
 	public JPanel getRolePanel(Role role) {
 		switch (role) {
-		case GUEST:
-			//return new GuestMainPanel();
-			return null;
 		case CLIENT:
 			return new ClientMainPanel();
 		case OWNER:
