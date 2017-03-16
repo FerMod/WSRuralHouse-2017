@@ -101,8 +101,7 @@ public class SignUpPanel extends JPanel {
 		add(getBtnCancel());
 		add(getLblSignUp());
 		add(getAccountType());
-		add(getLblAccountType());
-
+		add(getLblAccountType());		
 	}
 
 	public JButton getDefaultButton() {
@@ -216,7 +215,7 @@ public class SignUpPanel extends JPanel {
 							try {
 								dbManager.createUser(email, username, password, role);
 								dbManager.login(username, password);
-								JFrame jframe = new MainGUI(dbManager.getRole(username));	
+								JFrame jframe = new MainGUI(role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
@@ -289,8 +288,8 @@ public class SignUpPanel extends JPanel {
 	private boolean correctEmailFormat() {
 		clearFieldsColors();
 		if(!textFieldEmail.getText().matches(EMAIL_PATTERN)) {
-			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
-			confirmPasswordField.requestFocus();
+			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The email dont have the correct format.", "Invalid email format", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
