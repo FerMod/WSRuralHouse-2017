@@ -203,6 +203,7 @@ public class LoginPanel extends JPanel {
 			tp.setAlpha(128);
 			//ImageIcon imageIcon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/username.png")));
 			//tp.setIcon(imageIcon);
+			textFieldUsername.requestFocus();
 		}
 		return textFieldUsername;
 	}
