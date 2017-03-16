@@ -33,10 +33,10 @@ public abstract class AbstractUser implements UserInterface, Serializable {
 	 * Role of the user account
 	 */
 	public enum Role {
-		CLIENT(1),
-		OWNER(2),
-		ADMIN(3),
-		SUPER_ADMIN(4);
+		CLIENT(0),
+		OWNER(1),
+		ADMIN(2),
+		SUPER_ADMIN(3);
 
 		private final int role;
 

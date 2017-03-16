@@ -40,7 +40,7 @@ public class DataAccess  {
 		c = ConfigXML.getInstance();
 
 		System.out.println("Creating objectdb instance => isDatabaseLocal: "+c.isDatabaseLocal()+" getDatabBaseOpenMode: "+c.getDataBaseOpenMode());
-
+		
 		if (c.isDatabaseLocal()) {
 			emf = Persistence.createEntityManagerFactory(c.getDbFilename());
 			db = emf.createEntityManager();			

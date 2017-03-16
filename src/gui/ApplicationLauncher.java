@@ -13,6 +13,7 @@ import businessLogic.ApplicationFacadeInterfaceWS;
 import businessLogic.FacadeImplementationWS;
 import businessLogic.util.LogFile;
 import configuration.ConfigXML;
+import dataAccess.ExponentialBackOff;
 
 public class ApplicationLauncher {
 
@@ -43,7 +44,7 @@ public class ApplicationLauncher {
 
 			if (c.isBusinessLogicLocal()) {
 
-				appFacadeInterface = new FacadeImplementationWS();
+				appFacadeInterface = ExponentialBackOff.execute( () -> new FacadeImplementationWS() ) ;
 
 			} else { //Si es remoto
 
