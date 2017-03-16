@@ -1,4 +1,3 @@
-
 package domain;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,17 +10,16 @@ import javax.persistence.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Inheritance
-//@Entity(name="User")
-@MappedSuperclass
-//@DiscriminatorColumn(name="Id")
+@Entity(name = "User")
+@Table(name = "User")
 public abstract class AbstractUser implements UserInterface, Serializable {
 
 	private static final long serialVersionUID = -8104656861921494420L;
 
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
-	@Id
 	@GeneratedValue
+	@Id
 	private Integer id;
 	@Id
 	private String email;
