@@ -31,7 +31,7 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManager  db;
 
 	private final ConfigXML CONFIG;
-	
+
 	public DataAccess()  {
 		CONFIG = ConfigXML.getInstance();
 		this.persistenceUnitName = CONFIG.getDbFilename();
@@ -361,27 +361,69 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return false;
 	}
-<<<<<<< HEAD
-	
+
+
 	/*
-	 *  Método para obtener de una casa rural las ofertas por un rango de precio definido por el usuario (pendiente revisión, se quiere para todas).
+	 *  Método para obtener todas las ofertas por un rango de precio definido por el usuario (pendiente de prueba).
 	 */
-	public Vector<Offer> getOffersByPrice(RuralHouse rh, int min, int max) {
-		System.out.println(">> DataAccess: getOffersByPrice");
-		Vector<Offer> rho=rh.offers;
-		Vector<Offer> res= new Vector<>();
-		for(Offer of : rho) {
-			if(of.getPrice() > min && of.getPrice() < max){
-				res.add(of);
-			}
+	public Vector<Offer> getOffersByPrice(int min, int max) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT o"
+					+ " FROM Offer o "
+					+ "WHERE o.price>" + min + "AND o.price<" + max, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
-		return res;
+		return result;
 	}
 	
-	public void close(){
-		db.close();
-		System.out.println("DataBase closed");
-=======
+	/*
+	 *  Método para obtener todas las ofertas por un precio específico definido por el usuario (pendiente de prueba).
+	 */
+	public Vector<Offer> getOffersByConcretePrice(int price) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByConcretePrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT o"
+					+ " FROM Offer o "
+					+ "WHERE o.price=" + price, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/*
+	 *  Método para obtener todas las ofertas por el menor precio (pendiente de prueba).
+	 */
+	public Vector<Offer> getOffersByMinorPrice() {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByMinorPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
+												   + " FROM Offer o", Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
 
 	private <T> void printVector(Vector<T> vector) {
 		StringBuilder sp = new StringBuilder();
@@ -391,7 +433,6 @@ public class DataAccess implements DataAccessInterface {
 		}
 		sp.append("]");
 		System.out.println(sp.toString());
->>>>>>> refs/heads/FerMod
 	}
 
 }
