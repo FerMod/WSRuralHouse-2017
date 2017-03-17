@@ -12,11 +12,11 @@ public final class Verbose {
 		return verbose;
 	}
 
-	public static void enable() {
-		verbose = true;
+	public static boolean enabled() {
+		return verbose = true;
 	}
 	
-	public static void disable() {
+	public static void disabled() {
 		verbose = false;
 	}
 

@@ -1,19 +1,8 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Component;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.security.auth.login.AccountNotFoundException;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JRadioButton;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -22,17 +11,30 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Arrays;
-import java.awt.FlowLayout;
+
+import javax.security.auth.login.AccountNotFoundException;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import businessLogic.util.TextPrompt;
 import dataAccess.DataAccess;
-import domain.User.Role;
+import dataAccess.DataAccessInterface;
+import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
-import java.awt.Color;
-import javax.swing.border.LineBorder;
+import gui.components.TextPrompt;
 
 public class SignUpPanel extends JPanel {
 
@@ -100,8 +102,7 @@ public class SignUpPanel extends JPanel {
 		add(getBtnCancel());
 		add(getLblSignUp());
 		add(getAccountType());
-		add(getLblAccountType());
-
+		add(getLblAccountType());		
 	}
 
 	public JButton getDefaultButton() {
@@ -173,7 +174,8 @@ public class SignUpPanel extends JPanel {
 		if(confirmPasswordField == null) {
 			confirmPasswordField = new JPasswordField();
 			confirmPasswordField.setBounds(182, 95, 150, 28);
-			confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(confirmPasswordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			//confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(confirmPasswordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(confirmPasswordField);
 			tp.setText("Confirm password");
 			tp.setStyle(Font.BOLD);
@@ -206,20 +208,34 @@ public class SignUpPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
 						if(passwordMatch() && correctEmailFormat()) {
-							DataAccess dbManager = new DataAccess();
+							clearFieldsColors();
+							DataAccessInterface dbManager = new DataAccess();
 							String email = textFieldEmail.getText();
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
 								dbManager.createUser(email, username, password, role);
 								dbManager.login(username, password);
-								JFrame jframe = new MainGUI(dbManager.getRole(username));	
+								JFrame jframe = new MainGUI(Role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
 							} catch(DuplicatedEntityException ex) {
+								clearFieldsColors();
 								System.err.println(ex.getMessage());
 								System.out.println(ex.getError().toString());
+
+								switch(ex.getError().getCode()) {
+								case 1:
+									textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+									break;
+								case 2:
+									textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+									break;
+								default:
+									break;
+								}
+
 								JOptionPane.showMessageDialog(sharedFrame,	ex.getError().getDescription() + "\nTry with another one.", "Already in use!", JOptionPane.WARNING_MESSAGE);
 							} catch (AuthException | AccountNotFoundException ex) {
 								System.err.println(ex.getMessage());
@@ -234,16 +250,25 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean fieldsFilled() {
+		clearFieldsColors();
 		if(textFieldEmail.getText().equals("")) {
+			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"email\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(textFieldUsername.getText().trim().equals("")){
+			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldUsername.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(passwordField.getPassword()).equals("")) {
+			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			passwordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(confirmPasswordField.getPassword()).equals("")) {
+			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			confirmPasswordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"confirm password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -251,7 +276,10 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean passwordMatch() {
+		clearFieldsColors();
 		if(!Arrays.equals(passwordField.getPassword(), confirmPasswordField.getPassword())) {
+			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			confirmPasswordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The two passwords does not match.", "Password mismatch", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -259,7 +287,10 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean correctEmailFormat() {
+		clearFieldsColors();
 		if(!textFieldEmail.getText().matches(EMAIL_PATTERN)) {
+			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The email dont have the correct format.", "Invalid email format", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -270,7 +301,8 @@ public class SignUpPanel extends JPanel {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
 			passwordField.setBounds(20, 95, 150, 28);
-			passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			//passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(passwordField);
 			tp.setText("Password");
 			tp.setStyle(Font.BOLD);
@@ -286,7 +318,8 @@ public class SignUpPanel extends JPanel {
 			textFieldUsername.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldUsername.setBounds(20, 54, 312, 28);
 			textFieldUsername.setColumns(10);
-			textFieldUsername.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			//textFieldUsername.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(textFieldUsername);
 			tp.setText("Username");
 			tp.setStyle(Font.BOLD);
@@ -337,7 +370,8 @@ public class SignUpPanel extends JPanel {
 			textFieldEmail.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldEmail.setColumns(10);
 			textFieldEmail.setBounds(20, 13, 312, 28);
-			textFieldEmail.setBorder(BorderFactory.createCompoundBorder(textFieldEmail.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
+			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			//textFieldEmail.setBorder(BorderFactory.createCompoundBorder(textFieldEmail.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
 			TextPrompt tp = new TextPrompt(textFieldEmail);
 			tp.setText("email");
 			tp.setStyle(Font.BOLD);
@@ -350,7 +384,7 @@ public class SignUpPanel extends JPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 0, true), "* Required information", TitledBorder.RIGHT, TitledBorder.BOTTOM, null, new Color(255, 0, 0)));
+			panel.setBorder(new TitledBorder(new LineBorder(new Color(255, 51, 51), 0, true), "* Required information", TitledBorder.RIGHT, TitledBorder.BOTTOM, null, Color.RED));
 			panel.setBounds(0, 118, 360, 157);
 			panel.setLayout(null);
 			//panel.add(getLblUsername());
@@ -362,5 +396,12 @@ public class SignUpPanel extends JPanel {
 			//panel.add(getLblConfirmPassword());
 		}
 		return panel;
+	}
+
+	public void clearFieldsColors() {
+		textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 	}
 }

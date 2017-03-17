@@ -7,17 +7,17 @@ package gui;
 import javax.swing.*;
 
 import domain.RuralHouse;
-import domain.User.Role;
-import businessLogic.ApplicationFacadeInterfaceWS;
+import domain.AbstractUser.Role;
+import businessLogic.ApplicationFacadeImpl;
+import businessLogic.ApplicationFacadeInterface;
+import dataAccess.DataAccess;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -35,13 +35,13 @@ public class MainGUI extends JFrame {
 
 	private Role role;
 
-	private static ApplicationFacadeInterfaceWS appFacadeInterface;
+	private static ApplicationFacadeInterface appFacadeInterface;
 
-	public static ApplicationFacadeInterfaceWS getBusinessLogic(){
+	public static ApplicationFacadeInterface getBusinessLogic(){
 		return appFacadeInterface;
 	}
 
-	public static void setBussinessLogic (ApplicationFacadeInterfaceWS afi){
+	public static void setBussinessLogic (ApplicationFacadeInterface afi){
 		appFacadeInterface = afi;
 	}
 
@@ -93,14 +93,20 @@ public class MainGUI extends JFrame {
 	 */
 	private void initialize() {
 		this.setSize(495, 290);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Exit when pressed the "X" top corner button
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //Do nothing when pressed the "X" top corner button
 		Locale.setDefault(new Locale("en"));
 		this.setContentPane(getJContentPane(role));
 		this.setTitle(ResourceBundle.getBundle("Etiquetas").getString("MainTitle"));
 		
+		//Layer out its subcomponents, to later center the frame
+		//Caution: Its time consuming, must be done after adding all the components to the frame
+		this.validate();
+		this.setLocationRelativeTo(null); 
+		
+		/*FIXME The old code lines to center the lines
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize(); //Get screen dimension
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2); //Set the screen location to the center of the screen
-		
+		*/
 		WindowAdapter exitListener = new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -184,8 +190,10 @@ public class MainGUI extends JFrame {
 			btnSetAvailability.setText(ResourceBundle.getBundle("Etiquetas").getString("SetAvailability"));
 			btnSetAvailability.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
-					Vector<RuralHouse> rhs = facade.getAllRuralHouses();
+					ApplicationFacadeInterface aplicationFacade = new ApplicationFacadeImpl();
+					DataAccess dataAccess = new DataAccess();
+					aplicationFacade.setDataAccess(dataAccess);
+					Vector<RuralHouse> rhs = aplicationFacade.getAllRuralHouses();
 					JFrame a = new SetAvailabilityGUI(rhs);
 					a.setVisible(true);
 				}
@@ -293,7 +301,6 @@ public class MainGUI extends JFrame {
 	public int exitQuestion() {
 		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", null, JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
-			appFacadeInterface.close();
 			System.exit(0);
 		}
 		return reply;

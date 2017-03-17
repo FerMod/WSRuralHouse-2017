@@ -1,36 +1,27 @@
 package domain;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class Admin {
+public class Admin extends AbstractUser {
 	
-	@XmlID
-	@XmlJavaTypeAdapter(IntegerAdapter.class)
-	@Id
-	private int idAdmin;
+	private static final long serialVersionUID = 9196192939959320700L;
+
+	public Admin(String email, String username, String password) {
+		super(email, username, password, Role.ADMIN);
+	}
 	
-	public Admin(int idAdmin) {
-		this.idAdmin = idAdmin;
-	}
-
-	public int getIdAdmin() {
-		return idAdmin;
-	}
-
-	public void setIdAdmin(int idAdmin) {
-		this.idAdmin = idAdmin;
+	@Override
+	public Role getRole() {
+		return Role.ADMIN;
 	}
 
 	@Override
 	public String toString() {
-		return "Admin [idAdmin=" + idAdmin + "]";
+		return super.toString();
 	}
 	
 }

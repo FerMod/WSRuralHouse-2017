@@ -1,13 +1,12 @@
 package businessLogic;
 
-import java.util.Vector;
 import java.util.Date;
+import java.util.Vector;
 
-//import domain.Booking;
 import domain.Offer;
 import domain.RuralHouse;
-import domain.User;
-import domain.User.Role;
+import domain.AbstractUser;
+import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
@@ -17,8 +16,16 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
+import dataAccess.DataAccessInterface;
+
 @WebService
-public interface ApplicationFacadeInterfaceWS  {
+public interface ApplicationFacadeInterface  {
+	
+	/**
+	 * 
+	 * @param dataAccess
+	 */
+	void setDataAccess(DataAccessInterface dataAccess);
 
 	/**
 	 * Creates a rural house and stores it in the database.
@@ -54,7 +61,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
 	@WebMethod
-	 User createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
 	/**
 	 * Get the account role.
@@ -82,13 +89,7 @@ public interface ApplicationFacadeInterfaceWS  {
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) ;
-
-	/**
-	 * Inititialize the database.
-	 */
-	@WebMethod
-	void initializeBD();
+	Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay);
 
 	/**
 	 * Login the user with the account that matches the entered username and password
@@ -100,11 +101,5 @@ public interface ApplicationFacadeInterfaceWS  {
 	 */
 	@WebMethod
 	void login(String username, String password) throws AuthException, AccountNotFoundException;
-
-	/**
-	 * Close the database
-	 */
-	@WebMethod
-	void close();
 
 }
