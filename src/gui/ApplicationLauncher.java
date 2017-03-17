@@ -9,11 +9,11 @@ import javax.swing.UIManager;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import businessLogic.ApplicationFacadeInterfaceWS;
-import businessLogic.FacadeImplementationWS;
+import businessLogic.AplicationFacadeImpl;
+import businessLogic.AplicationFacadeInterface;
 import businessLogic.util.LogFile;
 import configuration.ConfigXML;
-import dataAccess.ExponentialBackOff;
+import dataAccess.DataAccess;
 
 public class ApplicationLauncher {
 
@@ -23,33 +23,31 @@ public class ApplicationLauncher {
 
 			LogFile.FILE_NAME = "error.log";
 
-			ConfigXML c = ConfigXML.getInstance();
+			ConfigXML config = ConfigXML.getInstance();
 
-			System.out.println(c.getLocale());
+			System.out.println(config.getLocale());
 
-			Locale.setDefault(new Locale(c.getLocale()));
+			Locale.setDefault(new Locale(config.getLocale()));
 
 			System.out.println("Locale: "+Locale.getDefault());
 
 			SharedFrame sharedFrame = new SharedFrame();
 			sharedFrame.setVisible(true);
 
-
-
-			ApplicationFacadeInterfaceWS appFacadeInterface;
+			AplicationFacadeInterface aplicationFacade;
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
-			if (c.isBusinessLogicLocal()) {
-
-				appFacadeInterface = ExponentialBackOff.execute( () -> new FacadeImplementationWS() ) ;
-
+			if (config.isBusinessLogicLocal()) {
+				aplicationFacade = new AplicationFacadeImpl();
+				DataAccess dataAccess = new DataAccess(config);
+				aplicationFacade.setDataAccess(dataAccess);
 			} else { //Si es remoto
 
 				//String serviceName = "http://localhost:9999/ws/ruralHouses?wsdl";
-				String serviceName= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName()+"?wsdl";
+				String serviceName= "http://"+config.getBusinessLogicNode() +":"+ config.getBusinessLogicPort()+"/ws/"+config.getBusinessLogicName()+"?wsdl";
 
 				//URL url = new URL("http://localhost:9999/ws/ruralHouses?wsdl");
 				URL url = new URL(serviceName);
@@ -61,14 +59,14 @@ public class ApplicationLauncher {
 
 				Service service = Service.create(url, qname);
 
-				appFacadeInterface = service.getPort(ApplicationFacadeInterfaceWS.class);
+				aplicationFacade = service.getPort(AplicationFacadeInterface.class);
 			} 
 
 			//if (c.getDataBaseOpenMode().equals("initialize")) {
 			//    appFacadeInterface.initializeBD();
 			//}
 
-			MainGUI.setBussinessLogic(appFacadeInterface);
+			MainGUI.setBussinessLogic(aplicationFacade);
 
 		} catch (Exception e) {
 

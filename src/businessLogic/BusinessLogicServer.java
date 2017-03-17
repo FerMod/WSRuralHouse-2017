@@ -25,7 +25,7 @@ public class BusinessLogicServer extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextArea textArea;
 	@SuppressWarnings("unused")
-	private ApplicationFacadeInterfaceWS server;
+	private AplicationFacadeInterface server;
 	private String service;
 
 	/**
@@ -95,7 +95,7 @@ public class BusinessLogicServer extends JDialog {
 
 				service= "http://"+c.getBusinessLogicNode() +":"+ c.getBusinessLogicPort()+"/ws/"+c.getBusinessLogicName();
 
-				Endpoint.publish(service, new FacadeImplementationWS());
+				Endpoint.publish(service, new AplicationFacadeImpl());
 
 				textArea.append("\n\nRunning service at:\n\t" + service);
 				textArea.append("\n\n\nPress button to exit this server... ");

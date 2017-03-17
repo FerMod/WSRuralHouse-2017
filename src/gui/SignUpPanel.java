@@ -30,6 +30,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import dataAccess.DataAccess;
+import dataAccess.DataAccessInterface;
 import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -208,14 +209,14 @@ public class SignUpPanel extends JPanel {
 					if(fieldsFilled()) {
 						if(passwordMatch() && correctEmailFormat()) {
 							clearFieldsColors();
-							DataAccess dbManager = new DataAccess();
+							DataAccessInterface dbManager = new DataAccess();
 							String email = textFieldEmail.getText();
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
 								dbManager.createUser(email, username, password, role);
 								dbManager.login(username, password);
-								JFrame jframe = new MainGUI(role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
+								JFrame jframe = new MainGUI(Role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);

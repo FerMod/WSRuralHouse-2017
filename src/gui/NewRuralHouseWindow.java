@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import businessLogic.ApplicationFacadeInterfaceWS;
+import businessLogic.AplicationFacadeInterface;
 import exceptions.DuplicatedEntityException;
 
 @SuppressWarnings("serial")
@@ -94,7 +94,7 @@ public class NewRuralHouseWindow extends JDialog {
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
-						ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
+						AplicationFacadeInterface facade = MainGUI.getBusinessLogic();
 						String description = textFieldDescription.getText();
 						String city = textFieldCity.getText();
 						try {

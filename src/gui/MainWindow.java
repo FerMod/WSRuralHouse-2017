@@ -28,6 +28,7 @@ public class MainWindow extends JFrame {
 	private static final long serialVersionUID = -1810393566512302281L;
 
 	private JPanel contentPane;
+	@SuppressWarnings("unused")
 	private Role role;
 	private JTabbedPane tabbedPane;
 
@@ -151,6 +152,7 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private JMenuBar getRoleMenuBar() {
 		//Where the GUI is created:
 		JMenuBar menuBar;

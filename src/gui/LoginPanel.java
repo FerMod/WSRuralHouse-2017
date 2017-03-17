@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import dataAccess.DataAccess;
+import dataAccess.DataAccessInterface;
 import domain.AbstractUser.Role;
 
 import javax.swing.JTextField;
@@ -116,12 +117,11 @@ public class LoginPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
 
-						DataAccess dbManager = new DataAccess();
+						DataAccessInterface dbManager = new DataAccess();
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
 							dbManager.login(username, password); //[TODO]: Login con correo electronico
-							System.out.println(dbManager.getRole(username));
 							if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
 								JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented jet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
 							} else {

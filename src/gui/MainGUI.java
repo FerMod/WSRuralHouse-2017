@@ -8,16 +8,16 @@ import javax.swing.*;
 
 import domain.RuralHouse;
 import domain.AbstractUser.Role;
-import businessLogic.ApplicationFacadeInterfaceWS;
+import businessLogic.AplicationFacadeImpl;
+import businessLogic.AplicationFacadeInterface;
+import dataAccess.DataAccess;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Vector;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -35,13 +35,13 @@ public class MainGUI extends JFrame {
 
 	private Role role;
 
-	private static ApplicationFacadeInterfaceWS appFacadeInterface;
+	private static AplicationFacadeInterface appFacadeInterface;
 
-	public static ApplicationFacadeInterfaceWS getBusinessLogic(){
+	public static AplicationFacadeInterface getBusinessLogic(){
 		return appFacadeInterface;
 	}
 
-	public static void setBussinessLogic (ApplicationFacadeInterfaceWS afi){
+	public static void setBussinessLogic (AplicationFacadeInterface afi){
 		appFacadeInterface = afi;
 	}
 
@@ -190,8 +190,10 @@ public class MainGUI extends JFrame {
 			btnSetAvailability.setText(ResourceBundle.getBundle("Etiquetas").getString("SetAvailability"));
 			btnSetAvailability.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
-					Vector<RuralHouse> rhs = facade.getAllRuralHouses();
+					AplicationFacadeInterface aplicationFacade = new AplicationFacadeImpl();
+					DataAccess dataAccess = new DataAccess();
+					aplicationFacade.setDataAccess(dataAccess);
+					Vector<RuralHouse> rhs = aplicationFacade.getAllRuralHouses();
 					JFrame a = new SetAvailabilityGUI(rhs);
 					a.setVisible(true);
 				}
@@ -299,7 +301,6 @@ public class MainGUI extends JFrame {
 	public int exitQuestion() {
 		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", null, JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
-			appFacadeInterface.close();
 			System.exit(0);
 		}
 		return reply;
