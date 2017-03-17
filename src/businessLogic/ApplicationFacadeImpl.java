@@ -21,7 +21,7 @@ import exceptions.DuplicatedEntityException.Error;
 
 //Service Implementation
 @WebService(endpointInterface = "businessLogic.ApplicationFacadeInterface")
-public final class AplicationFacadeImpl  implements AplicationFacadeInterface {
+public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface {
 
 	private DataAccessInterface dataAccess;
 

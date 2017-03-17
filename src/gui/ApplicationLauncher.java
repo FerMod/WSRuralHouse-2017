@@ -9,8 +9,8 @@ import javax.swing.UIManager;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
-import businessLogic.AplicationFacadeImpl;
-import businessLogic.AplicationFacadeInterface;
+import businessLogic.ApplicationFacadeImpl;
+import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
@@ -34,14 +34,14 @@ public class ApplicationLauncher {
 			SharedFrame sharedFrame = new SharedFrame();
 			sharedFrame.setVisible(true);
 
-			AplicationFacadeInterface aplicationFacade;
+			ApplicationFacadeInterface aplicationFacade;
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
 			if (config.isBusinessLogicLocal()) {
-				aplicationFacade = new AplicationFacadeImpl();
+				aplicationFacade = new ApplicationFacadeImpl();
 				DataAccess dataAccess = new DataAccess(config);
 				aplicationFacade.setDataAccess(dataAccess);
 			} else { //Si es remoto
@@ -59,7 +59,7 @@ public class ApplicationLauncher {
 
 				Service service = Service.create(url, qname);
 
-				aplicationFacade = service.getPort(AplicationFacadeInterface.class);
+				aplicationFacade = service.getPort(ApplicationFacadeInterface.class);
 			} 
 
 			//if (c.getDataBaseOpenMode().equals("initialize")) {

@@ -19,7 +19,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import dataAccess.DataAccessInterface;
 
 @WebService
-public interface AplicationFacadeInterface  {
+public interface ApplicationFacadeInterface  {
 	
 	/**
 	 * 

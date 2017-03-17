@@ -8,8 +8,8 @@ import javax.swing.*;
 
 import domain.RuralHouse;
 import domain.AbstractUser.Role;
-import businessLogic.AplicationFacadeImpl;
-import businessLogic.AplicationFacadeInterface;
+import businessLogic.ApplicationFacadeImpl;
+import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 
 import java.awt.Color;
@@ -35,13 +35,13 @@ public class MainGUI extends JFrame {
 
 	private Role role;
 
-	private static AplicationFacadeInterface appFacadeInterface;
+	private static ApplicationFacadeInterface appFacadeInterface;
 
-	public static AplicationFacadeInterface getBusinessLogic(){
+	public static ApplicationFacadeInterface getBusinessLogic(){
 		return appFacadeInterface;
 	}
 
-	public static void setBussinessLogic (AplicationFacadeInterface afi){
+	public static void setBussinessLogic (ApplicationFacadeInterface afi){
 		appFacadeInterface = afi;
 	}
 
@@ -190,7 +190,7 @@ public class MainGUI extends JFrame {
 			btnSetAvailability.setText(ResourceBundle.getBundle("Etiquetas").getString("SetAvailability"));
 			btnSetAvailability.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					AplicationFacadeInterface aplicationFacade = new AplicationFacadeImpl();
+					ApplicationFacadeInterface aplicationFacade = new ApplicationFacadeImpl();
 					DataAccess dataAccess = new DataAccess();
 					aplicationFacade.setDataAccess(dataAccess);
 					Vector<RuralHouse> rhs = aplicationFacade.getAllRuralHouses();

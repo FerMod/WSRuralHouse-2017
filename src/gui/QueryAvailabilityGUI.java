@@ -1,6 +1,6 @@
 package gui;
 
-import businessLogic.AplicationFacadeInterface;
+import businessLogic.ApplicationFacadeInterface;
 
 import com.toedter.calendar.JCalendar;
 
@@ -61,7 +61,7 @@ public class QueryAvailabilityGUI extends JFrame {
 
 	private void jbInit() throws Exception {
 
-		AplicationFacadeInterface facade = MainGUI.getBusinessLogic();
+		ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
 
 		Vector<RuralHouse> rhs = facade.getAllRuralHouses();
 
@@ -215,7 +215,7 @@ public class QueryAvailabilityGUI extends JFrame {
 
 
 		try {
-			AplicationFacadeInterface facade=MainGUI.getBusinessLogic();
+			ApplicationFacadeInterface facade=MainGUI.getBusinessLogic();
 
 			Vector<Offer> v=facade.getOffers(rh,firstDay, lastDay);
 			//Vector<Offer> v=rh.getOffers(firstDay, lastDay);
