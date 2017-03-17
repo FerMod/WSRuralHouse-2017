@@ -4,7 +4,6 @@ package dataAccess;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -15,51 +14,70 @@ import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
 import configuration.ConfigXML;
-//import domain.Booking;
-import domain.Offer;
-import domain.Owner;
-import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Client;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
-import exceptions.DuplicatedEntityException.Error;
 import exceptions.OverlappingOfferException;
 
-public class DataAccess  {
+public class DataAccess implements DataAccessInterface {
 
-	public static String fileName;
-	protected static EntityManagerFactory emf;
-	protected static EntityManager  db;
+	private String persistenceUnitName;
+	private EntityManagerFactory emf;
+	private EntityManager  db;
 
-	ConfigXML c;
-
+	private final ConfigXML CONFIG;
+	
 	public DataAccess()  {
-
-		c = ConfigXML.getInstance();
-
-		System.out.println("Creating objectdb instance => isDatabaseLocal: "+c.isDatabaseLocal()+" getDatabBaseOpenMode: "+c.getDataBaseOpenMode());
-		
-		if (c.isDatabaseLocal()) {
-			emf = Persistence.createEntityManagerFactory(c.getDbFilename());
-			db = emf.createEntityManager();			
-		} else {		
-			Map<String, String> properties = new HashMap<String, String>();
-			properties.put("javax.persistence.jdbc.user", c.getUser());
-			properties.put("javax.persistence.jdbc.password", c.getPassword());
-			emf = Persistence.createEntityManagerFactory("objectdb://"+c.getDatabaseNode()+":"+c.getDatabasePort()+"/"+c.getDbFilename(), properties);
-			db = emf.createEntityManager();				
-		}
+		CONFIG = ConfigXML.getInstance();
+		this.persistenceUnitName = CONFIG.getDbFilename();
 	}
 
-	public void initializeDB(){
+	public DataAccess(ConfigXML configFile)  {
+		CONFIG = ConfigXML.getInstance();
+		this.persistenceUnitName = CONFIG.getDbFilename();
 
-		db.getTransaction().begin();
-		try{			
+		//Initialize database. Only for debug purpose.
+		if (CONFIG.getDataBaseOpenMode().equals("initialize")) {
+			initializeDB();
+		}
+		System.out.println("Creating objectdb instance => isDatabaseLocal: " + CONFIG.isDatabaseLocal() + " getDatabBaseOpenMode: " + CONFIG.getDataBaseOpenMode());
+	}
+
+	private void open() {
+
+		Map<String, String> properties = null;
+
+		if (!CONFIG.isDatabaseLocal()) {
+			properties = new HashMap<String, String>();
+			properties.put("javax.persistence.jdbc.user", CONFIG.getUser());
+			properties.put("javax.persistence.jdbc.password", CONFIG.getPassword());
+		}
+
+		emf = Persistence.createEntityManagerFactory(persistenceUnitName, properties);
+		db = ExponentialBackOff.execute( () -> emf.createEntityManager(), "Could not open database.");
+
+		System.out.println("Database opened");
+	}
+
+
+	private void close() {
+		db.close();
+		System.out.println("Database closed");
+	}
+
+	@Override
+	public void initializeDB(){
+		try{	
+			open();
+			db.getTransaction().begin();				
 
 			TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
-			List<RuralHouse> results = query.getResultList();
+			Vector<RuralHouse> results = new Vector<RuralHouse>(query.getResultList());
 
 			Iterator<RuralHouse> itr = results.iterator();
 
@@ -83,60 +101,72 @@ public class DataAccess  {
 
 		} catch (Exception e){
 			e.printStackTrace();
+		} finally {
+			close();
 		}
 	}
 
+	@Override
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) {
-		System.out.println(">> DataAccess: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
-
+		Offer offer = null;
 		try {	
-			RuralHouse rh = db.find(RuralHouse.class, ruralHouse.getHouseNumber());
-
+			open();
+			System.out.print(">> DataAccess: createOffer(" + ruralHouse + ", " + firstDay + ", " + lastDay + ", " + price + ") -> ");
+			RuralHouse rh = db.find(RuralHouse.class, ruralHouse.getId());
 			db.getTransaction().begin();
-			Offer o = rh.createOffer(firstDay, lastDay, price);
-			db.persist(o);
+			offer = rh.createOffer(firstDay, lastDay, price);
+			db.persist(offer);
 			db.getTransaction().commit();
-			return o;
+			System.out.println("Created with id " + offer.getId());
+			return offer;
 
+		} catch (Exception e){
+			System.err.println("Offer not created: " + e .toString());
+		} finally {
+			close();
 		}
-		catch (Exception e){
-			System.out.println("Offer not created: "+e.toString());
-			return null;
-		}
+		return offer;
 	}
 
-	public RuralHouse createRuralHouse (String description, String city) throws DuplicatedEntityException {
-		System.out.println(">> DataAccess: createRuralHouse=> description= " + description + " city= " + city);
+	@Override
+	public RuralHouse createRuralHouse(String description, String city) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
-		if(!existsRuralHouse(description, city)) {
+		try {
+			open();
+			System.out.print(">> DataAccess: createRuralHouse(" + description + ", " + city + ") -> ");
 			db.getTransaction().begin();
 			ruralHouse = new RuralHouse(description, city);
 			db.persist(ruralHouse);
 			db.getTransaction().commit();
-		} else {
-			throw new DuplicatedEntityException();
+			System.out.println("Created with id " + ruralHouse.getId());
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
+
 		return ruralHouse;
 	}
 
+	@Override
 	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> DataAccess: createUser=> email=" + email + " username=" + username + " password=" + password + " role=" + role);
 		AbstractUser user = null;
-		if(!existsUser(username)) {
-			if(!existsEmail(email)) {
-				db.getTransaction().begin();
-				user = getNewUser(email, username, password, role);
-				db.persist(user);
-				db.getTransaction().commit();
-			} else {
-				throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
-			}
-		} else {
-			throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
+		try {
+			open();
+			System.out.print(">> DataAccess: createUser(" + email + ", " + username +", " + password + ", " + role + ") -> ");
+			db.getTransaction().begin();
+			user = getNewUser(email, username, password, role);
+			db.persist(user);
+			db.getTransaction().commit();
+			System.out.println("Created with id " + user.getId());
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
 		return user;
 	}
-	
+
 	private AbstractUser getNewUser(String email, String username, String password, Role role) {
 		switch (role) {
 		case CLIENT:
@@ -152,6 +182,7 @@ public class DataAccess  {
 		}
 	}
 
+	@Override
 	public boolean validDni(String dni) {
 		return dni.toUpperCase().matches("\\d{8}" + controlLetter(dni));
 	}
@@ -161,55 +192,114 @@ public class DataAccess  {
 		return controlLetter[Integer.parseInt(dni.substring(8)) % 23];
 	}
 
+	@Override
 	public Role getRole(String username) {
-		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
-				+ "FROM User u "
-				+ "WHERE u.username = :username ", AbstractUser.class)
-				.setParameter("username", username);
-		List<AbstractUser> result = query.getResultList();
-		return result.get(0).getRole();
+		Role role = null;
+		try {
+			open();
+			System.out.print(">> DataAccess: getRole(" + username + ") -> ");
+			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
+					+ "FROM User u "
+					+ "WHERE u.username = :username ", AbstractUser.class)
+					.setParameter("username", username);
+			Vector<AbstractUser> result = new Vector<AbstractUser>(new Vector<AbstractUser>(query.getResultList()));
+			role = result.get(0).getRole();
+			System.out.println(role);	
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return role;
 	}
 
+	@Override
 	public boolean existsUser(String username) {
-		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
-				+ "FROM User u "
-				+ "WHERE u.username = :username", AbstractUser.class)
-				.setParameter("username", username);
-		List<AbstractUser> result = query.getResultList();
-		return !result.isEmpty();
+		boolean found = false;
+		try {
+			open();
+			System.out.print("Check if exists \"" + username + "\" -> ");
+			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
+					+ "FROM User u "
+					+ "WHERE u.username = :username", AbstractUser.class)
+					.setParameter("username", username);
+			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
+			found = !result.isEmpty();
+			System.out.println(found);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return found;
 	}
 
+	@Override
 	public boolean existsEmail(String email) {
-		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
-				+ "FROM User u "
-				+ "WHERE u.email = :email", AbstractUser.class)
-				.setParameter("email", email);
-		List<AbstractUser> result = query.getResultList();
-		return !result.isEmpty();
+		boolean found = false;
+		try {
+			open();
+			System.out.print("Check if exists \"" + email + "\" -> ");
+			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
+					+ "FROM User u "
+					+ "WHERE u.email = :email", AbstractUser.class)
+					.setParameter("email", email);
+			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
+			found = !result.isEmpty();
+			System.out.println(found);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return found;
 	}
 
+	@Override
 	public boolean existsRuralHouse(String description, String city) {
-		TypedQuery<RuralHouse> query = db.createQuery("SELECT DISTINCT rh "
-				+ "FROM RuralHouse rh "
-				+ "WHERE rh.description = :description "
-				+ "AND rh.city = :city", RuralHouse.class)
-				.setParameter("description", description)
-				.setParameter("city", city);
-		List<RuralHouse> result = query.getResultList();
-		return !result.isEmpty();
+		boolean found = false;
+		try {
+			open();
+			System.out.print("Check if exists \"" + description + "\" -> ");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT DISTINCT rh "
+					+ "FROM RuralHouse rh "
+					+ "WHERE rh.description = :description "
+					+ "AND rh.city = :city", RuralHouse.class)
+					.setParameter("description", description)
+					.setParameter("city", city);
+			Vector<RuralHouse> result = new Vector<RuralHouse>(query.getResultList());
+			found = !result.isEmpty();
+			System.out.println(found);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return found;
 	}
 
+	@Override
 	public void login(String username, String password) throws AuthException, AccountNotFoundException {	
-		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
-				+ "FROM User u "
-				+ "WHERE u.username = :username ", AbstractUser.class)
-				.setParameter("username", username);
-		List<AbstractUser> result = query.getResultList();
-		if(!result.isEmpty()) {
-			AbstractUser user = result.get(0);
-			authenticate(user, password);
-		} else {
-			throw new AccountNotFoundException("Account not found.");
+		try {
+			open();
+			System.out.println(">> DataAccess: Login. " + username + " | " + password + "(don't look, this is secret)");
+			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
+					+ "FROM User u "
+					+ "WHERE u.username = :username ", AbstractUser.class)
+					.setParameter("username", username);
+			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
+			if(!result.isEmpty()) {
+				AbstractUser user = result.get(0);
+				authenticate(user, password);
+			} else {
+				throw new AccountNotFoundException("Account not found.");
+			}
+		} catch (AuthException | AccountNotFoundException e) {
+			throw e; //Throw exception and allow a method further up the call stack handle it.
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
 	}
 
@@ -219,44 +309,67 @@ public class DataAccess  {
 		}
 	}
 
+	@Override
 	public Vector<RuralHouse> getAllRuralHouses() {
-		System.out.println(">> DataAccess: getAllRuralHouses");
-		Vector<RuralHouse> res = new Vector<>();
-
-		TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
-		List<RuralHouse> results = query.getResultList();
-
-		Iterator<RuralHouse> itr = results.iterator();
-
-		while (itr.hasNext()){
-			res.add(itr.next());
+		Vector<RuralHouse> result = null;
+		try {
+			open();
+			System.out.println(">> DataAccess: getAllRuralHouses");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
+			result = new Vector<RuralHouse>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
 		}
-
-		return res;
+		return result;
 
 	}
 
+	@Override
 	public Vector<Offer> getOffers( RuralHouse rh, Date firstDay,  Date lastDay) {
-		System.out.println(">> DataAccess: getOffers");
-		Vector<Offer> res=new Vector<>();
-		RuralHouse rhn = db.find(RuralHouse.class, rh.getHouseNumber());
-		res = rhn.getOffers(firstDay,lastDay);
-		return res;
+		Vector<Offer> result = null;
+		try { 
+			open();
+			System.out.println(">> DataAccess: getOffers");
+			RuralHouse rhn = db.find(RuralHouse.class, rh.getId());
+			result = rhn.getOffers(firstDay,lastDay);
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
 	}
 
-	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws  OverlappingOfferException{
+	@Override
+	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws  OverlappingOfferException {
 		try{
-			RuralHouse rhn = db.find(RuralHouse.class, rh.getHouseNumber());
-			if (rhn.overlapsWith(firstDay,lastDay)!=null) return true;
+			open();
+
+			RuralHouse ruralHouse = db.find(RuralHouse.class, rh.getId());
+			if (ruralHouse.overlapsWith(firstDay, lastDay) != null) {
+				return true;
+			}
 		} catch (Exception e){
-			System.out.println("Error: "+e.toString());
+			System.out.println("Error: " + e.toString());
 			return true;
+		} finally {
+			close();
 		}
 		return false;
 	}
 
-	public void close(){
-		db.close();
-		System.out.println("DataBase closed");
+	private <T> void printVector(Vector<T> vector) {
+		StringBuilder sp = new StringBuilder();
+		sp.append("[");
+		for (T t : vector) {
+			sp.append(t + ", ");
+		}
+		sp.append("]");
+		System.out.println(sp.toString());
 	}
+
 }
