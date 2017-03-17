@@ -22,7 +22,7 @@ public class RuralHouse implements Serializable {
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
 	@GeneratedValue
-	private Integer houseNumber;
+	private Integer id;
 	private String description;
 	private String city; 
 	private int ownerId;
@@ -41,12 +41,12 @@ public class RuralHouse implements Serializable {
 		offers = new Vector<Offer>();
 	}
 
-	public Integer getHouseNumber() {
-		return houseNumber;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setHouseNumber(Integer houseNumber) {
-		this.houseNumber = houseNumber;
+	public void setId(Integer houseNumber) {
+		this.id = houseNumber;
 	}
 
 	public String getDescription() {
@@ -103,13 +103,13 @@ public class RuralHouse implements Serializable {
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + houseNumber.hashCode();
+		result = prime * result + id.hashCode();
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return this.houseNumber + ": " + this.city;
+		return this.id + ": " + this.city;
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class RuralHouse implements Serializable {
 		if (getClass() != obj.getClass())
 		  return false;
 //		if (houseNumber != other.houseNumber) // NO COMPARAR ASÍ ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
-		if (!houseNumber.equals(other.houseNumber))
+		if (!id.equals(other.id))
 		  return false;
    	    return true;
 	}

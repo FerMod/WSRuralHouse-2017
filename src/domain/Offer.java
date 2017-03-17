@@ -19,7 +19,7 @@ public class Offer implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private Integer offerNumber;
+	private Integer id;
 	private Date firstDay; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
 	private Date lastDay;  // because, they are not well stored in db4o as java.util.Date objects
 	private float price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
@@ -53,12 +53,12 @@ public class Offer implements Serializable {
 
 
 	/**
-	 * Get the offer number
+	 * Get the offer id
 	 * 
 	 * @return offer number
 	 */
-	public int getOfferNumber() {
-		return this.offerNumber;
+	public int getId() {
+		return this.id;
 	}
 
 	
@@ -120,6 +120,6 @@ public class Offer implements Serializable {
 	}
 	
 	public String toString(){
-		return offerNumber+";"+firstDay.toString()+";"+lastDay.toString()+";"+price;
+		return id+";"+firstDay.toString()+";"+lastDay.toString()+";"+price;
 	}
 }
