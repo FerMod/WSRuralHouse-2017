@@ -8,7 +8,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -29,7 +28,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -354,9 +352,9 @@ public class ClientMainPanel extends JPanel {
 			table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
-					JTable table =(JTable) me.getSource();
-					Point p = me.getPoint();
-					int row = table.rowAtPoint(p);
+//					JTable table =(JTable) me.getSource();
+//					Point p = me.getPoint();
+//					int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
 						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -380,6 +378,7 @@ public class ClientMainPanel extends JPanel {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("Add");
@@ -387,6 +386,7 @@ public class ClientMainPanel extends JPanel {
 		return btnAdd;
 	}
 
+	@SuppressWarnings("unused")
 	private JButton getBtnEdit() {
 		if (btnEdit == null) {
 			btnEdit = new JButton("Edit");
@@ -394,6 +394,7 @@ public class ClientMainPanel extends JPanel {
 		return btnEdit;
 	}
 
+	@SuppressWarnings("unused")
 	private JButton getBtnRemove() {
 		if (btnRemove == null) {
 			btnRemove = new JButton("Remove");
@@ -484,6 +485,7 @@ public class ClientMainPanel extends JPanel {
 			return data[row][col];
 		}
 
+		@SuppressWarnings("unused")
 		public void setValueAt(int row, int col, ImageIcon value) {
 			data[row][col] = getScaledImage(value);
 		}
@@ -492,26 +494,32 @@ public class ClientMainPanel extends JPanel {
 			return new ImageIcon(imageIcon.getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH));
 		}
 
+		@SuppressWarnings("unused")
 		public void setValueAt(int row, int col, Object value) {
 			data[row][col] = value;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
 
+		@SuppressWarnings("unused")
 		public int getDefaultImageWidth() {
 			return width;
 		}
 
+		@SuppressWarnings("unused")
 		public void setDefaultImageWidth(int width) {
 			this.width = width;
 		}
 
+		@SuppressWarnings("unused")
 		public int getDefaultImageHeight() {
 			return height;
 		}
 
+		@SuppressWarnings("unused")
 		public void setDefaultImageHeight(int height) {
 			this.height = height;
 		}
@@ -522,6 +530,7 @@ public class ClientMainPanel extends JPanel {
 		 * then the last column would contain text ("true"/"false"),
 		 * rather than a check box.
 		 */
+		@Override
 		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
@@ -542,6 +551,7 @@ public class ClientMainPanel extends JPanel {
 		 * Don't need to implement this method unless your table's
 		 * data can change.
 		 */
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			if (DEBUG) {
 				System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of "+ value.getClass() + ")");

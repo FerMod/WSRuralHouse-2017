@@ -1,25 +1,30 @@
 package domain;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import java.io.Serializable;
-import javax.persistence.*;
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @Inheritance
 @Entity(name = "User")
-@Table(name = "User")
+//@Table(name = "User")
 public abstract class AbstractUser implements UserInterface, Serializable {
 
 	private static final long serialVersionUID = -8104656861921494420L;
 
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
-	@GeneratedValue
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	@Id
 	private String email;

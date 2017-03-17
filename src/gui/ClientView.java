@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,19 +9,18 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import java.awt.Font;
 import javax.swing.UIManager;
-import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.JSlider;
 import java.awt.Color;
 import java.awt.SystemColor;
-import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Checkbox;
-import java.awt.Choice;
 import java.awt.List;
 
 public class ClientView extends JFrame {
+
+	private static final long serialVersionUID = -4012122876085861827L;
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -104,7 +102,7 @@ public class ClientView extends JFrame {
 		txtpnMax.setBounds(79, 176, 41, 20);
 		contentPane.add(txtpnMax);
 		
-		JComboBox comboBox = new JComboBox();
+		JComboBox<?> comboBox = new JComboBox<Object>();
 		comboBox.setBounds(419, 99, 156, 23);
 		contentPane.add(comboBox);
 		
