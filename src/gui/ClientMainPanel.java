@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
 
@@ -21,9 +22,11 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -44,6 +47,9 @@ public class ClientMainPanel extends JPanel {
 
 	private static final long serialVersionUID = 3063325462028186709L;
 
+	private JFormattedTextField minPriceField, maxPriceField;
+
+	private NumberFormat priceFormat;
 	private JTextField searchField;
 	private JTable table;
 	private TableModel tableModel;
@@ -54,6 +60,7 @@ public class ClientMainPanel extends JPanel {
 	//	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
 	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
 	private Role role;
+	private JSlider priceSlider;
 
 	//	/**
 	//	 * Launch the application.
@@ -129,24 +136,70 @@ public class ClientMainPanel extends JPanel {
 		gbc.weightx = 0.5;
 		gbc.weighty = 0;
 		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.gridwidth = 2;
-		gbc.insets = new Insets(20, 10, 0, 10);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridwidth = 5;
+		gbc.insets = new Insets(20, 5, 0, 10);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		add(getSearchField(), gbc);
 
+		gbc.ipadx = 20;
+		gbc.ipady = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.2;
+		gbc.gridwidth = 2;
+		gbc.insets = new Insets(20, 0, 2, 0);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(getPriceSlider(), gbc);
+
+		gbc.ipadx = 0;
+		gbc.ipady = 0;
+		gbc.weighty = 0;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		
+		gbc.weightx = 0.1;
+		gbc.anchor = GridBagConstraints.PAGE_START;
+		gbc.insets = new Insets(2, 10, 15, 15);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		add(getMinPriceField(), gbc);
+
+		gbc.weightx = 0.1;
+		gbc.anchor = GridBagConstraints.PAGE_END;
+		gbc.insets = new Insets(2, 15, 15, 10);
+		gbc.gridx = 1;
+		gbc.gridy = 2;
+		add(getMaxPriceField(), gbc);
+
+		gbc.ipady = 0;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.gridwidth = 2;
+		gbc.gridheight = 3;
 		gbc.insets = new Insets(0, 10, 10, 10);
-		gbc.weightx = 0.5;
+		gbc.weightx = 1;
 		gbc.weighty = 1;
 
 		gbc.gridwidth = 3;
-		gbc.gridx = 0;
+		gbc.gridx = 2;
 		gbc.gridy = 1;
 		add(getTableScrollPanel(), gbc);
 
-		setupClientWindow();
+		gbc.anchor = GridBagConstraints.PAGE_START;		
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.5;
+		gbc.weighty = 0;
+		gbc.gridwidth = 5;
+
+		gbc.insets = new Insets(10, 100, 10, 100);
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		add(getBtnDetails(), gbc);
+
+		//		setupClientWindow();
 
 		/*
 		JMenuBar menuBar = new JMenuBar();
@@ -167,23 +220,39 @@ public class ClientMainPanel extends JPanel {
 
 	}
 
-	private void setupClientWindow() {
-
-		GridBagConstraints gbc = new GridBagConstraints();
-
-		gbc.anchor = GridBagConstraints.PAGE_START;		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0;
-		gbc.gridwidth = 1;
-
-		gbc.insets = new Insets(10, 100, 10, 100);
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		add(getBtnDetails(), gbc);
-
-
+	private JFormattedTextField getMaxPriceField() {
+		if(maxPriceField == null) {
+			if(priceFormat == null) {
+				setupPriceFormat();
+			}
+			maxPriceField = new JFormattedTextField(priceFormat);
+		}
+		return maxPriceField;
 	}
+
+	private JFormattedTextField getMinPriceField() {
+		if(minPriceField == null) {
+			if(priceFormat == null) {
+				setupPriceFormat();
+			}
+			minPriceField = new JFormattedTextField(priceFormat);
+		}
+		return minPriceField;
+	}
+
+	private void setupPriceFormat() {
+		priceFormat = NumberFormat.getCurrencyInstance();
+		priceFormat.setMinimumIntegerDigits(1);
+	}
+
+	//	private void setupClientWindow() {
+	//
+	//		GridBagConstraints gbc = new GridBagConstraints();
+	//
+	//		
+	//
+	//
+	//	}
 
 	/*
 	private JPanel getTopPanel() {
@@ -352,9 +421,9 @@ public class ClientMainPanel extends JPanel {
 			table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
-//					JTable table =(JTable) me.getSource();
-//					Point p = me.getPoint();
-//					int row = table.rowAtPoint(p);
+					//					JTable table =(JTable) me.getSource();
+					//					Point p = me.getPoint();
+					//					int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
 						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -414,6 +483,13 @@ public class ClientMainPanel extends JPanel {
 			});
 		}
 		return btnDetails;
+	}
+
+	private JSlider getPriceSlider() {
+		if(priceSlider == null) {
+			priceSlider = new JSlider();
+		}
+		return priceSlider;
 	}
 
 	private class TableModel extends AbstractTableModel {

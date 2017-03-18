@@ -44,7 +44,7 @@ public class MainWindow extends JFrame {
 						MainWindow frame = new MainWindow(role);
 						frame.setVisible(true);
 					} else {
-						System.exit(1);
+						System.exit(0);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,30 +58,18 @@ public class MainWindow extends JFrame {
 	 * @return the chosen role
 	 */
 	private static Role getWindowRole() {
-		String[] options = new String[] {"CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-		String response = (String)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		switch (response) {
-		case "CLIENT":
-			return Role.CLIENT;
-		case "OWNER":
-			return Role.OWNER;
-		case "ADMIN":
-			return Role.ADMIN;
-		case "SUPER_ADMIN":
-			return Role.SUPER_ADMIN;
-		default:
-			return null;
-		}
+		Role[] options = new Role[] {Role.CLIENT, Role.OWNER, Role.ADMIN, Role.SUPER_ADMIN};
+		Role response = (Role)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		return response;
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public MainWindow(Role role) {
-		
-		ConsoleWindow consoleOutput = new ConsoleWindow();
-		consoleOutput.setVisible(true);
-		
+
+		//ConsoleWindow.setVisible(true);
+
 		this.role = role;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(600, 465));
@@ -104,14 +92,14 @@ public class MainWindow extends JFrame {
 		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
 		tabbedPane.addTab("", new TextArea("Inifinite posibilities...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmaybe(?)"));
 		tabbedPane.addTab("Log Out", new TextArea(""));
-//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
-//			@Override
-//			public void mouseDragged(MouseEvent e) {}
-//			@Override
-//			public void mouseMoved(MouseEvent e){
-//				adjustCursor(e);
-//			}
-//		});
+		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
+		//			@Override
+		//			public void mouseDragged(MouseEvent e) {}
+		//			@Override
+		//			public void mouseMoved(MouseEvent e){
+		//				adjustCursor(e);
+		//			}
+		//		});
 
 		contentPane.add(tabbedPane);
 

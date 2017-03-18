@@ -118,6 +118,8 @@ public class OwnerMainPanel extends JPanel {
 		add(getTableScrollPanel(), gbc);
 
 		setupOwnerWindow();
+		
+		
 
 		/*
 		JMenuBar menuBar = new JMenuBar();
