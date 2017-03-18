@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package examples;
+package examples.menu;
 
 import java.awt.*;
 import java.awt.event.*;
