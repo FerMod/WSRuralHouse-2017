@@ -31,7 +31,7 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManager  db;
 
 	private final ConfigXML CONFIG;
-	
+
 	public DataAccess()  {
 		CONFIG = ConfigXML.getInstance();
 		this.persistenceUnitName = CONFIG.getDbFilename();
@@ -362,6 +362,98 @@ public class DataAccess implements DataAccessInterface {
 		return false;
 	}
 
+
+
+	/**
+	 * Obtain all the offers by a price range defined by the user (pending trial).
+	 *  
+	 * @param min the lowest price
+	 * @param max the highest price
+	 * @return vector of offers in the range
+	 */
+	public Vector<Offer> getOffersByPrice(int min, int max) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT o"
+					+ " FROM Offer o "
+					+ "WHERE o.price>" + min + "AND o.price<" + max, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
+	 * Obtain all the offers for a specific price defined by the user (pending trial).
+	 *  
+	 * @param the price
+	 * @return vector of offers with the price selected
+	 */
+	public Vector<Offer> getOffersByConcretePrice(int price) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByConcretePrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT o"
+					+ " FROM Offer o "
+					+ "WHERE o.price=" + price, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
+	 * Obtain all the offers for the lowest price (pending trial).
+	 *  
+	 * @return vector of offers with the lowest prices
+	 */
+	public Vector<Offer> getOffersByMinorPrice() {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByMinorPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
+					+ " FROM Offer o", Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
+	 * Modify the user's password.
+	 *  
+	 * @param the user
+	 * @param the password to modify
+	 */
+	public void modifyUsersPass(AbstractUser us, String password) {
+		open();
+		db.getTransaction().begin();
+		us.setPassword(password);
+		db.getTransaction().commit();
+		close();
+	}
+
+	/**
+	 * Prints to the standard output the vector content
+	 * 
+	 * @param vector the vector of type {@code <T>}
+	 */
 	private <T> void printVector(Vector<T> vector) {
 		StringBuilder sp = new StringBuilder();
 		sp.append("[");
