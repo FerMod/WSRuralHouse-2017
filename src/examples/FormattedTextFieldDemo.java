@@ -55,9 +55,12 @@ import javax.swing.UIManager;
  * JFormattedTextFields.
  */
 public class FormattedTextFieldDemo extends JPanel implements PropertyChangeListener {
+
+	private static final long serialVersionUID = 4116307988739989652L;
+
 	//Values for the fields
 	private double amount = 100000;
-	private double rate = 7.5;  //7.5%
+	private double rate = 7.5;	//7.5%
 	private int numPeriods = 30;
 
 	//Labels to identify the fields
@@ -86,9 +89,7 @@ public class FormattedTextFieldDemo extends JPanel implements PropertyChangeList
 	public FormattedTextFieldDemo() {
 		super(new BorderLayout());
 		setUpFormats();
-		double payment = computePayment(amount,
-				rate,
-				numPeriods);
+		double payment = computePayment(amount, rate, numPeriods);
 
 		//Create the labels.
 		amountLabel = new JLabel(amountString);
@@ -138,8 +139,7 @@ public class FormattedTextFieldDemo extends JPanel implements PropertyChangeList
 		fieldPane.add(numPeriodsField);
 		fieldPane.add(paymentField);
 
-		//Put the panels in this panel, labels on left,
-		//text fields on right.
+		//Put the panels in this panel, labels on left, text fields on right.
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		add(labelPane, BorderLayout.CENTER);
 		add(fieldPane, BorderLayout.LINE_END);
@@ -190,14 +190,13 @@ public class FormattedTextFieldDemo extends JPanel implements PropertyChangeList
 		});
 	}
 
-	//Compute the monthly payment based on the loan amount,
-	//APR, and length of loan.
+	//Compute the monthly payment based on the loan amount, APR, and length of loan.
 	double computePayment(double loanAmt, double rate, int numPeriods) {
 		double I, partial1, denominator, answer;
 
-		numPeriods *= 12;        //get number of months
+		numPeriods *= 12;	//get number of months
 		if (rate > 0.01) {
-			I = rate / 100.0 / 12.0;         //get monthly rate from annual
+			I = rate / 100.0 / 12.0;	//get monthly rate from annual
 			partial1 = Math.pow((1 + I), (0.0 - numPeriods));
 			denominator = (1 - partial1) / I;
 		} else { //rate ~= 0
@@ -208,8 +207,7 @@ public class FormattedTextFieldDemo extends JPanel implements PropertyChangeList
 		return answer;
 	}
 
-	//Create and set up number formats. These objects also
-	//parse numbers input by user.
+	//Create and set up number formats. These objects also parse numbers input by user.
 	private void setUpFormats() {
 		amountFormat = NumberFormat.getNumberInstance();
 

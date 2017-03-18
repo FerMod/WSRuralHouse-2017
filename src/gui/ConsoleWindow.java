@@ -2,16 +2,20 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -19,21 +23,16 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-public class ConsoleWindow {
+public final class ConsoleWindow {
 
-	private JFrame frame;
-	private CapturePane capturePane;
+	private static JFrame frame;
+	private static CapturePane capturePane;
 
 	//private final Class<T> type;
 	//private Method[] declaredMethods;
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new ConsoleWindow();
-			}
-		});
-
+		new ConsoleWindow();
 	}
 
 	//TODO remove
@@ -42,39 +41,35 @@ public class ConsoleWindow {
 	//
 	//		this.type = type;
 
-	public ConsoleWindow() {
+	private ConsoleWindow() {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				createAndShowGui();
+				if(frame == null) {
+					createAndShowGui();
+				}
 			}            
 		});
-
 	}
 
-	private void createAndShowGui() {
+	private static void createAndShowGui() {
 
 		//ConsoleOutput consoleOutput = new ConsoleOutput();
 
 		frame = new JFrame("Console");
-		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		capturePane = new CapturePane();
 		frame.setContentPane(capturePane); 
 		//frame.pack();
 		frame.setLocationByPlatform(true);
+		frame.setMinimumSize(new Dimension(228, 39));
 		frame.setSize(650, 350);
-		frame.setLocationRelativeTo(null);	
-		setVisible(true);
+		//frame.setLocationRelativeTo(null);	
 
-		//TODO Remove
-		//########### Test ############
-		System.out.println("Hi! Im normal text.");
-		System.out.println("Im in this JTextPane, but I also appear in the console!");
-		System.err.println("Hi! Im error!");
-		System.out.println("I'm not!");
-		System.err.println("Ok, lets make it true.");
-		System.err.println("True hell...");
-		//#############################
+		System.setOut(new PrintStream(new StreamCapturer(capturePane, System.out)));
+		System.setErr(new PrintStream(new StreamCapturer(Color.RED, capturePane, System.err)));
+
+		frame.setVisible(true);
 
 		/*
 		JMenuBar menuBar;
@@ -128,32 +123,49 @@ public class ConsoleWindow {
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
 		 */
-
 	}
 
-	public void setVisible(boolean b) {
-		System.setOut(new PrintStream(new StreamCapturer(capturePane, System.out)));
-		System.setErr(new PrintStream(new StreamCapturer(Color.RED, capturePane, System.err)));
-		frame.setVisible(b);
+	public static void setVisible(boolean b) {
+		if(frame != null) {
+			frame.setVisible(b);
+		} else {
+			createAndShowGui();
+		}
 	}
 
-	public void dispose() {
-		frame.dispose();
+	public static void dispose() {
+		if(frame != null) {
+			frame.dispose();
+		}
 	}
 
-	private class CapturePane extends JPanel implements Consumer {
+	private static class CapturePane extends JPanel implements Consumer {
 
 		private static final long serialVersionUID = 6513396748219028375L;
 
 		private JTextPane output;
 
 		public CapturePane() {
-			output = new JTextPane();
+			super(new BorderLayout());
+			output = new JTextPane() {
+				private static final long serialVersionUID = -595836354069640799L;
+				// Override getScrollableTracksViewportWidth to preserve the full width of the text
+				@Override
+				public boolean getScrollableTracksViewportWidth() {
+					Component parent = getParent();
+					ComponentUI ui = getUI();
+
+					return parent != null ? (ui.getPreferredSize(this).width <= parent.getSize().width) : true;
+				}
+			};
 			output.setEditable(false);
 			output.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-			add(output);
-			setLayout(new BorderLayout());
-			add(new JScrollPane(output));
+			//add(output);
+			JScrollPane scrollPane = new JScrollPane(output);
+			add(scrollPane);
+			//setLayout(new BorderLayout());
+
+
 		}
 
 		@Override
@@ -201,7 +213,7 @@ public class ConsoleWindow {
 
 	}
 
-	public class StreamCapturer extends OutputStream {
+	public static class StreamCapturer extends OutputStream {
 
 		private StringBuilder buffer;
 		private String prefix;
