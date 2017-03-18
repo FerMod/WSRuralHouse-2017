@@ -365,7 +365,11 @@ public class DataAccess implements DataAccessInterface {
 
 
 	/**
-	 *  Método para obtener todas las ofertas por un rango de precio definido por el usuario (pendiente de prueba).
+	 * Obtain all the offers by a price range defined by the user (pending trial).
+	 *  
+	 * @param min the lowest price
+	 * @param max the highest price
+	 * @return vector of offers in the range
 	 */
 	public Vector<Offer> getOffersByPrice(int min, int max) {
 		Vector<Offer> result = null;
@@ -386,7 +390,10 @@ public class DataAccess implements DataAccessInterface {
 	}
 	
 	/**
-	 *  Método para obtener todas las ofertas por un precio específico definido por el usuario (pendiente de prueba).
+	 * Obtain all the offers for a specific price defined by the user (pending trial).
+	 *  
+	 * @param the price
+	 * @return vector of offers with the price selected
 	 */
 	public Vector<Offer> getOffersByConcretePrice(int price) {
 		Vector<Offer> result = null;
@@ -407,7 +414,9 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 *  Método para obtener todas las ofertas por el menor precio (pendiente de prueba).
+	 * Obtain all the offers for the lowest price (pending trial).
+	 *  
+	 * @return vector of offers with the lowest prices
 	 */
 	public Vector<Offer> getOffersByMinorPrice() {
 		Vector<Offer> result = null;
@@ -427,7 +436,10 @@ public class DataAccess implements DataAccessInterface {
 	}
 	
 	/**
-	 *  Método para modificar una contraseña del usuario.
+	 * Modify the user's password.
+	 *  
+	 * @param the user
+	 * @param the password to modify
 	 */
 	public void modifyUsersPass(AbstractUser us, String password) {
 			open();
