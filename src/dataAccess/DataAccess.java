@@ -361,9 +361,10 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return false;
 	}
+	
 
 
-	/*
+	/**
 	 *  Método para obtener todas las ofertas por un rango de precio definido por el usuario (pendiente de prueba).
 	 */
 	public Vector<Offer> getOffersByPrice(int min, int max) {
@@ -384,7 +385,7 @@ public class DataAccess implements DataAccessInterface {
 		return result;
 	}
 	
-	/*
+	/**
 	 *  Método para obtener todas las ofertas por un precio específico definido por el usuario (pendiente de prueba).
 	 */
 	public Vector<Offer> getOffersByConcretePrice(int price) {
@@ -405,7 +406,7 @@ public class DataAccess implements DataAccessInterface {
 		return result;
 	}
 
-	/*
+	/**
 	 *  Método para obtener todas las ofertas por el menor precio (pendiente de prueba).
 	 */
 	public Vector<Offer> getOffersByMinorPrice() {
@@ -423,6 +424,17 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return result;
+	}
+	
+	/**
+	 *  Método para modificar una contraseña del usuario.
+	 */
+	public void modifyUsersPass(AbstractUser us, String password) {
+			open();
+			db.getTransaction().begin();
+			us.setPassword(password);
+			db.getTransaction().commit();
+			close();
 	}
 
 	private <T> void printVector(Vector<T> vector) {
