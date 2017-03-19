@@ -462,11 +462,11 @@ public class DataAccess implements DataAccessInterface {
 	 *  
 	 * @return highest price of the Offers
 	 */
-	public double getXxxxx() {
+	public double getMaxPrice() {
 		double result = 0;
 		try{
 			open();
-			System.out.println(">> DataAccess: getXxxxx");
+			System.out.println(">> DataAccess: getMaxPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
 												   + " FROM Offer o", Offer.class);
 			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
@@ -485,11 +485,11 @@ public class DataAccess implements DataAccessInterface {
 	 *  
 	 * @return lowest price of the Offers
 	 */
-	public double getxxxxx() {
+	public double getMinorPrice() {
 		double result = 0;
 		try{
 			open();
-			System.out.println(">> DataAccess: getxxxxx");
+			System.out.println(">> DataAccess: getMinorPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
 												   + " FROM Offer o", Offer.class);
 			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
