@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -14,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -47,6 +48,7 @@ public final class ConsoleWindow {
 			public void run() {
 				if(frame == null) {
 					createAndShowGui();
+//					new ConsoleKeyListener(frame);
 				}
 			}            
 		});
@@ -125,11 +127,21 @@ public final class ConsoleWindow {
 		 */
 	}
 
-	public static void setVisible(boolean b) {
+	public static boolean isVisible() {
 		if(frame != null) {
-			frame.setVisible(b);
+			return frame.isVisible();
 		} else {
-			createAndShowGui();
+			return false;
+		}
+	}
+
+	public static void setVisible(boolean b) {
+		if(b) {
+			if(frame != null) {
+				frame.setVisible(b);
+			} else {
+				createAndShowGui();
+			}
 		}
 	}
 
@@ -255,7 +267,7 @@ public final class ConsoleWindow {
 			old.print(c);
 		}    
 
-	}  
+	}
 
 }
 

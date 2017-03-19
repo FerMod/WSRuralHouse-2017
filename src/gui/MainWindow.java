@@ -1,11 +1,13 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -20,7 +22,6 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import domain.AbstractUser.Role;
 import gui.components.ui.CustomTabbedPaneUI;
-import gui.ConsoleWindow;
 import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
@@ -42,7 +43,7 @@ public class MainWindow extends JFrame {
 					Role role = getWindowRole();
 					if(role != null) {
 						MainWindow frame = new MainWindow(role);
-						frame.setVisible(true);
+						frame.setVisible(true); 
 					} else {
 						System.exit(0);
 					}
@@ -72,12 +73,9 @@ public class MainWindow extends JFrame {
 
 		this.role = role;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setMinimumSize(new Dimension(600, 465));
-		setSize(700, 565);
 		getRolePanel(role);
 		//setJMenuBar(getRoleMenuBar());
-		//frame.pack();
-		pack();
+
 
 		contentPane = new JPanel();
 		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -103,7 +101,33 @@ public class MainWindow extends JFrame {
 
 		contentPane.add(tabbedPane);
 
+		//setMinimumSize(new Dimension(600, 365));
+		setSize(760, 400);
+		//pack();
+		validate();
 		setLocationRelativeTo(null);
+
+		addComponentListener(new ComponentListener() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void componentResized(ComponentEvent e) {
+				System.out.println(MainWindow.class.getName()+"[Width: " + getWidth() + ", Height" + getHeight() + "]");
+			}
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 	}
 
