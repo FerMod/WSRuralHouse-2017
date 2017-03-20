@@ -17,8 +17,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Checkbox;
 import java.awt.List;
+import javax.swing.JRadioButton;
 
-public class ClientView extends JFrame {
+public class ClientView_Prototype extends JFrame {
 
 	private static final long serialVersionUID = -4012122876085861827L;
 
@@ -34,7 +35,7 @@ public class ClientView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientView frame = new ClientView();
+					ClientView_Prototype frame = new ClientView_Prototype();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,7 +47,7 @@ public class ClientView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ClientView() {
+	public ClientView_Prototype() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 634, 425);
 		contentPane = new JPanel();
@@ -54,13 +55,6 @@ public class ClientView extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JTextPane txtpnBuscadorDeOfertas = new JTextPane();
-		txtpnBuscadorDeOfertas.setBackground(UIManager.getColor("Button.background"));
-		txtpnBuscadorDeOfertas.setFont(new Font("Tahoma", Font.PLAIN, 34));
-		txtpnBuscadorDeOfertas.setText("BUSCADOR DE OFERTAS");
-		txtpnBuscadorDeOfertas.setBounds(117, 11, 380, 47);
-		contentPane.add(txtpnBuscadorDeOfertas);
 		
 		textField = new JTextField();
 		textField.setBounds(117, 70, 380, 23);
@@ -85,7 +79,7 @@ public class ClientView extends JFrame {
 		txtpnPorPrecio.setText("Precio");
 		txtpnPorPrecio.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtpnPorPrecio.setBackground(SystemColor.menu);
-		txtpnPorPrecio.setBounds(10, 139, 59, 14);
+		txtpnPorPrecio.setBounds(10, 131, 59, 14);
 		contentPane.add(txtpnPorPrecio);
 		
 		JTextPane txtpnMin = new JTextPane();
@@ -148,5 +142,30 @@ public class ClientView extends JFrame {
 		List list = new List();
 		list.setBounds(117, 139, 458, 221);
 		contentPane.add(list);
+		
+		JTextPane txtpnBuscadorDeOfertas = new JTextPane();
+		txtpnBuscadorDeOfertas.setFont(new Font("Tahoma", Font.PLAIN, 28));
+		txtpnBuscadorDeOfertas.setBackground(UIManager.getColor("Button.background"));
+		txtpnBuscadorDeOfertas.setText("Buscador de ofertas");
+		txtpnBuscadorDeOfertas.setBounds(117, 11, 428, 48);
+		contentPane.add(txtpnBuscadorDeOfertas);
+		
+		JTextPane txtpnOrdenPor = new JTextPane();
+		txtpnOrdenPor.setBackground(UIManager.getColor("Button.background"));
+		txtpnOrdenPor.setText("Orden por:");
+		txtpnOrdenPor.setBounds(95, 366, 59, 20);
+		contentPane.add(txtpnOrdenPor);
+		
+		JRadioButton rdbtnPopularidad = new JRadioButton("Valoraciones");
+		rdbtnPopularidad.setBounds(160, 366, 86, 21);
+		contentPane.add(rdbtnPopularidad);
+		
+		JRadioButton rdbtnMayorNDe = new JRadioButton("Mejor precio");
+		rdbtnMayorNDe.setBounds(245, 364, 86, 23);
+		contentPane.add(rdbtnMayorNDe);
+		
+		JRadioButton rdbtnPopularidad_1 = new JRadioButton("Popularidad");
+		rdbtnPopularidad_1.setBounds(331, 364, 109, 23);
+		contentPane.add(rdbtnPopularidad_1);
 	}
 }

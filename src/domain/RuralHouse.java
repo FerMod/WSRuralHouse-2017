@@ -24,10 +24,12 @@ public class RuralHouse implements Serializable {
 	@GeneratedValue
 	private Integer id;
 	private String description;
-	private String city; 
+	private int city; 
 	private int ownerId;
 	private int reviewId;
-
+	private String[] images;
+	private String[] tags;                   
+	private	double price;                
 
 	public Vector<Offer> offers;
 
@@ -35,7 +37,7 @@ public class RuralHouse implements Serializable {
 		super();
 	}
 
-	public RuralHouse(String description, String city) {
+	public RuralHouse(String description, int city) {
 		this.description = description;
 		this.city = city;
 		offers = new Vector<Offer>();
@@ -58,12 +60,36 @@ public class RuralHouse implements Serializable {
 	}
 
 	
-	public String getCity() {
+	public int getCity() {
 		return city;
 	}
 	
-	public void setCity(String city) {
+	public void setCity(int city) {
 		this.city = city;
+	}
+
+	public String[] getImages() {
+		return images;
+	}
+
+	public void setImages(String[] images) {
+		this.images = images;
+	}
+
+	public String[] getTags() {
+		return tags;
+	}
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getOwnerId() {

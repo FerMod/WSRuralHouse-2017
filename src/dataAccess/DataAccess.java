@@ -86,15 +86,15 @@ public class DataAccess implements DataAccessInterface {
 				db.remove(rh);				
 			}
 
-			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
-			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
-			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
-			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
+//			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
+//			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
+//			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
+//			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
 
-			db.persist(rh1);
-			db.persist(rh2);
-			db.persist(rh3);
-			db.persist(rh4);
+//			db.persist(rh1);
+//			db.persist(rh2);
+//			db.persist(rh3);
+//			db.persist(rh4);
 
 			db.getTransaction().commit();
 			System.out.println("Db initialized");
@@ -129,7 +129,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(String description, String city) throws DuplicatedEntityException {
+	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
 		try {
 			open();
@@ -256,7 +256,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public boolean existsRuralHouse(String description, String city) {
+	public boolean existsRuralHouse(String description, int city) {
 		boolean found = false;
 		try {
 			open();
@@ -360,6 +360,161 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return false;
+	}
+	
+
+
+	/**
+	 * Obtain all the offers by a price range defined by the user (pending test).
+	 *  
+	 * @param min the lowest price
+	 * @param max the highest price
+	 * @return vector of offers in the range
+	 */
+	public Vector<Offer> getOffersByPrice(int min, int max) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT o"
+					+ " FROM Offer o "
+					+ "WHERE o.price>" + min + "AND o.price<" + max, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Obtain all the offers for a specific price defined by the user (pending test).
+	 *  
+	 * @param the price
+	 * @return vector of offers with the price selected
+	 */
+	public Vector<Offer> getOffersByConcretePrice(int price) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByConcretePrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT o"
+					+ " FROM Offer o "
+					+ "WHERE o.price=" + price, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
+	 * Obtain the offer with the lowest price (pending test).
+	 *  
+	 * @return vector with the offer with the lowest price 
+	 */
+	public Vector<Offer> getOffersByMinorPrice() {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByMinorPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
+												   + " FROM Offer o", Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Obtain the offer with the highest price (pending test).
+	 *  
+	 * @return vector with the offer with the highest price
+	 */
+	public Vector<Offer> getOffersByMaxPrice() {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByMaxPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
+												   + " FROM Offer o", Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Obtain the highest price of the Offers (pending test).
+	 *  
+	 * @return highest price of the Offers
+	 */
+	public double getMaxPrice() {
+		double result = 0;
+		try{
+			open();
+			System.out.println(">> DataAccess: getMaxPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
+												   + " FROM Offer o", Offer.class);
+			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
+			result = vm.get(0).getPrice(); //There is only one highest price.
+			printVector(vm);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Obtain the lowest price of the Offers (pending test).
+	 *  
+	 * @return lowest price of the Offers
+	 */
+	public double getMinorPrice() {
+		double result = 0;
+		try{
+			open();
+			System.out.println(">> DataAccess: getMinorPrice");
+			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
+												   + " FROM Offer o", Offer.class);
+			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
+			result = vm.get(0).getPrice(); //There is only one lowest price.
+			printVector(vm);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Modify the user's password.
+	 *  
+	 * @param the user
+	 * @param the password to modify
+	 */
+	public void changeUsersPass(AbstractUser us, String password) {
+			open();
+			db.getTransaction().begin();
+			us.setPassword(password);
+			db.getTransaction().commit();
+			close();
 	}
 
 

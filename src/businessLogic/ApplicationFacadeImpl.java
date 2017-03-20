@@ -12,7 +12,6 @@ import domain.Offer;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
@@ -29,7 +28,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		this.dataAccess = dataAccess;
 	}
 
-	public RuralHouse createRuralHouse(String description, String city) throws DuplicatedEntityException{
+	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException{
 		System.out.println(">> FacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
 
 		RuralHouse ruralHouse = null;
@@ -91,6 +90,13 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	@WebMethod
 	public Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
 		return new Vector<Offer>(dataAccess.getOffers(rh, firstDay, lastDay));
+	}
+
+	@Override
+	public RuralHouse createRuralHouse(String description, String city)
+			throws DuplicatedEntityException {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 
 }
