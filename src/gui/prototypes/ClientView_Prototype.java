@@ -1,4 +1,4 @@
-package gui;
+package gui.prototypes;
 
 import java.awt.EventQueue;
 
