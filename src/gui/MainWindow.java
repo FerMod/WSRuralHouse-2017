@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
-import java.util.logging.ConsoleHandler;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -23,9 +21,6 @@ import javax.swing.KeyStroke;
 import domain.AbstractUser.Role;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
-import gui.debug.ConsoleKeyEventDispatcher;
-import gui.debug.ConsoleWindow;
-
 import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
@@ -115,27 +110,27 @@ public class MainWindow extends JFrame {
 		validate();
 		setLocationRelativeTo(null);
 
-		addComponentListener(new ComponentListener() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-			@Override
-			public void componentResized(ComponentEvent e) {
-				System.out.println(MainWindow.class.getName()+"[Width: " + getWidth() + ", Height" + getHeight() + "]");
-			}
-			@Override
-			public void componentMoved(ComponentEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-			@Override
-			public void componentHidden(ComponentEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+//		addComponentListener(new ComponentListener() {
+//			@Override
+//			public void componentShown(ComponentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//			@Override
+//			public void componentResized(ComponentEvent e) {
+//				System.out.println(MainWindow.class.getName()+"[Width: " + getWidth() + ", Height" + getHeight() + "]");
+//			}
+//			@Override
+//			public void componentMoved(ComponentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//			@Override
+//			public void componentHidden(ComponentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//		});
 
 	}
 

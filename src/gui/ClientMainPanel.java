@@ -10,18 +10,15 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
 
@@ -49,6 +46,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import domain.AbstractUser.Role;
@@ -72,56 +72,7 @@ public class ClientMainPanel extends JPanel {
 	//	private GridBagLayout gridBagLayout;
 	//	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
 	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
-	private Role role;
 	private JSlider priceSlider;
-
-	//	/**
-	//	 * Launch the application.
-	//	 */
-	//	public static void main(String[] args) {
-	//		EventQueue.invokeLater(new Runnable() {
-	//			public void run() {
-	//				try {
-	//					Role role = getWindowRole();
-	//					if(role != null) {
-	//						JFrame frame = new JFrame();
-	//						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-	//						frame.setMinimumSize(new Dimension(400, 300));
-	//						frame.setSize(700, 365);
-	//						//frame.pack();
-	//						frame.setLocationRelativeTo(null);
-	//						frame.setVisible(true);
-	//					}
-	//				} catch (Exception e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		});
-	//	}
-	//
-	//	/**
-	//	 * Only to debug the windows
-	//	 * @return the chosen role
-	//	 */
-	//	private static Role getWindowRole() {
-	//		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-	//		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-	//		switch (response) {
-	//		case 0:
-	//			return Role.GUEST;
-	//		case 1:
-	//			return Role.CLIENT;
-	//		case 2:
-	//			return Role.OWNER;
-	//		case 3:
-	//			return Role.ADMIN;
-	//		case 4:
-	//			return Role.SUPER_ADMIN;
-	//		default:
-	//			return null;
-	//		}
-	//	}
 
 	/**
 	 * Create the panel.
@@ -133,17 +84,18 @@ public class ClientMainPanel extends JPanel {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		//		//GridBagConstraints variables
-		//		gbc.ipadx = 0;
-		//		gbc.ipady = 0;
-		//		gbc.weightx = 0.0;
-		//		gbc.weighty = 1.0;
-		//		gbc.anchor = GridBagConstraints.PAGE_END;
-		//		gbc.insets = new Insets(10,0,0,0);
-		//		gbc.gridwidth = 2;
-		//		gbc.gridheight = 1;
-		//		gbc.gridx = 1;
-		//		gbc.gridy = 2;
+		//// GridBagConstraints fields ///////////////////
+		// gbc.ipadx = 0;								//
+		// gbc.ipady = 0;								//
+		// gbc.weightx = 0.0;							//
+		// gbc.weighty = 1.0;							//
+		// gbc.anchor = GridBagConstraints.PAGE_END;	//
+		// gbc.insets = new Insets(10,0,0,0);			//
+		// gbc.gridwidth = 2;							//
+		// gbc.gridheight = 1;							//
+		// gbc.gridx = 1;								//
+		// gbc.gridy = 2;								//
+		//////////////////////////////////////////////////
 
 		gbc.ipady = 10;
 		gbc.weightx = 0.5;
@@ -404,17 +356,17 @@ public class ClientMainPanel extends JPanel {
 
 				@Override
 				public void changedUpdate(DocumentEvent e) {
-					refreshTableContent();
+					refreshTableContent("^[a-zA-Z]*$");
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					refreshTableContent();
+					refreshTableContent("^[a-zA-Z]*$");
 				}
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
-					refreshTableContent();
+					refreshTableContent("^[a-zA-Z]*$");
 				}
 
 			});
@@ -430,12 +382,21 @@ public class ClientMainPanel extends JPanel {
 	/** 
 	 * Update the row filter regular expression from the expression in the search text box.
 	 */
-	private void refreshTableContent() {
+	private void refreshTableContent(String expression) {
 		RowFilter<TableModel, Object> rf = null;
 		//If current expression can't parse, don't update.
 		try {
 			//Case insensitive flag   (?i)
-			rf = RowFilter.regexFilter("(?i)" + searchField.getText());
+			
+			//^[a-zA-Z0-9]*$
+			//
+			// ^ - Start of string
+			//
+			// [a-zA-Z0-9]* - multiple characters to include
+			//
+			// $ - End of string
+			
+			rf = RowFilter.regexFilter(expression + searchField.getText());
 			sorter.setRowFilter(rf);
 		} catch (PatternSyntaxException e) {
 			System.err.println("Info: Expression could not parse. Syntax error in a regular-expression pattern.");
@@ -453,29 +414,50 @@ public class ClientMainPanel extends JPanel {
 			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setFocusable(false);
-			table.setShowVerticalLines(false);
+			table.setShowVerticalLines(true);
 			table.setIntercellSpacing(new Dimension(0, 1));		
-			table.getTableHeader().setUI(null);
+			table.getTableHeader().setUI(null); //Hide the header
+			table.setUpdateSelectionOnSort(true);
+			//			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			//			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+			//			table.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
+
+			//Center the content in the column
+			DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
+			centerCellRenderer.setHorizontalAlignment(JLabel.CENTER);	
+			table.setDefaultRenderer(Double.class, centerCellRenderer);
+			table.setDefaultRenderer(String.class, centerCellRenderer);
+			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
+
+			//setTableColumnWidthPercentages(table, 0.2, 0.5, 0.2, 0.1);
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
 				@Override
 				public void valueChanged(ListSelectionEvent event) {
 					int row = table.getSelectedRow();
 					if (row < 0) {
 						//Selection got filtered away.
-						System.out.println("");
+						btnDetails.setEnabled(false);
 					} else {
-						//FIXME Add method to enable the buttons available to the current role window
-						if(role == Role.CLIENT) {
-							btnDetails.setEnabled(true);
-						}
+						btnDetails.setEnabled(true);
 						int modelRow = table.convertRowIndexToModel(row);
 						System.out.println(String.format("Selected Row in view: %d. Selected Row in model: %d.", row, modelRow));
 					}
 				}
 
+			});
+
+			table.addFocusListener(new FocusListener() {				
+				@Override
+				public void focusGained(FocusEvent e) {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					table.clearSelection();
+				}
 			});
 
 			table.addMouseListener(new MouseAdapter() {
@@ -489,8 +471,6 @@ public class ClientMainPanel extends JPanel {
 					}
 				}
 			});
-
-			tableScrollPanel = new JScrollPane(table);
 
 		}
 		return table;
@@ -545,6 +525,24 @@ public class ClientMainPanel extends JPanel {
 		return btnDetails;
 	}
 
+	/**
+	 * Set the width of the columns as percentages.
+	 * 
+	 * @param table the {@link JTable} whose columns will be set
+	 * @param percentages the widths of the columns as percentages</p>
+	 * <b>Note</b>: this method does <b>NOT</b> verify that all percentages add up to 100% and for
+	 * the columns to appear properly, it is recommended that the widths for <b>ALL</b> columns be specified.
+	 */
+	public void setTableColumnWidthPercentages(JTable table, double... percentages) {
+		final double factor = 10000;
+
+		TableColumnModel model = table.getColumnModel();
+		for (int columnIndex = 0; columnIndex < percentages.length; columnIndex++) {
+			TableColumn column = model.getColumn(columnIndex);
+			column.setPreferredWidth((int) (percentages[columnIndex] * factor));
+		}
+	}
+
 	private class TableModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = 1L;
@@ -552,17 +550,17 @@ public class ClientMainPanel extends JPanel {
 		private int width;
 		private int height;
 
-		private String[] columnNames = {"Image", "First Name", "Last Name", "Sport", "# of Years", "Vegetarian"};
+		private String[] columnNames = {"Image", "Description", "Address", "Price"};
 
 		private Object[][] data = {
-				{new ImageIcon("/img/house00.png"), "Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false) },
-				{new ImageIcon("/img/house00.png"), "John", "Doe", "Rowing", new Integer(3), new Boolean(true) },
-				{new ImageIcon("/img/house00.png"), "Sue", "Black", "Knitting", new Integer(2), new Boolean(false) },
-				{new ImageIcon("/img/house00.png"), "Jane", "White", "Speed reading", new Integer(20), new Boolean(true) },
-				{new ImageIcon("/img/house00.png"), "Joe", "Brown", "Pool", new Integer(10), new Boolean(false) },
-				{new ImageIcon("/img/house00.png"), "Paco", "Jones", "Anotha", new Integer(20), new Boolean(false) },
-				{new ImageIcon("/img/house00.png"), "Shpee", "Shpee", "Cloacker", new Integer(30), new Boolean(true) },
-				{new ImageIcon("/img/house00.png"), "Jam", "Jammies", "Speed sleep", new Integer(1), new Boolean(false) },
+				{new ImageIcon("/img/house00.png"), "Description of the house 1 with minor details", "Address 1", new Double(110.2)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 2 with minor details", "Address 2", new Double(154.52)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 3 with minor details", "Address 3", new Double(356.0)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 4 with minor details", "Address 4", new Double(165.4)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 5 with minor details", "Address 5", new Double(170.2)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 6 with minor details", "Address 6", new Double(666.5)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 7 with minor details", "Address 7", new Double(336.6)},
+				{new ImageIcon("/img/house00.png"), "Description of the house 8 with minor details", "Address 8", new Double(63.1)},
 		};
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
