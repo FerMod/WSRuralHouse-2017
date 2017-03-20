@@ -1,4 +1,4 @@
-package gui;
+package gui.debug;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,12 +6,12 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,7 +24,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-public final class ConsoleWindow {
+public final class ConsoleWindow extends ConsoleKeyEventDispatcher {
 
 	private static JFrame frame;
 	private static CapturePane capturePane;
@@ -46,19 +46,16 @@ public final class ConsoleWindow {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				if(frame == null) {
-					createAndShowGui();
-//					new ConsoleKeyListener(frame);
-				}
+				createAndShowGui();
 			}            
 		});
 	}
 
-	private static void createAndShowGui() {
+	private void createAndShowGui() {
 
 		//ConsoleOutput consoleOutput = new ConsoleOutput();
 
-		frame = new JFrame("Console");
+		frame = new JFrame("Console Output");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		capturePane = new CapturePane();
 		frame.setContentPane(capturePane); 
@@ -67,10 +64,13 @@ public final class ConsoleWindow {
 		frame.setMinimumSize(new Dimension(228, 39));
 		frame.setSize(650, 350);
 		//frame.setLocationRelativeTo(null);	
-
+//		frame.addKeyListener();
+		//new ConsoleKeyEvent<>(this.getClass());
+		frame.setFocusable(true);	
+		
 		System.setOut(new PrintStream(new StreamCapturer(capturePane, System.out)));
 		System.setErr(new PrintStream(new StreamCapturer(Color.RED, capturePane, System.err)));
-
+		
 		frame.setVisible(true);
 
 		/*
@@ -136,12 +136,12 @@ public final class ConsoleWindow {
 	}
 
 	public static void setVisible(boolean b) {
-		if(b) {
-			if(frame != null) {
-				frame.setVisible(b);
-			} else {
-				createAndShowGui();
-			}
+		if(frame != null) {
+			//the frame exists, and will show (b = true) or hide (b = false) de window
+			frame.setVisible(b);
+		} else if(b) {
+			//The frame does not exist, and
+			new ConsoleWindow();
 		}
 	}
 
@@ -225,7 +225,7 @@ public final class ConsoleWindow {
 
 	}
 
-	public static class StreamCapturer extends OutputStream {
+	private static class StreamCapturer extends OutputStream {
 
 		private StringBuilder buffer;
 		private String prefix;
@@ -241,6 +241,7 @@ public final class ConsoleWindow {
 			this("", color, consumer, old);
 		}
 
+		@SuppressWarnings("unused")
 		public StreamCapturer(String prefix, Consumer consumer, PrintStream old) {
 			this(prefix, Color.BLACK, consumer, old);
 		}

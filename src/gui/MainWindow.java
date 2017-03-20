@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.logging.ConsoleHandler;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -22,6 +22,10 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import domain.AbstractUser.Role;
 import gui.components.ui.CustomTabbedPaneUI;
+import gui.debug.ConsoleKeyEventDispatcher;
+import gui.debug.ConsoleKeyEventDispatcher;
+import gui.debug.ConsoleWindow;
+
 import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
@@ -43,6 +47,10 @@ public class MainWindow extends JFrame {
 					Role role = getWindowRole();
 					if(role != null) {
 						MainWindow frame = new MainWindow(role);
+//						frame.addKeyListener(
+						//new ConsoleKeyEvent<>(this.getClass());
+						new ConsoleKeyEventDispatcher();
+						frame.setFocusable(true);			
 						frame.setVisible(true); 
 					} else {
 						System.exit(0);
