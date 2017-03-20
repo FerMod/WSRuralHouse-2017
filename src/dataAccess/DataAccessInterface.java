@@ -19,7 +19,7 @@ public interface DataAccessInterface {
 
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price);
 
-	RuralHouse createRuralHouse(String description, String city) throws DuplicatedEntityException;
+	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
@@ -40,5 +40,8 @@ public interface DataAccessInterface {
 	List<Offer> getOffers(RuralHouse rh, Date firstDay, Date lastDay);
 
 	boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws OverlappingOfferException;
+
+	boolean existsRuralHouse(String description, int city);
+
 
 }

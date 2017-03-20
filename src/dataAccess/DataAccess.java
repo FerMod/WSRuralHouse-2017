@@ -86,15 +86,15 @@ public class DataAccess implements DataAccessInterface {
 				db.remove(rh);				
 			}
 
-			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
-			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
-			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
-			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
+//			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
+//			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
+//			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
+//			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
 
-			db.persist(rh1);
-			db.persist(rh2);
-			db.persist(rh3);
-			db.persist(rh4);
+//			db.persist(rh1);
+//			db.persist(rh2);
+//			db.persist(rh3);
+//			db.persist(rh4);
 
 			db.getTransaction().commit();
 			System.out.println("Db initialized");
@@ -129,7 +129,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(String description, String city) throws DuplicatedEntityException {
+	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
 		try {
 			open();
@@ -256,7 +256,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public boolean existsRuralHouse(String description, String city) {
+	public boolean existsRuralHouse(String description, int city) {
 		boolean found = false;
 		try {
 			open();
