@@ -43,5 +43,4 @@ public interface DataAccessInterface {
 
 	boolean existsRuralHouse(String description, int city);
 
-
 }

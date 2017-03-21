@@ -92,12 +92,6 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return new Vector<Offer>(dataAccess.getOffers(rh, firstDay, lastDay));
 	}
 
-	@Override
-	public RuralHouse createRuralHouse(String description, String city)
-			throws DuplicatedEntityException {
-		// TODO Auto-generated method stub
-		return null;
-	}	
 
 }
 
