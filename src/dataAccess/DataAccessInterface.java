@@ -31,8 +31,6 @@ public interface DataAccessInterface {
 
 	boolean existsEmail(String email);
 
-	boolean existsRuralHouse(String description, String city);
-
 	void login(String username, String password) throws AuthException, AccountNotFoundException;
 
 	List<RuralHouse> getAllRuralHouses();
