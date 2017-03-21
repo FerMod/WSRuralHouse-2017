@@ -30,8 +30,8 @@ public interface DataAccessInterface {
 	boolean existsUser(String username);
 
 	boolean existsEmail(String email);
-
-	boolean existsRuralHouse(String description, String city);
+	
+	boolean existsRuralHouse(String description, int city);
 
 	void login(String username, String password) throws AuthException, AccountNotFoundException;
 
@@ -40,8 +40,5 @@ public interface DataAccessInterface {
 	List<Offer> getOffers(RuralHouse rh, Date firstDay, Date lastDay);
 
 	boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws OverlappingOfferException;
-
-	boolean existsRuralHouse(String description, int city);
-
 
 }

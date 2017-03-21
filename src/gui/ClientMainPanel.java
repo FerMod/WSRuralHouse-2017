@@ -23,6 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.InputVerifier;
@@ -30,12 +31,14 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
@@ -47,6 +50,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
@@ -254,9 +259,9 @@ public class ClientMainPanel extends JPanel {
 
 	private Hashtable<Integer, JLabel> getSliderLabelTable(double minPrice, double maxPrice) {
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();		
-		labelTable.put(getPriceSlider().getMinimum(), new JLabel(Double.toString(minPrice)) );
-		labelTable.put(getPriceSlider().getMaximum()/2, new JLabel(Double.toString((maxPrice-minPrice)/2)) );
-		labelTable.put(getPriceSlider().getMaximum(), new JLabel(Double.toString(maxPrice)));
+		labelTable.put(getPriceSlider().getMinimum(), new JLabel(Double.toString(minPrice) + " €"));
+		labelTable.put(getPriceSlider().getMaximum()/2, new JLabel(Double.toString((maxPrice-minPrice)/2) + " €") );
+		labelTable.put(getPriceSlider().getMaximum(), new JLabel(Double.toString(maxPrice) + " €"));
 		return labelTable;
 	}
 
@@ -387,7 +392,7 @@ public class ClientMainPanel extends JPanel {
 		//If current expression can't parse, don't update.
 		try {
 			//Case insensitive flag   (?i)
-			
+
 			//^[a-zA-Z0-9]*$
 			//
 			// ^ - Start of string
@@ -395,7 +400,7 @@ public class ClientMainPanel extends JPanel {
 			// [a-zA-Z0-9]* - multiple characters to include
 			//
 			// $ - End of string
-			
+
 			rf = RowFilter.regexFilter(expression + searchField.getText());
 			sorter.setRowFilter(rf);
 		} catch (PatternSyntaxException e) {
@@ -425,11 +430,15 @@ public class ClientMainPanel extends JPanel {
 			//Center the content in the column
 			DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
 			centerCellRenderer.setHorizontalAlignment(JLabel.CENTER);	
-			table.setDefaultRenderer(Double.class, centerCellRenderer);
-			table.setDefaultRenderer(String.class, centerCellRenderer);
+			//			table.setDefaultRenderer(Double.class, centerCellRenderer);
+			//			table.setDefaultRenderer(String.class, centerCellRenderer);
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			//setTableColumnWidthPercentages(table, 0.2, 0.5, 0.2, 0.1);
+
+			table.setDefaultRenderer(Object.class, new TableDetailsCell());
+			table.setDefaultEditor(Object.class, new TableDetailsCell());
+			table.setRowHeight(60);
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -550,17 +559,30 @@ public class ClientMainPanel extends JPanel {
 		private int width;
 		private int height;
 
-		private String[] columnNames = {"Image", "Description", "Address", "Price"};
+		//		private String[] columnNames = {"Image", "Description", "Address", "Price"};
+		private String[] columnNames = {"Image", "Details"};
+
+
+		//		private Object[][] data = {
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 1 with minor details", "Address 1", new Double(110.2)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 2 with minor details", "Address 2", new Double(154.52)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 3 with minor details", "Address 3", new Double(356.0)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 4 with minor details", "Address 4", new Double(165.4)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 5 with minor details", "Address 5", new Double(170.2)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 6 with minor details", "Address 6", new Double(666.5)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 7 with minor details", "Address 7", new Double(336.6)},
+		//				{new ImageIcon("/img/house00.png"), "Description of the house 8 with minor details", "Address 8", new Double(63.1)},
+		//		};
 
 		private Object[][] data = {
-				{new ImageIcon("/img/house00.png"), "Description of the house 1 with minor details", "Address 1", new Double(110.2)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 2 with minor details", "Address 2", new Double(154.52)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 3 with minor details", "Address 3", new Double(356.0)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 4 with minor details", "Address 4", new Double(165.4)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 5 with minor details", "Address 5", new Double(170.2)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 6 with minor details", "Address 6", new Double(666.5)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 7 with minor details", "Address 7", new Double(336.6)},
-				{new ImageIcon("/img/house00.png"), "Description of the house 8 with minor details", "Address 8", new Double(63.1)},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 1 with minor details", "Address 1",  new Double(110.2))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 2 with minor details", "Address 2", new Double(154.52))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 3 with minor details", "Address 3", new Double(356.0))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 4 with minor details", "Address 4", new Double(165.4))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 5 with minor details", "Address 5", new Double(170.2))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 6 with minor details", "Address 6", new Double(666.5))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details", "Address 7", new Double(336.6))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "Address 8", new Double(63.1))},
 		};
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
@@ -705,6 +727,128 @@ public class ClientMainPanel extends JPanel {
 				System.out.println();
 			}
 			System.out.println("--------------------------");
+		}
+
+	}
+
+	public class TableDetailsCell extends AbstractCellEditor implements TableCellEditor, TableCellRenderer{
+
+		JPanel panel;
+		JTextArea textArea;
+		JTextField textField;
+		JButton btnNewButton;
+		JTextField textField_1;
+
+		public TableDetailsCell() {
+
+			panel = new JPanel();
+			panel.setBorder(new EmptyBorder(2, 5, 2, 5));
+			
+			GridBagLayout gridBagLayout = new GridBagLayout();
+			gridBagLayout.columnWidths = new int[] {386, 56, 0, 2};
+			gridBagLayout.rowHeights = new int[] {0, 0, 2};
+			gridBagLayout.columnWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
+			gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+			panel.setLayout(gridBagLayout);
+
+			textArea = new JTextArea();
+			GridBagConstraints gbc_textArea = new GridBagConstraints();
+			gbc_textArea.gridwidth = 3;
+			gbc_textArea.insets = new Insets(0, 0, 5, 0);
+			gbc_textArea.fill = GridBagConstraints.BOTH;
+			gbc_textArea.gridx = 0;
+			gbc_textArea.gridy = 0;
+			panel.add(textArea, gbc_textArea);
+
+			textField = new JTextField();
+			GridBagConstraints gbc_textField = new GridBagConstraints();
+			gbc_textField.insets = new Insets(0, 0, 0, 5);
+			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textField.gridx = 0;
+			gbc_textField.gridy = 1;
+			panel.add(textField, gbc_textField);
+			textField.setColumns(10);
+
+			textField_1 = new JTextField();
+			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+			gbc_textField_1.insets = new Insets(0, 0, 0, 5);
+			gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+			gbc_textField_1.gridx = 1;
+			gbc_textField_1.gridy = 1;
+			panel.add(textField_1, gbc_textField_1);
+			textField_1.setColumns(10);
+
+			btnNewButton = new JButton("New button");
+			GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+			gbc_btnNewButton.gridx = 2;
+			gbc_btnNewButton.gridy = 1;
+			panel.add(btnNewButton, gbc_btnNewButton);
+
+		}
+
+		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
+			textArea.setText(rowContent.getDescription());
+			textField.setText(rowContent.getAddress());
+			textField_1.setText(rowContent.getPrice() + " €");
+			btnNewButton.setText("Info.");
+
+			if (isSelected) {
+				panel.setBackground(table.getSelectionBackground());
+			}else{
+				panel.setBackground(table.getBackground());
+			}
+		}
+
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+			updateData((CellDetails) value, true, table);
+			return panel;
+		}
+
+		public Object getCellEditorValue() {
+			return null;
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			updateData((CellDetails) value, isSelected, table);
+			return panel;
+		}
+
+	}
+
+	public class CellDetails {
+
+		private String description;
+		private String address;
+		private Double price;
+
+		public CellDetails(String description, String address, Double price) {
+			this.description = description;
+			this.address = address;
+			this.price = price;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public String getAddress() {
+			return address;
+		}
+
+		public void setAddress(String address) {
+			this.address = address;
+		}
+
+		public Double getPrice() {
+			return price;
+		}
+
+		public void setPrice(Double price) {
+			this.price = price;
 		}
 
 	}

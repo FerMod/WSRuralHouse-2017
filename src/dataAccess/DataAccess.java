@@ -548,9 +548,4 @@ public class DataAccess implements DataAccessInterface {
 		System.out.println(sp.toString());
 	}
 
-	@Override
-	public boolean existsRuralHouse(String description, String city) {
-		return false;
-	}
-
 }
