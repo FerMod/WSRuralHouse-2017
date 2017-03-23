@@ -42,7 +42,7 @@ public class ApplicationLauncher {
 
 			if (config.isBusinessLogicLocal()) {
 				aplicationFacade = new ApplicationFacadeImpl();
-				DataAccess dataAccess = new DataAccess();
+				DataAccess dataAccess = new DataAccess(config);
 				aplicationFacade.setDataAccess(dataAccess);
 			} else { //Si es remoto
 
