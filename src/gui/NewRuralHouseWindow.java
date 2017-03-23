@@ -6,9 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,8 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import businessLogic.ApplicationFacadeInterface;
-import domain.City;
-import domain.Offer;
 import exceptions.DuplicatedEntityException;
 
 @SuppressWarnings("serial")
@@ -27,7 +23,7 @@ public class NewRuralHouseWindow extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField textFieldDescription;
-	private JComboBox<City> comboBoxCity;
+	private JTextField textFieldCity;
 	private JLabel lblNewRuralHouse;
 	private JLabel lblDescription;
 	private JLabel lblCity;
@@ -61,7 +57,7 @@ public class NewRuralHouseWindow extends JDialog {
 		contentPane.add(getLblNewRuralHouse());
 		contentPane.add(getLblDescription());		
 		contentPane.add(getTextFieldDescription());
-		contentPane.add(getComboBoxCity());
+		contentPane.add(getTextFieldCity());
 		contentPane.add(getLblCity());
 		contentPane.add(getBtnCreate());
 		contentPane.add(getBtnCancel());
@@ -100,7 +96,7 @@ public class NewRuralHouseWindow extends JDialog {
 					if(fieldsFilled()) {
 						ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
 						String description = textFieldDescription.getText();
-						City city = (City) comboBoxCity.getSelectedItem();
+						String city = textFieldCity.getText();
 						try {
 							facade.createRuralHouse(description, city);
 							dispose();
@@ -119,7 +115,7 @@ public class NewRuralHouseWindow extends JDialog {
 		if(textFieldDescription.getText().trim().equals("")){
 			JOptionPane.showMessageDialog(this,	"The field \"description\", cannot be empty.", "Empty value", JOptionPane.WARNING_MESSAGE);
 			return false;
-		} else if(comboBoxCity.getSelectedIndex() == -1) {
+		} else if(textFieldCity.getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(this,	"The field \"city\", cannot be empty.", "Empty value", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
@@ -134,13 +130,13 @@ public class NewRuralHouseWindow extends JDialog {
 		return lblCity;
 	}
 
-	private JComboBox<City> getComboBoxCity() {
-		if(comboBoxCity == null) {	
-			ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
-			comboBoxCity = new JComboBox<City>(new DefaultComboBoxModel<City>(facade.getCities()));
-			comboBoxCity.setBounds(20, 127, 191, 20);
+	private JTextField getTextFieldCity() {
+		if(textFieldCity == null) {	
+			textFieldCity = new JTextField();
+			textFieldCity.setColumns(10);
+			textFieldCity.setBounds(20, 127, 191, 20);
 		}
-		return comboBoxCity;
+		return textFieldCity;
 	}
 
 	private JTextField getTextFieldDescription() {

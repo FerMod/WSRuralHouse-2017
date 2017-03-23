@@ -7,7 +7,6 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-import domain.City;
 import domain.Offer;
 import domain.RuralHouse;
 import exceptions.AuthException;
@@ -34,22 +33,12 @@ public interface DataAccessInterface {
 
 	void login(String username, String password) throws AuthException, AccountNotFoundException;
 
-	List<RuralHouse> getRuralHouses();
+	List<RuralHouse> getAllRuralHouses();
 
-	List<Offer> getOffers(RuralHouse ruralHouse, Date firstDay, Date lastDay);
+	List<Offer> getOffers(RuralHouse rh, Date firstDay, Date lastDay);
 
-	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
+	boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws OverlappingOfferException;
 
 	boolean existsRuralHouse(String description, int city);
-	
-	City createCity(String name);
-	
-	boolean existsCity(City city);
-
-	boolean existsCity(int id);
-	
-	boolean existsCity(String name);
-
-	List<City> getCities();
 
 }

@@ -63,7 +63,7 @@ public class QueryAvailabilityGUI extends JFrame {
 
 		ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
 
-		Vector<RuralHouse> rhs = facade.getRuralHouses();
+		Vector<RuralHouse> rhs = facade.getAllRuralHouses();
 
 		comboBox = new JComboBox<RuralHouse>(rhs);
 		//comboBox.setModel(new DefaultComboBoxModel(rhs));
