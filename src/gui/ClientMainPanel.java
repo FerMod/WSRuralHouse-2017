@@ -32,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -43,6 +42,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -57,7 +57,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
-import domain.AbstractUser.Role;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
@@ -767,7 +766,7 @@ public class ClientMainPanel extends JPanel {
 			GridBagConstraints gbcAdressField = new GridBagConstraints();
 			gbcAdressField.insets = new Insets(0, 0, 0, 5);
 			gbcAdressField.fill = GridBagConstraints.HORIZONTAL;
-			gbcAdressField.gridx = 2;
+			gbcAdressField.gridx = 1;
 			gbcAdressField.gridy = 0;
 			panel.add(addressField, gbcAdressField);
 			addressField.setColumns(10);
@@ -779,7 +778,7 @@ public class ClientMainPanel extends JPanel {
 			GridBagConstraints gbcPriceField = new GridBagConstraints();
 			gbcPriceField.fill = GridBagConstraints.HORIZONTAL;
 			gbcPriceField.insets = new Insets(0, 0, 0, 5);
-			gbcPriceField.gridx = 0;
+			gbcPriceField.gridx = 1;
 			gbcPriceField.gridy = 1;
 			panel.add(priceField, gbcPriceField);
 			priceField.setColumns(10);
@@ -788,9 +787,9 @@ public class ClientMainPanel extends JPanel {
 			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 			GridBagConstraints gbcInfoButton = new GridBagConstraints();
 			gbcInfoButton.fill = GridBagConstraints.HORIZONTAL;
-			gbcInfoButton.gridx = 1;
-			gbcInfoButton.gridy = 1;	
-			gbcInfoButton.gridheight = 2;
+			gbcInfoButton.gridheight = 3;
+			gbcInfoButton.gridx = 2;
+			gbcInfoButton.gridy = 0;	
 			gbcPriceField.insets = new Insets(5, 5, 5, 5);
 			panel.add(infoButton, gbcInfoButton);
 
