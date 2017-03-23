@@ -193,7 +193,7 @@ public class MainGUI extends JFrame {
 					ApplicationFacadeInterface aplicationFacade = new ApplicationFacadeImpl();
 					DataAccess dataAccess = new DataAccess();
 					aplicationFacade.setDataAccess(dataAccess);
-					Vector<RuralHouse> rhs = aplicationFacade.getAllRuralHouses();
+					Vector<RuralHouse> rhs = aplicationFacade.getRuralHouses();
 					JFrame a = new SetAvailabilityGUI(rhs);
 					a.setVisible(true);
 				}
