@@ -2,6 +2,7 @@ package businessLogic;
 
 import java.util.Date;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -12,6 +13,7 @@ import domain.Offer;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.City;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
@@ -27,9 +29,14 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
 	}
+	
+	@Override
+	public RuralHouse createRuralHouse(String name, City city) throws DuplicatedEntityException {
+		return createRuralHouse(name, city.getId());
+	}
 
 	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException{
-		System.out.println(">> FacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
+		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
 
 		RuralHouse ruralHouse = null;
 
@@ -39,12 +46,12 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 			throw new DuplicatedEntityException();
 		}
 
-		System.out.println("<< FacadeImpl: createRuralHouse => " + ruralHouse);
+		System.out.println("<< ApplicationFacadeImpl: createRuralHouse => " + ruralHouse);
 		return ruralHouse;
 	}
 
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) throws OverlappingOfferException, BadDatesException {
-		System.out.println(">> FacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
+		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
 
 		Offer offer = null;
 
@@ -56,7 +63,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 			offer = dataAccess.createOffer(ruralHouse,firstDay,lastDay,price);		
 		}
 
-		System.out.println("<< FacadeImpl: createOffer=> O= " + offer);
+		System.out.println("<< ApplicationFacadeImpl: createOffer=> O= " + offer);
 		return offer;
 	}
 
@@ -65,7 +72,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> FacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
+		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
 		if(!dataAccess.existsUser(username)) {
 			if(!dataAccess.existsEmail(email)) {
 				return dataAccess.createUser(email, username, password, role);
@@ -82,14 +89,44 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return role;
 	}
 
-	public Vector<RuralHouse> getAllRuralHouses()  {
-		System.out.println(">> FacadeImpl: getAllRuralHouses");
-		return new Vector<RuralHouse>(dataAccess.getAllRuralHouses());
+	public Vector<RuralHouse> getRuralHouses()  {
+		System.out.println(">> ApplicationFacadeImpl: getAllRuralHouses");
+		return new Vector<RuralHouse>(dataAccess.getRuralHouses());
 	}
 
 	@WebMethod
-	public Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
-		return new Vector<Offer>(dataAccess.getOffers(rh, firstDay, lastDay));
+	@Override
+	public Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
+		return new Vector<Offer>(dataAccess.getOffers(ruralHouse, firstDay, lastDay));
+	}
+	
+	public City createCity(String name) {
+		System.out.println(">> ApplicationFacadeImpl: createCity=> name= " + name);
+
+		City city = null;
+
+		if (!dataAccess.existsCity(name)) {
+			city = dataAccess.createCity(name);		
+		}
+
+		System.out.println("<< ApplicationFacadeImpl: createCity=> City [id=" + city.getId() + ", " + city.getName() + "]");
+		return city;
+	}
+
+	@Override
+	public Vector<String> getCitiesNames() {
+		System.out.println(">> ApplicationFacadeImpl: getCitiesNames()");
+		//Get the city name list from the city object list, and parse it to vector
+		Vector<String> namesVector = new Vector<String>(dataAccess.getCities().stream()
+				.map(City::getName)
+				.collect(Collectors.toList()));
+		return namesVector;
+	}
+
+	@Override
+	public Vector<City> getCities() {
+		System.out.println(">> ApplicationFacadeImpl: getCities()");
+		return new Vector<City>(dataAccess.getCities());
 	}
 
 
