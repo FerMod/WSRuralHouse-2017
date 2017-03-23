@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import businessLogic.ApplicationFacadeInterfaceWS;
+import businessLogic.ApplicationFacadeInterface;
 
 import com.toedter.calendar.JCalendar;
 
@@ -177,7 +177,7 @@ public class SetAvailabilityGUI extends JFrame  {
 			float price= Float.parseFloat(jTextField3.getText());
 
 			//Obtain the business logic from a StartWindow class (local or remote)
-			ApplicationFacadeInterfaceWS facade=MainGUI.getBusinessLogic();
+			ApplicationFacadeInterface facade=MainGUI.getBusinessLogic();
 
 			Offer o = facade.createOffer(ruralHouse, firstDay, lastDay, price); 
 

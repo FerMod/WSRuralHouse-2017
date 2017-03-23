@@ -17,17 +17,19 @@ import javax.persistence.*;
 public class RuralHouse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
 	@GeneratedValue
-	private Integer houseNumber;
+	private Integer id;
 	private String description;
-	private String city; 
+	private int city; 
 	private int ownerId;
 	private int reviewId;
-
+	private String[] images;
+	private String[] tags;                   
+	private	double price;                
 
 	public Vector<Offer> offers;
 
@@ -35,35 +37,59 @@ public class RuralHouse implements Serializable {
 		super();
 	}
 
-	public RuralHouse(String description, String city) {
+	public RuralHouse(String description, int city) {
 		this.description = description;
 		this.city = city;
 		offers = new Vector<Offer>();
 	}
 
-	public Integer getHouseNumber() {
-		return houseNumber;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setHouseNumber(Integer houseNumber) {
-		this.houseNumber = houseNumber;
+	public void setId(Integer houseNumber) {
+		this.id = houseNumber;
 	}
 
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description=description;
 	}
 
-	
-	public String getCity() {
+
+	public int getCity() {
 		return city;
 	}
-	
-	public void setCity(String city) {
+
+	public void setCity(int city) {
 		this.city = city;
+	}
+
+	public String[] getImages() {
+		return images;
+	}
+
+	public void setImages(String[] images) {
+		this.images = images;
+	}
+
+	public String[] getTags() {
+		return tags;
+	}
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getOwnerId() {
@@ -81,8 +107,8 @@ public class RuralHouse implements Serializable {
 	public void setReviewId(int reviewId) {
 		this.reviewId = reviewId;
 	}
-	
-		
+
+
 	/**
 	 * This method creates an offer with a house number, first day, last day and price
 	 * 
@@ -91,42 +117,42 @@ public class RuralHouse implements Serializable {
 	 * @return None
 	 */
 	public Offer createOffer(Date firstDay, Date lastDay, float price)  {
-        System.out.println("LLAMADA RuralHouse createOffer, offerNumber="+" firstDay="+firstDay+" lastDay="+lastDay+" price="+price);
-        Offer off=new Offer(firstDay,lastDay,price,this);
-        offers.add(off);
-        return off;
+		System.out.println("LLAMADA RuralHouse createOffer, offerNumber="+" firstDay="+firstDay+" lastDay="+lastDay+" price="+price);
+		Offer off=new Offer(firstDay,lastDay,price,this);
+		offers.add(off);
+		return off;
 	}
 
-	
+
 	@Override
 	public int hashCode() {
 
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + houseNumber.hashCode();
+		result = prime * result + id.hashCode();
 		return result;
 	}
 
 	@Override
 	public String toString() {
-		return this.houseNumber + ": " + this.city;
+		return this.id + ": " + this.city;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		RuralHouse other = (RuralHouse) obj;
 		if (this == obj)
-		  return true;
+			return true;
 		if (obj == null)
-		  return false;
+			return false;
 		if (getClass() != obj.getClass())
-		  return false;
-//		if (houseNumber != other.houseNumber) // NO COMPARAR ASÍ ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
-		if (!houseNumber.equals(other.houseNumber))
-		  return false;
-   	    return true;
+			return false;
+		//		if (houseNumber != other.houseNumber) // NO COMPARAR ASÍ ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
+		if (!id.equals(other.id))
+			return false;
+		return true;
 	}
-	
+
 	/**
 	 * This method obtains available offers for a concrete house in a certain period 
 	 * 
@@ -136,7 +162,7 @@ public class RuralHouse implements Serializable {
 	 * @return a vector of offers(Offer class)  available  in this period
 	 */
 	public Vector<Offer> getOffers( Date firstDay,  Date lastDay) {
-		
+
 		Vector<Offer> availableOffers=new Vector<Offer>();
 		Iterator<Offer> e=offers.iterator();
 		Offer offer;
@@ -146,10 +172,10 @@ public class RuralHouse implements Serializable {
 				availableOffers.add(offer);
 		}
 		return availableOffers;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * This method obtains the first offer that overlaps with the provided dates
 	 * 
@@ -159,7 +185,7 @@ public class RuralHouse implements Serializable {
 	 */
 
 	public Offer overlapsWith( Date firstDay,  Date lastDay) {
-		
+
 		Iterator<Offer> e=offers.iterator();
 		Offer offer=null;
 		while (e.hasNext()){
@@ -168,7 +194,7 @@ public class RuralHouse implements Serializable {
 				return offer;
 		}
 		return null;
-		
+
 	}
 
 }

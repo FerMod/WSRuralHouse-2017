@@ -1,12 +1,12 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
-import domain.User.Role;
+import domain.AbstractUser.Role;
 import gui.components.ui.CustomTabbedPaneUI;
-import gui.ConsoleWindow;
+import gui.debug.ConsoleKeyEventDispatcher;
 import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
@@ -28,6 +28,7 @@ public class MainWindow extends JFrame {
 	private static final long serialVersionUID = -1810393566512302281L;
 
 	private JPanel contentPane;
+	@SuppressWarnings("unused")
 	private Role role;
 	private JTabbedPane tabbedPane;
 
@@ -41,9 +42,13 @@ public class MainWindow extends JFrame {
 					Role role = getWindowRole();
 					if(role != null) {
 						MainWindow frame = new MainWindow(role);
-						frame.setVisible(true);
+//						frame.addKeyListener(
+						//new ConsoleKeyEvent<>(this.getClass());
+						new ConsoleKeyEventDispatcher();
+						frame.setFocusable(true);			
+						frame.setVisible(true); 
 					} else {
-						System.exit(1);
+						System.exit(0);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,40 +62,23 @@ public class MainWindow extends JFrame {
 	 * @return the chosen role
 	 */
 	private static Role getWindowRole() {
-		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-		String response = (String)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		switch (response) {
-		case "GUEST":
-			return Role.GUEST;
-		case "CLIENT":
-			return Role.CLIENT;
-		case "OWNER":
-			return Role.OWNER;
-		case "ADMIN":
-			return Role.ADMIN;
-		case "SUPER_ADMIN":
-			return Role.SUPER_ADMIN;
-		default:
-			return null;
-		}
+		Role[] options = new Role[] {Role.CLIENT, Role.OWNER, Role.ADMIN, Role.SUPER_ADMIN};
+		Role response = (Role)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		return response;
 	}
 
 	/**
 	 * Create the frame.
 	 */
 	public MainWindow(Role role) {
-		
-		ConsoleWindow consoleOutput = new ConsoleWindow();
-		consoleOutput.setVisible(true);
-		
+
+		//ConsoleWindow.setVisible(true);
+
 		this.role = role;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setMinimumSize(new Dimension(600, 465));
-		setSize(700, 565);
 		getRolePanel(role);
 		//setJMenuBar(getRoleMenuBar());
-		//frame.pack();
-		pack();
+
 
 		contentPane = new JPanel();
 		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -105,18 +93,44 @@ public class MainWindow extends JFrame {
 		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
 		tabbedPane.addTab("", new TextArea("Inifinite posibilities...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmaybe(?)"));
 		tabbedPane.addTab("Log Out", new TextArea(""));
-//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
-//			@Override
-//			public void mouseDragged(MouseEvent e) {}
-//			@Override
-//			public void mouseMoved(MouseEvent e){
-//				adjustCursor(e);
-//			}
-//		});
+		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
+		//			@Override
+		//			public void mouseDragged(MouseEvent e) {}
+		//			@Override
+		//			public void mouseMoved(MouseEvent e){
+		//				adjustCursor(e);
+		//			}
+		//		});
 
 		contentPane.add(tabbedPane);
 
+		//setMinimumSize(new Dimension(600, 365));
+		setSize(760, 400);
+		//pack();
+		validate();
 		setLocationRelativeTo(null);
+
+//		addComponentListener(new ComponentListener() {
+//			@Override
+//			public void componentShown(ComponentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//			@Override
+//			public void componentResized(ComponentEvent e) {
+//				System.out.println(MainWindow.class.getName()+"[Width: " + getWidth() + ", Height" + getHeight() + "]");
+//			}
+//			@Override
+//			public void componentMoved(ComponentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//			@Override
+//			public void componentHidden(ComponentEvent e) {
+//				// TODO Auto-generated method stub
+//
+//			}
+//		});
 
 	}
 
@@ -136,9 +150,6 @@ public class MainWindow extends JFrame {
 
 	public JPanel getRolePanel(Role role) {
 		switch (role) {
-		case GUEST:
-			//return new GuestMainPanel();
-			return null;
 		case CLIENT:
 			return new ClientMainPanel();
 		case OWNER:
@@ -156,6 +167,7 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private JMenuBar getRoleMenuBar() {
 		//Where the GUI is created:
 		JMenuBar menuBar;

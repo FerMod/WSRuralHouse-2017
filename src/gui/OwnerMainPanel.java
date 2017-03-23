@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -10,34 +9,25 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.NumericShaper.Range;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
@@ -63,7 +53,7 @@ public class OwnerMainPanel extends JPanel {
 	private JScrollPane tableScrollPanel;
 	//	private GridBagLayout gridBagLayout;
 	//	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
-	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
+	private JButton btnAdd, btnEdit, btnRemove;//, btnDetails;
 
 	/**
 	 * Launch the application.
@@ -131,6 +121,8 @@ public class OwnerMainPanel extends JPanel {
 		add(getTableScrollPanel(), gbc);
 
 		setupOwnerWindow();
+		
+		
 
 		/*
 		JMenuBar menuBar = new JMenuBar();
@@ -336,9 +328,9 @@ public class OwnerMainPanel extends JPanel {
 			table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
-					JTable table =(JTable) me.getSource();
-					Point p = me.getPoint();
-					int row = table.rowAtPoint(p);
+//					JTable table =(JTable) me.getSource();
+//					Point p = me.getPoint();
+//					int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
 						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -449,6 +441,7 @@ public class OwnerMainPanel extends JPanel {
 			return data[row][col];
 		}
 
+		@SuppressWarnings("unused")
 		public void setValueAt(int row, int col, ImageIcon value) {
 			data[row][col] = getScaledImage(value);
 		}
@@ -456,27 +449,33 @@ public class OwnerMainPanel extends JPanel {
 		private ImageIcon getScaledImage(ImageIcon imageIcon) {
 			return new ImageIcon(imageIcon.getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH));
 		}
-
+		
+		@SuppressWarnings("unused")
 		public void setValueAt(int row, int col, Object value) {
 			data[row][col] = value;
 		}
 
+		@Override
 		public String getColumnName(int col) {
 			return columnNames[col];
 		}
 
+		@SuppressWarnings("unused")
 		public int getDefaultImageWidth() {
 			return width;
 		}
 
+		@SuppressWarnings("unused")
 		public void setDefaultImageWidth(int width) {
 			this.width = width;
 		}
 
+		@SuppressWarnings("unused")
 		public int getDefaultImageHeight() {
 			return height;
 		}
 
+		@SuppressWarnings("unused")
 		public void setDefaultImageHeight(int height) {
 			this.height = height;
 		}
@@ -487,6 +486,7 @@ public class OwnerMainPanel extends JPanel {
 		 * then the last column would contain text ("true"/"false"),
 		 * rather than a check box.
 		 */
+		@Override
 		public Class<?> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
@@ -507,6 +507,7 @@ public class OwnerMainPanel extends JPanel {
 		 * Don't need to implement this method unless your table's
 		 * data can change.
 		 */
+		@Override
 		public void setValueAt(Object value, int row, int col) {
 			if (DEBUG) {
 				System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of "+ value.getClass() + ")");

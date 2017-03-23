@@ -1,6 +1,6 @@
 package gui;
 
-import businessLogic.ApplicationFacadeInterfaceWS;
+import businessLogic.ApplicationFacadeInterface;
 
 import com.toedter.calendar.JCalendar;
 
@@ -61,9 +61,9 @@ public class QueryAvailabilityGUI extends JFrame {
 
 	private void jbInit() throws Exception {
 
-		ApplicationFacadeInterfaceWS facade = MainGUI.getBusinessLogic();
+		ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
 
-		Vector<RuralHouse> rhs = facade.getAllRuralHouses();
+		Vector<RuralHouse> rhs = facade.getRuralHouses();
 
 		comboBox = new JComboBox<RuralHouse>(rhs);
 		//comboBox.setModel(new DefaultComboBoxModel(rhs));
@@ -215,7 +215,7 @@ public class QueryAvailabilityGUI extends JFrame {
 
 
 		try {
-			ApplicationFacadeInterfaceWS facade=MainGUI.getBusinessLogic();
+			ApplicationFacadeInterface facade=MainGUI.getBusinessLogic();
 
 			Vector<Offer> v=facade.getOffers(rh,firstDay, lastDay);
 			//Vector<Offer> v=rh.getOffers(firstDay, lastDay);
@@ -235,10 +235,10 @@ public class QueryAvailabilityGUI extends JFrame {
 					of=en.nextElement();
 					System.out.println("Offer retrieved: "+of.toString());
 					Vector<Object> row = new Vector<Object>();
-					row.add(of.getOfferNumber());
+					row.add(of.getId());
 
 					// row.add(of.getRuralHouse().getHouseNumber()); // It does not contain the rural house, when access through web services
-					row.add(rh.getHouseNumber());					 // Rural houses are not serialized with offers
+					row.add(rh.getId());					 // Rural houses are not serialized with offers
 
 					// Dates are stored in db4o as java.util.Date objects instead of java.sql.Date objects
 					// They have to be converted into java.sql.Date objects before

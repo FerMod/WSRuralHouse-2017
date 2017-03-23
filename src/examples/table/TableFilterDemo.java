@@ -176,7 +176,7 @@ public class TableFilterDemo extends JPanel {
 		 * then the last column would contain text ("true"/"false"),
 		 * rather than a check box.
 		 */
-		public Class getColumnClass(int c) {
+		public Class<? extends Object> getColumnClass(int c) {
 			return getValueAt(0, c).getClass();
 		}
 
