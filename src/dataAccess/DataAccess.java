@@ -1,9 +1,11 @@
 package dataAccess;
 
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -16,6 +18,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import configuration.ConfigXML;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.City;
 import domain.Client;
 import domain.Offer;
 import domain.Owner;
@@ -32,20 +35,22 @@ public class DataAccess implements DataAccessInterface {
 
 	private final ConfigXML CONFIG;
 
+	//	public DataAccess()  {
+	//		CONFIG = ConfigXML.getInstance();
+	//		this.persistenceUnitName = CONFIG.getDbFilename();
+	//	}
+
 	public DataAccess()  {
 		CONFIG = ConfigXML.getInstance();
 		this.persistenceUnitName = CONFIG.getDbFilename();
-	}
 
-	public DataAccess(ConfigXML configFile)  {
-		CONFIG = ConfigXML.getInstance();
-		this.persistenceUnitName = CONFIG.getDbFilename();
-
-		//Initialize database. Only for debug purpose.
-		if (CONFIG.getDataBaseOpenMode().equals("initialize")) {
-			initializeDB();
+		if(CONFIG != null) {
+			//Initialize database. Only for debug purpose.
+			if (CONFIG.getDataBaseOpenMode().equals("initialize")) {
+				initializeDB();
+			}
+			System.out.println("Creating objectdb instance => isDatabaseLocal: " + CONFIG.isDatabaseLocal() + " getDatabBaseOpenMode: " + CONFIG.getDataBaseOpenMode());
 		}
-		System.out.println("Creating objectdb instance => isDatabaseLocal: " + CONFIG.isDatabaseLocal() + " getDatabBaseOpenMode: " + CONFIG.getDataBaseOpenMode());
 	}
 
 	private void open() {
@@ -66,8 +71,10 @@ public class DataAccess implements DataAccessInterface {
 
 
 	private void close() {
-		db.close();
-		System.out.println("Database closed");
+		if(db != null && db.isOpen()) {
+			db.close();
+			System.out.println("Database closed");
+		}
 	}
 
 	@Override
@@ -86,17 +93,23 @@ public class DataAccess implements DataAccessInterface {
 				db.remove(rh);				
 			}
 
-//			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
-//			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
-//			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
-//			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
+			//			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
+			//			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
+			//			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
+			//			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
 
-//			db.persist(rh1);
-//			db.persist(rh2);
-//			db.persist(rh3);
-//			db.persist(rh4);
+			//			db.persist(rh1);
+			//			db.persist(rh2);
+			//			db.persist(rh3);
+			//			db.persist(rh4);
 
 			db.getTransaction().commit();
+
+			createCity("Ciudad 01");
+			createCity("Ciudad 02");
+			createCity("Ciudad 03");
+			createCity("Ciudad 04");
+
 			System.out.println("Db initialized");
 
 		} catch (Exception e){
@@ -310,7 +323,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Vector<RuralHouse> getAllRuralHouses() {
+	public Vector<RuralHouse> getRuralHouses() {
 		Vector<RuralHouse> result = null;
 		try {
 			open();
@@ -361,8 +374,89 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return false;
 	}
-	
 
+	@Override
+	public List<City> getCities() {
+		Vector<City> result = null;
+		try {
+			open();
+			System.out.println(">> DataAccess: getCities");
+			TypedQuery<City> query = db.createQuery("SELECT c FROM City c", City.class);
+			result = new Vector<City>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	@Override
+	public City createCity(String name) {
+		City city= null;
+		try {
+			open();
+			System.out.print(">> DataAccess: createCity(\"" + name + "\") -> ");
+			db.getTransaction().begin();
+			city = new City(name);
+			db.persist(city);
+			db.getTransaction().commit();
+			System.out.println("Created with id " + city.getId());
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return city;
+	}
+
+	@Override
+	public boolean existsCity(City city) {
+		return existsCity(city.getId());
+	}
+
+	@Override
+	public boolean existsCity(int id) {
+		boolean found = false;
+		try {
+			open();
+			System.out.print("Check if exists the city with id:\"" + id + "\" -> ");
+			TypedQuery<City> query = db.createQuery("SELECT DISTINCT c "
+					+ "FROM City c "
+					+ "WHERE c.id = :id", City.class)
+					.setParameter("id", id);
+			Vector<City> result = new Vector<City>(query.getResultList());
+			found = !result.isEmpty();
+			System.out.println(found);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return found;
+	}
+
+	@Override
+	public boolean existsCity(String name) {
+		boolean found = false;
+		try {
+			open();
+			System.out.print("Check if exists the city with the name:\"" + name + "\" -> ");
+			TypedQuery<City> query = db.createQuery("SELECT DISTINCT c "
+					+ "FROM City c "
+					+ "WHERE c.name = :name", City.class)
+					.setParameter("name", name);
+			Vector<City> result = new Vector<City>(query.getResultList());
+			found = !result.isEmpty();
+			System.out.println(found);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return found;
+	}
 
 	/**
 	 * Obtain all the offers by a price range defined by the user (pending test).
@@ -388,7 +482,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Obtain all the offers for a specific price defined by the user (pending test).
 	 *  
@@ -424,7 +518,7 @@ public class DataAccess implements DataAccessInterface {
 			open();
 			System.out.println(">> DataAccess: getOffersByMinorPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
-												   + " FROM Offer o", Offer.class);
+					+ " FROM Offer o", Offer.class);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -434,7 +528,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Obtain the offer with the highest price (pending test).
 	 *  
@@ -446,7 +540,7 @@ public class DataAccess implements DataAccessInterface {
 			open();
 			System.out.println(">> DataAccess: getOffersByMaxPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
-												   + " FROM Offer o", Offer.class);
+					+ " FROM Offer o", Offer.class);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -456,7 +550,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Obtain the highest price of the Offers (pending test).
 	 *  
@@ -468,7 +562,7 @@ public class DataAccess implements DataAccessInterface {
 			open();
 			System.out.println(">> DataAccess: getMaxPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
-												   + " FROM Offer o", Offer.class);
+					+ " FROM Offer o", Offer.class);
 			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
 			result = vm.get(0).getPrice(); //There is only one highest price.
 			printVector(vm);
@@ -479,7 +573,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Obtain the lowest price of the Offers (pending test).
 	 *  
@@ -491,7 +585,7 @@ public class DataAccess implements DataAccessInterface {
 			open();
 			System.out.println(">> DataAccess: getMinorPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
-												   + " FROM Offer o", Offer.class);
+					+ " FROM Offer o", Offer.class);
 			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
 			result = vm.get(0).getPrice(); //There is only one lowest price.
 			printVector(vm);
@@ -502,7 +596,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Modify the user's password.
 	 *  
@@ -510,11 +604,11 @@ public class DataAccess implements DataAccessInterface {
 	 * @param the password to modify
 	 */
 	public void changeUsersPass(AbstractUser us, String password) {
-			open();
-			db.getTransaction().begin();
-			us.setPassword(password);
-			db.getTransaction().commit();
-			close();
+		open();
+		db.getTransaction().begin();
+		us.setPassword(password);
+		db.getTransaction().commit();
+		close();
 	}
 
 
@@ -539,13 +633,7 @@ public class DataAccess implements DataAccessInterface {
 	 * @param vector the vector of type {@code <T>}
 	 */
 	private <T> void printVector(Vector<T> vector) {
-		StringBuilder sp = new StringBuilder();
-		sp.append("[");
-		for (T t : vector) {
-			sp.append(t + ", ");
-		}
-		sp.append("]");
-		System.out.println(sp.toString());
+		Arrays.deepToString(vector.toArray());
 	}
 
 }
