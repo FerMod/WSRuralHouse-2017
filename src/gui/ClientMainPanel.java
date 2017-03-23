@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.PatternSyntaxException;
@@ -419,8 +420,8 @@ public class ClientMainPanel extends JPanel {
 			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setFocusable(false);
-			table.setShowVerticalLines(true);
-			table.setIntercellSpacing(new Dimension(0, 1));		
+			table.setShowVerticalLines(false);
+			table.setIntercellSpacing(new Dimension(0, 0));		
 			table.getTableHeader().setUI(null); //Hide the header
 			table.setUpdateSelectionOnSort(true);
 			//			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -434,11 +435,9 @@ public class ClientMainPanel extends JPanel {
 			//			table.setDefaultRenderer(String.class, centerCellRenderer);
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
-			//setTableColumnWidthPercentages(table, 0.2, 0.5, 0.2, 0.1);
-
+			setTableColumnWidthPercentages(table, 0.1, 0.9);
 			table.setDefaultRenderer(Object.class, new TableDetailsCell());
 			table.setDefaultEditor(Object.class, new TableDetailsCell());
-			table.setRowHeight(60);
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -684,36 +683,35 @@ public class ClientMainPanel extends JPanel {
 			return getValueAt(0, c).getClass();
 		}
 
-		/*
+
 		public boolean isCellEditable(int row, int col) {
-			//Note that the data/cell address is constant,
-			//no matter where the cell appears onscreen.
-			if (col < 2) {
+			//Note that the data/cell address is constant, no matter where the cell appears on screen.
+			if (col < 1) {
 				return false;
 			} else {
 				return true;
 			}
 		}
-		 */
+
 
 		/*
 		 * Don't need to implement this method unless your table's
 		 * data can change.
 		 */
-		@Override
-		public void setValueAt(Object value, int row, int col) {
-			if (DEBUG) {
-				System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of "+ value.getClass() + ")");
-			}
-
-			data[row][col] = value;
-			fireTableCellUpdated(row, col);
-
-			if (DEBUG) {
-				System.out.println("New value of data:");
-				printDebugData();
-			}
-		}
+		//		@Override
+		//		public void setValueAt(Object value, int row, int col) {
+		//			if (DEBUG) {
+		//				System.out.println("Setting value at " + row + "," + col + " to " + value + " (an instance of "+ value.getClass() + ")");
+		//			}
+		//
+		//			data[row][col] = value;
+		//			fireTableCellUpdated(row, col);
+		//
+		//			if (DEBUG) {
+		//				System.out.println("New value of data:");
+		//				printDebugData();
+		//			}
+		//		}
 
 		private void printDebugData() {
 			int numRows = getRowCount();
@@ -733,64 +731,83 @@ public class ClientMainPanel extends JPanel {
 
 	public class TableDetailsCell extends AbstractCellEditor implements TableCellEditor, TableCellRenderer{
 
+		private static final long serialVersionUID = 2711709042458345572L;
+		
 		JPanel panel;
-		JTextArea textArea;
-		JTextField textField;
-		JButton btnNewButton;
-		JTextField textField_1;
+		JTextArea descriptionTextArea, addressField, priceField;
+		JButton infoButton;
+		
 
 		public TableDetailsCell() {
 
 			panel = new JPanel();
 			panel.setBorder(new EmptyBorder(2, 5, 2, 5));
-			
+
 			GridBagLayout gridBagLayout = new GridBagLayout();
-			gridBagLayout.columnWidths = new int[] {386, 56, 0, 2};
+			gridBagLayout.columnWidths = new int[] {128, 34, 0, 2};
 			gridBagLayout.rowHeights = new int[] {0, 0, 2};
-			gridBagLayout.columnWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
+			gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
 			gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 			panel.setLayout(gridBagLayout);
 
-			textArea = new JTextArea();
-			GridBagConstraints gbc_textArea = new GridBagConstraints();
-			gbc_textArea.gridwidth = 3;
-			gbc_textArea.insets = new Insets(0, 0, 5, 0);
-			gbc_textArea.fill = GridBagConstraints.BOTH;
-			gbc_textArea.gridx = 0;
-			gbc_textArea.gridy = 0;
-			panel.add(textArea, gbc_textArea);
+			descriptionTextArea = new JTextArea();
+			descriptionTextArea.setOpaque(false);
+			descriptionTextArea.setFocusable(false);
+			GridBagConstraints gbcDescriptionTextArea = new GridBagConstraints();
+			gbcDescriptionTextArea.gridwidth = 3;
+			gbcDescriptionTextArea.insets = new Insets(0, 0, 5, 0);
+			gbcDescriptionTextArea.fill = GridBagConstraints.BOTH;
+			gbcDescriptionTextArea.gridx = 0;
+			gbcDescriptionTextArea.gridy = 0;
+			panel.add(descriptionTextArea, gbcDescriptionTextArea);
 
-			textField = new JTextField();
-			GridBagConstraints gbc_textField = new GridBagConstraints();
-			gbc_textField.insets = new Insets(0, 0, 0, 5);
-			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField.gridx = 0;
-			gbc_textField.gridy = 1;
-			panel.add(textField, gbc_textField);
-			textField.setColumns(10);
+			addressField = new JTextArea();
+			addressField.setOpaque(false);
+			addressField.setFocusable(false);
+			GridBagConstraints gbcAdressField = new GridBagConstraints();
+			gbcAdressField.insets = new Insets(0, 0, 0, 5);
+			gbcAdressField.fill = GridBagConstraints.HORIZONTAL;
+			gbcAdressField.gridx = 2;
+			gbcAdressField.gridy = 0;
+			panel.add(addressField, gbcAdressField);
+			addressField.setColumns(10);
 
-			textField_1 = new JTextField();
-			GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-			gbc_textField_1.insets = new Insets(0, 0, 0, 5);
-			gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-			gbc_textField_1.gridx = 1;
-			gbc_textField_1.gridy = 1;
-			panel.add(textField_1, gbc_textField_1);
-			textField_1.setColumns(10);
+			priceField = new JTextArea();
+			priceField.setOpaque(false);
+			priceField.setEditable(false);
+			priceField.setFocusable(false);
+			GridBagConstraints gbcPriceField = new GridBagConstraints();
+			gbcPriceField.fill = GridBagConstraints.HORIZONTAL;
+			gbcPriceField.insets = new Insets(0, 0, 0, 5);
+			gbcPriceField.gridx = 0;
+			gbcPriceField.gridy = 1;
+			panel.add(priceField, gbcPriceField);
+			priceField.setColumns(10);
 
-			btnNewButton = new JButton("New button");
-			GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-			gbc_btnNewButton.gridx = 2;
-			gbc_btnNewButton.gridy = 1;
-			panel.add(btnNewButton, gbc_btnNewButton);
+			infoButton = new JButton("Info. ");
+			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			GridBagConstraints gbcInfoButton = new GridBagConstraints();
+			gbcInfoButton.fill = GridBagConstraints.HORIZONTAL;
+			gbcInfoButton.gridx = 1;
+			gbcInfoButton.gridy = 1;	
+			gbcInfoButton.gridheight = 2;
+			gbcPriceField.insets = new Insets(5, 5, 5, 5);
+			panel.add(infoButton, gbcInfoButton);
 
 		}
 
 		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
-			textArea.setText(rowContent.getDescription());
-			textField.setText(rowContent.getAddress());
-			textField_1.setText(rowContent.getPrice() + " €");
-			btnNewButton.setText("Info.");
+			descriptionTextArea.setText(rowContent.getDescription());
+			addressField.setText(rowContent.getAddress());
+			priceField.setText(rowContent.getPrice() + " €");
+
+			infoButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Boton");
+
+				}
+			});
 
 			if (isSelected) {
 				panel.setBackground(table.getSelectionBackground());
@@ -806,6 +823,11 @@ public class ClientMainPanel extends JPanel {
 
 		public Object getCellEditorValue() {
 			return null;
+		}
+
+		@Override
+		public boolean isCellEditable(EventObject e){
+			return true;
 		}
 
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

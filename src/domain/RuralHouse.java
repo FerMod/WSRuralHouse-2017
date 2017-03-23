@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class RuralHouse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
@@ -54,16 +54,16 @@ public class RuralHouse implements Serializable {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description=description;
 	}
 
-	
+
 	public int getCity() {
 		return city;
 	}
-	
+
 	public void setCity(int city) {
 		this.city = city;
 	}
@@ -107,8 +107,8 @@ public class RuralHouse implements Serializable {
 	public void setReviewId(int reviewId) {
 		this.reviewId = reviewId;
 	}
-	
-		
+
+
 	/**
 	 * This method creates an offer with a house number, first day, last day and price
 	 * 
@@ -117,13 +117,13 @@ public class RuralHouse implements Serializable {
 	 * @return None
 	 */
 	public Offer createOffer(Date firstDay, Date lastDay, float price)  {
-        System.out.println("LLAMADA RuralHouse createOffer, offerNumber="+" firstDay="+firstDay+" lastDay="+lastDay+" price="+price);
-        Offer off=new Offer(firstDay,lastDay,price,this);
-        offers.add(off);
-        return off;
+		System.out.println("LLAMADA RuralHouse createOffer, offerNumber="+" firstDay="+firstDay+" lastDay="+lastDay+" price="+price);
+		Offer off=new Offer(firstDay,lastDay,price,this);
+		offers.add(off);
+		return off;
 	}
 
-	
+
 	@Override
 	public int hashCode() {
 
@@ -142,17 +142,17 @@ public class RuralHouse implements Serializable {
 	public boolean equals(Object obj) {
 		RuralHouse other = (RuralHouse) obj;
 		if (this == obj)
-		  return true;
+			return true;
 		if (obj == null)
-		  return false;
+			return false;
 		if (getClass() != obj.getClass())
-		  return false;
-//		if (houseNumber != other.houseNumber) // NO COMPARAR ASÍ ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
+			return false;
+		//		if (houseNumber != other.houseNumber) // NO COMPARAR ASÍ ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
 		if (!id.equals(other.id))
-		  return false;
-   	    return true;
+			return false;
+		return true;
 	}
-	
+
 	/**
 	 * This method obtains available offers for a concrete house in a certain period 
 	 * 
@@ -162,7 +162,7 @@ public class RuralHouse implements Serializable {
 	 * @return a vector of offers(Offer class)  available  in this period
 	 */
 	public Vector<Offer> getOffers( Date firstDay,  Date lastDay) {
-		
+
 		Vector<Offer> availableOffers=new Vector<Offer>();
 		Iterator<Offer> e=offers.iterator();
 		Offer offer;
@@ -172,10 +172,10 @@ public class RuralHouse implements Serializable {
 				availableOffers.add(offer);
 		}
 		return availableOffers;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * This method obtains the first offer that overlaps with the provided dates
 	 * 
@@ -185,7 +185,7 @@ public class RuralHouse implements Serializable {
 	 */
 
 	public Offer overlapsWith( Date firstDay,  Date lastDay) {
-		
+
 		Iterator<Offer> e=offers.iterator();
 		Offer offer=null;
 		while (e.hasNext()){
@@ -194,7 +194,7 @@ public class RuralHouse implements Serializable {
 				return offer;
 		}
 		return null;
-		
+
 	}
 
 }
