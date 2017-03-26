@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 
 import javax.imageio.ImageIO;
@@ -42,6 +43,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -56,18 +58,21 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
-
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
 
-	private static boolean DEBUG = true;
+	@SuppressWarnings("unused")
+	private static final boolean DEBUG = true;
 
 	private static final long serialVersionUID = 3063325462028186709L;
 
-	private JFormattedTextField minPriceField, maxPriceField;
+	//	private JFormattedTextField minPriceField
+	private JFormattedTextField maxPriceField;
 
-	private NumberFormat priceFormat;
 	private JTextField searchField;
 	private JTable table;
 	private TableModel tableModel;
@@ -79,12 +84,16 @@ public class ClientMainPanel extends JPanel {
 	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
 	private JSlider priceSlider;
 
+	private NumberFormat priceFormat;
+
 	/**
 	 * Create the panel.
 	 */
 	public ClientMainPanel() {
 
 		setLayout(new GridBagLayout());
+
+		setupNumberFormat();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -113,15 +122,23 @@ public class ClientMainPanel extends JPanel {
 		gbc.gridy = 0;
 		add(getSearchField(), gbc);
 
+		gbc.weightx = 0.1;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.insets = new Insets(5, 10, -5, 10);
+		gbc.gridwidth = 2;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		add(getMaxPriceField(), gbc);
+
 		gbc.ipadx = 0;
 		gbc.ipady = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0.1;
 		gbc.gridwidth = 2;
-		gbc.insets = new Insets(2, 5, 2, 0);
+		gbc.insets = new Insets(0, 5, 2, 0);
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		add(getPriceSlider(), gbc);
 
 		gbc.ipadx = 0;
@@ -130,19 +147,19 @@ public class ClientMainPanel extends JPanel {
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
 
-		gbc.weightx = 0.1;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.insets = new Insets(2, 10, 5, 10);
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		add(getMinPriceField(), gbc);
+		//		gbc.weightx = 0.1;
+		//		gbc.anchor = GridBagConstraints.PAGE_START;
+		//		gbc.insets = new Insets(2, 10, 5, 10);
+		//		gbc.gridx = 0;
+		//		gbc.gridy = 2;
+		//		add(getMinPriceField(), gbc);
 
-		gbc.weightx = 0.1;
-		gbc.anchor = GridBagConstraints.PAGE_END;
-		gbc.insets = new Insets(2, 5, 15, 10);
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		add(getMaxPriceField(), gbc);
+		//		gbc.weightx = 0.1;
+		//		gbc.anchor = GridBagConstraints.PAGE_END;
+		//		gbc.insets = new Insets(2, 5, 15, 10);
+		//		gbc.gridx = 1;
+		//		gbc.gridy = 2;
+		//		add(getMaxPriceField(), gbc);
 
 		gbc.ipady = 0;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -190,54 +207,6 @@ public class ClientMainPanel extends JPanel {
 
 	}
 
-	//	/**
-	//	 * Launch the application.
-	//	 */
-	//	public static void main(String[] args) {
-	//		EventQueue.invokeLater(new Runnable() {
-	//			public void run() {
-	//				try {
-	//					Role role = getWindowRole();
-	//					if(role != null) {
-	//						JFrame frame = new JFrame();
-	//						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//						frame.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-	//						frame.setMinimumSize(new Dimension(400, 300));
-	//						frame.setSize(700, 365);
-	//						//frame.pack();
-	//						frame.setLocationRelativeTo(null);
-	//						frame.setVisible(true);
-	//					}
-	//				} catch (Exception e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		});
-	//	}
-	//
-	//	/**
-	//	 * Only to debug the windows
-	//	 * @return the chosen role
-	//	 */
-	//	private static Role getWindowRole() {
-	//		String[] options = new String[] {"GUEST", "CLIENT", "OWNER", "ADMIN", "SUPER_ADMIN"};
-	//		int response = JOptionPane.showOptionDialog(null, "Open the window as: ", "Choose option", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-	//		switch (response) {
-	//		case 0:
-	//			return Role.GUEST;
-	//		case 1:
-	//			return Role.CLIENT;
-	//		case 2:
-	//			return Role.OWNER;
-	//		case 3:
-	//			return Role.ADMIN;
-	//		case 4:
-	//			return Role.SUPER_ADMIN;
-	//		default:
-	//			return null;
-	//		}
-	//	}
-
 	private JSlider getPriceSlider() {
 		if(priceSlider == null) {
 			double maxPrice = getRuralHouseMaxPrice();
@@ -250,7 +219,11 @@ public class ClientMainPanel extends JPanel {
 			priceSlider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					maxPriceField.setValue(priceSlider.getValue()/100);
+					if(e.getSource() == priceSlider) {
+						maxPriceField.setValue(priceSlider.getValue()/100);
+						//refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
+						refreshTableContent(0, (Number)maxPriceField.getValue());
+					}
 				}
 			});
 		}
@@ -258,92 +231,155 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	private Hashtable<Integer, JLabel> getSliderLabelTable(double minPrice, double maxPrice) {
+
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(getDefaultLocale());
+
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();		
-		labelTable.put(getPriceSlider().getMinimum(), new JLabel(Double.toString(minPrice) + " €"));
-		labelTable.put(getPriceSlider().getMaximum()/2, new JLabel(Double.toString((maxPrice-minPrice)/2) + " €") );
-		labelTable.put(getPriceSlider().getMaximum(), new JLabel(Double.toString(maxPrice) + " €"));
+		labelTable.put(getPriceSlider().getMinimum(), new JLabel(currencyFormatter.format(minPrice)));
+		labelTable.put(getPriceSlider().getMaximum()/2, new JLabel(currencyFormatter.format((maxPrice-minPrice)/2)));
+		labelTable.put(getPriceSlider().getMaximum(), new JLabel(currencyFormatter.format(maxPrice)));
 		return labelTable;
 	}
 
 	//XXX TEMPORAL. TODO REMOVE!!
 	private double getRuralHouseMaxPrice(){
-		return 100.00;
+		return 800.00;
 	}
 
-	private JFormattedTextField getMinPriceField() {
-		if(minPriceField == null) {
-			if(priceFormat == null) {
-				setupPriceFormat();
-			}
-			minPriceField = new JFormattedTextField(priceFormat);
-			minPriceField.setColumns(4);
-			minPriceField.setValue(0);
-			minPriceField.setInputVerifier(new FormattedTextFieldVerifier());
+	//	private JFormattedTextField getMinPriceField() {
+	//		if(minPriceField == null) {
+	//			if(priceFormat == null) {
+	//				setupNumberFormat();
+	//			}
+	//			minPriceField = new JFormattedTextField(priceFormat);
+	//			minPriceField.setColumns(4);
+	//			minPriceField.setValue(0);
+	//			minPriceField.setInputVerifier(new FormattedTextFieldVerifier());
+	//
+	//			///////////
+	//			// minPriceField.setVisible(false);
+	//			///////////
+	//
+	//
+	//			minPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {
+	//				@Override
+	//				public void propertyChange(PropertyChangeEvent e) {
+	//					if(e.getPropertyName() == "value" && e.getSource() == minPriceField) {
+	//						if(getPriceSlider().getMaximum() != 0) {
+	//							updatePriceRange((Number)minPriceField.getValue(), getPriceSlider().getMaximum()/100);
+	//
+	//						} else {
+	//							updatePriceRange((Number)minPriceField.getValue(), 0);
+	//						}
+	//						//TODO filter table
+	//						//refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
+	//					}
+	//				}
+	//			});
+	//
+	//		}
+	//		return minPriceField;
+	//	}
 
-			minPriceField.addActionListener(new ActionListener() {				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.out.println(e.getSource() == minPriceField);
-					if(e.getSource() == minPriceField) {
-						if(getPriceSlider().getMaximum() != 0) {
-							updatePriceRange((Number)minPriceField.getValue(), getPriceSlider().getMaximum()/100);
-						} else {
-							updatePriceRange((Number)minPriceField.getValue(), 0);
-						}
-						//TODO filter table
-					}
-				}
-			});
-		}
-		return minPriceField;
-	}
+	//	private JFormattedTextField getMaxPriceField() {
+	//		if(maxPriceField == null) {
+	//			if(priceFormat == null) {
+	//				setupNumberFormat();
+	//			}
+	//			maxPriceField = new JFormattedTextField(priceFormat);
+	//			maxPriceField.setColumns(4);
+	//			maxPriceField.setValue(getPriceSlider().getMaximum()/100);
+	//			maxPriceField.setInputVerifier(new FormattedTextFieldVerifier());
+	//
+	//			///////////
+	//			// maxPriceField.setFocusable(false);
+	//			// maxPriceField.setEditable(false);
+	//			// maxPriceField.setOpaque(false);
+	//			// maxPriceField.setHorizontalAlignment(SwingConstants.RIGHT);
+	//			// maxPriceField.setBorder(new EmptyBorder(0, 0, 0, 0));
+	//			///////////
+	//
+	//
+	//			maxPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {
+	//				@Override
+	//				public void propertyChange(PropertyChangeEvent e) {
+	//					if(e.getPropertyName() == "value" && e.getSource() == maxPriceField) {
+	//						if(getPriceSlider().getMinimum() != 0) {
+	//							// Number oldValue = (Number) e.getOldValue();
+	//							// Number newValue = (Number) e.getNewValue();
+	//
+	//							// if(oldValue.doubleValue() <= newValue.doubleValue()) {
+	//							//	 getPriceSlider().setValue(newValue.intValue()/100);
+	//							// }
+	//
+	//							updatePriceRange(getPriceSlider().getMinimum()/100, (Number)maxPriceField.getValue());
+	//
+	//						} else {
+	//							updatePriceRange(0, (Number)maxPriceField.getValue());
+	//						}
+	//						//TODO filter table
+	//						refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
+	//					}
+	//
+	//				}
+	//			});
+	//
+	//
+	//			//			maxPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {				
+	//			//				@Override
+	//			//				public void propertyChange(PropertyChangeEvent evt) {	
+	//			//					System.out.println(evt.getSource());
+	//			//					updatePriceRange((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
+	//			//				}
+	//			//			});
+	//		}
+	//		return maxPriceField;
+	//	}
 
-	private JFormattedTextField getMaxPriceField() {
+	private Component getMaxPriceField() {
 		if(maxPriceField == null) {
 			if(priceFormat == null) {
-				setupPriceFormat();
+				setupNumberFormat();
 			}
 			maxPriceField = new JFormattedTextField(priceFormat);
 			maxPriceField.setColumns(4);
 			maxPriceField.setValue(getPriceSlider().getMaximum()/100);
 			maxPriceField.setInputVerifier(new FormattedTextFieldVerifier());
-			maxPriceField.addActionListener(new ActionListener() {
+			maxPriceField.setFocusable(false);
+			maxPriceField.setEditable(false);
+			maxPriceField.setOpaque(false);
+			maxPriceField.setHorizontalAlignment(SwingConstants.CENTER);
+			maxPriceField.setBorder(new EmptyBorder(0, 0, 0, 0));
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					System.out.println(e.getSource() == maxPriceField);
-					if(e.getSource() == maxPriceField) {
-						if(getPriceSlider().getMinimum() != 0) {
-							updatePriceRange(getPriceSlider().getMinimum()/100, (Number)maxPriceField.getValue());
-						} else {
-							updatePriceRange(0, (Number)maxPriceField.getValue());
-						}
-						//TODO filter table
-					}
-				}
-			});
-			//			maxPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {				
-			//				@Override
-			//				public void propertyChange(PropertyChangeEvent evt) {	
-			//					System.out.println(evt.getSource());
-			//					updatePriceRange((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
-			//				}
-			//			});
 		}
 		return maxPriceField;
 	}
 
+	@SuppressWarnings("unused")
 	private void updatePriceRange(Number minPrice, Number maxPrice) {
 		priceSlider.setMinimum(minPrice.intValue() * 100);
 		priceSlider.setMaximum(maxPrice.intValue() * 100);
 		priceSlider.setLabelTable(getSliderLabelTable(minPrice.doubleValue(), maxPrice.doubleValue()));
 	}
 
-	private void setupPriceFormat() {
-		priceFormat =  NumberFormat.getCurrencyInstance();
+	private void setupNumberFormat() {
+		priceFormat = NumberFormat.getCurrencyInstance();
 		priceFormat.setMinimumIntegerDigits(1);
 		priceFormat.setMaximumFractionDigits(2);
 	}
+
+	// Create and set up number formats. These objects also parse numbers input by user.
+	//	private void setUpFormats(Locale currentLocale) {
+	//		
+	//		System.out.println(currentLocale.getCountry() + " \\\\ " + currentLocale.getLanguage());
+	//
+	//		
+	//		currencyInstance =  Currency.getInstance(currentLocale);
+	//		
+	//		//priceFormat = NumberFormat.getNumberInstance();
+	//		priceFormat = NumberFormat.getCurrencyInstance(currentLocale);
+	//		priceFormat.setCurrency(currencyInstance);
+	//	}
 
 	private JScrollPane getTableScrollPanel() {
 		if(tableScrollPanel == null) {
@@ -361,22 +397,29 @@ public class ClientMainPanel extends JPanel {
 
 				@Override
 				public void changedUpdate(DocumentEvent e) {
-					refreshTableContent("^[a-zA-Z]*$");
+					refreshTableContent(searchField.getText());
+					System.out.println("Finished");
+					getTable().clearSelection();
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
-					refreshTableContent("^[a-zA-Z]*$");
+					refreshTableContent(searchField.getText());
+					System.out.println("Finished");
+					getTable().clearSelection();
 				}
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
-					refreshTableContent("^[a-zA-Z]*$");
+					refreshTableContent(searchField.getText());
+					System.out.println("Finished");
+					getTable().clearSelection();
 				}
 
 			});
 
 		}
+
 		TextPrompt tp = new TextPrompt(searchField);
 		tp.setText("Search...");
 		tp.setStyle(Font.BOLD);
@@ -385,9 +428,13 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	/** 
+	 * <strong>TODO</strong> Remove unused method
 	 * Update the row filter regular expression from the expression in the search text box.
+	 * 
 	 */
-	private void refreshTableContent(String expression) {
+	@SuppressWarnings("unused")
+	@Deprecated
+	private void refreshTableContent(Matcher expression) {
 		RowFilter<TableModel, Object> rf = null;
 		//If current expression can't parse, don't update.
 		try {
@@ -401,11 +448,82 @@ public class ClientMainPanel extends JPanel {
 			//
 			// $ - End of string
 
-			rf = RowFilter.regexFilter(expression + searchField.getText());
+			rf = RowFilter.regexFilter(expression.toString() + searchField.getText());
 			sorter.setRowFilter(rf);
 		} catch (PatternSyntaxException e) {
 			System.err.println("Info: Expression could not parse. Syntax error in a regular-expression pattern.");
 		}
+	}
+
+	private void refreshTableContent(String text) {
+		RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
+			@Override
+			public boolean include(Entry<? extends Object, ? extends Object> entry) {
+
+				boolean include = false;
+
+				CellDetails cellDetails = (CellDetails) entry.getValue(1);
+				//JTextArea textArea = null;
+
+				System.out.println("cellDetails.getDescription().contains(text) -> " + cellDetails.getDescription().contains(text));
+				if(cellDetails.getDescription().contains(text)) {
+					//textArea = cellDetails.getTableDetailsCell().getDescriptionTextArea();
+					include = true;
+				}
+
+				System.out.println("cellDetails.getAddress().contains(text) -> " + cellDetails.getAddress().contains(text));
+				if(cellDetails.getAddress().contains(text)) {
+					//textArea = cellDetails.getTableDetailsCell().getAddressField();
+					include = true;
+				}
+
+				// System.out.println("textArea != null -> " + textArea != null);
+				// if(include && !text.equals("") && textArea != null) {
+				// 	 highlightTextAreaWord(textArea, text, Color.YELLOW);
+				// }
+
+				return include;
+			}
+		};
+		sorter.setRowFilter(filter);
+	}
+
+	private void refreshTableContent(Number minPrice, Number maxPrice) {
+		RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
+			public boolean include(Entry<? extends Object, ? extends Object> entry) {
+				CellDetails cellDetails = (CellDetails) entry.getValue(1);
+				return cellDetails.getPrice() > minPrice.doubleValue() && cellDetails.getPrice() <= maxPrice.doubleValue();
+			}
+		};
+		sorter.setRowFilter(filter);		
+	}
+
+	/**
+	 * Highlight the text in the {@code JTextArea} with the passed color. </p>
+	 * If no matches are found, no text is highlighted. </p>
+	 * 
+	 * @param textArea the {@code JTextArea} where the text is going to be highlighted
+	 * @param text the string to be highlighted
+	 * @param color the color of the highlighted text
+	 */
+	@SuppressWarnings("unused")
+	private void highlightTextAreaWord(JTextArea textArea, String text, Color color) {
+
+		Highlighter highlighter = textArea.getHighlighter();
+		//highlighter.removeAllHighlights();
+
+		text = text.toLowerCase();
+		String textAreaText = textArea.getText().toLowerCase();
+		int index = textAreaText.indexOf(text);
+		while(index >= 0){
+			try {            
+				highlighter.addHighlight(index, index + text.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.yellow));
+				index = textAreaText.indexOf(text, index + text.length());
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	private JTable getTable() {
@@ -419,9 +537,9 @@ public class ClientMainPanel extends JPanel {
 			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setFocusable(false);
-			table.setShowVerticalLines(false);
-			table.setIntercellSpacing(new Dimension(0, 0));		
 			table.getTableHeader().setUI(null); //Hide the header
+			table.setShowVerticalLines(false);
+			table.setIntercellSpacing(new Dimension(0, 1));
 			table.setUpdateSelectionOnSort(true);
 			//			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			//			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
@@ -435,8 +553,8 @@ public class ClientMainPanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(table, 0.1, 0.9);
-			table.setDefaultRenderer(Object.class, new TableDetailsCell());
-			table.setDefaultEditor(Object.class, new TableDetailsCell());
+			table.setDefaultRenderer(Object.class, new TableCellComponents());
+			table.setDefaultEditor(Object.class, new TableCellComponents());
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -458,7 +576,6 @@ public class ClientMainPanel extends JPanel {
 			table.addFocusListener(new FocusListener() {				
 				@Override
 				public void focusGained(FocusEvent e) {
-					// TODO Auto-generated method stub
 				}
 
 				@Override
@@ -573,14 +690,14 @@ public class ClientMainPanel extends JPanel {
 		//		};
 
 		private Object[][] data = {
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 1 with minor details", "Address 1",  new Double(110.2))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 2 with minor details", "Address 2", new Double(154.52))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 3 with minor details", "Address 3", new Double(356.0))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 4 with minor details", "Address 4", new Double(165.4))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 5 with minor details", "Address 5", new Double(170.2))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 6 with minor details", "Address 6", new Double(666.5))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details", "Address 7", new Double(336.6))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "Address 8", new Double(63.1))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 1 with minor details.\nHi", "Address 1",  new Double(110.2))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 2 with minor details.", "Address 2", new Double(154.52))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 3 with minor details", "Direccion 3", new Double(356.0))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 4 with minor details\nHi, more details.", "Address 4", new Double(165.4))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 5 with minor details\nHi", "Direccion 5", new Double(170.2))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 6 with minor details, text.", "Address 6", new Double(666.5))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details\nMore details.", "Address 7", new Double(336.6))},
+				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "ñeñeñe 8", new Double(63.1))},
 		};
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
@@ -712,6 +829,7 @@ public class ClientMainPanel extends JPanel {
 		//			}
 		//		}
 
+		@SuppressWarnings("unused")
 		private void printDebugData() {
 			int numRows = getRowCount();
 			int numCols = getColumnCount();
@@ -728,16 +846,16 @@ public class ClientMainPanel extends JPanel {
 
 	}
 
-	public class TableDetailsCell extends AbstractCellEditor implements TableCellEditor, TableCellRenderer{
+	public class TableCellComponents extends AbstractCellEditor implements TableCellEditor, TableCellRenderer{
 
 		private static final long serialVersionUID = 2711709042458345572L;
-		
+
 		JPanel panel;
 		JTextArea descriptionTextArea, addressField, priceField;
 		JButton infoButton;
-		
 
-		public TableDetailsCell() {
+
+		public TableCellComponents() {
 
 			panel = new JPanel();
 			panel.setBorder(new EmptyBorder(2, 5, 2, 5));
@@ -751,10 +869,11 @@ public class ClientMainPanel extends JPanel {
 
 			descriptionTextArea = new JTextArea();
 			descriptionTextArea.setOpaque(false);
+			descriptionTextArea.setEditable(false);
 			descriptionTextArea.setFocusable(false);
 			GridBagConstraints gbcDescriptionTextArea = new GridBagConstraints();
-			gbcDescriptionTextArea.gridwidth = 3;
-			gbcDescriptionTextArea.insets = new Insets(0, 0, 5, 0);
+			gbcDescriptionTextArea.gridwidth = 2;
+			gbcDescriptionTextArea.insets = new Insets(0, 0, 5, 5);
 			gbcDescriptionTextArea.fill = GridBagConstraints.BOTH;
 			gbcDescriptionTextArea.gridx = 0;
 			gbcDescriptionTextArea.gridy = 0;
@@ -762,12 +881,14 @@ public class ClientMainPanel extends JPanel {
 
 			addressField = new JTextArea();
 			addressField.setOpaque(false);
+			addressField.setEditable(false);
 			addressField.setFocusable(false);
 			GridBagConstraints gbcAdressField = new GridBagConstraints();
+			gbcDescriptionTextArea.gridwidth = 1;
 			gbcAdressField.insets = new Insets(0, 0, 0, 5);
 			gbcAdressField.fill = GridBagConstraints.HORIZONTAL;
-			gbcAdressField.gridx = 1;
-			gbcAdressField.gridy = 0;
+			gbcAdressField.gridx = 0;
+			gbcAdressField.gridy = 1;
 			panel.add(addressField, gbcAdressField);
 			addressField.setColumns(10);
 
@@ -796,9 +917,11 @@ public class ClientMainPanel extends JPanel {
 		}
 
 		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
+			rowContent.setTableDetailsCell(this);
 			descriptionTextArea.setText(rowContent.getDescription());
 			addressField.setText(rowContent.getAddress());
-			priceField.setText(rowContent.getPrice() + " €");
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(getDefaultLocale());
+			priceField.setText(currencyFormatter.format(rowContent.getPrice()));
 
 			infoButton.addActionListener(new ActionListener() {
 				@Override
@@ -834,18 +957,67 @@ public class ClientMainPanel extends JPanel {
 			return panel;
 		}
 
+		public JPanel getPanel() {
+			return panel;
+		}
+
+		public void setPanel(JPanel panel) {
+			this.panel = panel;
+		}
+
+		public JTextArea getDescriptionTextArea() {
+			return descriptionTextArea;
+		}
+
+		public void setDescriptionTextArea(JTextArea descriptionTextArea) {
+			this.descriptionTextArea = descriptionTextArea;
+		}
+
+		public JTextArea getAddressField() {
+			return addressField;
+		}
+
+		public void setAddressField(JTextArea addressField) {
+			this.addressField = addressField;
+		}
+
+		public JTextArea getPriceField() {
+			return priceField;
+		}
+
+		public void setPriceField(JTextArea priceField) {
+			this.priceField = priceField;
+		}
+
+		public JButton getInfoButton() {
+			return infoButton;
+		}
+
+		public void setInfoButton(JButton infoButton) {
+			this.infoButton = infoButton;
+		}
+
 	}
 
 	public class CellDetails {
 
+		private TableCellComponents tableDetailsCell;
 		private String description;
 		private String address;
 		private Double price;
 
-		public CellDetails(String description, String address, Double price) {
+		public CellDetails(String description, String address, double price) {
 			this.description = description;
 			this.address = address;
 			this.price = price;
+		}
+
+		public void setTableDetailsCell(TableCellComponents tableDetailsCell) {
+			this.tableDetailsCell = tableDetailsCell;
+		}
+
+		public TableCellComponents getTableDetailsCell() {
+			return tableDetailsCell;
 		}
 
 		public String getDescription() {
@@ -864,7 +1036,7 @@ public class ClientMainPanel extends JPanel {
 			this.address = address;
 		}
 
-		public Double getPrice() {
+		public double getPrice() {
 			return price;
 		}
 

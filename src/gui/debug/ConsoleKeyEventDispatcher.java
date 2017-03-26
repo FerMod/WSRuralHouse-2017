@@ -1,7 +1,9 @@
 package gui.debug;
 
+import java.awt.AWTEvent;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 //public abstract class ConsoleKeyEvent<T> implements KeyEventDispatcher, ConsoleKeyEventDispatcher<T> {
@@ -14,7 +16,10 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	//		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
 	//	}
 
+	private DebugBorderEventListener debugEventListener;
+
 	public ConsoleKeyEventDispatcher() {
+		debugEventListener = null;
 		addKeyEventDispatcher(this);
 	}
 
@@ -43,8 +48,18 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 				System.out.println("[" + this.getClass().getName() + "]: ConsoleWindow disposed");
 				ConsoleWindow.dispose();
 				return true;
+			case KeyEvent.VK_F9:
+				if(debugEventListener == null) {
+					debugEventListener = new DebugBorderEventListener();					
+					Toolkit.getDefaultToolkit().addAWTEventListener(debugEventListener, AWTEvent.MOUSE_EVENT_MASK);
+					System.out.println("[" + this.getClass().getName() + "]: Border drawing enabled");
+				} else {
+					debugEventListener = null;
+					Toolkit.getDefaultToolkit().removeAWTEventListener(debugEventListener);
+					System.out.println("[" + this.getClass().getName() + "]: Border drawing disabled");
+				}
+				return true;
 			}
-			return false;
 		}
 		//The KeyEvent is passed to the next KeyEventDispatcher in the chain
 		return false;

@@ -29,7 +29,7 @@ public class ApplicationLauncher {
 
 			Locale.setDefault(new Locale(config.getLocale()));
 
-			System.out.println("Locale: "+Locale.getDefault());
+			System.out.println("Locale: " + Locale.getDefault());
 
 			SharedFrame sharedFrame = new SharedFrame();
 			sharedFrame.setVisible(true);
