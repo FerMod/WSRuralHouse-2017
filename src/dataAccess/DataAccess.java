@@ -34,12 +34,7 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManager  db;
 
 	private final ConfigXML CONFIG;
-
-	//	public DataAccess()  {
-	//		CONFIG = ConfigXML.getInstance();
-	//		this.persistenceUnitName = CONFIG.getDbFilename();
-	//	}
-
+	
 	public DataAccess()  {
 		CONFIG = ConfigXML.getInstance();
 		this.persistenceUnitName = CONFIG.getDbFilename();

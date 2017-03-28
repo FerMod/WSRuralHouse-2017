@@ -14,12 +14,15 @@ import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
+import gui.debug.ConsoleKeyEventDispatcher;
 
 public class ApplicationLauncher {
 
 	public static void main(String[] args) {
 
 		try {
+			
+			new ConsoleKeyEventDispatcher();
 
 			LogFile.FILE_NAME = "error.log";
 
