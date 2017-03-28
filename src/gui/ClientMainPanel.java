@@ -242,6 +242,7 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	//XXX TEMPORAL. TODO REMOVE!!
+	@Deprecated
 	private double getRuralHouseMaxPrice(){
 		return 800.00;
 	}
