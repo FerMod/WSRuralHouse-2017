@@ -1,0 +1,5 @@
+IDEAS PARA LA APP
+
+-Geolocalización de las casas rurales.
+-Implementación de QR para que el cliente pueda llevarse sus datos de reserva por móvil.
+-Enviar los datos de reserva por el email y informar de todos sus cambios.
