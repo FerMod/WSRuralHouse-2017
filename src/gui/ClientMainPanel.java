@@ -241,7 +241,10 @@ public class ClientMainPanel extends JPanel {
 		return labelTable;
 	}
 
-	//XXX TEMPORAL. TODO REMOVE!!
+	/**XXX TEMPORAL. TODO REMOVE!!
+	 * This must be replaced with the original one.
+	 * @return
+	 */
 	@Deprecated
 	private double getRuralHouseMaxPrice(){
 		return 800.00;
@@ -903,7 +906,7 @@ public class ClientMainPanel extends JPanel {
 			gbcPriceField.gridx = 1;
 			gbcPriceField.gridy = 1;
 			panel.add(priceField, gbcPriceField);
-			priceField.setColumns(10);
+			priceField.setColumns(4);
 
 			infoButton = new JButton("Info. ");
 			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
