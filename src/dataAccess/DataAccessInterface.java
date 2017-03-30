@@ -51,5 +51,7 @@ public interface DataAccessInterface {
 	boolean existsCity(String name);
 
 	List<City> getCities();
+	
+	void deleteTableContent(String table);
 
 }
