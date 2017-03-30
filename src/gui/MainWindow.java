@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -16,10 +19,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.JTabbedPane;
+
 import domain.AbstractUser.Role;
+
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
-import javax.swing.JTabbedPane;
 
 public class MainWindow extends JFrame {
 
@@ -69,9 +74,7 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow(Role role) {
-
-		//ConsoleWindow.setVisible(true);
-
+		
 		this.role = role;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getRolePanel(role);
@@ -129,6 +132,14 @@ public class MainWindow extends JFrame {
 //
 //			}
 //		});
+		
+		WindowAdapter exitListener = new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exitQuestion();
+			}
+		};
+		this.addWindowListener(exitListener);
 
 	}
 
@@ -151,7 +162,9 @@ public class MainWindow extends JFrame {
 		case CLIENT:
 			return new ClientMainPanel();
 		case OWNER:
-			return new OwnerMainPanel();
+			//FIXME VERY VERY TEMPORAL!!
+			return (JPanel) new MainGUI(role).getContentPane();
+			//return new OwnerMainPanel();
 		case ADMIN:
 			//return new AdminMainPanel();
 			return null;
@@ -240,6 +253,14 @@ public class MainWindow extends JFrame {
 		menuBar.add(menu);
 
 		return menuBar;
+	}
+	
+	public int exitQuestion() {
+		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", null, JOptionPane.YES_NO_OPTION);
+		if (reply == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
+		return reply;
 	}
 
 }
