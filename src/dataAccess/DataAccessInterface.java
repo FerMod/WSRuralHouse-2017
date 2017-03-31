@@ -53,5 +53,7 @@ public interface DataAccessInterface {
 	List<City> getCities();
 	
 	void deleteTableContent(String table);
+	
+	AbstractUser getUser(String username, String password);
 
 }

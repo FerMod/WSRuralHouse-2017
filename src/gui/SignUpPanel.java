@@ -216,7 +216,7 @@ public class SignUpPanel extends JPanel {
 							try {
 								dbManager.createUser(email, username, password, role);
 								dbManager.login(username, password);
-								JFrame jframe = new MainGUI(Role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
+								JFrame jframe = new MainWindow(dbManager.getUser(username, password));//TODO Should be like this: MainGUI(dbManager.getRole(username));	
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);

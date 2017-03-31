@@ -21,19 +21,17 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.JTabbedPane;
 
+import domain.AbstractUser;
 import domain.AbstractUser.Role;
-
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import java.awt.Color;
-import javax.swing.UIManager;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+
 
 public class MainWindow extends JFrame {
 
@@ -43,31 +41,32 @@ public class MainWindow extends JFrame {
 	@SuppressWarnings("unused")
 	private Role role;
 	private JTabbedPane tabbedPane;
+	public String username, email;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Role role = getWindowRole();
-					if(role != null) {
-						MainWindow frame = new MainWindow(role);
-//						frame.addKeyListener(
-						//new ConsoleKeyEvent<>(this.getClass());
-						new ConsoleKeyEventDispatcher();
-						frame.setFocusable(true);			
-						frame.setVisible(true); 
-					} else {
-						System.exit(0);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Role role = getWindowRole();
+//					if(role != null) {
+//						MainWindow frame = new MainWindow(role);
+////						frame.addKeyListener(
+//						//new ConsoleKeyEvent<>(this.getClass());
+//						new ConsoleKeyEventDispatcher();
+//						frame.setFocusable(true);			
+//						frame.setVisible(true); 
+//					} else {
+//						System.exit(0);
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Only to debug the windows
@@ -82,9 +81,9 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow(Role role) {
+	public MainWindow(AbstractUser us) {
 		
-		this.role = role;
+		this.role = us.getRole();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getRolePanel(role);
 		//setJMenuBar(getRoleMenuBar());
@@ -124,7 +123,8 @@ public class MainWindow extends JFrame {
 		btnLogOut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				System.out.println("Log Out successfully!!!");
+				dispose();
+				System.exit(0);
 			}
 		});
 		
@@ -140,21 +140,18 @@ public class MainWindow extends JFrame {
 		lblRole.setBounds(10, 61, 41, 14);
 		panel.add(lblRole);
 		
-		JLabel lblNewLabel = new JLabel("");
+		JLabel lblNewLabel = new JLabel(us.getUser());
 		lblNewLabel.setBounds(61, 11, 534, 14);
 		panel.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
+		JLabel lblNewLabel_1 = new JLabel(us.getEmail());
 		lblNewLabel_1.setBounds(61, 36, 534, 19);
 		panel.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("");
+		JLabel lblNewLabel_2 = new JLabel(role.name());
 		lblNewLabel_2.setBounds(61, 61, 534, 19);
 		panel.add(lblNewLabel_2);
 		
-		lblNewLabel.setText("Manolo"); //Obtains the User, the email and the role.
-		lblNewLabel_1.setText("manolor@xdmail.com");
-		lblNewLabel_2.setText(role.name());
 
 		//setMinimumSize(new Dimension(600, 365));
 		setSize(760, 400);

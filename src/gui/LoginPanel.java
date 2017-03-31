@@ -122,13 +122,13 @@ public class LoginPanel extends JPanel {
 						String password = String.valueOf(passwordField.getPassword());
 						try {
 							dbManager.login(username, password); //[TODO]: Login con correo electronico
-							if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
-								JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
-							} else {
-								JFrame jframe = new MainGUI(dbManager.getRole(username));						
+							//if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
+								//JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+							//} else {
+								JFrame jframe = new MainWindow(dbManager.getUser(username, password));
 								jframe.setVisible(true);
 								sharedFrame.dispose();
-							}
+							//}
 
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
