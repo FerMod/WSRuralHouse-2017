@@ -76,6 +76,7 @@ public class DataAccess implements DataAccessInterface {
 	public void initializeDB(){
 		try{				
 
+<<<<<<< HEAD
 			deleteTableContent("RuralHouse");
 			deleteTableContent("City");
 			
@@ -86,6 +87,34 @@ public class DataAccess implements DataAccessInterface {
 
 			System.out.println("Db initialized");
 
+=======
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
+			Vector<RuralHouse> results = new Vector<RuralHouse>(query.getResultList());
+
+			Iterator<RuralHouse> itr = results.iterator();
+
+			while (itr.hasNext()){
+				RuralHouse rh=itr.next();
+				db.remove(rh);				
+			}
+
+			//			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
+			//			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
+			//			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
+			//			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
+
+			//			db.persist(rh1);
+			//			db.persist(rh2);
+			//			db.persist(rh3);
+			//			db.persist(rh4);
+
+			db.getTransaction().commit();
+
+			createCity("Ciudad 01");
+			createCity("Ciudad 02");
+			createCity("Ciudad 03");
+			createCity("Ciudad 04");
+>>>>>>> refs/heads/FosterGun
 		} catch (Exception e){
 			e.printStackTrace();
 		}
@@ -431,7 +460,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain all the offers by a price range defined by the user (pending test).
+	 * Obtain all the offers by a price range defined by the user (tested!).
 	 *  
 	 * @param min the lowest price
 	 * @param max the highest price
@@ -444,7 +473,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println(">> DataAccess: getOffersByPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT o"
 					+ " FROM Offer o "
-					+ "WHERE o.price>" + min + "AND o.price<" + max, Offer.class);
+					+ "WHERE o.price>" + min + " AND o.price<" + max, Offer.class);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -456,7 +485,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain all the offers for a specific price defined by the user (pending test).
+	 * Obtain all the offers for a specific price defined by the user (tested!).
 	 *  
 	 * @param the price
 	 * @return vector of offers with the price selected
@@ -480,7 +509,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the offer with the lowest price (pending test).
+	 * Obtain the offer with the lowest price (tested!).
 	 *  
 	 * @return vector with the offer with the lowest price 
 	 */
@@ -502,7 +531,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the offer with the highest price (pending test).
+	 * Obtain the offer with the highest price (tested!).
 	 *  
 	 * @return vector with the offer with the highest price
 	 */
@@ -524,7 +553,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the highest price of the Offers (pending test).
+	 * Obtain the highest price of the Offers (tested!).
 	 *  
 	 * @return highest price of the Offers
 	 */
@@ -547,7 +576,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the lowest price of the Offers (pending test).
+	 * Obtain the lowest price of the Offers (tested!).
 	 *  
 	 * @return lowest price of the Offers
 	 */
