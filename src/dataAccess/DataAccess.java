@@ -109,9 +109,6 @@ public class DataAccess implements DataAccessInterface {
 			createCity("Ciudad 02");
 			createCity("Ciudad 03");
 			createCity("Ciudad 04");
-
-			System.out.println("Db initialized");
-
 		} catch (Exception e){
 			e.printStackTrace();
 		} finally {
@@ -459,7 +456,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain all the offers by a price range defined by the user (pending test).
+	 * Obtain all the offers by a price range defined by the user (tested!).
 	 *  
 	 * @param min the lowest price
 	 * @param max the highest price
@@ -472,7 +469,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println(">> DataAccess: getOffersByPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT o"
 					+ " FROM Offer o "
-					+ "WHERE o.price>" + min + "AND o.price<" + max, Offer.class);
+					+ "WHERE o.price>" + min + " AND o.price<" + max, Offer.class);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -484,7 +481,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain all the offers for a specific price defined by the user (pending test).
+	 * Obtain all the offers for a specific price defined by the user (tested!).
 	 *  
 	 * @param the price
 	 * @return vector of offers with the price selected
@@ -508,7 +505,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the offer with the lowest price (pending test).
+	 * Obtain the offer with the lowest price (tested!).
 	 *  
 	 * @return vector with the offer with the lowest price 
 	 */
@@ -530,7 +527,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the offer with the highest price (pending test).
+	 * Obtain the offer with the highest price (tested!).
 	 *  
 	 * @return vector with the offer with the highest price
 	 */
@@ -552,7 +549,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the highest price of the Offers (pending test).
+	 * Obtain the highest price of the Offers (tested!).
 	 *  
 	 * @return highest price of the Offers
 	 */
@@ -575,7 +572,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain the lowest price of the Offers (pending test).
+	 * Obtain the lowest price of the Offers (tested!).
 	 *  
 	 * @return lowest price of the Offers
 	 */
