@@ -241,7 +241,11 @@ public class ClientMainPanel extends JPanel {
 		return labelTable;
 	}
 
-	//XXX TEMPORAL. TODO REMOVE!!
+	/**XXX TEMPORAL. TODO REMOVE!!
+	 * This must be replaced with the original one.
+	 * @return
+	 */
+	@Deprecated
 	private double getRuralHouseMaxPrice(){
 		return 800.00;
 	}
@@ -896,13 +900,15 @@ public class ClientMainPanel extends JPanel {
 			priceField.setOpaque(false);
 			priceField.setEditable(false);
 			priceField.setFocusable(false);
+			priceField.setColumns(4);
+			
 			GridBagConstraints gbcPriceField = new GridBagConstraints();
 			gbcPriceField.fill = GridBagConstraints.HORIZONTAL;
-			gbcPriceField.insets = new Insets(0, 0, 0, 5);
+			gbcPriceField.insets = new Insets(0, 0, 0, 10);
 			gbcPriceField.gridx = 1;
 			gbcPriceField.gridy = 1;
 			panel.add(priceField, gbcPriceField);
-			priceField.setColumns(10);
+			
 
 			infoButton = new JButton("Info. ");
 			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -911,7 +917,7 @@ public class ClientMainPanel extends JPanel {
 			gbcInfoButton.gridheight = 3;
 			gbcInfoButton.gridx = 2;
 			gbcInfoButton.gridy = 0;	
-			gbcPriceField.insets = new Insets(5, 5, 5, 5);
+			gbcInfoButton.insets = new Insets(5, 5, 5, 5);
 			panel.add(infoButton, gbcInfoButton);
 
 		}

@@ -22,9 +22,10 @@ import domain.City;
 import domain.Offer;
 import exceptions.DuplicatedEntityException;
 
-@SuppressWarnings("serial")
 public class NewRuralHouseWindow extends JDialog {
 
+	private static final long serialVersionUID = 6770177109582209536L;
+	
 	private JPanel contentPane;
 	private JTextField textFieldDescription;
 	private JComboBox<City> comboBoxCity;

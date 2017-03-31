@@ -134,7 +134,6 @@ public interface ApplicationFacadeInterface  {
 	 * @return a vector with all the cities of type {@code City}
 	 * @see {@link City}
 	 */
-	Vector<City> getCities();
-	
+	Vector<City> getCities();	
 
 }

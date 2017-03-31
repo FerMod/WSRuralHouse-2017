@@ -35,11 +35,6 @@ public class DataAccess implements DataAccessInterface {
 
 	private final ConfigXML CONFIG;
 
-	//	public DataAccess()  {
-	//		CONFIG = ConfigXML.getInstance();
-	//		this.persistenceUnitName = CONFIG.getDbFilename();
-	//	}
-
 	public DataAccess()  {
 		CONFIG = ConfigXML.getInstance();
 		this.persistenceUnitName = CONFIG.getDbFilename();
@@ -79,9 +74,19 @@ public class DataAccess implements DataAccessInterface {
 
 	@Override
 	public void initializeDB(){
-		try{	
-			open();
-			db.getTransaction().begin();				
+		try{				
+
+
+			deleteTableContent("RuralHouse");
+			deleteTableContent("City");
+			
+			createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
+			createRuralHouse("Etxetxikia", createCity("Iruna").getId());
+			createRuralHouse("Udaletxea", createCity("Bilbo").getId());			
+			createRuralHouse("Gaztetxea", createCity("Renteria").getId());		
+
+			System.out.println("Db initialized");
+
 
 			TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
 			Vector<RuralHouse> results = new Vector<RuralHouse>(query.getResultList());
@@ -109,10 +114,9 @@ public class DataAccess implements DataAccessInterface {
 			createCity("Ciudad 02");
 			createCity("Ciudad 03");
 			createCity("Ciudad 04");
+
 		} catch (Exception e){
 			e.printStackTrace();
-		} finally {
-			close();
 		}
 	}
 
@@ -324,8 +328,8 @@ public class DataAccess implements DataAccessInterface {
 		Vector<RuralHouse> result = null;
 		try {
 			open();
-			System.out.println(">> DataAccess: getAllRuralHouses");
-			TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
+			System.out.println(">> DataAccess: getRuralHouses()");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh FROM RuralHouse rh", RuralHouse.class);
 			result = new Vector<RuralHouse>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -600,14 +604,13 @@ public class DataAccess implements DataAccessInterface {
 	 * @param the user
 	 * @param the password to modify
 	 */
-	public void changeUsersPass(AbstractUser us, String password) {
+	public void changeUsersPass(AbstractUser user, String password) {
 		open();
 		db.getTransaction().begin();
-		us.setPassword(password);
+		user.setPassword(password);
 		db.getTransaction().commit();
 		close();
 	}
-
 
 
 	/**
@@ -616,10 +619,10 @@ public class DataAccess implements DataAccessInterface {
 	 * @param the user
 	 * @param the password to modify
 	 */
-	public void modifyUsersPass(AbstractUser us, String password) {
+	public void modifyUsersPass(AbstractUser user, String password) {
 		open();
 		db.getTransaction().begin();
-		us.setPassword(password);
+		user.setPassword(password);
 		db.getTransaction().commit();
 		close();
 	}
@@ -630,7 +633,20 @@ public class DataAccess implements DataAccessInterface {
 	 * @param vector the vector of type {@code <T>}
 	 */
 	private <T> void printVector(Vector<T> vector) {
-		Arrays.deepToString(vector.toArray());
+		System.out.println(Arrays.deepToString(vector.toArray()));
 	}
+
+	/**
+	 * Delete all the table entities
+	 * 
+	 * @param table the name of the table
+	 */
+	public void deleteTableContent(String table) {
+		open();
+		db.getTransaction().begin();
+		db.createQuery("DELETE FROM " + table + " t").executeUpdate();
+		db.getTransaction().commit();
+		close();
+	}	
 
 }
