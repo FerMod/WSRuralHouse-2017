@@ -25,6 +25,15 @@ import domain.AbstractUser.Role;
 
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import java.awt.Color;
+import javax.swing.UIManager;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class MainWindow extends JFrame {
 
@@ -93,7 +102,7 @@ public class MainWindow extends JFrame {
 		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
 		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
 		tabbedPane.addTab("", new TextArea("Inifinite posibilities...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmaybe(?)"));
-		tabbedPane.addTab("Log Out", new TextArea(""));
+		//tabbedPane.addTab("Log Out", new TextArea(""));
 		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
 		//			@Override
 		//			public void mouseDragged(MouseEvent e) {}
@@ -102,8 +111,50 @@ public class MainWindow extends JFrame {
 		//				adjustCursor(e);
 		//			}
 		//		});
-
+		
 		contentPane.add(tabbedPane);
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("Log Out", null, panel, null);
+		panel.setLayout(null);
+		JButton btnLogOut = new JButton("Log Out");
+		
+		btnLogOut.setBounds(10, 86, 78, 39);
+		panel.add(btnLogOut);
+	
+		btnLogOut.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				System.out.println("Log Out successfully!!!");
+			}
+		});
+		
+		JLabel lblUser = new JLabel("User: ");
+		lblUser.setBounds(10, 11, 41, 14);
+		panel.add(lblUser);
+		
+		JLabel lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(10, 36, 41, 14);
+		panel.add(lblEmail);
+		
+		JLabel lblRole = new JLabel("Role: ");
+		lblRole.setBounds(10, 61, 41, 14);
+		panel.add(lblRole);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(61, 11, 534, 14);
+		panel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setBounds(61, 36, 534, 19);
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setBounds(61, 61, 534, 19);
+		panel.add(lblNewLabel_2);
+		
+		lblNewLabel.setText("Manolo"); //Obtains the User, the email and the role.
+		lblNewLabel_1.setText("manolor@xdmail.com");
+		lblNewLabel_2.setText(role.name());
 
 		//setMinimumSize(new Dimension(600, 365));
 		setSize(760, 400);
@@ -132,6 +183,10 @@ public class MainWindow extends JFrame {
 //
 //			}
 //		});
+		
+
+
+		
 		
 		WindowAdapter exitListener = new WindowAdapter() {
 			@Override
@@ -255,6 +310,7 @@ public class MainWindow extends JFrame {
 		return menuBar;
 	}
 	
+	
 	public int exitQuestion() {
 		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", null, JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
@@ -262,5 +318,4 @@ public class MainWindow extends JFrame {
 		}
 		return reply;
 	}
-
 }
