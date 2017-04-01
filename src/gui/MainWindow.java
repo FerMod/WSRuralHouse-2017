@@ -42,7 +42,8 @@ public class MainWindow extends JFrame {
 	private Role role;
 	private JTabbedPane tabbedPane;
 	public String username, email;
-
+	public boolean logout = false;
+	
 //	/**
 //	 * Launch the application.
 //	 */
@@ -124,7 +125,6 @@ public class MainWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				dispose();
-				System.exit(0);
 			}
 		});
 		
@@ -182,7 +182,13 @@ public class MainWindow extends JFrame {
 //		});
 		
 
-
+		btnLogOut.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				logout = true;
+				dispose();
+			}
+		});
 		
 		
 		WindowAdapter exitListener = new WindowAdapter() {
@@ -314,5 +320,9 @@ public class MainWindow extends JFrame {
 			System.exit(0);
 		}
 		return reply;
+	}
+	
+	public boolean logOut() {
+		return logout;
 	}
 }

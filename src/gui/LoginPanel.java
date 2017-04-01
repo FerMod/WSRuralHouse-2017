@@ -128,6 +128,14 @@ public class LoginPanel extends JPanel {
 								JFrame jframe = new MainWindow(dbManager.getUser(username, password));
 								jframe.setVisible(true);
 								sharedFrame.dispose();
+								
+								boolean b = false;
+								while(b){
+									if(((MainWindow) jframe).logOut()) {
+										sharedFrame.show();
+										b = true;
+									}
+								}
 							//}
 
 						} catch (AuthException | AccountNotFoundException ex) {
