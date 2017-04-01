@@ -129,13 +129,7 @@ public class LoginPanel extends JPanel {
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 								
-								boolean b = false;
-								while(b){
-									if(((MainWindow) jframe).logOut()) {
-										sharedFrame.show();
-										b = true;
-									}
-								}
+							
 							//}
 
 						} catch (AuthException | AccountNotFoundException ex) {

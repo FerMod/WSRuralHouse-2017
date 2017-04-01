@@ -322,7 +322,4 @@ public class MainWindow extends JFrame {
 		return reply;
 	}
 	
-	public boolean logOut() {
-		return logout;
-	}
 }
