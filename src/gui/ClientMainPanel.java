@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -63,7 +62,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import gui.components.TextPrompt;
-import gui.debug.MouseXYLabel;
 
 public class ClientMainPanel extends JPanel {
 

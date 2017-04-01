@@ -9,12 +9,10 @@ import javax.swing.UIManager;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.JButton;
-import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import java.awt.Label;
-import java.awt.Canvas;
 
 public class RuralHousePage_Prototype {
 

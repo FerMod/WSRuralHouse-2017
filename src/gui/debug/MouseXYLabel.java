@@ -1,10 +1,8 @@
 package gui.debug;
 
 import java.awt.AWTEvent;
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
