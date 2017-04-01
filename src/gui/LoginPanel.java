@@ -129,7 +129,7 @@ public class LoginPanel extends JPanel {
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 								
-							
+							  
 							//}
 
 						} catch (AuthException | AccountNotFoundException ex) {
