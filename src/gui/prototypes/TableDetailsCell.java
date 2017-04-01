@@ -1,20 +1,21 @@
 package gui.prototypes;
 
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.Insets;
-import java.awt.LayoutManager;
-
-import javax.swing.JTextArea;
-import java.awt.Color;
-import java.awt.Component;
-
 public class TableDetailsCell extends JPanel {
+
+	private static final long serialVersionUID = -4506206726643163476L;
+	
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextArea textArea;

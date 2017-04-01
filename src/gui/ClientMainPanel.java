@@ -90,7 +90,7 @@ public class ClientMainPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ClientMainPanel() {
-
+		
 		setLayout(new GridBagLayout());
 
 		setupNumberFormat();

@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -19,19 +20,30 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.JTabbedPane;
+<<<<<<< HEAD
 
 import domain.AbstractUser;
+=======
+>>>>>>> refs/heads/FerMod
 import domain.AbstractUser.Role;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/heads/FerMod
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/heads/FerMod
 
 public class MainWindow extends JFrame {
 
@@ -41,6 +53,7 @@ public class MainWindow extends JFrame {
 	@SuppressWarnings("unused")
 	private Role role;
 	private JTabbedPane tabbedPane;
+<<<<<<< HEAD
 	public String username, email;
 	public boolean logout = false;
 	
@@ -68,6 +81,33 @@ public class MainWindow extends JFrame {
 //			}
 //		});
 //	}
+=======
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Role role = getWindowRole();
+					if(role != null) {
+						MainWindow frame = new MainWindow(role);
+						//						frame.addKeyListener(
+						//new ConsoleKeyEvent<>(this.getClass());
+						new ConsoleKeyEventDispatcher();
+						frame.setFocusable(true);			
+						frame.setVisible(true); 
+					} else {
+						System.exit(0);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+>>>>>>> refs/heads/FerMod
 
 	/**
 	 * Only to debug the windows
@@ -82,10 +122,17 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+<<<<<<< HEAD
 	public MainWindow(AbstractUser us) {
 		
 		this.role = us.getRole();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+=======
+	public MainWindow(Role role) {
+
+		this.role = role;
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+>>>>>>> refs/heads/FerMod
 		getRolePanel(role);
 		//setJMenuBar(getRoleMenuBar());
 
@@ -100,9 +147,29 @@ public class MainWindow extends JFrame {
 		//contentPane.add(tabbedPane);
 		tabbedPane.addTab("Rural Houses", getRolePanel(role));
 		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
+		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
 		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
-		tabbedPane.addTab("", new TextArea("Inifinite posibilities...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmaybe(?)"));
-		//tabbedPane.addTab("Log Out", new TextArea(""));
+
+		//		JButton logOutButton = new JButton("Log Out");
+		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);
+		tabbedPane.addTab("Log Out", null);
+
+		ChangeListener changeListener = new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent changeEvent) {
+				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+				int index = sourceTabbedPane.getSelectedIndex();				
+				System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+				if(index == sourceTabbedPane.getTabCount()-1 && logOutQuestion()) {
+					SharedFrame sharedFrame = new SharedFrame();
+					sharedFrame.setVisible(true);
+					dispose();
+				}
+				tabbedPane.setSelectedIndex(0); //TODO cleanup
+			}
+		};
+		tabbedPane.addChangeListener(changeListener);
+		
 		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
 		//			@Override
 		//			public void mouseDragged(MouseEvent e) {}
@@ -159,29 +226,29 @@ public class MainWindow extends JFrame {
 		validate();
 		setLocationRelativeTo(null);
 
-//		addComponentListener(new ComponentListener() {
-//			@Override
-//			public void componentShown(ComponentEvent e) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//			@Override
-//			public void componentResized(ComponentEvent e) {
-//				System.out.println(MainWindow.class.getName()+"[Width: " + getWidth() + ", Height" + getHeight() + "]");
-//			}
-//			@Override
-//			public void componentMoved(ComponentEvent e) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//			@Override
-//			public void componentHidden(ComponentEvent e) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//		});
-		
+		//		addComponentListener(new ComponentListener() {
+		//			@Override
+		//			public void componentShown(ComponentEvent e) {
+		//				// TODO Auto-generated method stub
+		//
+		//			}
+		//			@Override
+		//			public void componentResized(ComponentEvent e) {
+		//				System.out.println(MainWindow.class.getName()+"[Width: " + getWidth() + ", Height" + getHeight() + "]");
+		//			}
+		//			@Override
+		//			public void componentMoved(ComponentEvent e) {
+		//				// TODO Auto-generated method stub
+		//
+		//			}
+		//			@Override
+		//			public void componentHidden(ComponentEvent e) {
+		//				// TODO Auto-generated method stub
+		//
+		//			}
+		//		});
 
+<<<<<<< HEAD
 		btnLogOut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -191,13 +258,15 @@ public class MainWindow extends JFrame {
 		});
 		
 		
+=======
+>>>>>>> refs/heads/FerMod
 		WindowAdapter exitListener = new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				exitQuestion();
 			}
 		};
-		this.addWindowListener(exitListener);
+		this.addWindowListener(exitListener);	
 
 	}
 
@@ -312,8 +381,7 @@ public class MainWindow extends JFrame {
 
 		return menuBar;
 	}
-	
-	
+
 	public int exitQuestion() {
 		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", null, JOptionPane.YES_NO_OPTION);
 		if (reply == JOptionPane.YES_OPTION) {
@@ -321,5 +389,20 @@ public class MainWindow extends JFrame {
 		}
 		return reply;
 	}
+<<<<<<< HEAD
 	
+=======
+
+	public boolean logOutQuestion() {
+		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?", null, JOptionPane.YES_NO_OPTION);
+		switch (reply) {
+		case JOptionPane.YES_OPTION:			
+			return true;
+		case JOptionPane.NO_OPTION:
+		default:
+			return false;
+		}
+	}
+
+>>>>>>> refs/heads/FerMod
 }

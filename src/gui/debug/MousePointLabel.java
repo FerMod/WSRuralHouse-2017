@@ -3,22 +3,16 @@ package gui.debug;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputAdapter;
 
 public class MousePointLabel implements AWTEventListener {
 
@@ -27,6 +21,7 @@ public class MousePointLabel implements AWTEventListener {
 	private MouseCoordinatesComponent mouseCoordinatesComponent;
 	private Cursor oldCursor;
 
+	@SuppressWarnings("unused")
 	static private Component glassPane;
 
 	public MousePointLabel(JFrame frame) {
@@ -68,8 +63,6 @@ public class MousePointLabel implements AWTEventListener {
 //		Object o = event.getSource();
 
 		if (o instanceof JComponent) {
-
-			JComponent	source = (JComponent) o;
 
 			if (event.getID() == MouseEvent.MOUSE_MOVED && visible) {
 				Point p = MouseInfo.getPointerInfo().getLocation();

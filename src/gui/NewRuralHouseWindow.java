@@ -19,7 +19,6 @@ import javax.swing.border.EmptyBorder;
 
 import businessLogic.ApplicationFacadeInterface;
 import domain.City;
-import domain.Offer;
 import exceptions.DuplicatedEntityException;
 
 public class NewRuralHouseWindow extends JDialog {

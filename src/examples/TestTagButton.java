@@ -3,11 +3,8 @@ package examples;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -30,8 +27,6 @@ import javax.swing.DefaultButtonModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
@@ -88,7 +83,12 @@ public class TestTagButton {
 
     public static class WordGroupPane extends JPanel {
 
-        public WordGroupPane(Word word, List<String> translations) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -9174218515279768280L;
+
+		public WordGroupPane(Word word, List<String> translations) {
             setOpaque(false);
             setLayout(new GridLayout(0, 2));
 
@@ -100,7 +100,9 @@ public class TestTagButton {
 
     public static class TranslationsPane extends JPanel {
 
-        protected static final Border SPLIT_BORDER = new MatteBorder(0, 0, 1, 0, Color.GRAY);
+		private static final long serialVersionUID = -3132852526110463326L;
+		
+		protected static final Border SPLIT_BORDER = new MatteBorder(0, 0, 1, 0, Color.GRAY);
 
         public TranslationsPane(List<String> translations) {
             setOpaque(false);
@@ -117,7 +119,12 @@ public class TestTagButton {
 
     public static class WordPane extends JPanel {
 
-        public WordPane(Word word) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -4310625784786284612L;
+
+		public WordPane(Word word) {
             setBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY));
             setOpaque(false);
             setLayout(new GridBagLayout());
@@ -199,7 +206,11 @@ public class TestTagButton {
 
     public static class TagButton extends AbstractButton {
 
-        private JLabel renderer;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -6449364233453211768L;
+		private JLabel renderer;
         private String tag;
 
         public TagButton(String text) {
@@ -386,7 +397,12 @@ public class TestTagButton {
 
     protected static class TagInsert extends Path2D.Float {
 
-        public TagInsert(float width, float height) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -5871898300058667047L;
+
+		public TagInsert(float width, float height) {
 
             float gap = 3;
 
@@ -394,7 +410,8 @@ public class TestTagButton {
             moveTo(0, 0);
             lineTo(width, 0);
 
-            float yPos = 0;
+            @SuppressWarnings("unused")
+			float yPos = 0;
             lineTo(width, 1);
             float topY = gap;
             for (int index = 0; index < 4; index++) {
@@ -420,7 +437,11 @@ public class TestTagButton {
 
     protected static class TagShape extends Path2D.Float {
 
-        protected static final float RADIUS = 8;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -2294432579842895094L;
+		protected static final float RADIUS = 8;
 
         public TagShape(float width, float height) {
 

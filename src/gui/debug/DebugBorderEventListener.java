@@ -4,26 +4,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.AWTEventListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.beans.EventHandler;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.MouseInputListener;
 
 public class DebugBorderEventListener implements AWTEventListener{
 	
@@ -64,6 +54,8 @@ public class DebugBorderEventListener implements AWTEventListener{
 
 	class Canvas extends JComponent {
 
+		private static final long serialVersionUID = -3392450644639136003L;
+
 		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
@@ -72,7 +64,10 @@ public class DebugBorderEventListener implements AWTEventListener{
 
 	}
 
+	@SuppressWarnings("unused")
 	private static class RectDraw extends JComponent {
+
+		private static final long serialVersionUID = 8599029427375702998L;
 
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);  

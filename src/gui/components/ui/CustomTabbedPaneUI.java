@@ -64,7 +64,7 @@ public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 	 * The color of the text of a non selected tab
 	 */
 	private Color nonSelectedTextColor = Color.WHITE;
-	
+
 	/**
 	 * The number of pixels the first tab should be inset from the left margin
 	 */
@@ -264,5 +264,5 @@ public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 	protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex) {
 		// Do nothing
 	}
-	
+
 }

@@ -1,15 +1,12 @@
 package gui.debug;
 
 import java.awt.AWTEvent;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JRootPane;
 
 //public abstract class ConsoleKeyEvent<T> implements KeyEventDispatcher, ConsoleKeyEventDispatcher<T> {
 public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
