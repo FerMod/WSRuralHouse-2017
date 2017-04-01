@@ -191,9 +191,9 @@ public class OfferInfoDialog extends JDialog {
 				JButton btnX = new JButton("");
 				btnX.setBorderPainted(false);
 				btnX.setSelectedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close.png")));
-				btnX.setRolloverSelectedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window_close_pressed.png")));
-				btnX.setRolloverIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window_close_hover.png")));
-				btnX.setPressedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window_close_pressed.png")));
+				btnX.setRolloverSelectedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close_pressed.png")));
+				btnX.setRolloverIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close_hover.png")));
+				btnX.setPressedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close_pressed.png")));
 				btnX.setContentAreaFilled(false);
 				btnX.setDefaultCapable(false);
 				btnX.setFocusPainted(false);
@@ -208,7 +208,7 @@ public class OfferInfoDialog extends JDialog {
 				btnX.setBackground(UIManager.getColor("Button.light"));
 				btnX.setAlignmentY(Component.TOP_ALIGNMENT);
 				btnX.setAlignmentX(Component.RIGHT_ALIGNMENT);
-				btnX.setPreferredSize(new Dimension(20, 20));
+				btnX.setPreferredSize(new Dimension(22, 22));
 				btnX.setMinimumSize(new Dimension(9, 9));
 				btnX.setMaximumSize(new Dimension(9, 9));
 				btnX.setMargin(new Insets(0, 0, 0, 0));
