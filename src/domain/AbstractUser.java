@@ -74,7 +74,7 @@ public abstract class AbstractUser implements UserInterface, Serializable {
 		return id;
 	}
 
-	public String getUser() {
+	public String getUsername() {
 		return username;
 	}
 
