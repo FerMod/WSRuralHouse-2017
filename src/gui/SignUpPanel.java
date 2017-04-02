@@ -214,12 +214,23 @@ public class SignUpPanel extends JPanel {
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
+								
 								dbManager.createUser(email, username, password, role);
-								dbManager.login(username, password);
-								JFrame jframe = new MainGUI(Role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
+								
+								//FIXME: TEMPORAL SOLUTION //////////
+								//
+								JFrame jframe = null; 
+								if(dbManager.getRole(username) == Role.OWNER) {
+									jframe = new MainGUI(dbManager.getRole(username)); //TODO Should be like this: MainWindow(dbManager.login(username, password)));					
+								} else if(dbManager.getRole(username) == Role.CLIENT)  {
+									jframe = new MainWindow(dbManager.login(username, password));
+								}
+								//
+								////////////////////////////////////
+								
 								jframe.setVisible(true);
-								sharedFrame.dispose();
-								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
+								sharedFrame.dispose();								
+								JOptionPane.showMessageDialog(jframe, "Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
 							} catch(DuplicatedEntityException ex) {
 								clearFieldsColors();
 								System.err.println(ex.getMessage());

@@ -13,32 +13,31 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JTabbedPane;
-import domain.AbstractUser.Role;
 
+import domain.AbstractUser;
+import domain.AbstractUser.Role;
+import domain.Client;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -1810393566512302281L;
 
 	private JPanel contentPane;
-	@SuppressWarnings("unused")
-	private Role role;
+	private AbstractUser user;
 	private JTabbedPane tabbedPane;
 
 	/**
@@ -48,17 +47,13 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Role role = getWindowRole();
-					if(role != null) {
-						MainWindow frame = new MainWindow(role);
-						//						frame.addKeyListener(
-						//new ConsoleKeyEvent<>(this.getClass());
-						new ConsoleKeyEventDispatcher();
-						frame.setFocusable(true);			
-						frame.setVisible(true); 
-					} else {
-						System.exit(0);
-					}
+					AbstractUser user = getDebugAccount();
+					MainWindow frame = new MainWindow(user);
+					//						frame.addKeyListener(
+					//new ConsoleKeyEvent<>(this.getClass());
+					new ConsoleKeyEventDispatcher();
+					frame.setFocusable(true);			
+					frame.setVisible(true); 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -67,23 +62,37 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Only to debug the windows
-	 * @return the chosen role
+	 * Only for debug purposes it will be removed in a future
+	 * @return the chosen user fictional account
 	 */
-	private static Role getWindowRole() {
+	@Deprecated
+	private static AbstractUser getDebugAccount() {
 		Role[] options = new Role[] {Role.CLIENT, Role.OWNER, Role.ADMIN, Role.SUPER_ADMIN};
 		Role response = (Role)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
-		return response;
+		if(response != null) {
+			switch (response) {
+			case CLIENT:
+				return new Client("Client@clientmail.com", "Client", "ClientPassword");
+			case OWNER:
+				return new Client("Owner@ownermail.com", "Owner", "OwnerPassword");
+			case ADMIN:
+				return new Client("Admin@adminmail.com", "Admin", "AdminPassword");
+			case SUPER_ADMIN:
+				return new Client("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword");
+			}
+		}
+		System.exit(0);
+		return null;
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow(Role role) {
+	public MainWindow(AbstractUser user) {
 
-		this.role = role;
+		this.user = user;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		getRolePanel(role);
+		getRolePanel(user.getRole());
 		//setJMenuBar(getRoleMenuBar());
 
 
@@ -95,10 +104,10 @@ public class MainWindow extends JFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setUI(new CustomTabbedPaneUI());
 		//contentPane.add(tabbedPane);
-		tabbedPane.addTab("Rural Houses", getRolePanel(role));
+		tabbedPane.addTab("Rural Houses", getRolePanel(user.getRole()));
+		tabbedPane.addTab("Profile", getProfilePanel());
 		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
 		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
-		tabbedPane.addTab("Profile", new TextArea("Profile goes here"));
 
 		//		JButton logOutButton = new JButton("Log Out");
 		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);
@@ -110,16 +119,18 @@ public class MainWindow extends JFrame {
 				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
 				int index = sourceTabbedPane.getSelectedIndex();				
 				System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
-				if(index == sourceTabbedPane.getTabCount()-1 && logOutQuestion()) {
-					SharedFrame sharedFrame = new SharedFrame();
-					sharedFrame.setVisible(true);
-					dispose();
+				if(index == sourceTabbedPane.getTabCount()-1) {
+					if(logOutQuestion()) {
+						SharedFrame sharedFrame = new SharedFrame();
+						sharedFrame.setVisible(true);
+						dispose();
+					}
+					tabbedPane.setSelectedIndex(0); //TODO cleanup
 				}
-				tabbedPane.setSelectedIndex(0); //TODO cleanup
 			}
 		};
 		tabbedPane.addChangeListener(changeListener);
-		
+
 		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
 		//			@Override
 		//			public void mouseDragged(MouseEvent e) {}
@@ -128,50 +139,8 @@ public class MainWindow extends JFrame {
 		//				adjustCursor(e);
 		//			}
 		//		});
-		
+
 		contentPane.add(tabbedPane);
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Log Out", null, panel, null);
-		panel.setLayout(null);
-		JButton btnLogOut = new JButton("Log Out");
-		
-		btnLogOut.setBounds(10, 86, 78, 39);
-		panel.add(btnLogOut);
-	
-		btnLogOut.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				System.out.println("Log Out successfully!!!");
-			}
-		});
-		
-		JLabel lblUser = new JLabel("User: ");
-		lblUser.setBounds(10, 11, 41, 14);
-		panel.add(lblUser);
-		
-		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(10, 36, 41, 14);
-		panel.add(lblEmail);
-		
-		JLabel lblRole = new JLabel("Role: ");
-		lblRole.setBounds(10, 61, 41, 14);
-		panel.add(lblRole);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(61, 11, 534, 14);
-		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setBounds(61, 36, 534, 19);
-		panel.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setBounds(61, 61, 534, 19);
-		panel.add(lblNewLabel_2);
-		
-		lblNewLabel.setText("Manolo"); //Obtains the User, the email and the role.
-		lblNewLabel_1.setText("manolor@xdmail.com");
-		lblNewLabel_2.setText(role.name());
 
 		//setMinimumSize(new Dimension(600, 365));
 		setSize(760, 400);
@@ -209,6 +178,50 @@ public class MainWindow extends JFrame {
 		};
 		this.addWindowListener(exitListener);	
 
+	}
+
+	private JPanel getProfilePanel() {
+		JPanel profilePanel = new JPanel();
+		profilePanel.setLayout(null);
+		//TODO: Make a separate class with the user profile /////////////////
+		JLabel lblUser = new JLabel("User: ");
+		lblUser.setBounds(10, 11, 64, 14);
+		profilePanel.add(lblUser);
+
+		JLabel lblNewLabel = new JLabel(user.getUsername());
+		lblNewLabel.setBounds(84, 11, 411, 14);
+		profilePanel.add(lblNewLabel);
+
+		JLabel lblEmail = new JLabel("Password:");
+		lblEmail.setBounds(10, 36, 64, 14);
+		profilePanel.add(lblEmail);
+
+		JPasswordField lblNewLabel_1 = new JPasswordField(user.getPassword().replaceAll(".", "*"));
+		lblNewLabel_1.setEchoChar('☺');
+		lblNewLabel_1.setBorder(null);
+		lblNewLabel_1.setFocusTraversalKeysEnabled(false);
+		lblNewLabel_1.setFocusable(false);
+		lblNewLabel_1.setEditable(false);
+		lblNewLabel_1.setBounds(84, 36, 190, 19);
+		profilePanel.add(lblNewLabel_1);
+
+		JLabel lblRole = new JLabel("e-mail: ");
+		lblRole.setBounds(10, 61, 64, 14);
+		profilePanel.add(lblRole);
+
+		JLabel lblNewLabel_2 = new JLabel(user.getEmail());
+		lblNewLabel_2.setBounds(84, 61, 411, 19);
+		profilePanel.add(lblNewLabel_2);
+
+		JLabel label = new JLabel("Role: ");
+		label.setBounds(10, 86, 64, 14);
+		profilePanel.add(label);
+
+		JLabel label_1 = new JLabel(user.getRole().toString());
+		label_1.setBounds(84, 84, 411, 19);
+		profilePanel.add(label_1);		
+		///////////////////////////////////////////////
+		return profilePanel;
 	}
 
 	//	private void adjustCursor(MouseEvent e) {
