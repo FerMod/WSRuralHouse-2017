@@ -108,9 +108,12 @@ public interface ApplicationFacadeInterface  {
 	 * @param password the password of the account
 	 * @throws AuthException If the authentication is failed
 	 * @throws AccountNotFoundException If no such account is found
+	 * 
+	 * @return the object inherited from {@code AbstractUser} that represents the user which have successfully logged in
+	 * @see {@link AbstractUser}
 	 */
 	@WebMethod
-	void login(String username, String password) throws AuthException, AccountNotFoundException;
+	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 
 	/**
 	 * Creates a city and stores it in the database.

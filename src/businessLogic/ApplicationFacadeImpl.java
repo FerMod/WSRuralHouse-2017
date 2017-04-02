@@ -67,8 +67,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return offer;
 	}
 
-	public void login(String username, String password) throws AuthException, AccountNotFoundException {
-		dataAccess.login(username, password);
+	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
+		return dataAccess.login(username, password);
 	}
 
 	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
