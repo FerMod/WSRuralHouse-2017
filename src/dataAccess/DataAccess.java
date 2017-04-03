@@ -78,11 +78,35 @@ public class DataAccess implements DataAccessInterface {
 
 			deleteTableContent("RuralHouse");
 			deleteTableContent("City");
-			
-			createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
+			deleteTableContent("Offer");
+			deleteTableContent("Client");
+			deleteTableContent("Owner");
+			//deleteTableContent("Admin");
+
+			RuralHouse rh;
+			rh = createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
+			createOffer(rh, new Date(2017, 2, 03), new Date(2017, 5, 43), 293);
+			createOffer(rh, new Date(2016, 3, 23), new Date(2018, 11, 23),593);
+			createOffer(rh, new Date(2017, 1, 4), new Date(2017, 1, 5), 773);			
+
 			createRuralHouse("Etxetxikia", createCity("Iruna").getId());
-			createRuralHouse("Udaletxea", createCity("Bilbo").getId());			
-			createRuralHouse("Gaztetxea", createCity("Renteria").getId());		
+			createOffer(rh, new Date(2013, 1, 4), new Date(2017, 2, 5), 773);		
+			
+			createRuralHouse("Udaletxea", createCity("Bilbo").getId());		
+			createOffer(rh, new Date(2017, 1, 5), new Date(2017, 1, 5), 93);		
+			createOffer(rh, new Date(2016, 12, 14), new Date(2017, 1, 5), 876);		
+			createOffer(rh, new Date(2017, 2, 12), new Date(2017, 4, 5), 233);		
+			
+			createRuralHouse("Gaztetxea", createCity("Renteria").getId());	
+			createOffer(rh, new Date(2017, 6, 3), new Date(2017, 5, 5), 128);		
+			createOffer(rh, new Date(2017, 5, 4), new Date(2017, 6, 20), 455);		
+
+			createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
+			createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
+			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
+			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
+			createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
+			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			System.out.println("Db initialized");
 
@@ -129,7 +153,6 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-
 		return ruralHouse;
 	}
 
@@ -317,7 +340,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Vector<Offer> getOffers( RuralHouse rh, Date firstDay,  Date lastDay) {
+	public Vector<Offer> getOffer(RuralHouse rh, Date firstDay,  Date lastDay) {
 		Vector<Offer> result = null;
 		try { 
 			open();
@@ -432,6 +455,24 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return found;
+	}
+
+	/**
+	 * Delete all the table entities
+	 * 
+	 * @param table the name of the table
+	 */
+	public void deleteTableContent(String table) {
+		try {
+			open();
+			db.getTransaction().begin();
+			db.createQuery("DELETE FROM " + table + " t ").executeUpdate();
+			db.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {			
+			close();
+		}
 	}
 
 	/**
@@ -609,19 +650,6 @@ public class DataAccess implements DataAccessInterface {
 	 */
 	private <T> void printVector(Vector<T> vector) {
 		System.out.println(Arrays.deepToString(vector.toArray()));
-	}
-
-	/**
-	 * Delete all the table entities
-	 * 
-	 * @param table the name of the table
-	 */
-	public void deleteTableContent(String table) {
-		open();
-		db.getTransaction().begin();
-		db.createQuery("DELETE FROM " + table + " t").executeUpdate();
-		db.getTransaction().commit();
-		close();
 	}	
 
 }

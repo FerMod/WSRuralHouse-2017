@@ -36,7 +36,7 @@ public interface DataAccessInterface {
 
 	List<RuralHouse> getRuralHouses();
 
-	List<Offer> getOffers(RuralHouse ruralHouse, Date firstDay, Date lastDay);
+	List<Offer> getOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay);
 
 	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
 

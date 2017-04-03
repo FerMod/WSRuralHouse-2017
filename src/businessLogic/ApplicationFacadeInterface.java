@@ -99,7 +99,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
+	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
 
 	/**
 	 * Login the user with the account that matches the entered user name and password
