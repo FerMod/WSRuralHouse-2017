@@ -122,6 +122,13 @@ public class LoginPanel extends JPanel {
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
+<<<<<<< HEAD
+							dbManager.login(username, password); //[TODO]: Login con correo electronico
+							//if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
+								//JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+							//} else {
+								JFrame jframe = new MainWindow(dbManager.getUser(username, password));
+=======
 							AbstractUser user = dbManager.login(username, password); //[TODO]: Login con correo electronico
 							
 							//FIXME: TEMPORAL SOLUTION //////////
@@ -129,8 +136,15 @@ public class LoginPanel extends JPanel {
 							JFrame jframe = null; 
 							if(dbManager.getRole(username) == Role.OWNER) {
 								jframe = new MainGUI(dbManager.getRole(username));						
+>>>>>>> refs/remotes/origin/FerMod
 								jframe.setVisible(true);
 								sharedFrame.dispose();
+<<<<<<< HEAD
+								
+							  
+							//}
+
+=======
 							} else if(dbManager.getRole(username) == Role.CLIENT)  {
 								jframe = new MainWindow(user);						
 								jframe.setVisible(true);
@@ -141,6 +155,7 @@ public class LoginPanel extends JPanel {
 							//
 							///////////////////////////////////
 							
+>>>>>>> refs/remotes/origin/FerMod
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
 							JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							
