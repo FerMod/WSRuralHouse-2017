@@ -33,6 +33,11 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	public void removeKeyEventDispatcher(KeyEventDispatcher dispatcher) {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(dispatcher);
 	}
+	
+	public void showConsole() {
+		ConsoleWindow.setVisible(true);
+		System.out.println("[" + this.getClass().getSimpleName() + "]: ConsoleWindow visible");
+	}
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent e) {
