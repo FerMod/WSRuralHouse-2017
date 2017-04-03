@@ -47,7 +47,7 @@ public class LoginPanel extends JPanel {
 
 	public LoginPanel(SharedFrame sharedFrame) {
 		this.sharedFrame = sharedFrame;		
-		
+
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
 
@@ -120,26 +120,26 @@ public class LoginPanel extends JPanel {
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
-							
+
 							AbstractUser user = MainWindow.getBusinessLogic().login(username, password); //[TODO]: Login con correo electronico
-							
+
 							//FIXME: TEMPORAL SOLUTION //////////
 							//
 							JFrame jframe = null; 
 							if(MainWindow.getBusinessLogic().getRole(username) == Role.OWNER) {
-								jframe = new MainGUI(MainWindow.getBusinessLogic().getRole(username));						
+								jframe = new MainGUI(MainWindow.getBusinessLogic().getRole(username));
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 							} else if(MainWindow.getBusinessLogic().getRole(username) == Role.CLIENT)  {
-								jframe = new MainWindow(user);						
+								jframe = new MainWindow(user);
 								jframe.setVisible(true);
-								sharedFrame.dispose();
+								sharedFrame.dispose();					
 							} else {
 								JOptionPane.showMessageDialog(sharedFrame, "The " + MainWindow.getBusinessLogic().getRole(username) + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
 							}
 							//
 							///////////////////////////////////
-							
+
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
 							JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							
@@ -237,7 +237,7 @@ public class LoginPanel extends JPanel {
 		}
 		return lblLogin;
 	}
-	
+
 	public void clearFieldsColors() {
 		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));

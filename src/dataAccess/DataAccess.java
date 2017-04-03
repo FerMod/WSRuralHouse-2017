@@ -590,6 +590,25 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * Obtain a User by username and password from the database
+	 * 
+	 * @param username String with the username of the user
+	 * @param password String with the password of the user
+	 * @return The user with the username and password definied
+	 */
+	public AbstractUser getUser(String username, String password) {
+		open();
+		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
+				+ "FROM User u "
+				+ "WHERE u.username = :username AND u.password = :password", AbstractUser.class)
+				.setParameter("username", username).setParameter("password", password);
+		Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
+		close();
+		return result.get(0);
+	}
 
 	/**
 	 * Obtain the lowest price of the Offers (tested!).
@@ -650,6 +669,6 @@ public class DataAccess implements DataAccessInterface {
 	 */
 	private <T> void printVector(Vector<T> vector) {
 		System.out.println(Arrays.deepToString(vector.toArray()));
-	}	
+	}
 
 }

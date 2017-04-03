@@ -18,8 +18,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Currency;
 import java.util.EventObject;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
@@ -238,7 +240,7 @@ public class ClientMainPanel extends JPanel {
 
 	private Hashtable<Integer, JLabel> getSliderLabelTable(double minPrice, double maxPrice) {
 
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(getDefaultLocale());
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
 
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();		
 		labelTable.put(getPriceSlider().getMinimum(), new JLabel(currencyFormatter.format(minPrice)));

@@ -142,8 +142,7 @@ public class OfferInfoDialog extends JDialog {
 		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		
-		System.out.println(ruralHouse.getPrice());
+	
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			ImagePanel imagePanel = new ImagePanel();

@@ -58,7 +58,7 @@ public class MainWindow extends JFrame {
 					//						frame.addKeyListener(
 					//new ConsoleKeyEvent<>(this.getClass());
 					new ConsoleKeyEventDispatcher();
-					frame.setFocusable(true);			
+					frame.setFocusable(true);
 					frame.setVisible(true); 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -212,7 +212,7 @@ public class MainWindow extends JFrame {
 		profilePanel.add(lblEmail);
 
 		JPasswordField lblNewLabel_1 = new JPasswordField(user.getPassword().replaceAll(".", "*"));
-		lblNewLabel_1.setEchoChar('☺');
+		//lblNewLabel_1.setEchoChar('☺');
 		lblNewLabel_1.setBorder(null);
 		lblNewLabel_1.setFocusTraversalKeysEnabled(false);
 		lblNewLabel_1.setFocusable(false);
