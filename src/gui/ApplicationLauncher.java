@@ -21,8 +21,6 @@ public class ApplicationLauncher {
 	public static void main(String[] args) {
 
 		try {
-			
-			new ConsoleKeyEventDispatcher();
 
 			LogFile.FILE_NAME = "error.log";
 
@@ -33,6 +31,12 @@ public class ApplicationLauncher {
 			Locale.setDefault(new Locale(config.getLocale()));
 
 			System.out.println("Locale: " + Locale.getDefault());
+			
+			ConsoleKeyEventDispatcher consoleKeyEventDispatcher = new ConsoleKeyEventDispatcher();
+			if(config.enableConsole()) {
+			
+				consoleKeyEventDispatcher.showConsole();
+			}
 
 			SharedFrame sharedFrame = new SharedFrame();
 			sharedFrame.setVisible(true);
@@ -70,6 +74,7 @@ public class ApplicationLauncher {
 			//}
 
 			MainGUI.setBussinessLogic(aplicationFacade);
+			MainWindow.setBussinessLogic(aplicationFacade);
 
 		} catch (Exception e) {
 
