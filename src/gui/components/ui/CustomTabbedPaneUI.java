@@ -1,13 +1,18 @@
 package gui.components.ui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Event;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.ComponentUI;
@@ -70,6 +75,8 @@ public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 	 */
 	private int leftInset = 12;
 
+	private CustomHandler customHandler;
+
 	// ------------------------------------------------------------------------------------------------------------------
 	//  Custom installation methods
 	// ------------------------------------------------------------------------------------------------------------------
@@ -108,7 +115,7 @@ public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 	protected void installDefaults() {
 		super.installDefaults();
 		tabAreaInsets.left = leftInset;
-		selectedTabPadInsets = new Insets(0, 0, 0, 0);
+		selectedTabPadInsets = new Insets(0, 0, (buttonHeight / 2) + fadeColorCount, 0);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------
@@ -120,15 +127,15 @@ public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 	}
 
 	protected Insets getContentBorderInsets(int tabPlacement) {
-		return NO_INSETS;
+		return new Insets((buttonHeight / 2) + fadeColorCount, 0, 0, 0);
 	}
 
 	protected int calculateTabHeight(int tabPlacement, int tabIndex, int fontHeight) {
-		if (tabPlacement == tabIndex) {
-			return buttonHeight;
-		} else {
-			return buttonHeight + (buttonHeight / 2) + 6;
-		}
+		//if (tabPlacement == tabIndex) {
+		return buttonHeight + fadeColorCount;
+		//} else {
+		//	return buttonHeight + (buttonHeight / 2) + 6;
+		//}
 	}
 
 	protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
@@ -263,6 +270,51 @@ public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 
 	protected void paintContentBorder(Graphics g, int tabPlacement, int selectedIndex) {
 		// Do nothing
+	}
+
+	@Override
+	protected void installListeners() {
+		super.installListeners();
+		if ((customHandler = new CustomHandler()) != null) {
+			super.tabPane.addMouseMotionListener(customHandler);
+		}
+	}
+
+	private void adjustCursor(MouseEvent e) {
+		if (getRolloverTab() >= 0) {
+			super.tabPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		} else {
+			super.tabPane.setCursor(null);
+		}
+	}
+
+	@Override
+	protected void setRolloverTab(int index) {
+		super.setRolloverTab(index);
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------
+	//  Controller
+	// ------------------------------------------------------------------------------------------------------------------
+
+	class CustomHandler implements MouseMotionListener{
+
+		public CustomHandler() {
+			super();
+		}
+
+		//
+		// MouseMotionListener
+		//
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			adjustCursor(e);
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+		}
+
 	}
 
 }
