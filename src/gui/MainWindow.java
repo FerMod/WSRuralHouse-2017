@@ -52,7 +52,7 @@ public class MainWindow extends JFrame {
 					//						frame.addKeyListener(
 					//new ConsoleKeyEvent<>(this.getClass());
 					new ConsoleKeyEventDispatcher();
-					frame.setFocusable(true);			
+					frame.setFocusable(true);
 					frame.setVisible(true); 
 				} catch (Exception e) {
 					e.printStackTrace();
