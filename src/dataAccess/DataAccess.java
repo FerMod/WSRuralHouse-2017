@@ -114,13 +114,13 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException {
+	public RuralHouse createRuralHouse(String description, int city, double price) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createRuralHouse(" + description + ", " + city + ") -> ");
+			System.out.print(">> DataAccess: createRuralHouse(" + description + ", " + city + ", " + price +") -> ");
 			db.getTransaction().begin();
-			ruralHouse = new RuralHouse(description, city);
+			ruralHouse = new RuralHouse(description, city, price);
 			db.persist(ruralHouse);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + ruralHouse.getId());

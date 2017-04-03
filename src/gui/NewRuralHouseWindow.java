@@ -20,6 +20,8 @@ import javax.swing.border.EmptyBorder;
 import businessLogic.ApplicationFacadeInterface;
 import domain.City;
 import exceptions.DuplicatedEntityException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class NewRuralHouseWindow extends JDialog {
 
@@ -33,8 +35,8 @@ public class NewRuralHouseWindow extends JDialog {
 	private JLabel lblCity;
 	private JButton btnAdd;
 	private JButton btnCancel;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField textFieldPrice;
+	private JTextField textFieldTags;
 
 	/**
 	 * Create the frame.
@@ -80,10 +82,10 @@ public class NewRuralHouseWindow extends JDialog {
 			lblPrice.setBounds(10, 328, 46, 14);
 			contentPane.add(lblPrice);
 			
-			textField = new JTextField();
-			textField.setBounds(10, 353, 46, 20);
-			contentPane.add(textField);
-			textField.setColumns(10);
+			textFieldPrice = new JTextField();
+			textFieldPrice.setBounds(10, 353, 46, 20);
+			contentPane.add(textFieldPrice);
+			textFieldPrice.setColumns(10);
 			
 			JLabel lblImages = new JLabel("Images:");
 			lblImages.setBounds(260, 198, 46, 14);
@@ -97,12 +99,24 @@ public class NewRuralHouseWindow extends JDialog {
 			lblTags.setBounds(260, 254, 46, 14);
 			contentPane.add(lblTags);
 			
-			textField_1 = new JTextField();
-			textField_1.setBounds(260, 274, 251, 73);
-			contentPane.add(textField_1);
-			textField_1.setColumns(10);
+			textFieldTags = new JTextField();
+			textFieldTags.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JOptionPane.showMessageDialog(contentPane,	"This feature currently is being developed or is planned to do so.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
+			textFieldTags.setBounds(260, 274, 251, 73);
+			contentPane.add(textFieldTags);
+			textFieldTags.setColumns(10);
 			
 			JButton btnAddNewCity = new JButton("Add new city");
+			btnAddNewCity.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					JOptionPane.showMessageDialog(contentPane,	"This feature currently is being developed or is planned to do so.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
 			btnAddNewCity.setBounds(10, 250, 191, 23);
 			contentPane.add(btnAddNewCity);
 		}
@@ -133,8 +147,9 @@ public class NewRuralHouseWindow extends JDialog {
 						ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
 						String description = textFieldDescription.getText();
 						City city = (City) comboBoxCity.getSelectedItem();
+						Double price = Double.valueOf(textFieldPrice.getText());
 						try {
-							facade.createRuralHouse(description, city);
+							facade.createRuralHouse(description, city, price);
 							dispose();
 							JOptionPane.showMessageDialog(null,	"Rural house added successfuly", "Info", JOptionPane.INFORMATION_MESSAGE);
 						} catch (DuplicatedEntityException e1) {

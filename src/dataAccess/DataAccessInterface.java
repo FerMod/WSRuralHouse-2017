@@ -20,7 +20,7 @@ public interface DataAccessInterface {
 
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price);
 
-	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
+	RuralHouse createRuralHouse(String description, int city, double price) throws DuplicatedEntityException;
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 

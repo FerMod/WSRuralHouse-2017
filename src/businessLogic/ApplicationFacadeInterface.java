@@ -45,7 +45,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return the created rural house, null if none was created
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
-	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
+	RuralHouse createRuralHouse(String description, City city, Double price) throws DuplicatedEntityException;
 
 	/**
 	 * Creates an offer and stores it in the database.
