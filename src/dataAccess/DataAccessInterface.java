@@ -32,7 +32,7 @@ public interface DataAccessInterface {
 
 	boolean existsEmail(String email);
 
-	void login(String username, String password) throws AuthException, AccountNotFoundException;
+	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 
 	List<RuralHouse> getRuralHouses();
 

@@ -76,7 +76,6 @@ public class DataAccess implements DataAccessInterface {
 	public void initializeDB(){
 		try{				
 
-
 			deleteTableContent("RuralHouse");
 			deleteTableContent("City");
 			
@@ -86,34 +85,6 @@ public class DataAccess implements DataAccessInterface {
 			createRuralHouse("Gaztetxea", createCity("Renteria").getId());		
 
 			System.out.println("Db initialized");
-
-
-			TypedQuery<RuralHouse> query = db.createQuery("SELECT c FROM RuralHouse c", RuralHouse.class);
-			Vector<RuralHouse> results = new Vector<RuralHouse>(query.getResultList());
-
-			Iterator<RuralHouse> itr = results.iterator();
-
-			while (itr.hasNext()){
-				RuralHouse rh=itr.next();
-				db.remove(rh);				
-			}
-
-			//			RuralHouse rh1 = new RuralHouse("Ezkioko etxea","Ezkio");
-			//			RuralHouse rh2 = new RuralHouse("Etxetxikia","Iruna");
-			//			RuralHouse rh3 = new RuralHouse("Udaletxea","Bilbo");
-			//			RuralHouse rh4 = new RuralHouse("Gaztetxea","Renteria");
-
-			//			db.persist(rh1);
-			//			db.persist(rh2);
-			//			db.persist(rh3);
-			//			db.persist(rh4);
-
-			db.getTransaction().commit();
-
-			createCity("Ciudad 01");
-			createCity("Ciudad 02");
-			createCity("Ciudad 03");
-			createCity("Ciudad 04");
 
 		} catch (Exception e){
 			e.printStackTrace();
@@ -293,28 +264,32 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public void login(String username, String password) throws AuthException, AccountNotFoundException {	
+	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {	
+		AbstractUser user = null;
 		try {
 			open();
-			System.out.println(">> DataAccess: Login. " + username + " | " + password + "(don't look, this is secret)");
+			System.out.println(">> DataAccess: Login. " + username + " | " + password + " (don't look, this is secret)");
 			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 					+ "FROM User u "
 					+ "WHERE u.username = :username ", AbstractUser.class)
 					.setParameter("username", username);
 			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
 			if(!result.isEmpty()) {
-				AbstractUser user = result.get(0);
+				user = result.get(0);
 				authenticate(user, password);
 			} else {
+				user = null;
 				throw new AccountNotFoundException("Account not found.");
 			}
 		} catch (AuthException | AccountNotFoundException e) {
+			user = null;
 			throw e; //Throw exception and allow a method further up the call stack handle it.
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
+		return user;
 	}
 
 	private void authenticate(AbstractUser user, String password) throws AuthException {
