@@ -12,6 +12,8 @@ import org.w3c.dom.NodeList;
 
 public class ConfigXML {
 	
+	private boolean showConsole;
+	
 	private String businessLogicNode;
 
 	private String businessLogicPort;
@@ -38,6 +40,10 @@ public class ConfigXML {
 	private String password;
 
 	private String locale;
+	
+	public boolean enableConsole() {
+		return showConsole;
+	}
 
 	public String getLocale() {
 		return locale;
@@ -118,6 +124,9 @@ public class ConfigXML {
 			user=getTagValue("user", config);
 
 			password=getTagValue("password", config);
+			
+			value =  getTagValue("showConsole", config);
+			showConsole = value.equals("true");
 
 			System.out.print("Read from config.xml: ");
 			System.out.print("\t businessLogicLocal="+businessLogicLocal);
