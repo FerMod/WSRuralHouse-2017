@@ -1,19 +1,21 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,6 +28,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import businessLogic.ApplicationFacadeInterface;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Client;
@@ -35,11 +38,14 @@ import gui.debug.ConsoleKeyEventDispatcher;
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -1810393566512302281L;
+	
+	private static ApplicationFacadeInterface appFacadeInterface;
 
-	private JPanel contentPane;
+	private JLayeredPane contentPane;
 	private AbstractUser user;
 	private JTabbedPane tabbedPane;
-
+	private int layer;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -62,7 +68,7 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Only for debug purposes it will be removed in a future
+	 * Only for debugging purposes it will be removed in a future
 	 * @return the chosen user fictional account
 	 */
 	@Deprecated
@@ -84,6 +90,14 @@ public class MainWindow extends JFrame {
 		System.exit(0);
 		return null;
 	}
+	
+	public static ApplicationFacadeInterface getBusinessLogic(){
+		return appFacadeInterface;
+	}
+
+	public static void setBussinessLogic (ApplicationFacadeInterface applicationFacadeInterface){
+		appFacadeInterface = applicationFacadeInterface;
+	}
 
 	/**
 	 * Create the frame.
@@ -91,12 +105,13 @@ public class MainWindow extends JFrame {
 	public MainWindow(AbstractUser user) {
 
 		this.user = user;
+
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		getRolePanel(user.getRole());
 		//setJMenuBar(getRoleMenuBar());
 
 
-		contentPane = new JPanel();
+		contentPane = new JLayeredPane();
 		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -140,10 +155,10 @@ public class MainWindow extends JFrame {
 		//			}
 		//		});
 
-		contentPane.add(tabbedPane);
-
-		//setMinimumSize(new Dimension(600, 365));
-		setSize(760, 400);
+		addLayer(tabbedPane);
+		
+		setMinimumSize(new Dimension(780, 600));
+		setSize(900, 800);
 		//pack();
 		validate();
 		setLocationRelativeTo(null);
@@ -224,33 +239,33 @@ public class MainWindow extends JFrame {
 		return profilePanel;
 	}
 
-	//	private void adjustCursor(MouseEvent e) {
-	//
-	//		TabbedPaneUI ui = tabbedPane.getUI();
-	//
-	//		int index = ui.tabForCoordinate(tabbedPane, e.getX(), e.getY());
-	//
-	//		if (index >= 0) {
-	//			tabbedPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	//		} else {
-	//			tabbedPane.setCursor(null);
+	//		private void adjustCursor(MouseEvent e) {
+	//	
+	//			TabbedPaneUI ui = tabbedPane.getUI();
+	//	
+	//			int index = ui.tabForCoordinate(tabbedPane, e.getX(), e.getY());
+	//	
+	//			if (index >= 0) {
+	//				tabbedPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	//			} else {
+	//				tabbedPane.setCursor(null);
+	//			}
+	//	
 	//		}
-	//
-	//	}
 
 	public JPanel getRolePanel(Role role) {
 		switch (role) {
 		case CLIENT:
-			return new ClientMainPanel();
+			return new ClientMainPanel(this);
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!
 			return (JPanel) new MainGUI(role).getContentPane();
-			//return new OwnerMainPanel();
+			//return new OwnerMainPanel(this);
 		case ADMIN:
-			//return new AdminMainPanel();
+			//return new AdminMainPanel(this);
 			return null;
 		case SUPER_ADMIN:
-			//return new SuperAdminMainPanel();
+			//return new SuperAdminMainPanel(this);
 			return null;
 		default:
 			//[TODO]: Throw exception when the user role content pane is not defined 
@@ -334,6 +349,16 @@ public class MainWindow extends JFrame {
 		menuBar.add(menu);
 
 		return menuBar;
+	}
+
+	public Component addLayer(Component comp) {
+		contentPane.add(comp, layer++);
+		return comp;
+	}
+	
+	public void removeLayer(Component comp) {
+		layer--;
+		contentPane.remove(comp);
 	}
 
 	public int exitQuestion() {

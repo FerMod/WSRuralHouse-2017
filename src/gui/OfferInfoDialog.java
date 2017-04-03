@@ -30,6 +30,8 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
+import domain.RuralHouse;
+import gui.ClientMainPanel.CellDetails;
 import gui.components.FrameShader;
 import gui.components.ImagePanel;
 
@@ -66,7 +68,7 @@ public class OfferInfoDialog extends JDialog {
 					launchDialog.addActionListener(new ActionListener() {				
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							OfferInfoDialog dialog = new OfferInfoDialog(parentFrame);
+							OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, null);
 							dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 							//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
 							dialog.setLocationRelativeTo(parentFrame);
@@ -82,11 +84,13 @@ public class OfferInfoDialog extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param rowContent 
 	 */
-	public OfferInfoDialog(JFrame parentFrame) {
+	public OfferInfoDialog(JFrame parentFrame, RuralHouse ruralHouse) {
 
 		this.parentFrame = parentFrame;
 		frameShader = new FrameShader(parentFrame);
+		
 
 		this.addWindowFocusListener(new WindowFocusListener() {
 			@Override
@@ -138,6 +142,8 @@ public class OfferInfoDialog extends JDialog {
 		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		
+		System.out.println(ruralHouse.getPrice());
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			ImagePanel imagePanel = new ImagePanel();

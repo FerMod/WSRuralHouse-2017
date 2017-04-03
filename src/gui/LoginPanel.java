@@ -7,8 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 
@@ -27,6 +25,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+
 import javax.swing.UIManager;
 
 import java.awt.Color;
@@ -48,7 +47,7 @@ public class LoginPanel extends JPanel {
 
 	public LoginPanel(SharedFrame sharedFrame) {
 		this.sharedFrame = sharedFrame;		
-
+		
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLayout(null);
 
@@ -118,25 +117,25 @@ public class LoginPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
 
-						DataAccessInterface dbManager = new DataAccess();
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
-							AbstractUser user = dbManager.login(username, password); //[TODO]: Login con correo electronico
+							
+							AbstractUser user = MainWindow.getBusinessLogic().login(username, password); //[TODO]: Login con correo electronico
 							
 							//FIXME: TEMPORAL SOLUTION //////////
 							//
 							JFrame jframe = null; 
-							if(dbManager.getRole(username) == Role.OWNER) {
-								jframe = new MainGUI(dbManager.getRole(username));						
+							if(MainWindow.getBusinessLogic().getRole(username) == Role.OWNER) {
+								jframe = new MainGUI(MainWindow.getBusinessLogic().getRole(username));						
 								jframe.setVisible(true);
 								sharedFrame.dispose();
-							} else if(dbManager.getRole(username) == Role.CLIENT)  {
+							} else if(MainWindow.getBusinessLogic().getRole(username) == Role.CLIENT)  {
 								jframe = new MainWindow(user);						
 								jframe.setVisible(true);
 								sharedFrame.dispose();
 							} else {
-								JOptionPane.showMessageDialog(sharedFrame, "The " + dbManager.getRole(username) + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(sharedFrame, "The " + MainWindow.getBusinessLogic().getRole(username) + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
 							}
 							//
 							///////////////////////////////////

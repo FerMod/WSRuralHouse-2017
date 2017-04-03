@@ -136,8 +136,7 @@ public class NewRuralHouseWindow extends JDialog {
 
 	private JComboBox<City> getComboBoxCity() {
 		if(comboBoxCity == null) {	
-			ApplicationFacadeInterface facade = MainGUI.getBusinessLogic();
-			comboBoxCity = new JComboBox<City>(new DefaultComboBoxModel<City>(facade.getCities()));
+			comboBoxCity = new JComboBox<City>(new DefaultComboBoxModel<City>(MainWindow.getBusinessLogic().getCities()));
 			comboBoxCity.setBounds(20, 127, 191, 20);
 		}
 		return comboBoxCity;
