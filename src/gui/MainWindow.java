@@ -44,8 +44,6 @@ public class MainWindow extends JFrame {
 	private JPanel contentPane;
 	private AbstractUser user;
 	private JTabbedPane tabbedPane;
-	private int layer;
-	
 	/**
 	 * Launch the application.
 	 */
