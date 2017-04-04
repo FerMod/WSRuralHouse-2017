@@ -941,8 +941,9 @@ public class ClientMainPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					OfferInfoDialog dialog = new OfferInfoDialog(frame); //FIXME
-					dialog.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
+					dialog.setLocationRelativeTo(frame);
 					dialog.setVisible(true);
 				}
 			});

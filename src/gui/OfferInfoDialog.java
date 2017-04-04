@@ -87,8 +87,8 @@ public class OfferInfoDialog extends JDialog {
 	 * @param rowContent 
 	 */
 	public OfferInfoDialog(JFrame parentFrame) {
-		
-		setParentComponent(parentFrame);
+
+		this.parentFrame = parentFrame;
 		frameShader = new FrameShader(parentFrame);
 		
 

@@ -29,8 +29,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import exceptions.AuthException;
