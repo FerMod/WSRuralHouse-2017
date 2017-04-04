@@ -121,7 +121,7 @@ public class MainWindow extends JFrame {
 		//contentPane.add(tabbedPane);
 		tabbedPane.addTab("Rural Houses", getRolePanel(user.getRole()));
 		tabbedPane.addTab("Profile", getProfilePanel());
-		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
+		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeah awesome... another pane..."));
 		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
 
 		//		JButton logOutButton = new JButton("Log Out");
