@@ -33,8 +33,7 @@ public class ApplicationLauncher {
 			System.out.println("Locale: " + Locale.getDefault());
 			
 			ConsoleKeyEventDispatcher consoleKeyEventDispatcher = new ConsoleKeyEventDispatcher();
-			if(config.enableConsole()) {
-			
+			if(config.enableConsole()) {			
 				consoleKeyEventDispatcher.showConsole();
 			}
 

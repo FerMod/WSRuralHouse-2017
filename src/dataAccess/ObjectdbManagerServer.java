@@ -91,7 +91,7 @@ public class ObjectdbManagerServer extends JDialog {
 
 		c=ConfigXML.getInstance();
 
-		if (c.isDatabaseLocal()) {
+		if (c.isLocalDatabes()) {
 			textArea.append("\nERROR, the database is configured as local");
 		}
 		else {
