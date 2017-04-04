@@ -21,7 +21,7 @@ public class Booking {
 	@Id
 	private int idOffer;
 	
-	private Booking(int idClient, int idOffer) {
+	public Booking(int idClient, int idOffer) {
 		this.idClient = idClient;
 		this.idOffer = idOffer;
 	}

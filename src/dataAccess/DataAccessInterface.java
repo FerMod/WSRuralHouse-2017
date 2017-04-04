@@ -2,11 +2,13 @@ package dataAccess;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.security.auth.login.AccountNotFoundException;
 
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Booking;
 import domain.City;
 import domain.Offer;
 import domain.RuralHouse;
@@ -56,4 +58,7 @@ public interface DataAccessInterface {
 	
 	AbstractUser getUser(String username, String password);
 
+	public Vector<Offer> getOffersByRuralHouse(RuralHouse rh);
+
+	public Booking createBooking(int idClient, int idOffer);
 }

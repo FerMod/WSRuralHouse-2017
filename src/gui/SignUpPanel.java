@@ -216,10 +216,10 @@ public class SignUpPanel extends JPanel {
 							try {
 								
 								dbManager.createUser(email, username, password, role);
-<<<<<<< HEAD
+
 								dbManager.login(username, password);
 								JFrame jframe = new MainWindow(dbManager.getUser(username, password));//TODO Should be like this: MainGUI(dbManager.getRole(username));	
-=======
+
 								
 								//FIXME: TEMPORAL SOLUTION //////////
 								//
@@ -232,7 +232,7 @@ public class SignUpPanel extends JPanel {
 								//
 								////////////////////////////////////
 								
->>>>>>> refs/remotes/origin/FerMod
+
 								jframe.setVisible(true);
 								sharedFrame.dispose();								
 								JOptionPane.showMessageDialog(jframe, "Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);

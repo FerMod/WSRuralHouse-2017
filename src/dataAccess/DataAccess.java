@@ -18,6 +18,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import configuration.ConfigXML;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Booking;
 import domain.City;
 import domain.Client;
 import domain.Offer;
@@ -79,10 +80,10 @@ public class DataAccess implements DataAccessInterface {
 			deleteTableContent("RuralHouse");
 			deleteTableContent("City");
 			
-			createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
-			createRuralHouse("Etxetxikia", createCity("Iruna").getId());
-			createRuralHouse("Udaletxea", createCity("Bilbo").getId());			
-			createRuralHouse("Gaztetxea", createCity("Renteria").getId());		
+//			createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
+//			createRuralHouse("Etxetxikia", createCity("Iruna").getId());
+//			createRuralHouse("Udaletxea", createCity("Bilbo").getId());			
+//			createRuralHouse("Gaztetxea", createCity("Renteria").getId());		
 
 			System.out.println("Db initialized");
 
@@ -386,6 +387,23 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return city;
 	}
+	
+	@Override
+	public Booking createBooking(int idClient, int idOffer) {
+		Booking book = new Booking(idClient, idOffer);
+		try {
+			open();
+			System.out.print(">> DataAccess: createBooking(\"For:" + idClient + "Of:" + idOffer + "\") -> ");
+			db.getTransaction().begin();
+			db.persist(book);
+			db.getTransaction().commit();
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return book;
+	}
 
 	@Override
 	public boolean existsCity(City city) {
@@ -552,6 +570,28 @@ public class DataAccess implements DataAccessInterface {
 	
 	
 	/**
+	 * Obtain the offers by Rural House (tested!).
+	 *  
+	 * @return vector with the offers of the Rural House
+	 */
+	public Vector<Offer> getOffersByRuralHouse(RuralHouse rh) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffersByRuralHouse");
+			TypedQuery<Offer> query = db.createQuery("SELECT *"
+					+ " FROM Offer o WHERE o.ruralHouse=" + rh, Offer.class);
+			result = new Vector<Offer>(query.getResultList());
+			printVector(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
 	 * Obtain a User by username and password from the database
 	 * 
 	 * @param username String with the username of the user
@@ -642,5 +682,6 @@ public class DataAccess implements DataAccessInterface {
 		db.getTransaction().commit();
 		close();
 	}	
-
+	
+	
 }
