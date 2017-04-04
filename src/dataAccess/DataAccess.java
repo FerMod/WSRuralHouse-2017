@@ -1,10 +1,8 @@
 package dataAccess;
 
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -12,6 +10,7 @@ import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -44,7 +43,7 @@ public class DataAccess implements DataAccessInterface {
 			if (CONFIG.getDataBaseOpenMode().equals("initialize")) {
 				initializeDB();
 			}
-			System.out.println("Creating objectdb instance => isDatabaseLocal: " + CONFIG.isDatabaseLocal() + " getDatabBaseOpenMode: " + CONFIG.getDataBaseOpenMode());
+			System.out.println(">> DataAccess: Creating objectdb instance => isDatabaseLocal: " + CONFIG.isDatabaseLocal() + " getDatabBaseOpenMode: " + CONFIG.getDataBaseOpenMode());
 		}
 	}
 
@@ -105,7 +104,7 @@ public class DataAccess implements DataAccessInterface {
 			createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
-			createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
+			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			System.out.println("Db initialized");
@@ -226,7 +225,7 @@ public class DataAccess implements DataAccessInterface {
 		boolean found = false;
 		try {
 			open();
-			System.out.print("Check if exists \"" + username + "\" -> ");
+			System.out.print(">> DataAccess: Check if exists \"" + username + "\" -> ");
 			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 					+ "FROM User u "
 					+ "WHERE u.username = :username", AbstractUser.class)
@@ -420,7 +419,7 @@ public class DataAccess implements DataAccessInterface {
 		boolean found = false;
 		try {
 			open();
-			System.out.print("Check if exists the city with id:\"" + id + "\" -> ");
+			System.out.print(">> DataAccess: Check if exists the city with id:\"" + id + "\" -> ");
 			TypedQuery<City> query = db.createQuery("SELECT DISTINCT c "
 					+ "FROM City c "
 					+ "WHERE c.id = :id", City.class)
@@ -441,7 +440,7 @@ public class DataAccess implements DataAccessInterface {
 		boolean found = false;
 		try {
 			open();
-			System.out.print("Check if exists the city with the name:\"" + name + "\" -> ");
+			System.out.print(">> DataAccess: Check if exists the city with the name:\"" + name + "\" -> ");
 			TypedQuery<City> query = db.createQuery("SELECT DISTINCT c "
 					+ "FROM City c "
 					+ "WHERE c.name = :name", City.class)
@@ -466,8 +465,11 @@ public class DataAccess implements DataAccessInterface {
 		try {
 			open();
 			db.getTransaction().begin();
+			System.out.println(">> DataAccess: Delete the table with the name: \"" + table + "\"");
 			db.createQuery("DELETE FROM " + table + " t ").executeUpdate();
 			db.getTransaction().commit();
+		} catch (PersistenceException e) {
+			System.err.println(e.getCause());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {			

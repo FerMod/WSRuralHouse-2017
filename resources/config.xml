@@ -9,7 +9,7 @@
 	<database local="true">
 		<databaseNode>0.0.0.0</databaseNode>
 		<dbFilename>resources\ruralHouses.odb</dbFilename>
-		<dataBaseOpenMode>open</dataBaseOpenMode>
+		<dataBaseOpenMode>initialize</dataBaseOpenMode>
 		<databasePort>6136</databasePort>
 		<user>admin</user>
 		<password>admin</password>
