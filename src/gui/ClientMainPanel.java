@@ -375,7 +375,7 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	private void setupNumberFormat() {
-		priceFormat = NumberFormat.getCurrencyInstance();
+		priceFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
 		priceFormat.setMinimumIntegerDigits(1);
 		priceFormat.setMaximumFractionDigits(2);
 	}
@@ -934,16 +934,15 @@ public class ClientMainPanel extends JPanel {
 			rowContent.setTableDetailsCell(this);
 			descriptionTextArea.setText(rowContent.getDescription());
 			addressField.setText(rowContent.getAddress());
-			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(getDefaultLocale());
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
 			priceField.setText(currencyFormatter.format(rowContent.getPrice()));
 
 			infoButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					OfferInfoDialog dialog = new OfferInfoDialog(frame, null); //FIXME
-					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					OfferInfoDialog dialog = new OfferInfoDialog(frame); //FIXME
+					dialog.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 					//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
-					dialog.setLocationRelativeTo(dialog.getParentComponent());
 					dialog.setVisible(true);
 				}
 			});

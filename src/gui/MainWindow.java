@@ -41,7 +41,7 @@ public class MainWindow extends JFrame {
 	
 	private static ApplicationFacadeInterface appFacadeInterface;
 
-	private JLayeredPane contentPane;
+	private JPanel contentPane;
 	private AbstractUser user;
 	private JTabbedPane tabbedPane;
 	private int layer;
@@ -111,7 +111,7 @@ public class MainWindow extends JFrame {
 		//setJMenuBar(getRoleMenuBar());
 
 
-		contentPane = new JLayeredPane();
+		contentPane = new JPanel();
 		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -155,7 +155,7 @@ public class MainWindow extends JFrame {
 		//			}
 		//		});
 
-		addLayer(tabbedPane);
+		contentPane.add(tabbedPane);
 		
 		setMinimumSize(new Dimension(780, 600));
 		setSize(900, 800);
@@ -349,16 +349,6 @@ public class MainWindow extends JFrame {
 		menuBar.add(menu);
 
 		return menuBar;
-	}
-
-	public Component addLayer(Component comp) {
-		contentPane.add(comp, layer++);
-		return comp;
-	}
-	
-	public void removeLayer(Component comp) {
-		layer--;
-		contentPane.remove(comp);
 	}
 
 	public int exitQuestion() {

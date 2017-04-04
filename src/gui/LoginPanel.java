@@ -126,16 +126,16 @@ public class LoginPanel extends JPanel {
 							//FIXME: TEMPORAL SOLUTION //////////
 							//
 							JFrame jframe = null; 
-							if(MainWindow.getBusinessLogic().getRole(username) == Role.OWNER) {
-								jframe = new MainGUI(MainWindow.getBusinessLogic().getRole(username));
+							if(user.getRole() == Role.OWNER) {
+								jframe = new MainGUI(user.getRole());
 								jframe.setVisible(true);
 								sharedFrame.dispose();
-							} else if(MainWindow.getBusinessLogic().getRole(username) == Role.CLIENT)  {
+							} else if(user.getRole() == Role.CLIENT)  {
 								jframe = new MainWindow(user);
 								jframe.setVisible(true);
 								sharedFrame.dispose();					
 							} else {
-								JOptionPane.showMessageDialog(sharedFrame, "The " + MainWindow.getBusinessLogic().getRole(username) + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(sharedFrame, "The " + user.getRole() + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
 							}
 							//
 							///////////////////////////////////

@@ -68,7 +68,7 @@ public class OfferInfoDialog extends JDialog {
 					launchDialog.addActionListener(new ActionListener() {				
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, null);
+							OfferInfoDialog dialog = new OfferInfoDialog(parentFrame);
 							dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 							//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
 							dialog.setLocationRelativeTo(parentFrame);
@@ -86,9 +86,9 @@ public class OfferInfoDialog extends JDialog {
 	 * Create the dialog.
 	 * @param rowContent 
 	 */
-	public OfferInfoDialog(JFrame parentFrame, RuralHouse ruralHouse) {
-
-		this.parentFrame = parentFrame;
+	public OfferInfoDialog(JFrame parentFrame) {
+		
+		setParentComponent(parentFrame);
 		frameShader = new FrameShader(parentFrame);
 		
 
