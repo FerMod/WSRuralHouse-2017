@@ -1,5 +1,6 @@
 package dataAccess;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,22 +29,55 @@ import exceptions.OverlappingOfferException;
 
 public class DataAccess implements DataAccessInterface {
 
-	private String persistenceUnitName;
+	private final ConfigXML CONFIG;
+	private static String DB_PATH;
+	private static boolean OVERWRITE_DB_FILE;
+	private static boolean INIT_DB_VALUES;
+
 	private EntityManagerFactory emf;
 	private EntityManager  db;
 
-	private final ConfigXML CONFIG;
-
 	public DataAccess()  {
+
 		CONFIG = ConfigXML.getInstance();
-		this.persistenceUnitName = CONFIG.getDbFilename();
+		DB_PATH = CONFIG.getDbFilename();
+		OVERWRITE_DB_FILE = CONFIG.overwriteFile();
+		INIT_DB_VALUES = CONFIG.initValues();
 
 		if(CONFIG != null) {
-			//Initialize database. Only for debug purpose.
-			if (CONFIG.getDataBaseOpenMode().equals("initialize")) {
-				initializeDB();
+			
+			System.out.println(">> DataAccess: Configuring database connection...");
+			System.out.println("\tDB_PATH: " + DB_PATH);
+
+			if(CONFIG.isLocalDatabes()) {
+				
+				System.out.println("\tOVERWRITE_DB_FILE: " + OVERWRITE_DB_FILE);
+				System.out.println("\tINIT_DB_VALUES: " + INIT_DB_VALUES);
+
+				// Overwrite the database file
+				if(OVERWRITE_DB_FILE) {
+					deleteDBFile(DB_PATH);
+				}
+
+				// Initialize database values.
+				if(INIT_DB_VALUES) {
+					File file = new File(DB_PATH);
+					INIT_DB_VALUES = !file.exists();
+					initializeDB();
+				}
+
 			}
-			System.out.println(">> DataAccess: Creating objectdb instance => isDatabaseLocal: " + CONFIG.isDatabaseLocal() + " getDatabBaseOpenMode: " + CONFIG.getDataBaseOpenMode());
+
+		}
+
+	}
+
+	private static void deleteDBFile(String fileName) {
+		File file = new File(fileName);
+		if(file.exists()) {
+			file.delete();
+			System.out.println(">> DataAccess: Removed the file \"" + fileName + "\"");
+			deleteDBFile(fileName+"$");
 		}
 	}
 
@@ -51,13 +85,13 @@ public class DataAccess implements DataAccessInterface {
 
 		Map<String, String> properties = null;
 
-		if (!CONFIG.isDatabaseLocal()) {
+		if (!CONFIG.isLocalDatabes()) {
 			properties = new HashMap<String, String>();
 			properties.put("javax.persistence.jdbc.user", CONFIG.getUser());
 			properties.put("javax.persistence.jdbc.password", CONFIG.getPassword());
 		}
 
-		emf = Persistence.createEntityManagerFactory(persistenceUnitName, properties);
+		emf = Persistence.createEntityManagerFactory(DB_PATH, properties);
 		db = ExponentialBackOff.execute( () -> emf.createEntityManager(), "Could not open database.");
 
 		System.out.println("Database opened");
@@ -75,11 +109,11 @@ public class DataAccess implements DataAccessInterface {
 	public void initializeDB(){
 		try{				
 
-			deleteTableContent("RuralHouse");
-			deleteTableContent("City");
-			deleteTableContent("Offer");
-			deleteTableContent("Client");
-			deleteTableContent("Owner");
+//			deleteTableContent("RuralHouse");
+//			deleteTableContent("City");
+//			deleteTableContent("Offer");
+//			deleteTableContent("Client");
+//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
 
 			RuralHouse rh;
@@ -90,12 +124,12 @@ public class DataAccess implements DataAccessInterface {
 
 			createRuralHouse("Etxetxikia", createCity("Iruna").getId());
 			createOffer(rh, new Date(2013, 1, 4), new Date(2017, 2, 5), 773);		
-			
+
 			createRuralHouse("Udaletxea", createCity("Bilbo").getId());		
 			createOffer(rh, new Date(2017, 1, 5), new Date(2017, 1, 5), 93);		
 			createOffer(rh, new Date(2016, 12, 14), new Date(2017, 1, 5), 876);		
 			createOffer(rh, new Date(2017, 2, 12), new Date(2017, 4, 5), 233);		
-			
+
 			createRuralHouse("Gaztetxea", createCity("Renteria").getId());	
 			createOffer(rh, new Date(2017, 6, 3), new Date(2017, 5, 5), 128);		
 			createOffer(rh, new Date(2017, 5, 4), new Date(2017, 6, 20), 455);		
@@ -469,7 +503,7 @@ public class DataAccess implements DataAccessInterface {
 			db.createQuery("DELETE FROM " + table + " t ").executeUpdate();
 			db.getTransaction().commit();
 		} catch (PersistenceException e) {
-			System.err.println(e.getCause());
+			System.err.println("Could not complete the operation: " + e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {			
@@ -592,8 +626,8 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
-	
+
+
 	/**
 	 * Obtain a User by username and password from the database
 	 * 

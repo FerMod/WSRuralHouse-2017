@@ -20,10 +20,11 @@ public class ConfigXML {
 
 	private String businessLogicName;
 
-	private static String dbFilename;
+	private static String databaseFileName;
 
-	//Two possible values: "open" or "initialize"
-	private String dataBaseOpenMode;
+	private boolean databaseInitValues;
+	
+	private boolean databaseOverwriteFile;
 
 	//Two possible values: true (no instance of RemoteServer needs to be launched) or false (RemoteServer needs to be run first)
 	private boolean businessLogicLocal;
@@ -41,35 +42,6 @@ public class ConfigXML {
 
 	private String locale;
 	
-	public boolean enableConsole() {
-		return showConsole;
-	}
-
-	public String getLocale() {
-		return locale;
-	}
-
-	public int getDatabasePort() {
-		return databasePort;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-
-	public boolean isDatabaseLocal() {
-		return databaseLocal;
-	}
-
-	public boolean isBusinessLogicLocal() {
-		return businessLogicLocal;
-	}
-
 	private static ConfigXML theInstance = new ConfigXML();
 
 	private ConfigXML(){
@@ -105,16 +77,15 @@ public class ConfigXML {
 
 			//javaPolicyPath= getTagValue("javaPolicyPath", config);
 
-			dbFilename = getTagValue("dbFilename", config);
+			databaseFileName = getTagValue("databaseFileName", config);
 
 			//Two possible values: true (no instance of RemoteServer needs to be launched) or false (RemoteServer needs to be run first)
 			value= ((Element)config.getElementsByTagName("database").item(0)).getAttribute("local");
-			databaseLocal=value.equals("true");
+			databaseLocal = value.equals("true");
 
-
-			//Two possible values: "open" or "initialize"
-			dataBaseOpenMode= getTagValue("dataBaseOpenMode", config);
-
+			databaseInitValues = getTagValue("databaseInitValues", config).equals("true");
+			
+			databaseOverwriteFile = getTagValue("databaseOverwriteFile", config).equals("true");
 
 			databaseNode = getTagValue("databaseNode", config);
 
@@ -125,22 +96,18 @@ public class ConfigXML {
 
 			password=getTagValue("password", config);
 			
-			value =  getTagValue("showConsole", config);
-			showConsole = value.equals("true");
+			showConsole = getTagValue("showConsole", config).equals("true");
 
 			System.out.print("Read from config.xml: ");
-			System.out.print("\t businessLogicLocal="+businessLogicLocal);
-			System.out.print("\t databaseLocal="+databaseLocal);
-			System.out.println("\t dataBaseOpenMode="+dataBaseOpenMode); 
+			System.out.print("\tbusinessLogicLocal = " + businessLogicLocal);
+			System.out.print("\tdatabaseLocal = " + databaseLocal);
+			System.out.println("\tdatabaseInitValues = "+ databaseInitValues); 
 
 		} catch (Exception e) {
 			System.out.println("Error in ConfigXML.java: problems with config.xml");
 			e.printStackTrace();
 		}		
-
-
-
-
+		
 	}
 
 	private static String getTagValue(String sTag, Element eElement) {
@@ -149,6 +116,34 @@ public class ConfigXML {
 		Node nValue = (Node) nlList.item(0);
 
 		return nValue.getNodeValue();
+	}
+
+	public boolean enableConsole() {
+		return showConsole;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public int getDatabasePort() {
+		return databasePort;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public boolean isLocalDatabes() {
+		return databaseLocal;
+	}
+
+	public boolean isBusinessLogicLocal() {
+		return businessLogicLocal;
 	}
 
 	public static ConfigXML getInstance() {
@@ -168,11 +163,15 @@ public class ConfigXML {
 	}
 
 	public String getDbFilename(){
-		return dbFilename;
+		return databaseFileName;
 	}
 
-	public String getDataBaseOpenMode(){
-		return dataBaseOpenMode;
+	public boolean initValues(){
+		return databaseInitValues;
+	}
+	
+	public boolean overwriteFile(){
+		return databaseOverwriteFile;
 	}
 
 	public String getDatabaseNode() {
