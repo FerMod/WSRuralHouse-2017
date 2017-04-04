@@ -7,6 +7,12 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 public class FrameShader {
+	
+	/*
+	 * TODO: Block events in GlassPane.
+	 * http://www.java2s.com/Code/Java/Swing-JFC/Showhowaglasspanecanbeusedtoblockmouseandkeyevents.htm
+	 * https://docs.oracle.com/javase/tutorial/uiswing/components/rootpane.html
+	 */
 
 	private boolean enabled;
 	private Component oldGlassPane;
