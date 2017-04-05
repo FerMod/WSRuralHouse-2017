@@ -22,8 +22,8 @@ public class Konami {
 		}
 		
 		if (index == CODE.length) {
-			runnable.run();
 			index = 0;
+			runnable.run();
 		}
 		
 	}

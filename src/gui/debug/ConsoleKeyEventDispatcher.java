@@ -9,8 +9,10 @@ import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 //public abstract class ConsoleKeyEvent<T> implements KeyEventDispatcher, ConsoleKeyEventDispatcher<T> {
 public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
@@ -25,21 +27,94 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	private DebugBorderEventListener debugEventListener;
 	private MousePointLabel mousePointLabel;
 	private Konami konami;
+	private boolean disableKeyInput = false;
+	private static int count = 0;
 
 	public ConsoleKeyEventDispatcher() {
 		debugEventListener = null;
 		addKeyEventDispatcher(this);
-		konami = new Konami(new Runnable() {			
+		konami = new Konami(new Runnable() { // ^.^		
 			@Override
-			public void run() {
-				try {
-					openWebpage(new URI("https://youtu.be/zqqq8uqSDnk?t=1s"));
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
+			public void run() {			
+				showMessage();
 			}
 		});
-		//Konamis.setEnabled(true); // ^.^
+	}
+
+	private void showMessage() {
+
+		String message = null;
+		String audioFile = "/img/major_puzzle_solved.wav";
+		int endTime = -1;
+		boolean fade = true;
+		
+		switch (count) {
+		case 0:
+			fade = false;
+			break;
+		case 1:
+			message = "You shouldn't be doing this...";
+			break;
+		case 2:
+			message = "I'm warning you...";
+			break;
+		case 3:
+			message = "Ok... For you...\nBut don't do it again...\nIt's a warning.";
+			break;
+		case 4:
+			message = "Now, you should stop... I'm serious...";
+			break;
+		case 5:
+			message = "Last warning... You don't wanna see what can I do...\nDON'T DO THIS AGAIN.";
+			break;
+		case 6:
+			message = "I   d i d   t e l l   y o u,   a n d   y o u   d i d ' t   s t o p . . .";
+			audioFile = "/img/major_puzzle_solved_reversed.wav";
+			endTime = 5000;
+			fade = false;
+			break;
+		}
+		
+		Sound sound = new Sound();
+		sound.playSound(getClass().getResource(audioFile), endTime, fade);	
+
+		if(count == 6) {
+			Thread thread = new Thread(new Runnable() {			
+				@Override
+				public void run() {
+					try {
+						new GlitchImagePanel(Arrays.asList("/img/glitch.gif", "/img/glitched.gif"));
+						disableKeyInput = true;
+						Thread.sleep(5000);						
+						System.exit(666);
+					} catch (InterruptedException e) {
+					}
+				}
+			});
+			thread.start();
+		}
+
+		if(count != 0) {
+			JOptionPane.showOptionDialog(null,
+					message,
+					null,
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.PLAIN_MESSAGE,
+					null,
+					new String[] {"Accept"},
+					"Accept");	
+		}
+
+		if(count == 3) {
+			try {
+				openWebpage(new URI("https://youtu.be/zqqq8uqSDnk?t=1s"));
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
+
+		count++;
+
 	}
 
 	public static void openWebpage(URI uri) {
@@ -76,6 +151,9 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent e) {
+		if(disableKeyInput) {
+			e.consume();
+		}
 		if(e.getID() == KeyEvent.KEY_PRESSED) {
 			konami.checkCode(e.getKeyCode());
 			switch (e.getKeyCode()) {
@@ -103,7 +181,6 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 					}
 					//					mousePointLabel.setVisible(true);
 					//					Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);
-
 
 					if(!mousePointLabel.isVisible()) {
 						mousePointLabel.setVisible(true);

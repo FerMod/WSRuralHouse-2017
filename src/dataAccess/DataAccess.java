@@ -141,7 +141,7 @@ public class DataAccess implements DataAccessInterface {
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
-			System.out.println("Db initialized");
+			System.out.println("Database initialized");
 
 		} catch (Exception e){
 			e.printStackTrace();
