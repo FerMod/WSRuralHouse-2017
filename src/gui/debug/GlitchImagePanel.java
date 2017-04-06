@@ -20,13 +20,12 @@ public class GlitchImagePanel extends JPanel {
 	private final List<Image> image;
 
 	public static void main(String[] args) {
-		new GlitchImagePanel(Arrays.asList("/img/glitch.gif", "/img/glitched.gif"));
+		new GlitchImagePanel(Arrays.asList("/img/glitch.gif", "/img/glitched.gif"), 10000);
 	}
 
-	public GlitchImagePanel(List<String> resource) {
+	public GlitchImagePanel(List<String> resource, int millis) {
 		super();
 		JFrame frame = new JFrame();
-		
 		image = new ArrayList<Image>(resource.size()+1);
 		try {
 			Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
@@ -44,17 +43,17 @@ public class GlitchImagePanel extends JPanel {
 		frame.setContentPane(this);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		frame.setUndecorated(true);
-		//		frame.setBackground(new Color(Color.TRANSLUCENT, true));
+		//frame.setBackground(new Color(Color.TRANSLUCENT, true));
 		frame.setIconImage(null);
 		frame.setVisible(true);
 
-		//		hideToSystemTray(frame);
+		//hideToSystemTray(frame);
 
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(millis);
 					synchronized (Thread.currentThread()) {
 						frame.dispose();
 					}

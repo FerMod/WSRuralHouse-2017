@@ -27,8 +27,8 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	private DebugBorderEventListener debugEventListener;
 	private MousePointLabel mousePointLabel;
 	private Konami konami;
-	private boolean disableKeyInput = false;
 	private static int count = 0;
+	private int millis;
 
 	public ConsoleKeyEventDispatcher() {
 		debugEventListener = null;
@@ -45,9 +45,9 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 
 		String message = null;
 		String audioFile = "/img/major_puzzle_solved.wav";
-		int endTime = -1;
+		millis = -1;
 		boolean fade = true;
-		
+
 		switch (count) {
 		case 0:
 			fade = false;
@@ -70,32 +70,32 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 		case 6:
 			message = "I   d i d   t e l l   y o u,   a n d   y o u   d i d ' t   s t o p . . .";
 			audioFile = "/img/major_puzzle_solved_reversed.wav";
-			endTime = 5000;
+			millis = 10000;
 			fade = false;
 			break;
 		}
-		
+
 		Sound sound = new Sound();
-		sound.playSound(getClass().getResource(audioFile), endTime, fade);	
+		sound.playSound(getClass().getResource(audioFile), millis, fade);	
 
 		if(count == 6) {
 			Thread thread = new Thread(new Runnable() {			
 				@Override
 				public void run() {
 					try {
-						new GlitchImagePanel(Arrays.asList("/img/glitch.gif", "/img/glitched.gif"));
-						disableKeyInput = true;
-						Thread.sleep(5000);						
+						new GlitchImagePanel(Arrays.asList("/img/glitch.gif", "/img/glitched.gif"), millis);
+						Thread.sleep(millis);	
 						System.exit(666);
 					} catch (InterruptedException e) {
 					}
 				}
 			});
+			thread.setDaemon(true);
 			thread.start();
 		}
 
 		if(count != 0) {
-			JOptionPane.showOptionDialog(null,
+			JOptionPane.showInternalOptionDialog(null,
 					message,
 					null,
 					JOptionPane.DEFAULT_OPTION,
@@ -151,9 +151,6 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent e) {
-		if(disableKeyInput) {
-			e.consume();
-		}
 		if(e.getID() == KeyEvent.KEY_PRESSED) {
 			konami.checkCode(e.getKeyCode());
 			switch (e.getKeyCode()) {
