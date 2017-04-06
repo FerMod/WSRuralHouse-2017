@@ -1,22 +1,19 @@
 package gui.prototypes;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.JTextPane;
-import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import java.awt.Font;
 
 public class ClientViewBookings_Prototype extends JFrame {
 
+	private static final long serialVersionUID = -8051624733236525210L;
+	
 	private JPanel contentPane;
 
 	/**

@@ -99,7 +99,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
+	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
 
 	/**
 	 * Login the user with the account that matches the entered user name and password
@@ -108,9 +108,12 @@ public interface ApplicationFacadeInterface  {
 	 * @param password the password of the account
 	 * @throws AuthException If the authentication is failed
 	 * @throws AccountNotFoundException If no such account is found
+	 * 
+	 * @return the object inherited from {@code AbstractUser} that represents the user which have successfully logged in
+	 * @see {@link AbstractUser}
 	 */
 	@WebMethod
-	void login(String username, String password) throws AuthException, AccountNotFoundException;
+	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 
 	/**
 	 * Creates a city and stores it in the database.
@@ -134,7 +137,6 @@ public interface ApplicationFacadeInterface  {
 	 * @return a vector with all the cities of type {@code City}
 	 * @see {@link City}
 	 */
-	Vector<City> getCities();
-	
+	Vector<City> getCities();	
 
 }

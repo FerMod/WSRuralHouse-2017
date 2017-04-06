@@ -29,8 +29,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessInterface;
+import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -209,17 +208,28 @@ public class SignUpPanel extends JPanel {
 					if(fieldsFilled()) {
 						if(passwordMatch() && correctEmailFormat()) {
 							clearFieldsColors();
-							DataAccessInterface dbManager = new DataAccess();
+							
 							String email = textFieldEmail.getText();
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
-								dbManager.createUser(email, username, password, role);
-								dbManager.login(username, password);
-								JFrame jframe = new MainGUI(Role.OWNER);//TODO Should be like this: MainGUI(dbManager.getRole(username));	
+								
+								AbstractUser user = MainWindow.getBusinessLogic().createUser(email, username, password, role);
+								
+								//FIXME: TEMPORAL SOLUTION //////////
+								//
+								JFrame jframe = null; 
+								if(user.getRole() == Role.OWNER) {
+									jframe = new MainGUI(user.getRole()); //TODO Should be like this: MainWindow(dbManager.login(username, password)));					
+								} else if(user.getRole() == Role.CLIENT)  {
+									jframe = new MainWindow(MainWindow.getBusinessLogic().login(username, password));
+								}
+								//
+								////////////////////////////////////
+								
 								jframe.setVisible(true);
-								sharedFrame.dispose();
-								JOptionPane.showMessageDialog(sharedFrame,	"Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
+								sharedFrame.dispose();								
+								JOptionPane.showMessageDialog(jframe, "Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
 							} catch(DuplicatedEntityException ex) {
 								clearFieldsColors();
 								System.err.println(ex.getMessage());

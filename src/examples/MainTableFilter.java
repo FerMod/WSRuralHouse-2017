@@ -5,7 +5,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.text.DecimalFormat;
 
-public class Main {
+public class MainTableFilter {
     public static void main(String[] args) {
         final DecimalFormat df = new DecimalFormat("0.####");
         final JFrame frame = new JFrame();
@@ -40,7 +40,9 @@ public class Main {
 
 class DoubleJSlider extends JSlider {
 
-    final int scale;
+	private static final long serialVersionUID = 5903519725128672525L;
+	
+	final int scale;
 
     public DoubleJSlider(int min, int max, int value, int scale) {
         super(min, max, value);

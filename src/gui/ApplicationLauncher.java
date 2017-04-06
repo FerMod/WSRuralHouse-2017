@@ -14,6 +14,7 @@ import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
+import gui.debug.ConsoleKeyEventDispatcher;
 
 public class ApplicationLauncher {
 
@@ -29,7 +30,12 @@ public class ApplicationLauncher {
 
 			Locale.setDefault(new Locale(config.getLocale()));
 
-			System.out.println("Locale: "+Locale.getDefault());
+			System.out.println("Locale: " + Locale.getDefault());
+			
+			ConsoleKeyEventDispatcher consoleKeyEventDispatcher = new ConsoleKeyEventDispatcher();
+			if(config.enableConsole()) {			
+				consoleKeyEventDispatcher.showConsole();
+			}
 
 			SharedFrame sharedFrame = new SharedFrame();
 			sharedFrame.setVisible(true);
@@ -67,6 +73,7 @@ public class ApplicationLauncher {
 			//}
 
 			MainGUI.setBussinessLogic(aplicationFacade);
+			MainWindow.setBussinessLogic(aplicationFacade);
 
 		} catch (Exception e) {
 

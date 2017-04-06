@@ -1,23 +1,21 @@
 package gui.prototypes;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.JToggleButton;
 import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
 
 public class ReviewersView_Prototype extends JFrame {
 
+	private static final long serialVersionUID = -6196779958021246451L;
+	
 	private JPanel contentPane;
 
 	/**

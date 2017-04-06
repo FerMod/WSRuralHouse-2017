@@ -13,7 +13,7 @@ public class SharedFrame extends JFrame {
 
 	/**
 	 * Create the frame.
-	 */
+     */
 	public SharedFrame() {
 
 		setResizable(false);

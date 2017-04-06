@@ -7,8 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import dataAccess.DataAccess;
-import dataAccess.DataAccessInterface;
+import domain.AbstractUser;
 import domain.AbstractUser.Role;
 
 import javax.swing.JTextField;
@@ -26,6 +25,7 @@ import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+
 import javax.swing.UIManager;
 
 import java.awt.Color;
@@ -117,18 +117,28 @@ public class LoginPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					if(fieldsFilled()) {
 
-						DataAccessInterface dbManager = new DataAccess();
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
-							dbManager.login(username, password); //[TODO]: Login con correo electronico
-							if(dbManager.getRole(username) != Role.OWNER) {//FIXME: TEMPORAL SOLUTION
-								JOptionPane.showMessageDialog(sharedFrame,	"The " + dbManager.getRole(username) +" view is not implemented jet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
-							} else {
-								JFrame jframe = new MainGUI(dbManager.getRole(username));						
+
+							AbstractUser user = MainWindow.getBusinessLogic().login(username, password); //[TODO]: Login con correo electronico
+
+							//FIXME: TEMPORAL SOLUTION //////////
+							//
+							JFrame jframe = null; 
+							if(user.getRole() == Role.OWNER) {
+								jframe = new MainGUI(user.getRole());
 								jframe.setVisible(true);
 								sharedFrame.dispose();
+							} else if(user.getRole() == Role.CLIENT)  {
+								jframe = new MainWindow(user);
+								jframe.setVisible(true);
+								sharedFrame.dispose();					
+							} else {
+								JOptionPane.showMessageDialog(sharedFrame, "The " + user.getRole() + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
 							}
+							//
+							///////////////////////////////////
 
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
@@ -227,7 +237,7 @@ public class LoginPanel extends JPanel {
 		}
 		return lblLogin;
 	}
-	
+
 	public void clearFieldsColors() {
 		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));

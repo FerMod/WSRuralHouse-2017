@@ -28,13 +28,11 @@ public class RuralHouse implements Serializable {
 	private int ownerId;
 	private int reviewId;
 	private String[] images;
-	private String[] tags;                   
-	private	double price;                
+	private String[] tags;                
 
 	public Vector<Offer> offers;
 
 	public RuralHouse() {
-		super();
 	}
 
 	public RuralHouse(String description, int city) {
@@ -82,14 +80,6 @@ public class RuralHouse implements Serializable {
 
 	public void setTags(String[] tags) {
 		this.tags = tags;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
 	}
 
 	public int getOwnerId() {

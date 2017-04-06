@@ -31,8 +31,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 	
 	@Override
-	public RuralHouse createRuralHouse(String name, City city) throws DuplicatedEntityException {
-		return createRuralHouse(name, city.getId());
+	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException {
+		return createRuralHouse(description, city.getId());
 	}
 
 	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException{
@@ -67,8 +67,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return offer;
 	}
 
-	public void login(String username, String password) throws AuthException, AccountNotFoundException {
-		dataAccess.login(username, password);
+	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
+		return dataAccess.login(username, password);
 	}
 
 	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
@@ -96,8 +96,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	@WebMethod
 	@Override
-	public Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
-		return new Vector<Offer>(dataAccess.getOffers(ruralHouse, firstDay, lastDay));
+	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
+		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
 	}
 	
 	public City createCity(String name) {
