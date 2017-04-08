@@ -29,7 +29,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
 	}
-	
+
 	@Override
 	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException {
 		return createRuralHouse(description, city.getId());
@@ -73,14 +73,14 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
-		if(!dataAccess.existsUser(username)) {
-			if(!dataAccess.existsEmail(email)) {
+		if(!dataAccess.existsEmail(email)) {
+			if(!dataAccess.existsUser(username)) {
 				return dataAccess.createUser(email, username, password, role);
 			} else {
-				throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
+				throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
 			}
 		} else {
-			throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
+			throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
 		}
 	}
 
@@ -99,7 +99,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
 		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
 	}
-	
+
 	public City createCity(String name) {
 		System.out.println(">> ApplicationFacadeImpl: createCity=> name= " + name);
 
@@ -129,6 +129,9 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return new Vector<City>(dataAccess.getCities());
 	}
 
+	//	private getConfig() {
+	//		return dataAccess.ge
+	//	}
 
 }
 
