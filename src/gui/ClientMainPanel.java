@@ -18,7 +18,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Currency;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Locale;
