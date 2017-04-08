@@ -1,6 +1,7 @@
 package dataAccess;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,11 +11,13 @@ import java.util.Vector;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
+import businessLogic.util.Timer;
 import configuration.ConfigXML;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
@@ -37,7 +40,11 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManagerFactory emf;
 	private EntityManager  db;
 
+	private Timer timer;
+
 	public DataAccess()  {
+
+		timer = new Timer();
 
 		CONFIG = ConfigXML.getInstance();
 		DB_PATH = CONFIG.getDbFilename();
@@ -45,12 +52,12 @@ public class DataAccess implements DataAccessInterface {
 		INIT_DB_VALUES = CONFIG.initValues();
 
 		if(CONFIG != null) {
-			
+
 			System.out.println(">> DataAccess: Configuring database connection...");
 			System.out.println("\tDB_PATH: " + DB_PATH);
 
-			if(CONFIG.isLocalDatabes()) {
-				
+			if(CONFIG.isLocalDatabase()) {
+
 				System.out.println("\tOVERWRITE_DB_FILE: " + OVERWRITE_DB_FILE);
 				System.out.println("\tINIT_DB_VALUES: " + INIT_DB_VALUES);
 
@@ -61,8 +68,6 @@ public class DataAccess implements DataAccessInterface {
 
 				// Initialize database values.
 				if(INIT_DB_VALUES) {
-					File file = new File(DB_PATH);
-					INIT_DB_VALUES = !file.exists();
 					initializeDB();
 				}
 
@@ -85,7 +90,7 @@ public class DataAccess implements DataAccessInterface {
 
 		Map<String, String> properties = null;
 
-		if (!CONFIG.isLocalDatabes()) {
+		if (!CONFIG.isLocalDatabase()) {
 			properties = new HashMap<String, String>();
 			properties.put("javax.persistence.jdbc.user", CONFIG.getUser());
 			properties.put("javax.persistence.jdbc.password", CONFIG.getPassword());
@@ -109,30 +114,31 @@ public class DataAccess implements DataAccessInterface {
 	public void initializeDB(){
 		try{				
 
-//			deleteTableContent("RuralHouse");
-//			deleteTableContent("City");
-//			deleteTableContent("Offer");
-//			deleteTableContent("Client");
-//			deleteTableContent("Owner");
+			//			deleteTableContent("RuralHouse");
+			//			deleteTableContent("City");
+			//			deleteTableContent("Offer");
+			//			deleteTableContent("Client");
+			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
 
-			RuralHouse rh;
-			rh = createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
-			createOffer(rh, new Date(2017, 2, 03), new Date(2017, 5, 43), 293);
-			createOffer(rh, new Date(2016, 3, 23), new Date(2018, 11, 23),593);
-			createOffer(rh, new Date(2017, 1, 4), new Date(2017, 1, 5), 773);			
+			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
-			createRuralHouse("Etxetxikia", createCity("Iruna").getId());
-			createOffer(rh, new Date(2013, 1, 4), new Date(2017, 2, 5), 773);		
+			RuralHouse rh1 = createRuralHouse("Ezkioko etxea", createCity("Ezkio").getId());
+			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 293);
+			createOffer(rh1, date.parse("2017/5/23"), date.parse("2017/7/16"), 593);
+			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 773);			
 
-			createRuralHouse("Udaletxea", createCity("Bilbo").getId());		
-			createOffer(rh, new Date(2017, 1, 5), new Date(2017, 1, 5), 93);		
-			createOffer(rh, new Date(2016, 12, 14), new Date(2017, 1, 5), 876);		
-			createOffer(rh, new Date(2017, 2, 12), new Date(2017, 4, 5), 233);		
+			RuralHouse rh2 = createRuralHouse("Etxetxikia", createCity("Iruna").getId());
+			createOffer(rh2, date.parse("2013/10/3"), date.parse("2017/2/8"), 773);		
 
-			createRuralHouse("Gaztetxea", createCity("Renteria").getId());	
-			createOffer(rh, new Date(2017, 6, 3), new Date(2017, 5, 5), 128);		
-			createOffer(rh, new Date(2017, 5, 4), new Date(2017, 6, 20), 455);		
+			RuralHouse rh3 = createRuralHouse("Udaletxea", createCity("Bilbo").getId());		
+			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 93);		
+			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 876);		
+			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 233);		
+
+			RuralHouse rh4 = createRuralHouse("Gaztetxea", createCity("Renteria").getId());	
+			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 128);		
+			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 455);		
 
 			createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
@@ -161,7 +167,6 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + offer.getId());
 			return offer;
-
 		} catch (Exception e){
 			System.err.println("Offer not created: " + e .toString());
 		} finally {
@@ -241,7 +246,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.print(">> DataAccess: getRole(" + username + ") -> ");
 			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 					+ "FROM User u "
-					+ "WHERE u.username = :username ", AbstractUser.class)
+					+ "WHERE u.username = :username", AbstractUser.class)
 					.setParameter("username", username);
 			Vector<AbstractUser> result = new Vector<AbstractUser>(new Vector<AbstractUser>(query.getResultList()));
 			role = result.get(0).getRole();
@@ -256,51 +261,67 @@ public class DataAccess implements DataAccessInterface {
 
 	@Override
 	public boolean existsUser(String username) {
-		boolean found = false;
 		try {
 			open();
+			timer.startTimer();
 			System.out.print(">> DataAccess: Check if exists \"" + username + "\" -> ");
 			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 					+ "FROM User u "
 					+ "WHERE u.username = :username", AbstractUser.class)
-					.setParameter("username", username);
-			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
-			found = !result.isEmpty();
-			System.out.println(found);
+					.setParameter("username", username)
+					.setMaxResults(1);
+			//			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
+			//			found = !result.isEmpty();
+			query.getSingleResult();
+			System.out.println(true);
+			System.out.println(timer.getFormattedFinishTime());
+			return true;
+		} catch (NoResultException e) {
+			//Dummy catch
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return found;
+		System.out.println(false);
+		System.out.println(timer.getFormattedFinishTime());
+		return false;
 	}
 
 	@Override
-	public boolean existsEmail(String email) {
-		boolean found = false;
+	public boolean existsEmail(String email) {		
 		try {
 			open();
+			timer.startTimer();
 			System.out.print("Check if exists \"" + email + "\" -> ");
 			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 					+ "FROM User u "
 					+ "WHERE u.email = :email", AbstractUser.class)
-					.setParameter("email", email);
-			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
-			found = !result.isEmpty();
-			System.out.println(found);
+					.setParameter("email", email)
+					.setMaxResults(1);
+			//			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
+			//			found = !result.isEmpty();
+			query.getSingleResult();
+			System.out.println(true);
+			System.out.println(timer.getFormattedFinishTime());
+			return true;
+		} catch (NoResultException e) {
+			//Dummy catch.
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return found;
+		System.out.println(false);
+		System.out.println(timer.getFormattedFinishTime());
+		return false;
 	}
 
 	@Override
 	public boolean existsRuralHouse(String description, int city) {
-		boolean found = false;
 		try {
 			open();
+			timer.startTimer();
 			System.out.print("Check if exists \"" + description + "\" -> ");
 			TypedQuery<RuralHouse> query = db.createQuery("SELECT DISTINCT rh "
 					+ "FROM RuralHouse rh "
@@ -308,15 +329,22 @@ public class DataAccess implements DataAccessInterface {
 					+ "AND rh.city = :city", RuralHouse.class)
 					.setParameter("description", description)
 					.setParameter("city", city);
-			Vector<RuralHouse> result = new Vector<RuralHouse>(query.getResultList());
-			found = !result.isEmpty();
-			System.out.println(found);
+			//			Vector<RuralHouse> result = new Vector<RuralHouse>(query.getResultList());
+			//			found = !result.isEmpty();
+			query.getSingleResult();
+			System.out.println(true);
+			System.out.println(timer.getFormattedFinishTime());
+			return true;
+		} catch (NoResultException e) {
+			// Dummy catch
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return found;
+		System.out.println(false);
+		System.out.println(timer.getFormattedFinishTime());
+		return false;
 	}
 
 	@Override
@@ -324,22 +352,20 @@ public class DataAccess implements DataAccessInterface {
 		AbstractUser user = null;
 		try {
 			open();
+			timer.startTimer();
 			System.out.println(">> DataAccess: Login. " + username + " | " + password + " (don't look, this is secret)");
 			TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
 					+ "FROM User u "
-					+ "WHERE u.username = :username ", AbstractUser.class)
-					.setParameter("username", username);
-			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
-			if(!result.isEmpty()) {
-				user = result.get(0);
-				authenticate(user, password);
-			} else {
-				user = null;
-				throw new AccountNotFoundException("Account not found.");
-			}
-		} catch (AuthException | AccountNotFoundException e) {
-			user = null;
+					+ "WHERE u.username = :username", AbstractUser.class)
+					.setParameter("username", username)
+					.setMaxResults(1);
+			System.out.println(timer.getFormattedFinishTime());
+			user = query.getSingleResult();
+			authenticate(user, password);
+		} catch (AuthException e) { 
 			throw e; //Throw exception and allow a method further up the call stack handle it.
+		} catch(NoResultException e) {
+			throw new AccountNotFoundException("Account not found.");
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -500,7 +526,9 @@ public class DataAccess implements DataAccessInterface {
 			open();
 			db.getTransaction().begin();
 			System.out.println(">> DataAccess: Delete the table with the name: \"" + table + "\"");
-			db.createQuery("DELETE FROM " + table + " t ").executeUpdate();
+			db.createQuery("DELETE FROM :table")
+			.setParameter("table", table)
+			.executeUpdate();
 			db.getTransaction().commit();
 		} catch (PersistenceException e) {
 			System.err.println("Could not complete the operation: " + e.getMessage());
@@ -512,20 +540,23 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain all the offers by a price range defined by the user (tested!).
+	 * Obtain all the offers within the price range defined by the parameters {@code min} and {@code max}
 	 *  
 	 * @param min the lowest price
 	 * @param max the highest price
-	 * @return vector of offers in the range
+	 * @return vector of offers within the range
 	 */
-	public Vector<Offer> getOffersByPrice(int min, int max) {
+	public Vector<Offer> getOffersBetweenPrice(int min, int max) {
 		Vector<Offer> result = null;
 		try{
 			open();
 			System.out.println(">> DataAccess: getOffersByPrice");
-			TypedQuery<Offer> query = db.createQuery("SELECT o"
-					+ " FROM Offer o "
-					+ "WHERE o.price>" + min + " AND o.price<" + max, Offer.class);
+			TypedQuery<Offer> query = db.createQuery("SELECT o "
+					+ "FROM Offer o "
+					+ "WHERE o.price > :min "
+					+ "AND o.price < :max", Offer.class)
+					.setParameter("min", min)
+					.setParameter("max", max);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -537,85 +568,17 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Obtain all the offers for a specific price defined by the user (tested!).
+	 * Obtain the highest price of the stored offers
 	 *  
-	 * @param the price
-	 * @return vector of offers with the price selected
+	 * @return highest price of the stored Offers
 	 */
-	public Vector<Offer> getOffersByConcretePrice(int price) {
-		Vector<Offer> result = null;
-		try{
-			open();
-			System.out.println(">> DataAccess: getOffersByConcretePrice");
-			TypedQuery<Offer> query = db.createQuery("SELECT o"
-					+ " FROM Offer o "
-					+ "WHERE o.price=" + price, Offer.class);
-			result = new Vector<Offer>(query.getResultList());
-			printVector(result);
-		} catch	(Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return result;
-	}
-
-	/**
-	 * Obtain the offer with the lowest price (tested!).
-	 *  
-	 * @return vector with the offer with the lowest price 
-	 */
-	public Vector<Offer> getOffersByMinorPrice() {
-		Vector<Offer> result = null;
-		try{
-			open();
-			System.out.println(">> DataAccess: getOffersByMinorPrice");
-			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
-					+ " FROM Offer o", Offer.class);
-			result = new Vector<Offer>(query.getResultList());
-			printVector(result);
-		} catch	(Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return result;
-	}
-
-	/**
-	 * Obtain the offer with the highest price (tested!).
-	 *  
-	 * @return vector with the offer with the highest price
-	 */
-	public Vector<Offer> getOffersByMaxPrice() {
-		Vector<Offer> result = null;
-		try{
-			open();
-			System.out.println(">> DataAccess: getOffersByMaxPrice");
-			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
-					+ " FROM Offer o", Offer.class);
-			result = new Vector<Offer>(query.getResultList());
-			printVector(result);
-		} catch	(Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return result;
-	}
-
-	/**
-	 * Obtain the highest price of the Offers (tested!).
-	 *  
-	 * @return highest price of the Offers
-	 */
-	public double getMaxPrice() {
+	public double getOffersHighestPrice() {
 		double result = 0;
 		try{
 			open();
 			System.out.println(">> DataAccess: getMaxPrice");
-			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price)"
-					+ " FROM Offer o", Offer.class);
+			TypedQuery<Offer> query = db.createQuery("SELECT MAX(o.price) "
+					+ "FROM Offer o", Offer.class);
 			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
 			result = vm.get(0).getPrice(); //There is only one highest price.
 			printVector(vm);
@@ -629,6 +592,28 @@ public class DataAccess implements DataAccessInterface {
 
 
 	/**
+	 * Obtain the lowest price of the stored offers
+	 *  
+	 * @return lowest price of the stored offers
+	 */
+	public float getOffersLowestPrice() {
+		float result = 0f;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOfferLowestPrice() -> ");
+			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price) "
+					+ "FROM Offer o ", Offer.class);
+			result = query.getResultList().get(0).getPrice(); //There is only one lowest price.
+			System.out.println(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
 	 * Obtain a User by username and password from the database
 	 * 
 	 * @param username String with the username of the user
@@ -637,36 +622,15 @@ public class DataAccess implements DataAccessInterface {
 	 */
 	public AbstractUser getUser(String username, String password) {
 		open();
-		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u "
-				+ "FROM User u "
-				+ "WHERE u.username = :username AND u.password = :password", AbstractUser.class)
-				.setParameter("username", username).setParameter("password", password);
+		TypedQuery<AbstractUser> query = db.createQuery("SELECT DISTINCT u"
+				+ " FROM User u"
+				+ " WHERE u.username = :username"
+				+ " AND u.password = :password", AbstractUser.class)
+				.setParameter("username", username)
+				.setParameter("password", password);
 		Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
 		close();
 		return result.get(0);
-	}
-
-	/**
-	 * Obtain the lowest price of the Offers (tested!).
-	 *  
-	 * @return lowest price of the Offers
-	 */
-	public double getMinorPrice() {
-		double result = 0;
-		try{
-			open();
-			System.out.println(">> DataAccess: getMinorPrice");
-			TypedQuery<Offer> query = db.createQuery("SELECT MIN(o.price)"
-					+ " FROM Offer o", Offer.class);
-			Vector<Offer> vm = new Vector<Offer>(query.getResultList());
-			result = vm.get(0).getPrice(); //There is only one lowest price.
-			printVector(vm);
-		} catch	(Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return result;
 	}
 
 	/**
