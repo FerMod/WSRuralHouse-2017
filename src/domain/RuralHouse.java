@@ -106,9 +106,9 @@ public class RuralHouse implements Serializable {
 	 *            number, start day, last day and price
 	 * @return None
 	 */
-	public Offer createOffer(Date firstDay, Date lastDay, float price)  {
+	public Offer createOffer(Date firstDay, Date lastDay, double price)  {
 		System.out.println("LLAMADA RuralHouse createOffer, offerNumber="+" firstDay="+firstDay+" lastDay="+lastDay+" price="+price);
-		Offer off=new Offer(firstDay,lastDay,price,this);
+		Offer off = new Offer(firstDay, lastDay, price, this);
 		offers.add(off);
 		return off;
 	}

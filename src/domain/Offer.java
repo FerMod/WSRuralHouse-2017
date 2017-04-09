@@ -22,12 +22,14 @@ public class Offer implements Serializable {
 	private Integer id;
 	private Date firstDay; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
 	private Date lastDay;  // because, they are not well stored in db4o as java.util.Date objects
-	private float price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
+	private double price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
 	@XmlIDREF
 	private RuralHouse ruralHouse;
 
-	public Offer(){}
-	public Offer(Date firstDay, Date lastDay, float price, RuralHouse ruralHouse){
+	public Offer(){
+	}
+	
+	public Offer(Date firstDay, Date lastDay, double price, RuralHouse ruralHouse){
 		  this.firstDay=firstDay;
 		  this.lastDay=lastDay;
 		  this.price=price;
@@ -106,7 +108,7 @@ public class Offer implements Serializable {
 	 * 
 	 * @return price
 	 */
-	public float getPrice() {
+	public double getPrice() {
 		return this.price;
 	}
 
@@ -115,7 +117,7 @@ public class Offer implements Serializable {
 	 * 
 	 * @param price
 	 */
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	

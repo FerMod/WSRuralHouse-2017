@@ -155,7 +155,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) {
+	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) {
 		Offer offer = null;
 		try {	
 			open();
@@ -596,8 +596,8 @@ public class DataAccess implements DataAccessInterface {
 	 *  
 	 * @return lowest price of the stored offers
 	 */
-	public float getOffersLowestPrice() {
-		float result = 0f;
+	public double getOffersLowestPrice() {
+		double result = 0f;
 		try{
 			open();
 			System.out.println(">> DataAccess: getOfferLowestPrice() -> ");

@@ -18,7 +18,7 @@ public interface DataAccessInterface {
 
 	void initializeDB();
 
-	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price);
+	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price);
 
 	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
 

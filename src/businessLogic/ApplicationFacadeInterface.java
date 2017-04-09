@@ -59,7 +59,7 @@ public interface ApplicationFacadeInterface  {
 	 * @throws BadDatesException If the first date is greater than second date
 	 */
 	@WebMethod
-	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) throws OverlappingOfferException, BadDatesException;
+	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException;
 
 	/**
 	 * Creates an user and stores it in the database.
