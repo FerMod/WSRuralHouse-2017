@@ -95,7 +95,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 		}
 
 		if(count != 0) {
-			JOptionPane.showInternalOptionDialog(null,
+			JOptionPane.showOptionDialog(null,
 					message,
 					null,
 					JOptionPane.DEFAULT_OPTION,
@@ -152,6 +152,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent e) {
 		if(e.getID() == KeyEvent.KEY_PRESSED) {
+			//System.out.println(KeyEvent.getKeyText(e.getKeyCode()));
 			konami.checkCode(e.getKeyCode());
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_F12:
