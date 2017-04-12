@@ -3,12 +3,17 @@ package gui.debug;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,23 +26,14 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-public final class ConsoleWindow extends ConsoleKeyEventDispatcher {
+public final class ConsoleWindow {
 
 	private static JFrame frame;
-	private static CapturePane capturePane;
-
-	//private final Class<T> type;
-	//private Method[] declaredMethods;
+	private static String windowTitle = "Console Output";
 
 	public static void main(String[] args) {
 		new ConsoleWindow();
 	}
-
-	//TODO remove
-	//Constructor header. 
-	//	public ConsoleOutput(Class<T> type) {
-	//
-	//		this.type = type;
 
 	private ConsoleWindow() {
 		EventQueue.invokeLater(new Runnable() {
@@ -50,24 +46,18 @@ public final class ConsoleWindow extends ConsoleKeyEventDispatcher {
 
 	private void createAndShowGui() {
 
-		//ConsoleOutput consoleOutput = new ConsoleOutput();
-
-		frame = new JFrame("Console Output");
+		frame = new JFrame(windowTitle);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		capturePane = new CapturePane();
-		frame.setContentPane(capturePane); 
-		//frame.pack();
+		CapturePane capturePane = new CapturePane();
+		frame.setContentPane(capturePane.getContentPanel()); 
 		frame.setLocationByPlatform(true);
-		frame.setMinimumSize(new Dimension(228, 39));
+		frame.setMinimumSize(new Dimension(272, 39));
 		frame.setSize(650, 350);
-		//frame.setLocationRelativeTo(null);	
-//		frame.addKeyListener();
-		//new ConsoleKeyEvent<>(this.getClass());
-		frame.setFocusable(true);	
-		
+		frame.setFocusable(true);
+
 		System.setOut(new PrintStream(new StreamCapturer(capturePane, System.out)));
 		System.setErr(new PrintStream(new StreamCapturer(Color.RED, capturePane, System.err)));
-		
+
 		frame.setVisible(true);
 
 		/*
@@ -148,33 +138,63 @@ public final class ConsoleWindow extends ConsoleKeyEventDispatcher {
 		}
 	}
 
-	private static class CapturePane extends JPanel implements Consumer {
+	public static void setTitle(String title) {
+		windowTitle = title;
+	}
 
-		private static final long serialVersionUID = 6513396748219028375L;
+	public void restartApplication(Class<?> applicationClass) {
 
+		try {
+
+			final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+			final File currentJar = new File(applicationClass.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+			System.out.println(applicationClass + "");
+			System.out.println(javaBin);
+			System.out.println(currentJar);
+
+			if(currentJar.getName().endsWith(".jar")) {
+				final ArrayList<String> command = new ArrayList<String>();
+				command.add(javaBin);
+				command.add("-jar");
+				command.add(currentJar.getPath());
+
+				final ProcessBuilder builder = new ProcessBuilder(command);
+				builder.start();
+				System.exit(0);
+			}
+
+		} catch (URISyntaxException  e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static class CapturePane implements Consumer {
+
+		private JPanel panel;
 		private JTextPane output;
+		private JScrollPane scrollPane;
 
 		public CapturePane() {
-			super(new BorderLayout());
-			output = new JTextPane() {
-				private static final long serialVersionUID = -595836354069640799L;
-				// Override getScrollableTracksViewportWidth to preserve the full width of the text
-				@Override
-				public boolean getScrollableTracksViewportWidth() {
-					Component parent = getParent();
-					ComponentUI ui = getUI();
 
-					return parent != null ? (ui.getPreferredSize(this).width <= parent.getSize().width) : true;
-				}
-			};
+			panel = new JPanel(new BorderLayout());
+
+			output = new OutputTextPane();
+
 			output.setEditable(false);
 			output.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-			//add(output);
-			JScrollPane scrollPane = new JScrollPane(output);
-			add(scrollPane);
-			//setLayout(new BorderLayout());
+			
+			panel.add(output);
+			scrollPane = new JScrollPane(panel);
+			scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
+		}
 
+		public Container getContentPanel() {
+			return scrollPane;
 		}
 
 		@Override
@@ -190,7 +210,7 @@ public final class ConsoleWindow extends ConsoleKeyEventDispatcher {
 				AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
 
 				aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-				aset = sc.addAttribute(aset, StyleConstants.Size, 12);
+				aset = sc.addAttribute(aset, StyleConstants.Size, 16);
 				aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_LEFT);
 				aset = sc.addAttribute(aset, StyleConstants.Foreground, color);
 
@@ -212,6 +232,22 @@ public final class ConsoleWindow extends ConsoleKeyEventDispatcher {
 			}
 		}    
 
+		private class OutputTextPane extends JTextPane {
+
+			/**
+			 * Generated serial version ID
+			 */
+			private static final long serialVersionUID = 8387122820900506959L;
+
+			// Override getScrollableTracksViewportWidth to preserve the full width of the text
+			@Override
+			public boolean getScrollableTracksViewportWidth() {
+				Component parent = getParent();
+				ComponentUI ui = getUI();
+				return parent != null ? (ui.getPreferredSize(this).width <= parent.getSize().width) : true;
+			}
+
+		}
 	}
 
 	public interface Consumer {
