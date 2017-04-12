@@ -42,11 +42,11 @@ public interface DataAccessInterface {
 	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
 
 	boolean existsRuralHouse(String description, int city);
-	
+	 
 	City createCity(String name);
 	
 	boolean existsCity(City city);
-
+	
 	boolean existsCity(int id);
 	
 	boolean existsCity(String name);
