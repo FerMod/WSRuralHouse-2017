@@ -22,10 +22,11 @@ public class Offer implements Serializable {
 	private Integer id;
 	private Date firstDay; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
 	private Date lastDay;  // because, they are not well stored in db4o as java.util.Date objects
-	private float price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
+	private float price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date
 	@XmlIDREF
 	private RuralHouse ruralHouse;
-
+	private boolean booked = false;
+	
 	public Offer(){}
 	public Offer(Date firstDay, Date lastDay, float price, RuralHouse ruralHouse){
 		  this.firstDay=firstDay;
@@ -33,6 +34,7 @@ public class Offer implements Serializable {
 		  this.price=price;
 		  this.ruralHouse=ruralHouse;
 	}
+	
 	/**
 	 * Get the house number of the offer
 	 * 
@@ -119,7 +121,15 @@ public class Offer implements Serializable {
 		this.price = price;
 	}
 	
+	public boolean isBooked() {
+		return booked;
+	}
+	
+	public void setBooked(boolean booked) {
+		this.booked = booked;
+	}
+	
 	public String toString(){
-		return id+";"+firstDay.toString()+";"+lastDay.toString()+";"+price;
+		return id+";"+firstDay.toString()+";"+lastDay.toString()+";"+price+";"+booked;
 	}
 }

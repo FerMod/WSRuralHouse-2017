@@ -47,7 +47,7 @@ public class RuralHousePage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RuralHouse r = new RuralHouse("Esto es una casa rural", 3, 50.0);
+					RuralHouse r = new RuralHouse("Esto es una casa rural", 3);
 					
 					Client c = new Client("fost@gma.com", "fost", "bob");
 					RuralHousePage window = new RuralHousePage(r, c);

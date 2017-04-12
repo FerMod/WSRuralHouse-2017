@@ -2,7 +2,6 @@ package dataAccess;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -22,7 +21,7 @@ public interface DataAccessInterface {
 
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price);
 
-	RuralHouse createRuralHouse(String description, int city, double price) throws DuplicatedEntityException;
+	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
@@ -57,8 +56,12 @@ public interface DataAccessInterface {
 	void deleteTableContent(String table);
 	
 	AbstractUser getUser(String username, String password);
-
-	public Vector<Offer> getOffersByRuralHouse(RuralHouse rh);
-
-	public Booking createBooking(int idClient, int idOffer);
+	
+	Booking createBooking(int idClient, int idOffer);
+	
+	List<Offer> getOfferById(int idOffer);
+	
+	void offerBookedControl(Offer of, boolean booked);
+	
+	List<Offer> getBookingsOfClient(int idClient);
 }
