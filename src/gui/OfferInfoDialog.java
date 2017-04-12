@@ -30,6 +30,8 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 
+import domain.RuralHouse;
+import gui.ClientMainPanel.CellDetails;
 import gui.components.FrameShader;
 import gui.components.ImagePanel;
 
@@ -82,11 +84,13 @@ public class OfferInfoDialog extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param rowContent 
 	 */
 	public OfferInfoDialog(JFrame parentFrame) {
 
 		this.parentFrame = parentFrame;
 		frameShader = new FrameShader(parentFrame);
+		
 
 		this.addWindowFocusListener(new WindowFocusListener() {
 			@Override
@@ -138,6 +142,7 @@ public class OfferInfoDialog extends JDialog {
 		gbl_contentPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+	
 		contentPanel.setLayout(gbl_contentPanel);
 		{
 			ImagePanel imagePanel = new ImagePanel();

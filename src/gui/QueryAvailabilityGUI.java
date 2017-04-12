@@ -217,7 +217,7 @@ public class QueryAvailabilityGUI extends JFrame {
 		try {
 			ApplicationFacadeInterface facade=MainGUI.getBusinessLogic();
 
-			Vector<Offer> v=facade.getOffers(rh,firstDay, lastDay);
+			Vector<Offer> v=facade.getOffer(rh,firstDay, lastDay);
 			//Vector<Offer> v=rh.getOffers(firstDay, lastDay);
 
 			Enumeration<Offer> en=v.elements();

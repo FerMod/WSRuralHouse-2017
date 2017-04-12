@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+	<showConsole>false</showConsole>
 	<businessLogic local="true">
 		<businessLogicNode>0.0.0.0</businessLogicNode>
 		<businessLogicPort>1099</businessLogicPort>
@@ -7,8 +8,9 @@
 	</businessLogic>
 	<database local="true">
 		<databaseNode>0.0.0.0</databaseNode>
-		<dbFilename>resources\ruralHouses.odb</dbFilename>
-		<dataBaseOpenMode>initialize</dataBaseOpenMode>
+		<databaseFileName>resources\ruralHouses.odb</databaseFileName>
+		<databaseInitValues>true</databaseInitValues>
+		<databaseOverwriteFile>true</databaseOverwriteFile>
 		<databasePort>6136</databasePort>
 		<user>admin</user>
 		<password>admin</password>

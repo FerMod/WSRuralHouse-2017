@@ -87,7 +87,7 @@ public class BusinessLogicServer extends JDialog {
 
 			try {
 
-				if (!c.isDatabaseLocal()) {
+				if (!c.isLocalDatabes()) {
 					textArea.append("\nWARNING: Please be sure ObjectdbManagerServer is launched\n           in machine: "+c.getDatabaseNode()+" port: "+c.getDatabasePort()+"\n");
 					//textArea.append("\n java -cp objectdb.jar com.objectdb.Server -port "+c.getDatabasePort()+" start");
 					this.setVisible(true);			

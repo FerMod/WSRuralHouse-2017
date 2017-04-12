@@ -18,8 +18,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Currency;
 import java.util.EventObject;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
@@ -33,6 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -44,6 +47,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -61,6 +65,8 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
+
+import domain.Offer;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
@@ -70,9 +76,9 @@ public class ClientMainPanel extends JPanel {
 
 	private static final long serialVersionUID = 3063325462028186709L;
 
+	private JFrame frame;
 	//	private JFormattedTextField minPriceField
 	private JFormattedTextField maxPriceField;
-
 	private JTextField searchField;
 	private JTable table;
 	private TableModel tableModel;
@@ -89,8 +95,10 @@ public class ClientMainPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ClientMainPanel() {
-		
+	public ClientMainPanel(JFrame frame) {
+
+		this.frame = frame;
+
 		setLayout(new GridBagLayout());
 
 		setupNumberFormat();
@@ -175,16 +183,16 @@ public class ClientMainPanel extends JPanel {
 		gbc.gridy = 1;
 		add(getTableScrollPanel(), gbc);
 
-		gbc.anchor = GridBagConstraints.PAGE_START;		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0;
-		gbc.gridwidth = 5;
-
-		gbc.insets = new Insets(10, 100, 10, 100);
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		add(getBtnDetails(), gbc);
+//		gbc.anchor = GridBagConstraints.PAGE_START;		
+//		gbc.fill = GridBagConstraints.HORIZONTAL;
+//		gbc.weightx = 0.5;
+//		gbc.weighty = 0;
+//		gbc.gridwidth = 5;
+//
+//		gbc.insets = new Insets(10, 100, 10, 100);
+//		gbc.gridx = 0;
+//		gbc.gridy = 4;
+//		add(getBtnDetails(), gbc);
 
 		//		setupClientWindow();
 
@@ -232,7 +240,7 @@ public class ClientMainPanel extends JPanel {
 
 	private Hashtable<Integer, JLabel> getSliderLabelTable(double minPrice, double maxPrice) {
 
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(getDefaultLocale());
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
 
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();		
 		labelTable.put(getPriceSlider().getMinimum(), new JLabel(currencyFormatter.format(minPrice)));
@@ -367,7 +375,7 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	private void setupNumberFormat() {
-		priceFormat = NumberFormat.getCurrencyInstance();
+		priceFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
 		priceFormat.setMinimumIntegerDigits(1);
 		priceFormat.setMaximumFractionDigits(2);
 	}
@@ -567,9 +575,9 @@ public class ClientMainPanel extends JPanel {
 					int row = table.getSelectedRow();
 					if (row < 0) {
 						//Selection got filtered away.
-						btnDetails.setEnabled(false);
+						//btnDetails.setEnabled(false);
 					} else {
-						btnDetails.setEnabled(true);
+						//btnDetails.setEnabled(true);
 						int modelRow = table.convertRowIndexToModel(row);
 						System.out.println(String.format("Selected Row in view: %d. Selected Row in model: %d.", row, modelRow));
 					}
@@ -595,7 +603,7 @@ public class ClientMainPanel extends JPanel {
 					//					Point p = me.getPoint();
 					//					int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
-						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, info window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
@@ -703,6 +711,7 @@ public class ClientMainPanel extends JPanel {
 				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details\nMore details.", "Address 7", new Double(336.6))},
 				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "ñeñeñe 8", new Double(63.1))},
 		};
+		
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
@@ -901,14 +910,14 @@ public class ClientMainPanel extends JPanel {
 			priceField.setEditable(false);
 			priceField.setFocusable(false);
 			priceField.setColumns(4);
-			
+
 			GridBagConstraints gbcPriceField = new GridBagConstraints();
 			gbcPriceField.fill = GridBagConstraints.HORIZONTAL;
 			gbcPriceField.insets = new Insets(0, 0, 0, 10);
 			gbcPriceField.gridx = 1;
 			gbcPriceField.gridy = 1;
 			panel.add(priceField, gbcPriceField);
-			
+
 
 			infoButton = new JButton("Info. ");
 			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -919,21 +928,23 @@ public class ClientMainPanel extends JPanel {
 			gbcInfoButton.gridy = 0;	
 			gbcInfoButton.insets = new Insets(5, 5, 5, 5);
 			panel.add(infoButton, gbcInfoButton);
-
 		}
 
 		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
 			rowContent.setTableDetailsCell(this);
 			descriptionTextArea.setText(rowContent.getDescription());
 			addressField.setText(rowContent.getAddress());
-			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(getDefaultLocale());
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
 			priceField.setText(currencyFormatter.format(rowContent.getPrice()));
 
 			infoButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("Boton");
-
+					OfferInfoDialog dialog = new OfferInfoDialog(frame); //FIXME
+					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
+					dialog.setLocationRelativeTo(frame);
+					dialog.setVisible(true);
 				}
 			});
 
@@ -1008,6 +1019,7 @@ public class ClientMainPanel extends JPanel {
 	public class CellDetails {
 
 		private TableCellComponents tableDetailsCell;
+		private Offer offer;
 		private String description;
 		private String address;
 		private Double price;
