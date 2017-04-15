@@ -14,10 +14,6 @@ public class Owner extends AbstractUser {
 		super(email, username, password, Role.OWNER);
 	}
 
-	public int getIdOwner() {
-		return super.getId();
-	}
-
 	@Override
 	public Role getRole() {
 		return Role.OWNER;
