@@ -81,7 +81,7 @@ public class RuralHouse implements Serializable {
 	 * @param city the city where the rural house is located
 	 * @param address the address where the rural house is
 	 * 
-	 * @see Review.ReviewState
+	 * @see Review.State
 	 */
 	public RuralHouse(Owner owner, String name, String description, City city, String address) {
 		this.owner = owner;
