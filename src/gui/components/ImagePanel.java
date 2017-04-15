@@ -8,34 +8,48 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class ImagePanel extends JPanel{
+public class ImagePanel extends JPanel {
 
 	/**
 	 * Generated serial version UID
 	 */
 	private static final long serialVersionUID = -886982507395266888L;
+	
+	/**
+	 * When no image is provided in the constructor this one will be used
+	 */
+	private static final ImageIcon NO_IMAGE = new ImageIcon(ImagePanel.class.getResource("/img/icons/loading.gif"));
 
 	private ImageIcon imageIcon;
 
 	public ImagePanel() {
-	}
-
-	public ImagePanel(URL url) {		
-		this(url, null);
+		this(NO_IMAGE, null);
 	}
 	
+	public ImagePanel(ImageIcon imageIcon) {
+		this(imageIcon, null);
+	}
+	
+	public ImagePanel(ImageIcon imageIcon, Dimension dimension) {
+		setImage(imageIcon);
+		setPreferredSize(dimension);
+	}
+
 	public ImagePanel(String pathname) {
 		this(pathname, null);
 	}
 
-	public ImagePanel(URL url, Dimension dimension) {		
-		setImage(url);		
-		setPreferredSize(dimension);
-	}
-
-
 	public ImagePanel(String pathname, Dimension dimension) {
 		setImage(pathname);
+		setPreferredSize(dimension);
+	}
+	
+	public ImagePanel(URL url) {		
+		this(url, null);
+	}
+
+	public ImagePanel(URL url, Dimension dimension) {		
+		setImage(url);		
 		setPreferredSize(dimension);
 	}
 
