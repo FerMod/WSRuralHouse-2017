@@ -1,5 +1,8 @@
 package domain;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -12,90 +15,144 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class Review {
-	
+
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
 	@GeneratedValue
-	private Integer idRev;
-	
+	private Integer id;
 	@Id
-	private Integer idAdmin;
-	
-	public enum ReviewState {
-		ACEPTED(1),
-		IN_PROCESS(0),
-		REJECTED(-1);
-
-		private int state;
-
-		private ReviewState(int state) {
-			this.state = state;
-		}
-
-		public int getValue() {
-			return this.state;
-		}
-		
-	}
-	
-	@Enumerated
-	private ReviewState reviewState;
+	private Admin reviewer;
+	private Date creationDate;
+	private Date reviewDate;
 	private String description;
-	
-	
-	public Review(Integer idRev, Integer idAdmin, ReviewState reviewState, String description) {
-		this.idRev = idRev;
-		this.idAdmin = idAdmin;
-		this.reviewState = reviewState;
+	@Enumerated
+	private State state;
+
+	/**
+	 * A review state. A review can be in one of the following states:
+	 * <ul>
+	 * <li>{@link #APPROVED}</br>
+	 *     A review is made and the element is marked as valid.
+	 *     </li>
+	 * <li>{@link #AWAITING_REVIEW}</br>
+	 *      A review have not been made yet, and the element is waiting for one.
+	 *     </li>
+	 * <li>{@link #REJECTED}</br>
+	 *      A review is made and the element is marked as not valid.
+	 *     </li>
+	 * </ul>
+	 * A review can be in only one state at time.
+	 * 
+	 * @see #getReviewState
+	 * 
+	 */
+	public enum State {
+		/**
+		 * Element marked as valid
+		 */
+		APPROVED,
+		/**
+		 * The element does not have any revision
+		 */
+		AWAITING_REVIEW,
+		/**
+		 * Element marked as not valid
+		 */
+		REJECTED		
+	}
+
+	public Review() {
+		state = State.AWAITING_REVIEW;
+		creationDate = Calendar.getInstance().getTime();
+	}
+
+	@Deprecated
+	public Review(Admin admin, State state, String description) {
+		this.reviewer = admin;
+		this.state = state;
 		this.description = description;
 	}
 
-
-	public Integer getIdRev() {
-		return idRev;
+	public Integer getId() {
+		return id;
 	}
 
-
-	public void setIdRev(Integer idRev) {
-		this.idRev = idRev;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-
-	public Integer getIdAdmin() {
-		return idAdmin;
+	public Admin getReviewer() {
+		return reviewer;
 	}
 
-
-	public void setIdAdmin(Integer idAdmin) {
-		this.idAdmin = idAdmin;
+	public void setReviewer(Admin reviewer) {
+		this.reviewer = reviewer;
 	}
 
-
-	public ReviewState getReviewState() {
-		return reviewState;
+	public State getState() {
+		return state;
 	}
 
-
-	public void setReviewState(ReviewState reviewState) {
-		this.reviewState = reviewState;
+	public void setState(State state) {
+		this.state = state;
 	}
-
 
 	public String getDescription() {
 		return description;
 	}
 
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getReviewDate() {
+		return reviewDate;
+	}
+
+	public void setReviewDate(Date reviewDate) {
+		this.reviewDate = reviewDate;
+	}
+
+	/**
+	 * Set the reviewer and the state of the review.
+	 * No description is given to the review, so the description value will be null.
+	 * This also gets the current system date and stores it to later know when was made the review.
+	 * 
+	 * @param reviewer the administrator who have made the review
+	 * @param state the state that is currently the review
+	 */
+	public void setReview(Admin reviewer, State state) {
+		setReview(reviewer, null, state);
+	}
+
+	/**
+	 * Set the reviewer, description and state of the review.
+	 * This also gets the current system date and stores it to later know when was made the review.
+	 * 
+	 * @param reviewer the administrator who have made the review
+	 * @param description a description for the review
+	 * @param state the state that is currently the review
+	 */
+	public void setReview(Admin reviewer, String description, State state) {
+		this.reviewer = reviewer;
+		this.description = description;
+		this.state = state;
+		reviewDate = Calendar.getInstance().getTime();
+	}
 
 	@Override
 	public String toString() {
-		return "Review [idRev=" + idRev + ", idAdmin=" + idAdmin
-				+ ", reviewState=" + reviewState + ", description="
+		return "Review [idRev=" + id + ", idAdmin=" + reviewer
+				+ ", reviewState=" + state + ", description="
 				+ description + "]";
 	}
 
