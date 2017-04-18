@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,12 +21,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Entity
 public class RuralHouse implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = -7593429026088916515L;
+
 	/**
 	 * When no image is available this one will be used 
 	 */
-	private static final ImageIcon NO_IMAGE_AVAILABLE =  new ImageIcon("img/no_image_available.png");
+	private static final ImageIcon NO_IMAGE_AVAILABLE =  new ImageIcon(RuralHouse.class.getResource("/img/no_image_available.png"));
 
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
@@ -35,6 +41,7 @@ public class RuralHouse implements Serializable {
 	private City city; 
 	private String address;
 	private Owner owner;
+	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true, optional=false)
 	private Review review;
 	/**
 	 * The image in the first position (<i>index 0</i>) of the {@code Vector} will be used as the
@@ -46,6 +53,7 @@ public class RuralHouse implements Serializable {
 	public Vector<Offer> offers;
 
 	public RuralHouse() {
+		this.review = new Review();
 	}
 
 	/**
@@ -57,7 +65,7 @@ public class RuralHouse implements Serializable {
 	public RuralHouse(String description, City city) {
 		this(null, null, description, city, null);
 	}
-	
+
 	/**
 	 * Constructor of {@code RuralHouse}.
 	 * 
@@ -69,7 +77,7 @@ public class RuralHouse implements Serializable {
 	public RuralHouse(Owner owner, String description, City city, String address) {
 		this(owner, null, description, city, address);
 	}
-	
+
 	/**
 	 * Constructor of {@code RuralHouse}.
 	 * <p>
@@ -81,7 +89,7 @@ public class RuralHouse implements Serializable {
 	 * @param city the city where the rural house is located
 	 * @param address the address where the rural house is
 	 * 
-	 * @see Review.State
+	 * @see Review.ReviewState
 	 */
 	public RuralHouse(Owner owner, String name, String description, City city, String address) {
 		this.owner = owner;
@@ -151,10 +159,11 @@ public class RuralHouse implements Serializable {
 	public void setImages(Vector<ImageIcon>  images) {
 		this.images = images;
 	}
-	
+
 	/**
 	 * Returns the image at the specified position
 	 * 
+	 * @param index index of the image to return
 	 * @return the <code>ImageIcon</code> at the specified index
 	 */
 	public ImageIcon getImage(int index) {
