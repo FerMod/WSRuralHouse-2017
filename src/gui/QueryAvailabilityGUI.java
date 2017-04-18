@@ -242,8 +242,8 @@ public class QueryAvailabilityGUI extends JFrame {
 
 					// Dates are stored in db4o as java.util.Date objects instead of java.sql.Date objects
 					// They have to be converted into java.sql.Date objects before
-					java.sql.Date firstDaySqlDate = new java.sql.Date(of.getFirstDay().getTime());
-					java.sql.Date lastDaySqlDate = new java.sql.Date(of.getLastDay().getTime());
+					java.sql.Date firstDaySqlDate = new java.sql.Date(of.getStartDate().getTime());
+					java.sql.Date lastDaySqlDate = new java.sql.Date(of.getEndDate().getTime());
 					row.add(firstDaySqlDate);
 					row.add(lastDaySqlDate);
 					row.add(of.getPrice());

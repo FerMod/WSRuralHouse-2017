@@ -26,16 +26,6 @@ public interface ApplicationFacadeInterface  {
 	 * @param dataAccess
 	 */
 	void setDataAccess(DataAccessInterface dataAccess);
-
-	/**
-	 * Creates a new rural house and stores it in the database.
-	 * 
-	 * @param description the description of the rural house
-	 * @param city the id of the city which the rural house is located
-	 * @return the created rural house, null if none was created
-	 * @throws DuplicatedEntityException If is attempted to create an existing entity
-	 */
-	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
 	
 	/**
 	 * Creates a new rural house and stores it in the database.
@@ -61,6 +51,14 @@ public interface ApplicationFacadeInterface  {
 	@WebMethod
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException;
 
+	/**
+	 * Returns the highest price of the stored offers
+	 *  
+	 * @return highest price of the stored Offers
+	 */
+	@WebMethod
+	double getOffersHighestPrice();
+	
 	/**
 	 * Creates an user and stores it in the database.
 	 * 
@@ -100,6 +98,9 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
+	
+	@WebMethod
+	Vector<Offer> getOffers();
 
 	/**
 	 * Login the user with the account that matches the entered user name and password
@@ -137,6 +138,6 @@ public interface ApplicationFacadeInterface  {
 	 * @return a vector with all the cities of type {@code City}
 	 * @see {@link City}
 	 */
-	Vector<City> getCities();	
+	Vector<City> getCities();
 
 }

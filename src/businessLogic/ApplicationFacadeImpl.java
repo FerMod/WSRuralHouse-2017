@@ -31,16 +31,12 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException {
-		return createRuralHouse(description, city.getId());
-	}
-
-	public RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException{
+	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException{
 		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
 
 		RuralHouse ruralHouse = null;
 
-		if(!dataAccess.existsRuralHouse(description, city)) {
+		if(!dataAccess.existsRuralHouse(description, city.getId())) {
 			ruralHouse = dataAccess.createRuralHouse(description, city);
 		} else {
 			throw new DuplicatedEntityException();
@@ -65,6 +61,22 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 		System.out.println("<< ApplicationFacadeImpl: createOffer=> O= " + offer);
 		return offer;
+	}
+
+	@WebMethod
+	@Override
+	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
+		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
+	}
+	
+	@Override
+	public double getOffersHighestPrice() {
+		return dataAccess.getOffersHighestPrice();
+	}
+
+	@Override
+	public Vector<Offer> getOffers() {
+		return dataAccess.getOffers();
 	}
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
@@ -92,12 +104,6 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<RuralHouse> getRuralHouses()  {
 		System.out.println(">> ApplicationFacadeImpl: getAllRuralHouses");
 		return new Vector<RuralHouse>(dataAccess.getRuralHouses());
-	}
-
-	@WebMethod
-	@Override
-	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
-		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
 	}
 
 	public City createCity(String name) {
