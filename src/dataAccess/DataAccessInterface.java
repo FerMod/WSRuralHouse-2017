@@ -2,6 +2,7 @@ package dataAccess;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -19,10 +20,28 @@ public interface DataAccessInterface {
 	void initializeDB();
 
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price);
+	
+	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay);
+	
+	Vector<Offer> getOffersBetweenPrice(int min, int max);
+	
+	Vector<Offer> getOffers();
+	
+	double getOffersHighestPrice();
+	
+	double getOffersLowestPrice();
 
-	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
+	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
+
+	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
+
+	Vector<RuralHouse> getRuralHouses();
+
+	boolean existsRuralHouse(String description, int city);
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+
+	AbstractUser getUser(String username, String password);
 
 	boolean validDni(String dni);
 
@@ -34,14 +53,6 @@ public interface DataAccessInterface {
 
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 
-	List<RuralHouse> getRuralHouses();
-
-	List<Offer> getOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay);
-
-	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
-
-	boolean existsRuralHouse(String description, int city);
-	
 	City createCity(String name);
 	
 	boolean existsCity(City city);
@@ -50,10 +61,8 @@ public interface DataAccessInterface {
 	
 	boolean existsCity(String name);
 
-	List<City> getCities();
+	Vector<City> getCities();
 	
 	void deleteTableContent(String table);
-	
-	AbstractUser getUser(String username, String password);
 
 }
