@@ -18,7 +18,7 @@ public class ImagePanel extends JPanel {
 	/**
 	 * When no image is provided in the constructor this one will be used
 	 */
-	private static final ImageIcon NO_IMAGE = new ImageIcon(ImagePanel.class.getResource("/img/icons/loading.gif"));
+	public static final ImageIcon NO_IMAGE = new ImageIcon(ImagePanel.class.getResource("/img/icons/loading.gif"));
 
 	private ImageIcon imageIcon;
 
