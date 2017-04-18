@@ -18,9 +18,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
@@ -66,6 +70,7 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 import domain.Offer;
+import domain.Review.ReviewState;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
@@ -182,16 +187,16 @@ public class ClientMainPanel extends JPanel {
 		gbc.gridy = 1;
 		add(getTableScrollPanel(), gbc);
 
-//		gbc.anchor = GridBagConstraints.PAGE_START;		
-//		gbc.fill = GridBagConstraints.HORIZONTAL;
-//		gbc.weightx = 0.5;
-//		gbc.weighty = 0;
-//		gbc.gridwidth = 5;
-//
-//		gbc.insets = new Insets(10, 100, 10, 100);
-//		gbc.gridx = 0;
-//		gbc.gridy = 4;
-//		add(getBtnDetails(), gbc);
+		//		gbc.anchor = GridBagConstraints.PAGE_START;		
+		//		gbc.fill = GridBagConstraints.HORIZONTAL;
+		//		gbc.weightx = 0.5;
+		//		gbc.weighty = 0;
+		//		gbc.gridwidth = 5;
+		//
+		//		gbc.insets = new Insets(10, 100, 10, 100);
+		//		gbc.gridx = 0;
+		//		gbc.gridy = 4;
+		//		add(getBtnDetails(), gbc);
 
 		//		setupClientWindow();
 
@@ -208,18 +213,19 @@ public class ClientMainPanel extends JPanel {
 		menuBar.add(btnLogOut);
 		 */
 
-		//[FIXME] Just a prank, bro.
-		tableModel.setRandomImages();
+		//[FIXME] Temporal images.
+		//tableModel.setRandomImages();
 		updateRowHeights();
 
 	}
 
 	private JSlider getPriceSlider() {
 		if(priceSlider == null) {
-			double maxPrice = getRuralHouseMaxPrice();
-			priceSlider = new JSlider(JSlider.HORIZONTAL, 0, (int)(maxPrice* 100), (int)(maxPrice* 100));
-			priceSlider.setMajorTickSpacing((priceSlider.getMaximum()*25)/100); //each 25% of the value
-			priceSlider.setMinorTickSpacing((priceSlider.getMajorTickSpacing()*10)/100); //each 10% of the 25% of the value
+			double maxPrice = MainWindow.getBusinessLogic().getOffersHighestPrice();
+			maxPrice = ((int) ((maxPrice + 99) / 100) * 100);
+			priceSlider = new JSlider(JSlider.HORIZONTAL, 0, (int)(maxPrice * 100), (int)(maxPrice* 100));
+			priceSlider.setMajorTickSpacing((priceSlider.getMaximum() * 25) / 100); //each 25% of the value
+			priceSlider.setMinorTickSpacing((priceSlider.getMajorTickSpacing() * 10) / 100); //each 10% of the 25% of the value
 			priceSlider.setLabelTable(getSliderLabelTable(0, maxPrice));
 			priceSlider.setPaintTicks(true);
 			priceSlider.setPaintLabels(true);
@@ -227,7 +233,7 @@ public class ClientMainPanel extends JPanel {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					if(e.getSource() == priceSlider) {
-						maxPriceField.setValue(priceSlider.getValue()/100);
+						maxPriceField.setValue(priceSlider.getValue() / 100);
 						//refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
 						refreshTableContent(0, (Number)maxPriceField.getValue());
 					}
@@ -246,15 +252,6 @@ public class ClientMainPanel extends JPanel {
 		labelTable.put(getPriceSlider().getMaximum()/2, new JLabel(currencyFormatter.format((maxPrice-minPrice)/2)));
 		labelTable.put(getPriceSlider().getMaximum(), new JLabel(currencyFormatter.format(maxPrice)));
 		return labelTable;
-	}
-
-	/**XXX TEMPORAL. TODO REMOVE!!
-	 * This must be replaced with the original one.
-	 * @return
-	 */
-	@Deprecated
-	private double getRuralHouseMaxPrice(){
-		return 800.00;
 	}
 
 	//	private JFormattedTextField getMinPriceField() {
@@ -564,8 +561,8 @@ public class ClientMainPanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(table, 0.1, 0.9);
-			table.setDefaultRenderer(Object.class, new TableCellComponents());
-			table.setDefaultEditor(Object.class, new TableCellComponents());
+			table.setDefaultRenderer(Object.class, new TableCellComponent());
+			table.setDefaultEditor(Object.class, new TableCellComponent());
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -646,19 +643,19 @@ public class ClientMainPanel extends JPanel {
 		return btnRemove;
 	}
 
-	private JButton getBtnDetails() {
-		if (btnDetails == null) {
-			btnDetails = new JButton("Details");
-			btnDetails.setEnabled(false);
-			btnDetails.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null,	"\"Details\" button pressed.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
-				}
-			});
-		}
-		return btnDetails;
-	}
+	//	private JButton getBtnDetails() {
+	//		if (btnDetails == null) {
+	//			btnDetails = new JButton("Details");
+	//			btnDetails.setEnabled(false);
+	//			btnDetails.addActionListener(new ActionListener() {
+	//				@Override
+	//				public void actionPerformed(ActionEvent e) {
+	//					JOptionPane.showMessageDialog(null,	"\"Details\" button pressed.\nWhen implemented, more details window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
+	//				}
+	//			});
+	//		}
+	//		return btnDetails;
+	//	}
 
 	/**
 	 * Set the width of the columns as percentages.
@@ -678,12 +675,11 @@ public class ClientMainPanel extends JPanel {
 		}
 	}
 
-	private class TableModel extends AbstractTableModel {
+	class TableModel extends AbstractTableModel {
 
 		private static final long serialVersionUID = 1L;
 
-		private int width;
-		private int height;
+		private Dimension imageDimension;
 
 		//		private String[] columnNames = {"Image", "Description", "Address", "Price"};
 		private String[] columnNames = {"Image", "Details"};
@@ -700,30 +696,50 @@ public class ClientMainPanel extends JPanel {
 		//				{new ImageIcon("/img/house00.png"), "Description of the house 8 with minor details", "Address 8", new Double(63.1)},
 		//		};
 
-		private Object[][] data = {
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 1 with minor details.\nHi", "Address 1",  new Double(110.2))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 2 with minor details.", "Address 2", new Double(154.52))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 3 with minor details", "Direccion 3", new Double(356.0))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 4 with minor details\nHi, more details.", "Address 4", new Double(165.4))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 5 with minor details\nHi", "Direccion 5", new Double(170.2))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 6 with minor details, text.", "Address 6", new Double(666.5))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details\nMore details.", "Address 7", new Double(336.6))},
-				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "ñeñeñe 8", new Double(63.1))},
-		};
-		
+		private Object[][] data; 
+		//		= {
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 1 with minor details.\nHi", "Address 1",  new Double(110.2))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 2 with minor details.", "Address 2", new Double(154.52))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 3 with minor details", "Direccion 3", new Double(356.0))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 4 with minor details\nHi, more details.", "Address 4", new Double(165.4))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 5 with minor details\nHi", "Direccion 5", new Double(170.2))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 6 with minor details, text.", "Address 6", new Double(666.5))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details\nMore details.", "Address 7", new Double(336.6))},
+		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "ñeñeñe 8", new Double(63.1))},
+		//		};
 
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 		private TableModel() {
-			this.width = 50;
-			this.height = 50;
+			this.imageDimension = new Dimension(60, 60);			
+			fillTableData();			
+		}
+
+		private void fillTableData() {
+
+			Vector<Offer> offerVector = MainWindow.getBusinessLogic().getOffers();
+			data = new Object[offerVector.size()][2];
+			System.out.println(Arrays.deepToString(data));
+			System.out.println();
+			int i = 0;
+			for (Offer offer : offerVector) {
+				if(offer.getRuralHouse().getReview().getReviewState() == ReviewState.APPROVED) {
+					data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
+					System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());				
+					data[i][1] = new CellDetails(offer);
+					System.out.println("data[" + i + "][1] " + offer);
+					i++;
+					System.out.println();
+				}
+			}
+
 		}
 
 		public void setRandomImages() {		
 			for (Object[] object: data) {
 				// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
 				int randomNum = ThreadLocalRandom.current().nextInt(0, images.length);
-				object[0] = getImage(images[randomNum]);
+				object[0] = getScaledImage(images[randomNum]);
 			}
 		}
 
@@ -734,16 +750,22 @@ public class ClientMainPanel extends JPanel {
 		//				setValueAt(i, 0, new ImageIcon(images[randomNum]));
 		//			}
 
-		private ImageIcon getImage(String path) {
-			BufferedImage bufferedImage;
+		private ImageIcon getScaledImage(String path) {
 			ImageIcon imageIcon = null;
 			try {
-				bufferedImage = ImageIO.read(getClass().getResource(path));
-				imageIcon =  new ImageIcon(bufferedImage.getScaledInstance(width, height, Image.SCALE_SMOOTH));
+				imageIcon = getScaledImage(ImageIO.read(getClass().getResource(path)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			return imageIcon;
+		}
+
+		private ImageIcon getScaledImage(BufferedImage bufferedImage) {	 
+			return new ImageIcon(bufferedImage.getScaledInstance(imageDimension.width, imageDimension.height, Image.SCALE_SMOOTH));
+		}
+
+		private ImageIcon getScaledImage(ImageIcon imageIcon) {
+			return new ImageIcon(imageIcon.getImage().getScaledInstance(imageDimension.width, imageDimension.height, Image.SCALE_SMOOTH));
 		}
 
 		@Override
@@ -761,16 +783,10 @@ public class ClientMainPanel extends JPanel {
 			return data[row][col];
 		}
 
-		@SuppressWarnings("unused")
 		public void setValueAt(int row, int col, ImageIcon value) {
 			data[row][col] = getScaledImage(value);
 		}
 
-		private ImageIcon getScaledImage(ImageIcon imageIcon) {
-			return new ImageIcon(imageIcon.getImage().getScaledInstance(width, height,Image.SCALE_SMOOTH));
-		}
-
-		@SuppressWarnings("unused")
 		public void setValueAt(int row, int col, Object value) {
 			data[row][col] = value;
 		}
@@ -780,24 +796,32 @@ public class ClientMainPanel extends JPanel {
 			return columnNames[col];
 		}
 
-		@SuppressWarnings("unused")
-		public int getDefaultImageWidth() {
-			return width;
+		public Dimension getImageDimension() {
+			return imageDimension;
 		}
 
-		@SuppressWarnings("unused")
-		public void setDefaultImageWidth(int width) {
-			this.width = width;
+		public void setImageDimension(int width, int height) {
+			setImageDimension(new Dimension(width, height));
 		}
 
-		@SuppressWarnings("unused")
-		public int getDefaultImageHeight() {
-			return height;
+		public void setImageDimension(Dimension imageDimension) {
+			this.imageDimension = imageDimension;
 		}
 
-		@SuppressWarnings("unused")
-		public void setDefaultImageHeight(int height) {
-			this.height = height;
+		public int getImageWidth() {
+			return imageDimension.width;
+		}
+
+		public void setImageWidth(int width) {
+			this.imageDimension.width = width;
+		}
+
+		public int getImageHeight() {
+			return this.imageDimension.height;
+		}
+
+		public void setImageHeight(int height) {
+			this.imageDimension.height = height;
 		}
 
 		/*
@@ -858,65 +882,72 @@ public class ClientMainPanel extends JPanel {
 
 	}
 
-	public class TableCellComponents extends AbstractCellEditor implements TableCellEditor, TableCellRenderer{
+	public class TableCellComponent extends AbstractCellEditor implements TableCellEditor, TableCellRenderer{
 
 		private static final long serialVersionUID = 2711709042458345572L;
 
-		JPanel panel;
-		JTextArea descriptionTextArea, addressField, priceField;
-		JButton infoButton;
+		private JTextArea descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
+		private JButton infoButton;
+		private JPanel panel;
 
-
-		public TableCellComponents() {
+		public TableCellComponent() {
 
 			panel = new JPanel();
 			panel.setBorder(new EmptyBorder(2, 5, 2, 5));
 
 			GridBagLayout gridBagLayout = new GridBagLayout();
 			gridBagLayout.columnWidths = new int[] {128, 34, 0, 2};
-			gridBagLayout.rowHeights = new int[] {0, 0, 2};
+			gridBagLayout.rowHeights = new int[] {0, 0, 0};
 			gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
-			gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+			gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0};
 			panel.setLayout(gridBagLayout);
 
-			descriptionTextArea = new JTextArea();
-			descriptionTextArea.setOpaque(false);
-			descriptionTextArea.setEditable(false);
-			descriptionTextArea.setFocusable(false);
-			GridBagConstraints gbcDescriptionTextArea = new GridBagConstraints();
-			gbcDescriptionTextArea.gridwidth = 2;
-			gbcDescriptionTextArea.insets = new Insets(0, 0, 5, 5);
-			gbcDescriptionTextArea.fill = GridBagConstraints.BOTH;
-			gbcDescriptionTextArea.gridx = 0;
-			gbcDescriptionTextArea.gridy = 0;
-			panel.add(descriptionTextArea, gbcDescriptionTextArea);
+			dateRangeComponent = new JTextArea();
+			dateRangeComponent.setText("startDate - endDate");
+			GridBagConstraints gbcDateRange = new GridBagConstraints();
+			gbcDateRange.insets = new Insets(0, 0, 5, 5);
+			gbcDateRange.fill = GridBagConstraints.HORIZONTAL;
+			gbcDateRange.gridx = 0;
+			gbcDateRange.gridy = 0;
+			panel.add(dateRangeComponent, gbcDateRange);
 
-			addressField = new JTextArea();
-			addressField.setOpaque(false);
-			addressField.setEditable(false);
-			addressField.setFocusable(false);
-			GridBagConstraints gbcAdressField = new GridBagConstraints();
-			gbcDescriptionTextArea.gridwidth = 1;
-			gbcAdressField.insets = new Insets(0, 0, 0, 5);
-			gbcAdressField.fill = GridBagConstraints.HORIZONTAL;
-			gbcAdressField.gridx = 0;
-			gbcAdressField.gridy = 1;
-			panel.add(addressField, gbcAdressField);
-			addressField.setColumns(10);
+			descriptionComponent = new JTextArea("description");
+			descriptionComponent.setOpaque(true);
+			descriptionComponent.setEditable(true);
+			descriptionComponent.setFocusable(false);
+			GridBagConstraints gbcDescription = new GridBagConstraints();
+			gbcDescription.gridwidth = 2;
+			gbcDescription.insets = new Insets(5, 0, 5, 5);
+			gbcDescription.fill = GridBagConstraints.BOTH;
+			gbcDescription.gridx = 0;
+			gbcDescription.gridy = 1;
+			panel.add(descriptionComponent, gbcDescription);
 
-			priceField = new JTextArea();
-			priceField.setOpaque(false);
-			priceField.setEditable(false);
-			priceField.setFocusable(false);
-			priceField.setColumns(4);
+			addressComponent = new JTextArea("address [ city/address ]");
+			addressComponent.setOpaque(true);
+			addressComponent.setEditable(true);
+			addressComponent.setFocusable(false);
+			GridBagConstraints gbcAdress = new GridBagConstraints();
+			gbcDescription.gridwidth = 1;
+			gbcAdress.insets = new Insets(0, 0, 0, 5);
+			gbcAdress.fill = GridBagConstraints.HORIZONTAL;
+			gbcAdress.gridx = 0;
+			gbcAdress.gridy = 2;
+			panel.add(addressComponent, gbcAdress);
+			addressComponent.setColumns(10);
 
-			GridBagConstraints gbcPriceField = new GridBagConstraints();
-			gbcPriceField.fill = GridBagConstraints.HORIZONTAL;
-			gbcPriceField.insets = new Insets(0, 0, 0, 10);
-			gbcPriceField.gridx = 1;
-			gbcPriceField.gridy = 1;
-			panel.add(priceField, gbcPriceField);
+			priceComponent = new JTextArea("price");
+			priceComponent.setOpaque(true);
+			priceComponent.setEditable(true);
+			priceComponent.setFocusable(false);
+			priceComponent.setColumns(4);
 
+			GridBagConstraints gbcPrice = new GridBagConstraints();
+			gbcPrice.fill = GridBagConstraints.HORIZONTAL;
+			gbcPrice.insets = new Insets(0, 0, 0, 5);
+			gbcPrice.gridx = 1;
+			gbcPrice.gridy = 2;
+			panel.add(priceComponent, gbcPrice);
 
 			infoButton = new JButton("Info. ");
 			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -925,16 +956,23 @@ public class ClientMainPanel extends JPanel {
 			gbcInfoButton.gridheight = 3;
 			gbcInfoButton.gridx = 2;
 			gbcInfoButton.gridy = 0;	
-			gbcInfoButton.insets = new Insets(5, 5, 5, 5);
+			gbcInfoButton.insets = new Insets(5, 5, 0, 0);
 			panel.add(infoButton, gbcInfoButton);
+
 		}
+
+		//		descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
+		//		private JButton infoButton;
+		//		private JPanel panel;
 
 		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
 			rowContent.setTableDetailsCell(this);
-			descriptionTextArea.setText(rowContent.getDescription());
-			addressField.setText(rowContent.getAddress());
+			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+			dateRangeComponent.setText(date.format(rowContent.getStartDate()) + " - " + date.format(rowContent.getEndDate()));
+			descriptionComponent.setText(rowContent.getDescription());
 			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-			priceField.setText(currencyFormatter.format(rowContent.getPrice()));
+			addressComponent.setText(rowContent.getCity() + " " + rowContent.getAddress());
+			priceComponent.setText(currencyFormatter.format(rowContent.getPrice()));
 
 			infoButton.addActionListener(new ActionListener() {
 				@Override
@@ -981,28 +1019,28 @@ public class ClientMainPanel extends JPanel {
 			this.panel = panel;
 		}
 
-		public JTextArea getDescriptionTextArea() {
-			return descriptionTextArea;
+		public JTextArea getDescriptionComponent() {
+			return descriptionComponent;
 		}
 
-		public void setDescriptionTextArea(JTextArea descriptionTextArea) {
-			this.descriptionTextArea = descriptionTextArea;
+		public void setDescriptionComponent(JTextArea descriptionComponent) {
+			this.descriptionComponent = descriptionComponent;
 		}
 
-		public JTextArea getAddressField() {
-			return addressField;
+		public JTextArea getAddressComponent() {
+			return addressComponent;
 		}
 
-		public void setAddressField(JTextArea addressField) {
-			this.addressField = addressField;
+		public void setAddressComponent(JTextArea addressComponent) {
+			this.addressComponent = addressComponent;
 		}
 
-		public JTextArea getPriceField() {
-			return priceField;
+		public JTextArea getPriceComponent() {
+			return priceComponent;
 		}
 
-		public void setPriceField(JTextArea priceField) {
-			this.priceField = priceField;
+		public void setPriceComponent(JTextArea priceComponent) {
+			this.priceComponent = priceComponent;
 		}
 
 		public JButton getInfoButton() {
@@ -1017,48 +1055,74 @@ public class ClientMainPanel extends JPanel {
 
 	public class CellDetails {
 
-		private TableCellComponents tableDetailsCell;
+		private TableCellComponent tableCellComponent;
+		//		private String description;
+		//		private String city;
+		//		private String address;
+		//		private Date startDate;
+		//		private Date endDate;
+		//		private double price;
 		private Offer offer;
-		private String description;
-		private String address;
-		private Double price;
 
-		public CellDetails(String description, String address, double price) {
-			this.description = description;
-			this.address = address;
-			this.price = price;
+		//startDate endDate description address(city/address) price Image Offer
+		public CellDetails(Offer offer) {
+			this.offer = offer;
 		}
 
-		public void setTableDetailsCell(TableCellComponents tableDetailsCell) {
-			this.tableDetailsCell = tableDetailsCell;
+		public TableCellComponent getTableDetailsCell() {
+			return tableCellComponent;
 		}
 
-		public TableCellComponents getTableDetailsCell() {
-			return tableDetailsCell;
+		public void setTableDetailsCell(TableCellComponent tableCellComponent) {
+			this.tableCellComponent = tableCellComponent;
+		}
+
+		public Date getStartDate() {
+			return offer.getStartDate();
+		}
+
+		public void setStartDate(Date startDate) {
+			offer.setStartDate(startDate);
+		}
+
+		public Date getEndDate() {
+			return offer.getEndDate();
+		}
+
+		public void setEndDate(Date endDate) {
+			offer.getEndDate();
 		}
 
 		public String getDescription() {
-			return description;
+			return offer.getRuralHouse().getDescription();
 		}
 
 		public void setDescription(String description) {
-			this.description = description;
+			offer.getRuralHouse().setDescription(description);
+		}
+
+		public String getCity() {
+			return offer.getRuralHouse().getCity().getName();
+		}
+
+		public void setCity(String cityName) {
+			offer.getRuralHouse().getCity().setName(cityName);
 		}
 
 		public String getAddress() {
-			return address;
+			return offer.getRuralHouse().getAddress();
 		}
 
 		public void setAddress(String address) {
-			this.address = address;
+			offer.getRuralHouse().setAddress(address);
 		}
 
 		public double getPrice() {
-			return price;
+			return offer.getPrice();
 		}
 
-		public void setPrice(Double price) {
-			this.price = price;
+		public void setPrice(double price) {
+			offer.setPrice(price);
 		}
 
 	}

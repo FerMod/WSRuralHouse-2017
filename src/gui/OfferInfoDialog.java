@@ -5,14 +5,18 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -87,10 +91,10 @@ public class OfferInfoDialog extends JDialog {
 	 * @param rowContent 
 	 */
 	public OfferInfoDialog(JFrame parentFrame) {
-
+		super(parentFrame);
+		
 		this.parentFrame = parentFrame;
 		frameShader = new FrameShader(parentFrame);
-		
 
 		this.addWindowFocusListener(new WindowFocusListener() {
 			@Override
@@ -104,13 +108,40 @@ public class OfferInfoDialog extends JDialog {
 			public void windowLostFocus(WindowEvent e) {
 				if(e.getOppositeWindow() != null) {
 					if (!SwingUtilities.isDescendingFrom(e.getOppositeWindow(), OfferInfoDialog.this)) {
-						System.out.println("Closed the dialog!");
-						frameShader.setEnabled(false);
-						dispose();
+//						System.out.println("Closed the dialog!");
+//						frameShader.setEnabled(false);
+//						dispose();
 					}
 				}
 			}
 
+		});
+		
+		parentFrame.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+				System.out.println(e.getSource().getClass() + " >> " + e.paramString());
+//				int width = ((parentFrame.getSize().width - getSize().width/2)/100)*85;
+//				int height = ((parentFrame.getSize().height - getSize().height/2)/100)*99;
+//				setSize(width, height);
+//				validate();
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				System.out.println(e.getSource().getClass() + " >> " + e.paramString());
+				setLocationRelativeTo(parentFrame);
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+			}
+			
 		});
 
 		WindowAdapter exitListener = new WindowAdapter() {
