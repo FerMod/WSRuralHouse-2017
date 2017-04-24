@@ -7,6 +7,7 @@ import domain.Offer;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Review.ReviewState;
 import domain.City;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
@@ -99,8 +100,24 @@ public interface ApplicationFacadeInterface  {
 	@WebMethod
 	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
 	
+	/**
+	 * Obtain all the offers stored in the database
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database, {@code null} if none is found
+	 */
 	@WebMethod
 	Vector<Offer> getOffers();
+	
+	/**
+	 * Obtain all the offers matching with the entered {@code ReviewState}
+	 *
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers matching with the {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	@WebMethod
+	Vector<Offer> getOffers(ReviewState reviewState);
 
 	/**
 	 * Login the user with the account that matches the entered user name and password

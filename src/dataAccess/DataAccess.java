@@ -258,6 +258,34 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
+	
+	/**
+	 * Obtain all the offers matching with the entered {@code ReviewState}
+	 *
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers matching with the {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	public Vector<Offer> getOffers(ReviewState reviewState) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffers()");
+			TypedQuery<Offer> query = db.createQuery(
+					"SELECT o " +
+					"FROM Offer o " +
+					"WHERE o.reviewState LIKE :reviewState ", Offer.class)
+					.setParameter("reviewState", reviewState);
+			result = new Vector<Offer>(query.getResultList());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
 
 	/**
 	 * Returns the highest price of the stored offers

@@ -13,6 +13,7 @@ import domain.Offer;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Review.ReviewState;
 import domain.City;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
@@ -73,10 +74,15 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public double getOffersHighestPrice() {
 		return dataAccess.getOffersHighestPrice();
 	}
-
+	
 	@Override
 	public Vector<Offer> getOffers() {
 		return dataAccess.getOffers();
+	}
+	
+	@Override
+	public Vector<Offer> getOffers(ReviewState reviewState) {
+		return dataAccess.getOffers(reviewState);
 	}
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {

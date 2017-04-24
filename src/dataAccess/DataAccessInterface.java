@@ -8,6 +8,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Review.ReviewState;
 import domain.City;
 import domain.Offer;
 import domain.RuralHouse;
@@ -26,6 +27,8 @@ public interface DataAccessInterface {
 	Vector<Offer> getOffersBetweenPrice(int min, int max);
 	
 	Vector<Offer> getOffers();
+	
+	Vector<Offer> getOffers(ReviewState reviewState);
 	
 	double getOffersHighestPrice();
 	
