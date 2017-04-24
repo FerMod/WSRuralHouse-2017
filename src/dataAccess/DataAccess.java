@@ -268,12 +268,12 @@ public class DataAccess implements DataAccessInterface {
 		double result = 0;
 		try{
 			open();
-			System.out.println(">> DataAccess: getOffersHighestPrice() -> ");
+			System.out.print(">> DataAccess: getOffersHighestPrice() -> ");
 			TypedQuery<Double> query = db.createQuery("SELECT MAX(o.price) "
 					+ "FROM Offer o ", Double.class)
 					.setMaxResults(1); //There is only one highest price.
 			result = query.getSingleResult();
-			System.out.print(result);
+			System.out.println(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -291,12 +291,12 @@ public class DataAccess implements DataAccessInterface {
 		double result = 0f;
 		try{
 			open();
-			System.out.println(">> DataAccess: getOfferLowestPrice() -> ");
+			System.out.print(">> DataAccess: getOfferLowestPrice() -> ");
 			TypedQuery<Double> query = db.createQuery("SELECT MIN(o.price) "
 					+ "FROM Offer o ", Double.class)
 					.setMaxResults(1); //There is only one lowest price.
 			result = query.getSingleResult(); 
-			System.out.print(result);
+			System.out.println(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
