@@ -90,11 +90,11 @@ public class Review {
 		this.reviewer = reviewer;
 	}
 
-	public ReviewState getReviewState() {
+	public ReviewState getState() {
 		return reviewState;
 	}
 
-	public void setReviewState(ReviewState reviewState) {
+	public void setState(ReviewState reviewState) {
 		this.reviewState = reviewState;
 	}
 
