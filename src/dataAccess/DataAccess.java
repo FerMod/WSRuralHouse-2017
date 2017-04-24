@@ -34,6 +34,8 @@ import domain.City;
 import domain.Client;
 import domain.Offer;
 import domain.Owner;
+import domain.Review;
+import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -140,6 +142,7 @@ public class DataAccess implements DataAccessInterface {
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
 			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", createCity("Ezkio"), "Calle Falsa / 123");
+			rh1.getReview().setState(ReviewState.APPROVED);
 			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 293);
 			createOffer(rh1, date.parse("2017/5/23"), date.parse("2017/7/16"), 593);
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 773);
@@ -147,14 +150,17 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println(rh1.getOwner());
 
 			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", createCity("Iruna"), "Plz. square 1 3ºA");
+			rh2.getReview().setState(ReviewState.APPROVED);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2017/2/8"), 773);		
 
 			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", createCity("Bilbo"), "ñeñeñe 3 3ºñe");		
+			rh3.getReview().setState(ReviewState.APPROVED);
 			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 93);		
 			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 876);		
 			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 233);		
 
 			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", createCity("Renteria"), "Plhasa Bonitah 2 3sero se");	
+			rh4.getReview().setState(ReviewState.APPROVED);
 			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 128);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 455);		
 
