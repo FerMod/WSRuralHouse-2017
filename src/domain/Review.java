@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
@@ -31,8 +33,8 @@ public class Review implements Serializable {
 	private Date creationDate;
 	private Date reviewDate;
 	private String description;
-//	@OneToOne
-//	@MapsId
+	@OneToOne
+	@MapsId
 	private RuralHouse ruralHouse;
 
 	@Enumerated
