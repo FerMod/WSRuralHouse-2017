@@ -90,9 +90,10 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return ruralHouse;
 	}
 
+	@Override
 	public Vector<RuralHouse> getRuralHouses()  {
-		System.out.println(">> ApplicationFacadeImpl: getAllRuralHouses");
-		return new Vector<RuralHouse>(dataAccess.getRuralHouses());
+		System.out.println(">> ApplicationFacadeImpl: getRuralHouses");
+		return dataAccess.getRuralHouses();
 	}
 
 	@Override

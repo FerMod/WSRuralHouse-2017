@@ -421,8 +421,10 @@ public class DataAccess implements DataAccessInterface {
 		try {
 			open();
 			System.out.println(">> DataAccess: getRuralHouses()");
-			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh FROM RuralHouse rh", RuralHouse.class);
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
+					+ "FROM RuralHouse rh ", RuralHouse.class);
 			result = new Vector<RuralHouse>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
