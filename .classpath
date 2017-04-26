@@ -5,7 +5,7 @@
 	<classpathentry kind="lib" path="lib/jcalendar.jar"/>
 	<classpathentry kind="lib" path="lib/objectdb.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/Users/Ferran%20Tudela/Documents/workspaceIS/objectdb-2.6.9_09/doc/api-javadoc.zip!/api-javadoc"/>
+			<attribute name="javadoc_location" value="jar:file:/D:/Users/Ferran/Documents/workspaceIS/objectdb-2.6.9_09/doc/api-javadoc.zip!/api-javadoc"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

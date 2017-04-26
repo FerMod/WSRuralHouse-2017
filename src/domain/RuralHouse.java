@@ -270,7 +270,7 @@ public class RuralHouse implements Serializable {
 	/**
 	 * This method obtains all the available offers 
 	 * 
-	 * @return a vector of {@code Offers} available  in this period
+	 * @return a vector of {@code Offers}
 	 */
 	public Vector<Offer> getOffers() {
 		System.out.println(offers);
@@ -279,7 +279,7 @@ public class RuralHouse implements Serializable {
 				return offers;			
 			}
 		}
-		return null;
+		return new Vector<>();
 	}
 
 	/**

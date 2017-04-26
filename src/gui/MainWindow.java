@@ -31,7 +31,7 @@ import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-import domain.Client;
+import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
 
@@ -63,15 +63,18 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AbstractUser user = getDebugAccount();
+					
 					new ConsoleKeyEventDispatcher();
+					
 					ApplicationFacadeImpl aplicationFacade = new ApplicationFacadeImpl();
 					aplicationFacade.setDataAccess(new DataAccess());
 					MainWindow.setBussinessLogic(aplicationFacade);
-
+					
+					AbstractUser user = setupDebugAccount();					
 					MainWindow frame = new MainWindow(user);
 					frame.setFocusable(true);
 					frame.setVisible(true); 
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -84,19 +87,24 @@ public class MainWindow extends JFrame {
 	 * @return the chosen user fictional account
 	 */
 	@Deprecated
-	private static AbstractUser getDebugAccount() {
+	private static AbstractUser setupDebugAccount() {
 		Role[] options = new Role[] {Role.CLIENT, Role.OWNER, Role.ADMIN, Role.SUPER_ADMIN};
 		Role response = (Role)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		if(response != null) {
-			switch (response) {
-			case CLIENT:
-				return new Client("Client@clientmail.com", "Client", "ClientPassword");
-			case OWNER:
-				return new Client("Owner@ownermail.com", "Owner", "OwnerPassword");
-			case ADMIN:
-				return new Client("Admin@adminmail.com", "Admin", "AdminPassword");
-			case SUPER_ADMIN:
-				return new Client("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword");
+			try {
+				switch (response) {
+				case CLIENT:
+					return getBusinessLogic().createUser("Client@clientmail.com", "Client", "ClientPassword", response);
+				case OWNER:
+					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
+				case ADMIN:
+					return getBusinessLogic().createUser("Admin@adminmail.com", "Admin", "AdminPassword", response);
+				case SUPER_ADMIN:
+					//Not implemented
+					return getBusinessLogic().createUser("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword", response);
+				}
+			} catch (DuplicatedEntityException e) {
+				e.printStackTrace();
 			}
 		}
 		System.exit(0);
