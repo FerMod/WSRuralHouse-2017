@@ -528,7 +528,9 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println(">> DataAccess: getOffersByPrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT o"
 					+ " FROM Offer o "
-					+ "WHERE o.price>" + min + " AND o.price<" + max, Offer.class);
+					+ "WHERE o.price> :min AND o.price< :max", Offer.class)
+					.setParameter("min", min)
+					.setParameter("max", max);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -552,7 +554,8 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println(">> DataAccess: getOffersByConcretePrice");
 			TypedQuery<Offer> query = db.createQuery("SELECT o"
 					+ " FROM Offer o "
-					+ "WHERE o.price=" + price, Offer.class);
+					+ "WHERE o.price= :price", Offer.class)
+					.setParameter("price", price);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -743,7 +746,8 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println(">> DataAccess: getOfferById");
 			TypedQuery<Offer> query = db.createQuery("SELECT * "
 					+ "FROM Offer o "
-					+ "WHERE o.id=" + idOffer, Offer.class);
+					+ "WHERE o.id= :idOffer", Offer.class)
+					.setParameter("idOffer", idOffer);
 			result = new Vector<Offer>(query.getResultList());
 			printVector(result);
 		} catch	(Exception e) {
@@ -782,7 +786,8 @@ public class DataAccess implements DataAccessInterface {
 			open();
 			System.out.println(">> DataAccess: getBookingsOfClient");
 			TypedQuery<Booking> queryB = db.createQuery("SELECT b.idOffer"
-					+ " FROM Booking b WHERE b.idClient=" + idClient , Booking.class);
+					+ " FROM Booking b WHERE b.idClient= :idClient", Booking.class)
+					.setParameter("idClient", idClient);
 			List<Booking> bookings = new Vector<Booking>(queryB.getResultList());
 			
 			result = new Vector<Offer>();
