@@ -1,13 +1,13 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -41,7 +41,8 @@ public class RuralHouse implements Serializable {
 	private City city; 
 	private String address;
 	private Owner owner;
-	@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true, optional=false)
+	//@OneToOne(fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true, optional=false)
+	@OneToOne(cascade=CascadeType.ALL)
 	private Review review;
 	/**
 	 * The image in the first position (<i>index 0</i>) of the {@code Vector} will be used as the
@@ -53,7 +54,7 @@ public class RuralHouse implements Serializable {
 	public Vector<Offer> offers;
 
 	public RuralHouse() {
-		this.review = new Review();
+		this.review = new Review(this);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class RuralHouse implements Serializable {
 		this.description = description;
 		this.city = city;
 		this.address = address;
-		this.review = new Review();
+		this.review = new Review(this);
 		offers = new Vector<Offer>();
 		images = new Vector<ImageIcon>();
 	}
@@ -239,11 +240,72 @@ public class RuralHouse implements Serializable {
 	 */
 	public Offer createOffer(Date firstDay, Date lastDay, double price)  {
 		System.out.println("LLAMADA RuralHouse createOffer, offerNumber="+" firstDay="+firstDay+" lastDay="+lastDay+" price="+price);
-		Offer off = new Offer(firstDay, lastDay, price, this);
-		offers.add(off);
-		return off;
+		Offer offer = new Offer(firstDay, lastDay, price, this);
+		offers.add(offer);
+		return offer;
 	}
 
+
+	/**
+	 * This method obtains available offers for a concrete house in a certain period 
+	 * 
+	 * @param houseNumber, the house number where the offers must be obtained 
+	 * @param firstDay, first day in a period range 
+	 * @param lastDay, last day in a period range
+	 * @return a vector of offers(Offer class)  available  in this period
+	 */
+	public Vector<Offer> getOffers(Date firstDay,  Date lastDay) {
+
+		Vector<Offer> availableOffers=new Vector<Offer>();
+		Iterator<Offer> e = offers.iterator();
+		Offer offer;
+		while (e.hasNext()){
+			offer=e.next();
+			if ( (offer.getStartDate().compareTo(firstDay)>=0) && (offer.getEndDate().compareTo(lastDay)<=0)  )
+				availableOffers.add(offer);
+		}
+		return availableOffers;
+	}
+
+	/**
+	 * This method obtains all the available offers 
+	 * 
+	 * @return a vector of {@code Offers} available  in this period
+	 */
+	public Vector<Offer> getOffers() {
+		System.out.println(offers);
+		if(offers != null) {
+			if(!offers.isEmpty()) {
+				return offers;			
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * This method obtains the first offer that overlaps with the provided dates
+	 * 
+	 * @param firstDay, first day in a period range 
+	 * @param lastDay, last day in a period range
+	 * @return the first offer that overlaps with those dates, or null if there is no overlapping offer
+	 */
+	public Offer overlapsWith( Date firstDay,  Date lastDay) {
+
+		Iterator<Offer> e=offers.iterator();
+		Offer offer=null;
+		while (e.hasNext()){
+			offer=e.next();
+			if ( (offer.getStartDate().compareTo(lastDay)<0) && (offer.getEndDate().compareTo(firstDay)>0))
+				return offer;
+		}
+		return null;
+	}
+
+	public String toDetailedString() {
+		return "RuralHouse [id=" + id + ", name=" + name + ", description=" + description + ", city=" + city
+				+ ", address=" + address + ", owner=" + owner + ", review=" + review + ", images=" + images + ", tags="
+				+ Arrays.toString(tags) + ", offers=" + offers + "]";
+	}
 
 	@Override
 	public int hashCode() {
@@ -272,48 +334,6 @@ public class RuralHouse implements Serializable {
 		if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	/**
-	 * This method obtains available offers for a concrete house in a certain period 
-	 * 
-	 * @param houseNumber, the house number where the offers must be obtained 
-	 * @param firstDay, first day in a period range 
-	 * @param lastDay, last day in a period range
-	 * @return a vector of offers(Offer class)  available  in this period
-	 */
-	public Vector<Offer> getOffers( Date firstDay,  Date lastDay) {
-
-		Vector<Offer> availableOffers=new Vector<Offer>();
-		Iterator<Offer> e=offers.iterator();
-		Offer offer;
-		while (e.hasNext()){
-			offer=e.next();
-			if ( (offer.getStartDate().compareTo(firstDay)>=0) && (offer.getEndDate().compareTo(lastDay)<=0)  )
-				availableOffers.add(offer);
-		}
-		return availableOffers;
-
-	}
-
-
-	/**
-	 * This method obtains the first offer that overlaps with the provided dates
-	 * 
-	 * @param firstDay, first day in a period range 
-	 * @param lastDay, last day in a period range
-	 * @return the first offer that overlaps with those dates, or null if there is no overlapping offer
-	 */
-	public Offer overlapsWith( Date firstDay,  Date lastDay) {
-
-		Iterator<Offer> e=offers.iterator();
-		Offer offer=null;
-		while (e.hasNext()){
-			offer=e.next();
-			if ( (offer.getStartDate().compareTo(lastDay)<0) && (offer.getEndDate().compareTo(firstDay)>0))
-				return offer;
-		}
-		return null;
 	}
 
 }

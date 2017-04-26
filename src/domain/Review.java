@@ -1,9 +1,9 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -15,7 +15,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class Review {
+public class Review implements Serializable {
+
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = 8273895976125369427L;
 
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
@@ -26,6 +31,10 @@ public class Review {
 	private Date creationDate;
 	private Date reviewDate;
 	private String description;
+//	@OneToOne
+//	@MapsId
+	private RuralHouse ruralHouse;
+
 	@Enumerated
 	private ReviewState reviewState;
 
@@ -62,7 +71,8 @@ public class Review {
 		REJECTED		
 	}
 
-	public Review() {
+	public Review(RuralHouse ruralHouse) {
+		this.ruralHouse = ruralHouse;
 		reviewState = ReviewState.AWAITING_REVIEW;
 		creationDate = Calendar.getInstance().getTime();
 	}
@@ -94,8 +104,31 @@ public class Review {
 		return reviewState;
 	}
 
-	public void setState(ReviewState reviewState) {
+	/**
+	 * Set the reviewer and the state of the review.
+	 * No description is given to the review, so the description value will be null.
+	 * This also gets the current system date and stores it to later know when was made the review.
+	 * 
+	 * @param reviewer the administrator who have made the review
+	 * @param state the state that is currently the review
+	 */
+	public void setState(Admin reviewer, ReviewState state) {
+		setState(reviewer, null, state);
+	}
+
+	/**
+	 * Set the reviewer, description and state of the review.
+	 * This also gets the current system date and stores it to later know when was made the review.
+	 * 
+	 * @param reviewer the administrator who have made the review
+	 * @param description a description for the review
+	 * @param state the state that is currently the review
+	 */
+	public void setState(Admin reviewer, String description, ReviewState reviewState) {
+		this.reviewer = reviewer;
+		this.description = description;
 		this.reviewState = reviewState;
+		reviewDate = Calendar.getInstance().getTime();
 	}
 
 	public String getDescription() {
@@ -120,33 +153,6 @@ public class Review {
 
 	public void setReviewDate(Date reviewDate) {
 		this.reviewDate = reviewDate;
-	}
-
-	/**
-	 * Set the reviewer and the state of the review.
-	 * No description is given to the review, so the description value will be null.
-	 * This also gets the current system date and stores it to later know when was made the review.
-	 * 
-	 * @param reviewer the administrator who have made the review
-	 * @param state the state that is currently the review
-	 */
-	public void setReview(Admin reviewer, ReviewState state) {
-		setReview(reviewer, null, state);
-	}
-
-	/**
-	 * Set the reviewer, description and state of the review.
-	 * This also gets the current system date and stores it to later know when was made the review.
-	 * 
-	 * @param reviewer the administrator who have made the review
-	 * @param description a description for the review
-	 * @param state the state that is currently the review
-	 */
-	public void setReview(Admin reviewer, String description, ReviewState reviewState) {
-		this.reviewer = reviewer;
-		this.description = description;
-		this.reviewState = reviewState;
-		reviewDate = Calendar.getInstance().getTime();
 	}
 
 	@Override
