@@ -32,19 +32,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException{
-		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
-
-		RuralHouse ruralHouse = null;
-
-		if(!dataAccess.existsRuralHouse(description, city.getId())) {
-			ruralHouse = dataAccess.createRuralHouse(description, city);
-		} else {
-			throw new DuplicatedEntityException();
-		}
-
-		System.out.println("<< ApplicationFacadeImpl: createRuralHouse => " + ruralHouse);
-		return ruralHouse;
+	public <T> T update(T entity) {
+		return dataAccess.update(entity);
 	}
 
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
@@ -69,42 +58,36 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
 		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
 	}
-	
-	@Override
-	public double getOffersHighestPrice() {
-		return dataAccess.getOffersHighestPrice();
-	}
-	
+
 	@Override
 	public Vector<Offer> getOffers() {
 		return dataAccess.getOffers();
 	}
 	
 	@Override
-	public Vector<Offer> getOffers(ReviewState reviewState) {
-		return dataAccess.getOffers(reviewState);
+	public int getOfferCount() {
+		return dataAccess.getOfferCount();
 	}
 
-	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
-		return dataAccess.login(username, password);
+	@Override
+	public double getOffersHighestPrice() {
+		return dataAccess.getOffersHighestPrice();
 	}
 
-	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
-		if(!dataAccess.existsEmail(email)) {
-			if(!dataAccess.existsUser(username)) {
-				return dataAccess.createUser(email, username, password, role);
-			} else {
-				throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
-			}
+	@Override
+	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException{
+		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
+
+		RuralHouse ruralHouse = null;
+
+		if(!dataAccess.existsRuralHouse(description, city.getId())) {
+			ruralHouse = dataAccess.createRuralHouse(description, city);
 		} else {
-			throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
+			throw new DuplicatedEntityException();
 		}
-	}
 
-	public Role getRole(String username) {
-		Role role = dataAccess.getRole(username);
-		return role;
+		System.out.println("<< ApplicationFacadeImpl: createRuralHouse => " + ruralHouse);
+		return ruralHouse;
 	}
 
 	public Vector<RuralHouse> getRuralHouses()  {
@@ -112,6 +95,12 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return new Vector<RuralHouse>(dataAccess.getRuralHouses());
 	}
 
+	@Override
+	public Vector<RuralHouse> getRuralHouses(ReviewState reviewState) {
+		return dataAccess.getRuralHouses(reviewState);
+	}
+
+	@Override
 	public City createCity(String name) {
 		System.out.println(">> ApplicationFacadeImpl: createCity=> name= " + name);
 
@@ -139,6 +128,28 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<City> getCities() {
 		System.out.println(">> ApplicationFacadeImpl: getCities()");
 		return new Vector<City>(dataAccess.getCities());
+	}
+
+	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
+		if(!dataAccess.existsEmail(email)) {
+			if(!dataAccess.existsUser(username)) {
+				return dataAccess.createUser(email, username, password, role);
+			} else {
+				throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
+			}
+		} else {
+			throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
+		}
+	}
+
+	public Role getRole(String username) {
+		Role role = dataAccess.getRole(username);
+		return role;
+	}
+
+	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
+		return dataAccess.login(username, password);
 	}
 
 	//	private getConfig() {

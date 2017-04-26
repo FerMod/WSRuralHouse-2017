@@ -1,5 +1,6 @@
 package dataAccess;
 
+import java.awt.List;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
@@ -18,6 +19,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import javax.jdo.annotations.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -29,6 +31,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import businessLogic.util.Timer;
 import configuration.ConfigXML;
 import domain.AbstractUser;
+import domain.Admin;
 import domain.AbstractUser.Role;
 import domain.City;
 import domain.Client;
@@ -40,6 +43,7 @@ import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
+import gui.prototypes.ReviewersView_Prototype;
 
 public class DataAccess implements DataAccessInterface {
 
@@ -121,6 +125,22 @@ public class DataAccess implements DataAccessInterface {
 		}
 	}
 
+	/**
+	 * Method used to update a entity with their changes to the database
+	 * 
+	 * @param entity the entity that will be updated
+	 * @return the managed instance that is updated
+	 */
+	@Override
+	public <T> T update(T entity) {
+		open();
+		db.getTransaction().begin();
+		T managedInstance = db.merge(entity);
+		db.getTransaction().commit();
+		close();
+		return managedInstance;
+	}
+
 	@Override
 	public void initializeDB(){
 		try{				
@@ -131,40 +151,46 @@ public class DataAccess implements DataAccessInterface {
 			//			deleteTableContent("Client");
 			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
-			
+
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
-			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
-
+			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
+			
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
 			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", createCity("Ezkio"), "Calle Falsa / 123");
-			rh1.getReview().setState(ReviewState.APPROVED);
+			rh1.getReview().setState(admin, ReviewState.APPROVED);
+			update(rh1);
 			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 293);
 			createOffer(rh1, date.parse("2017/5/23"), date.parse("2017/7/16"), 593);
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 773);
-			
-			System.out.println(rh1.getOwner());
 
 			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", createCity("Iruna"), "Plz. square 1 3ºA");
-			rh2.getReview().setState(ReviewState.APPROVED);
+			rh2.getReview().setState(admin, ReviewState.APPROVED);
+			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2017/2/8"), 773);		
 
 			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", createCity("Bilbo"), "ñeñeñe 3 3ºñe");		
-			rh3.getReview().setState(ReviewState.APPROVED);
+			rh3.getReview().setState(admin, ReviewState.APPROVED);
+			update(rh3);
 			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 93);		
 			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 876);		
 			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 233);		
 
 			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", createCity("Renteria"), "Plhasa Bonitah 2 3sero se");	
-			rh4.getReview().setState(ReviewState.APPROVED);
+			rh4.getReview().setState(admin, ReviewState.APPROVED);
+			update(rh4);
 			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 128);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 455);		
 
 			System.out.println("Database initialized");
+
+			for (RuralHouse ruralHouse : getRuralHouses()) {
+				System.out.println(ruralHouse.getReview().toString());
+			}
 
 		} catch (Exception e){
 			e.printStackTrace();
@@ -260,25 +286,19 @@ public class DataAccess implements DataAccessInterface {
 	}
 	
 	/**
-	 * Obtain all the offers matching with the entered {@code ReviewState}
+	 * Returns the number of offers stored in the database
 	 *
-	 * @param reviewState one of the possible states of a {@code Review}
-	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers matching with the {@code ReviewState}, {@code null} if none is found
-	 * 
-	 * @see ReviewState
+	 * @return the number of offers in the database
 	 */
-	public Vector<Offer> getOffers(ReviewState reviewState) {
-		Vector<Offer> result = null;
+	public int getOfferCount() {
+		int result = 0;
 		try{
 			open();
-			System.out.println(">> DataAccess: getOffers()");
-			TypedQuery<Offer> query = db.createQuery(
-					"SELECT o " +
-					"FROM Offer o " +
-					"WHERE o.reviewState LIKE :reviewState ", Offer.class)
-					.setParameter("reviewState", reviewState);
-			result = new Vector<Offer>(query.getResultList());
-			printCollection(result);
+			System.out.print(">> DataAccess: getOfferCount() -> ");
+			TypedQuery<Offer> query = db.createQuery("SELECT o "
+					+ "FROM Offer o ", Offer.class);
+			result = query.getResultList().size();
+			System.out.println(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -337,7 +357,7 @@ public class DataAccess implements DataAccessInterface {
 	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws  OverlappingOfferException {
 		try{
 			open();
-	
+
 			RuralHouse ruralHouse = db.find(RuralHouse.class, rh.getId());
 			if (ruralHouse.overlapsWith(firstDay, lastDay) != null) {
 				return true;
@@ -355,14 +375,17 @@ public class DataAccess implements DataAccessInterface {
 	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException {
 		return createRuralHouse(description, city);
 	}
-	
-	public RuralHouse createRuralHouse(Owner owner, String description, City city, String address) {
+
+	@Override
+	public RuralHouse createRuralHouse(Owner owner, String description, City city, String address) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
 		try {
 			open();
 			System.out.print(">> DataAccess: createRuralHouse(" + owner + ", " + description + ", " + city + ", " + address + ") -> ");
 			db.getTransaction().begin();
-			ruralHouse = new RuralHouse(owner, description, city, address);
+			ruralHouse = new RuralHouse(owner, description, city, address);	
+			Review review = new Review(ruralHouse);
+			ruralHouse.setReview(review);
 			db.persist(ruralHouse);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + ruralHouse.getId());
@@ -373,6 +396,24 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return ruralHouse;
 	}
+
+	//	public Review createReview(RuralHouse ruralHouse) {
+	//		Review review= null;
+	//		try {
+	//			open();
+	//			System.out.print(">> DataAccess: createReview(" + ruralHouse + ") -> ");
+	//			db.getTransaction().begin();
+	//			review = new Review(ruralHouse);
+	//			db.persist(ruralHouse);
+	//			db.getTransaction().commit();
+	//			System.out.println("Created with id " + review.getId());
+	//		} catch	(Exception e) {
+	//			e.printStackTrace();
+	//		} finally {
+	//			close();
+	//		}
+	//		return review;
+	//	}
 
 	@Override
 	public Vector<RuralHouse> getRuralHouses() {
@@ -389,7 +430,36 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return result;
-	
+
+	}
+
+	/**
+	 * Obtain all the rural houses matching with the entered {@code ReviewState}
+	 *
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses matching with the {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	@Override
+	public Vector<RuralHouse> getRuralHouses(ReviewState reviewState) {
+		Vector<RuralHouse> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffers(" + reviewState + ")");
+			//FIXME Not making the query in the right way
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT r.ruralHouse " +
+					"FROM Review r " +
+					"WHERE r.reviewState == :reviewState ", RuralHouse.class)
+					.setParameter("reviewState", reviewState.toString());
+			result = new Vector<RuralHouse>(query.getResultList());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
 	}
 
 	@Override
@@ -404,8 +474,6 @@ public class DataAccess implements DataAccessInterface {
 					+ "AND rh.city = :city", RuralHouse.class)
 					.setParameter("description", description)
 					.setParameter("city", city);
-			//			Vector<RuralHouse> result = new Vector<RuralHouse>(query.getResultList());
-			//			found = !result.isEmpty();
 			query.getSingleResult();
 			System.out.println(true);
 			System.out.println(timer.getFormattedFinishTime());
@@ -448,7 +516,7 @@ public class DataAccess implements DataAccessInterface {
 		case OWNER:
 			return new Owner(email, username, password);
 		case ADMIN:
-			return null;
+			return new Admin(email, username, password);
 		case SUPER_ADMIN:
 			return null;
 		default:
@@ -518,8 +586,6 @@ public class DataAccess implements DataAccessInterface {
 					+ "WHERE u.username = :username", AbstractUser.class)
 					.setParameter("username", username)
 					.setMaxResults(1);
-			//			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
-			//			found = !result.isEmpty();
 			query.getSingleResult();
 			System.out.println(true);
 			System.out.println(timer.getFormattedFinishTime());
@@ -547,8 +613,6 @@ public class DataAccess implements DataAccessInterface {
 					+ "WHERE u.email = :email", AbstractUser.class)
 					.setParameter("email", email)
 					.setMaxResults(1);
-			//			Vector<AbstractUser> result = new Vector<AbstractUser>(query.getResultList());
-			//			found = !result.isEmpty();
 			query.getSingleResult();
 			System.out.println(true);
 			System.out.println(timer.getFormattedFinishTime());
@@ -710,26 +774,9 @@ public class DataAccess implements DataAccessInterface {
 	 * @param the user
 	 * @param the password to modify
 	 */
-	public void changeUsersPass(AbstractUser user, String password) {
-		open();
-		db.getTransaction().begin();
+	public void changeUserPassword(AbstractUser user, String password) {
 		user.setPassword(password);
-		db.getTransaction().commit();
-		close();
-	}
-
-	/**
-	 * Modify the user's password.
-	 *  
-	 * @param the user
-	 * @param the password to modify
-	 */
-	public void modifyUsersPass(AbstractUser user, String password) {
-		open();
-		db.getTransaction().begin();
-		user.setPassword(password);
-		db.getTransaction().commit();
-		close();
+		update(user);
 	}
 
 	/**
