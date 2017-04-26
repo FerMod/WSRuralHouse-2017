@@ -22,13 +22,13 @@ import dataAccess.DataAccessInterface;
 
 @WebService
 public interface ApplicationFacadeInterface  {
-	
+
 	/**
 	 * 
 	 * @param dataAccess
 	 */
 	void setDataAccess(DataAccessInterface dataAccess);
-	
+
 	/**
 	 * Method used to update a entity with their changes to the database
 	 * 
@@ -36,7 +36,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return the managed instance that is updated
 	 */
 	<T> T update(T entity);
-	
+
 	/**
 	 * Creates an offer and stores it in the database.
 	 * 
@@ -69,7 +69,14 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<Offer> getOffers();
-	
+
+	/**
+	 * Obtain all the offers stored in the database that matches with the given {@code ReviewState} of their rural house
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
+	 */
+	Vector<Offer> getOffers(ReviewState reviewState);
+
 	/**
 	 * Returns the number of offers stored in the database
 	 *
@@ -103,7 +110,7 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<RuralHouse> getRuralHouses();
-	
+
 	/**
 	 * Obtain all the rural houses matching with the entered {@code ReviewState}
 	 *

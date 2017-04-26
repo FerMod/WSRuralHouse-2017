@@ -158,7 +158,7 @@ public class DataAccess implements DataAccessInterface {
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
-			
+
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
 			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", createCity("Ezkio"), "Calle Falsa / 123");
@@ -284,7 +284,31 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * Obtain all the offers stored in the database that matches with the given {@code ReviewState} of their rural house
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
+	 */
+	public Vector<Offer> getOffers(ReviewState reviewState) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOffers(" + reviewState + ")");
+			TypedQuery<Offer> query = db.createQuery("SELECT o " +
+					"FROM Offer o " +
+					"WHERE o.ruralHouse.review.reviewState == :reviewState", Offer.class)
+					.setParameter("reviewState", reviewState);
+			result = new Vector<Offer>(query.getResultList());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
 	/**
 	 * Returns the number of offers stored in the database
 	 *
@@ -448,12 +472,11 @@ public class DataAccess implements DataAccessInterface {
 		Vector<RuralHouse> result = null;
 		try{
 			open();
-			System.out.println(">> DataAccess: getOffers(" + reviewState + ")");
-			//FIXME Not making the query in the right way
-			TypedQuery<RuralHouse> query = db.createQuery("SELECT r.ruralHouse " +
-					"FROM Review r " +
-					"WHERE r.reviewState == :reviewState ", RuralHouse.class)
-					.setParameter("reviewState", reviewState.toString());
+			System.out.println(">> DataAccess: getRuralHouses(" + reviewState + ")");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh " +
+					"FROM RuralHouse rh " +
+					"WHERE rh.review.reviewState == :reviewState ", RuralHouse.class)
+					.setParameter("reviewState", reviewState);
 			result = new Vector<RuralHouse>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {

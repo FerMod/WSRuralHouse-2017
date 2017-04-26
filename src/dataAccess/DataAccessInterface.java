@@ -30,6 +30,8 @@ public interface DataAccessInterface {
 	
 	Vector<Offer> getOffers();
 	
+	Vector<Offer> getOffers(ReviewState reviewState);
+	
 	int getOfferCount();
 	
 	double getOffersHighestPrice();

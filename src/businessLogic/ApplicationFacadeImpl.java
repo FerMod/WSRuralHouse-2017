@@ -64,6 +64,10 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return dataAccess.getOffers();
 	}
 	
+	public Vector<Offer> getOffers(ReviewState reviewState) {
+		 return dataAccess.getOffers(reviewState);
+	 }
+	
 	@Override
 	public int getOfferCount() {
 		return dataAccess.getOfferCount();

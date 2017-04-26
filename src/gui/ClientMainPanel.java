@@ -71,6 +71,7 @@ import javax.swing.text.Highlighter;
 
 import domain.Offer;
 import domain.Review.ReviewState;
+import domain.RuralHouse;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
@@ -717,21 +718,23 @@ public class ClientMainPanel extends JPanel {
 
 		private void fillTableData() {
 
-			Vector<Offer> offerVector = MainWindow.getBusinessLogic().getOffers();
+			//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses(ReviewState.APPROVED);
+//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses();
+//			System.out.println("###############################\nRURAL HOUSES\n" + MainWindow.getBusinessLogic().getRuralHouses());
+			
+			Vector<Offer> offerVector = MainWindow.getBusinessLogic().getOffers(ReviewState.APPROVED);
 			data = new Object[offerVector.size()][2];
 			System.out.println(Arrays.deepToString(data));
 			System.out.println();
 			int i = 0;
 			for (Offer offer : offerVector) {
-				if(offer.getRuralHouse().getReview().getReviewState() == ReviewState.APPROVED) {
-					data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
-					System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());				
-					data[i][1] = new CellDetails(offer);
-					System.out.println("data[" + i + "][1] " + offer);
-					i++;
-					System.out.println();
-				}
+				data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
+				System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());				
+				data[i][1] = new CellDetails(offer);
+				System.out.println("data[" + i + "][1] " + offer);
+				i++;					
 			}
+			System.out.println();
 
 		}
 
