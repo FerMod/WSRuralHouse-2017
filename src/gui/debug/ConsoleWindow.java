@@ -5,31 +5,68 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.TextAction;
 
 public final class ConsoleWindow {
 
 	private static JFrame frame;
-	private static String windowTitle = "Console Output";
+	private static String frameTitle = "Console Output";
+	private static CloseOperation defaultCloseOperation = CloseOperation.HIDE_ON_CLOSE;
+	private static CapturePane capturePane;
+
+	public enum CloseOperation {
+		HIDE_ON_CLOSE(JFrame.HIDE_ON_CLOSE), 
+		DISPOSE_ON_CLOSE(JFrame.DISPOSE_ON_CLOSE),
+		EXIT_ON_CLOSE(JFrame.EXIT_ON_CLOSE),
+		DO_NOTHING_ON_CLOSE(JFrame.DO_NOTHING_ON_CLOSE);
+
+		private final int operation;
+
+		private CloseOperation(int operation) {
+			this.operation = operation;
+		}
+
+		public int getValue() {
+			return this.operation;
+		}
+
+	}
 
 	public static void main(String[] args) {
 		new ConsoleWindow();
@@ -46,12 +83,25 @@ public final class ConsoleWindow {
 
 	private void createAndShowGui() {
 
-		frame = new JFrame(windowTitle);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		CapturePane capturePane = new CapturePane();
+		try {
+			// Set System L&F
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException e) {
+			// handle exception
+		} catch (ClassNotFoundException e) {
+			// handle exception
+		} catch (InstantiationException e) {
+			// handle exception
+		} catch (IllegalAccessException e) {
+			// handle exception
+		}
+
+		frame = new JFrame(frameTitle);
+		frame.setDefaultCloseOperation(defaultCloseOperation.getValue());
+		capturePane = new CapturePane();
 		frame.setContentPane(capturePane.getContentPanel()); 
 		frame.setLocationByPlatform(true);
-		frame.setMinimumSize(new Dimension(272, 39));
+		//frame.setMinimumSize(new Dimension(272, 39));
 		frame.setSize(650, 350);
 		frame.setFocusable(true);
 
@@ -111,7 +161,58 @@ public final class ConsoleWindow {
 
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
-		 */
+		 */		
+	}
+
+	public static void showInBrowse(File file) {
+		showInBrowse(file.toURI());
+	}
+
+	public static void showInBrowse(URL url) {
+		try {
+			showInBrowse(url.toURI());
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void showInBrowse(URI uri) {
+		Desktop desktop = Desktop.isDesktopSupported()? Desktop.getDesktop() : null;
+		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+			try {
+				desktop.browse(uri);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			showInConsole(uri);
+		}
+	}
+
+	public static void showInConsole(File file) {
+		showInConsole(file.toURI());
+	}
+
+	public static void showInConsole(URI uri) {
+		try {
+			showFile(uri.toURL());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void showInConsole(URL url) {
+		showFile(url);
+	}
+
+	public static void showFile(URL url) {
+		try {
+			capturePane.getTextPane().setPage(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static boolean isVisible() {
@@ -138,11 +239,65 @@ public final class ConsoleWindow {
 		}
 	}
 
-	public static void setTitle(String title) {
-		windowTitle = title;
+	public static String getTitle() {
+		return frameTitle;
 	}
 
-	public void restartApplication(Class<?> applicationClass) {
+	public static void setTitle(String title) {
+		frameTitle = title;
+	}
+
+	/**
+	 * Sets the operation that will happen by default when
+	 * the user initiates a "close" on this frame.
+	 * You must specify one of the following choices:
+	 * <br><br>
+	 * <ul>
+	 * <li><code>DO_NOTHING_ON_CLOSE</code>
+	 * (defined in <code>WindowConstants</code>):
+	 * Don't do anything; require the
+	 * program to handle the operation in the <code>windowClosing</code>
+	 * method of a registered <code>WindowListener</code> object.
+	 *
+	 * <li><code>HIDE_ON_CLOSE</code>
+	 * (defined in <code>WindowConstants</code>):
+	 * Automatically hide the frame after
+	 * invoking any registered <code>WindowListener</code>
+	 * objects.
+	 *
+	 * <li><code>DISPOSE_ON_CLOSE</code>
+	 * (defined in <code>WindowConstants</code>):
+	 * Automatically hide and dispose the
+	 * frame after invoking any registered <code>WindowListener</code>
+	 * objects.
+	 *
+	 * <li><code>EXIT_ON_CLOSE</code>
+	 * (defined in <code>JFrame</code>):
+	 * Exit the application using the <code>System</code>
+	 * <code>exit</code> method.  Use this only in applications.
+	 * </ul>
+	 * <p>
+	 * The value is set to <code>HIDE_ON_CLOSE</code> by default. Changes
+	 * to the value of this property cause the firing of a property
+	 * change event, with property name "defaultCloseOperation".
+	 * <p>
+	 * <b>Note</b>: When the last displayable window within the
+	 * Java virtual machine (VM) is disposed of, the VM may
+	 * terminate.  See <a href="../../java/awt/doc-files/AWTThreadIssues.html">
+	 * AWT Threading Issues</a> for more information.
+	 *
+	 * @param operation the operation which should be performed when the
+	 *        user closes the frame
+	 */
+	public static void setDefaultCloseOperation(CloseOperation operation) {
+		defaultCloseOperation = operation;
+	}
+
+	public static CloseOperation getDefaultCloseOperation() {
+		return defaultCloseOperation;
+	}
+
+	public static void restartApplication(Class<?> applicationClass) {
 
 		try {
 
@@ -172,7 +327,7 @@ public final class ConsoleWindow {
 
 	}
 
-	private static class CapturePane implements Consumer {
+	public static class CapturePane implements Consumer {
 
 		private JPanel panel;
 		private JTextPane output;
@@ -185,16 +340,125 @@ public final class ConsoleWindow {
 			output = new OutputTextPane();
 
 			output.setEditable(false);
+			//output.setHighlighter(null); //Disable text selection
 			output.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-			
+
 			panel.add(output);
 			scrollPane = new JScrollPane(panel);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+			output.setComponentPopupMenu(getPopupMenu());
+
+		}
+
+		private JPopupMenu getPopupMenu() {
+
+			JPopupMenu popupMenu = null;
+
+			if(output.getHighlighter() != null) {
+
+				popupMenu = new JPopupMenu();
+				ImageIcon icon = null;
+
+				// Cut
+				Action cut = new DefaultEditorKit.CutAction();
+				cut.putValue(Action.NAME, "Cut");
+				cut.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
+
+				try {
+					icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/img/icons/cut.png")));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				cut.putValue(Action.SMALL_ICON, icon);
+				cut.setEnabled(output.isEditable());
+
+				popupMenu.add(cut);
+
+
+				// Copy
+				Action copy = new DefaultEditorKit.CopyAction();
+				copy.putValue(Action.NAME, "Copy");
+				copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+				
+				try {
+					icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/img/icons/copy.png")));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				copy.putValue(Action.SMALL_ICON, icon);
+
+				popupMenu.add(copy);
+				
+
+				// Paste
+				Action paste = new DefaultEditorKit.PasteAction();
+				paste.putValue(Action.NAME, "Paste");
+				paste.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+
+				try {
+					icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/img/icons/paste.png")));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				paste.putValue(Action.SMALL_ICON, icon);
+				paste.setEnabled(output.isEditable());
+				
+				popupMenu.add(paste);
+
+
+				// Separator
+				popupMenu.addSeparator();
+
+
+				// Select All
+				Action selectAll = new SelectAllAction();
+				selectAll.putValue(Action.NAME, "SelectAll");
+				selectAll.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control A"));
+
+				JMenuItem selectAllMenuItem = new JMenuItem(selectAll);
+				selectAllMenuItem.setHorizontalTextPosition(SwingConstants.LEFT);
+				selectAllMenuItem.setHorizontalAlignment(SwingConstants.LEFT);
+
+				popupMenu.add(selectAllMenuItem);
+
+
+			}
+
+			return popupMenu;
+		}
+
+		public static class SelectAllAction extends TextAction {
+			/**
+			 * Generated serial version ID
+			 */
+			private static final long serialVersionUID = -2451448648221545271L;
+
+			public SelectAllAction() {
+				super("Select All");
+				putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control A"));
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTextComponent component = getFocusedComponent();
+				if(component != null) {
+					component.selectAll();
+					component.requestFocusInWindow();
+				}
+			}
 
 		}
 
 		public Container getContentPanel() {
 			return scrollPane;
+		}
+
+		public JTextPane getTextPane() {
+			return output;
 		}
 
 		@Override
@@ -210,7 +474,7 @@ public final class ConsoleWindow {
 				AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
 
 				aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-				aset = sc.addAttribute(aset, StyleConstants.Size, 16);
+				aset = sc.addAttribute(aset, StyleConstants.Size, new JEditorPane().getFont().getSize());
 				aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_LEFT);
 				aset = sc.addAttribute(aset, StyleConstants.Foreground, color);
 
@@ -230,7 +494,7 @@ public final class ConsoleWindow {
 				});
 
 			}
-		}    
+		}
 
 		private class OutputTextPane extends JTextPane {
 
