@@ -140,6 +140,11 @@ public class DataAccess implements DataAccessInterface {
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
+			
+			createBooking(20, 3);
+			getOfferById(20);
+			//offerBookedControl(of, true);
+			getBookingsOfClient(20);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			System.out.println("Database initialized");
@@ -744,11 +749,15 @@ public class DataAccess implements DataAccessInterface {
 		try{
 			open();
 			System.out.println(">> DataAccess: getOfferById");
-			TypedQuery<Offer> query = db.createQuery("SELECT * "
-					+ "FROM Offer o "
-					+ "WHERE o.id= :idOffer", Offer.class)
-					.setParameter("idOffer", idOffer);
+			TypedQuery<Offer> query = db.createQuery("SELECT o "
+					+ "FROM Offer o ", Offer.class);
 			result = new Vector<Offer>(query.getResultList());
+			for(int i = 0; i < result.size()-1; i++) {
+				if(result.get(i).getId()!=idOffer) {
+					result.remove(i); //Remove all offers except the definied.
+				}
+			}
+			
 			printVector(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
@@ -785,8 +794,8 @@ public class DataAccess implements DataAccessInterface {
 		try{
 			open();
 			System.out.println(">> DataAccess: getBookingsOfClient");
-			TypedQuery<Booking> queryB = db.createQuery("SELECT b.idOffer"
-					+ " FROM Booking b WHERE b.idClient= :idClient", Booking.class)
+			TypedQuery<Booking> queryB = db.createQuery("SELECT b"
+					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
 					.setParameter("idClient", idClient);
 			List<Booking> bookings = new Vector<Booking>(queryB.getResultList());
 			
