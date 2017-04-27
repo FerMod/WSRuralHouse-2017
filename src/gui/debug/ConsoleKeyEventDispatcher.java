@@ -95,7 +95,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 		}
 
 		if(count != 0) {
-			JOptionPane.showInternalOptionDialog(null,
+			JOptionPane.showOptionDialog(null,
 					message,
 					null,
 					JOptionPane.DEFAULT_OPTION,
