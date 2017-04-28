@@ -1,6 +1,8 @@
 package domain;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -15,26 +17,29 @@ import javax.xml.bind.annotation.XmlIDREF;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class Offer implements Serializable {
-	
+
 
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private Date firstDay; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
-	private Date lastDay;  // because, they are not well stored in db4o as java.util.Date objects
-	private float price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date
+	private Date startDate; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
+	private Date endDate;  // because, they are not well stored in db4o as java.util.Date objects
+	private double price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
+
 	@XmlIDREF
 	private RuralHouse ruralHouse;
 	private boolean booked = false;
-	
-	public Offer(){}
-	public Offer(Date firstDay, Date lastDay, float price, RuralHouse ruralHouse){
-		  this.firstDay=firstDay;
-		  this.lastDay=lastDay;
-		  this.price=price;
-		  this.ruralHouse=ruralHouse;
+
+	public Offer(){
 	}
-	
+
+	public Offer(Date firstDay, Date lastDay, double price, RuralHouse ruralHouse){
+		this.startDate=firstDay;
+		this.endDate=lastDay;
+		this.price=price;
+		this.ruralHouse=ruralHouse;
+	}
+
 	/**
 	 * Get the house number of the offer
 	 * 
@@ -53,7 +58,6 @@ public class Offer implements Serializable {
 		this.ruralHouse = ruralHouse;
 	}
 
-
 	/**
 	 * Get the offer id
 	 * 
@@ -63,44 +67,66 @@ public class Offer implements Serializable {
 		return this.id;
 	}
 
-	
-
 	/**
-	 * Get the first day of the offer
+	 * Get the starting date of the offer
 	 * 
-	 * @return the first day
+	 * @return the start date
 	 */
-	public Date getFirstDay() {
-		return this.firstDay;
+	public Date getStartDate() {
+		return startDate;
 	}
 
 	/**
-	 * Set the first day of the offer
+	 * Set the starting date of the offer
 	 * 
-	 * @param firstDay
-	 *            The first day
+	 * @param startDate the start date
 	 */
-	public void setFirstDay(Date firstDay) {
-		this.firstDay = firstDay;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
 	/**
-	 * Get the last day of the offer
+	 * Set the starting date of the offer
 	 * 
-	 * @return the last day
+	 * @param year The year when starts
+	 * @param month The month when starts
+	 * @param day The day when starts
+	 * @throws ParseException if the beginning of the specified string cannot be parsed.
 	 */
-	public Date getLastDay() {
-		return this.lastDay;
+	public void setStartDate(int year, int month, int day) throws ParseException {
+		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+		this.startDate = date.parse(year + "/" + month + "/" + day);
 	}
 
 	/**
-	 * Set the last day of the offer
+	 * Get the ending date of the offer
 	 * 
-	 * @param lastDay
-	 *            The last day
+	 * @return the ending date
 	 */
-	public void setLastDay(Date lastDay) {
-		this.lastDay = lastDay;
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	/**
+	 * Set the ending date of the offer
+	 * 
+	 * @param endDate the ending date
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	/**
+	 * Set the ending date of the offer
+	 * 
+	 * @param year The year when finishes
+	 * @param month The month when finishes
+	 * @param day The day when finishes
+	 * @throws ParseException if the beginning of the specified string cannot be parsed.
+	 */
+	public void setEndDate(int year, int month, int day) throws ParseException {
+		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+		this.endDate = date.parse(year + "/" + month + "/" + day);
 	}
 
 	/**
@@ -108,7 +134,7 @@ public class Offer implements Serializable {
 	 * 
 	 * @return price
 	 */
-	public float getPrice() {
+	public double getPrice() {
 		return this.price;
 	}
 
@@ -117,18 +143,18 @@ public class Offer implements Serializable {
 	 * 
 	 * @param price
 	 */
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
 	public boolean isBooked() {
 		return booked;
 	}
-	
+
 	public void setBooked(boolean booked) {
 		this.booked = booked;
 	}
-	
+
 	public String toString(){
 		return id+";"+firstDay.toString()+";"+lastDay.toString()+";"+price+";"+booked;
 	}

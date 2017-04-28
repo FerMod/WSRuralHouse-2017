@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.Vector;
 
 import domain.Offer;
+import domain.Review;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Review.ReviewState;
 import domain.City;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
@@ -20,7 +22,7 @@ import dataAccess.DataAccessInterface;
 
 @WebService
 public interface ApplicationFacadeInterface  {
-	
+
 	/**
 	 * 
 	 * @param dataAccess
@@ -28,24 +30,12 @@ public interface ApplicationFacadeInterface  {
 	void setDataAccess(DataAccessInterface dataAccess);
 
 	/**
-	 * Creates a new rural house and stores it in the database.
+	 * Method used to update a entity with their changes to the database
 	 * 
-	 * @param description the description of the rural house
-	 * @param city the id of the city which the rural house is located
-	 * @return the created rural house, null if none was created
-	 * @throws DuplicatedEntityException If is attempted to create an existing entity
+	 * @param entity the entity that will be updated
+	 * @return the managed instance that is updated
 	 */
-	RuralHouse createRuralHouse(String description, int city) throws DuplicatedEntityException;
-	
-	/**
-	 * Creates a new rural house and stores it in the database.
-	 * 
-	 * @param description the description of the rural house
-	 * @param city the city which the rural house is located
-	 * @return the created rural house, null if none was created
-	 * @throws DuplicatedEntityException If is attempted to create an existing entity
-	 */
-	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
+	<T> T update(T entity);
 
 	/**
 	 * Creates an offer and stores it in the database.
@@ -59,7 +49,102 @@ public interface ApplicationFacadeInterface  {
 	 * @throws BadDatesException If the first date is greater than second date
 	 */
 	@WebMethod
-	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, float price) throws OverlappingOfferException, BadDatesException;
+	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException;
+
+	/**
+	 * This method obtains the offers of a ruralHouse in the provided date interval
+	 * 
+	 * @param ruralHouse the rural house that the offer is applied to
+	 * @param firstDay the start date of the offer
+	 * @param lastDay the ending date of the offer
+	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
+	 */
+	@WebMethod
+	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
+
+	/**
+	 * Obtain all the offers stored in the database
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database, {@code null} if none is found
+	 */
+	@WebMethod
+	Vector<Offer> getOffers();
+
+	/**
+	 * Obtain all the offers stored in the database that matches with the given {@code ReviewState} of their rural house
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
+	 */
+	Vector<Offer> getOffers(ReviewState reviewState);
+
+	/**
+	 * Returns the number of offers stored in the database
+	 *
+	 * @return the number of offers in the database
+	 */
+	@WebMethod
+	int getOfferCount();
+
+	/**
+	 * Returns the highest price of the stored offers
+	 *  
+	 * @return highest price of the stored Offers
+	 */
+	@WebMethod
+	double getOffersHighestPrice();
+
+	/**
+	 * Creates a new rural house and stores it in the database.
+	 * 
+	 * @param description the description of the rural house
+	 * @param city the city which the rural house is located
+	 * @return the created rural house, null if none was created
+	 * @throws DuplicatedEntityException If is attempted to create an existing entity
+	 */
+	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
+
+	/**
+	 * This method retrieves the existing rural houses 
+	 * 
+	 * @return a {@code Vector} of rural houses
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHouses();
+
+	/**
+	 * Obtain all the rural houses matching with the entered {@code ReviewState}
+	 *
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses matching with the {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHouses(ReviewState reviewState);
+
+	/**
+	 * Creates a city and stores it in the database.
+	 * @param name the name of the city
+	 * @return the created city
+	 * @see {@link City}
+	 */
+	City createCity(String name);
+
+	/**
+	 * Return a vector of all the cities names stored in the database
+	 * 
+	 * @return a vector with all the cities names of type {@code String}
+	 * @see {@link City}
+	 */
+	Vector<String> getCitiesNames();
+
+	/**
+	 * Return a vector of all the cities stored in the database
+	 * 
+	 * @return a vector with all the cities of type {@code City}
+	 * @see {@link City}
+	 */
+	Vector<City> getCities();
 
 	/**
 	 * Creates an user and stores it in the database.
@@ -83,25 +168,6 @@ public interface ApplicationFacadeInterface  {
 	Role getRole(String username);
 
 	/**
-	 * This method retrieves the existing rural houses 
-	 * 
-	 * @return a {@code Vector} of rural houses
-	 */
-	@WebMethod
-	Vector<RuralHouse> getRuralHouses();
-
-	/**
-	 * This method obtains the offers of a ruralHouse in the provided date interval
-	 * 
-	 * @param ruralHouse the rural house that the offer is applied to
-	 * @param firstDay the start date of the offer
-	 * @param lastDay the ending date of the offer
-	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
-	 */
-	@WebMethod
-	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
-
-	/**
 	 * Login the user with the account that matches the entered user name and password
 	 * 
 	 * @param username the user name of the account
@@ -114,29 +180,5 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
-
-	/**
-	 * Creates a city and stores it in the database.
-	 * @param name the name of the city
-	 * @return the created city
-	 * @see {@link City}
-	 */
-	City createCity(String name);
-	
-	/**
-	 * Return a vector of all the cities names stored in the database
-	 * 
-	 * @return a vector with all the cities names of type {@code String}
-	 * @see {@link City}
-	 */
-	Vector<String> getCitiesNames();
-	
-	/**
-	 * Return a vector of all the cities stored in the database
-	 * 
-	 * @return a vector with all the cities of type {@code City}
-	 * @see {@link City}
-	 */
-	Vector<City> getCities();	
 
 }

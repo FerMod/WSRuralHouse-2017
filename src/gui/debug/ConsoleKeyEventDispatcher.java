@@ -1,18 +1,18 @@
 package gui.debug;
 
 import java.awt.AWTEvent;
-import java.awt.Desktop;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import gui.debug.ConsoleWindow.CloseOperation;
 
 //public abstract class ConsoleKeyEvent<T> implements KeyEventDispatcher, ConsoleKeyEventDispatcher<T> {
 public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
@@ -31,6 +31,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	private int millis;
 
 	public ConsoleKeyEventDispatcher() {
+		ConsoleWindow.setDefaultCloseOperation(CloseOperation.DISPOSE_ON_CLOSE);
 		debugEventListener = null;
 		addKeyEventDispatcher(this);
 		konami = new Konami(new Runnable() { // ^.^		
@@ -107,7 +108,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 
 		if(count == 3) {
 			try {
-				openWebpage(new URI("https://youtu.be/zqqq8uqSDnk?t=1s"));
+				ConsoleWindow.showInBrowse(new URI("https://youtu.be/zqqq8uqSDnk?t=1s"));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -115,25 +116,6 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 
 		count++;
 
-	}
-
-	public static void openWebpage(URI uri) {
-		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-			try {
-				desktop.browse(uri);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public static void openWebpage(URL url) {
-		try {
-			openWebpage(url.toURI());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void addKeyEventDispatcher(KeyEventDispatcher dispatcher) {
@@ -152,6 +134,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent e) {
 		if(e.getID() == KeyEvent.KEY_PRESSED) {
+			//System.out.println(KeyEvent.getKeyText(e.getKeyCode()));
 			konami.checkCode(e.getKeyCode());
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_F12:

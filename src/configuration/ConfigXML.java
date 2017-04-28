@@ -138,7 +138,7 @@ public class ConfigXML {
 		return password;
 	}
 
-	public boolean isLocalDatabes() {
+	public boolean isLocalDatabase() {
 		return databaseLocal;
 	}
 

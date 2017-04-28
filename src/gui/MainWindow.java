@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.TextArea;
@@ -15,7 +14,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -28,36 +26,55 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
+import dataAccess.DataAccess;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-import domain.Client;
+import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
 
+/**
+ * This is the core of the application, from where is choose which panel will be opened for which user.
+ *	
+ *
+ */
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -1810393566512302281L;
-	
+
 	private static ApplicationFacadeInterface appFacadeInterface;
 
 	private JPanel contentPane;
 	private AbstractUser user;
 	private JTabbedPane tabbedPane;
+
 	/**
-	 * Launch the application.
+	 * Launches the {@code MainWindow} application.</br>
+	 * This will prompt a dialog to choose between which type of user wants to be launched the {@code MainWindow}
+	 * <p>
+	 * This is {@code main} method is only for debugging purposes.</br>
+	 * <strong><em>This will be removed in a nearby future,</em></strong> and will be accessed as the designed way.
+	 * 
 	 */
+	@Deprecated
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AbstractUser user = getDebugAccount();
-					MainWindow frame = new MainWindow(user);
-					//						frame.addKeyListener(
-					//new ConsoleKeyEvent<>(this.getClass());
+					
 					new ConsoleKeyEventDispatcher();
+					
+					ApplicationFacadeImpl aplicationFacade = new ApplicationFacadeImpl();
+					aplicationFacade.setDataAccess(new DataAccess());
+					MainWindow.setBussinessLogic(aplicationFacade);
+					
+					AbstractUser user = setupDebugAccount();					
+					MainWindow frame = new MainWindow(user);
 					frame.setFocusable(true);
 					frame.setVisible(true); 
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -70,25 +87,30 @@ public class MainWindow extends JFrame {
 	 * @return the chosen user fictional account
 	 */
 	@Deprecated
-	private static AbstractUser getDebugAccount() {
+	private static AbstractUser setupDebugAccount() {
 		Role[] options = new Role[] {Role.CLIENT, Role.OWNER, Role.ADMIN, Role.SUPER_ADMIN};
 		Role response = (Role)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		if(response != null) {
-			switch (response) {
-			case CLIENT:
-				return new Client("Client@clientmail.com", "Client", "ClientPassword");
-			case OWNER:
-				return new Client("Owner@ownermail.com", "Owner", "OwnerPassword");
-			case ADMIN:
-				return new Client("Admin@adminmail.com", "Admin", "AdminPassword");
-			case SUPER_ADMIN:
-				return new Client("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword");
+			try {
+				switch (response) {
+				case CLIENT:
+					return getBusinessLogic().createUser("Client@clientmail.com", "Client", "ClientPassword", response);
+				case OWNER:
+					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
+				case ADMIN:
+					return getBusinessLogic().createUser("Admin@adminmail.com", "Admin", "AdminPassword", response);
+				case SUPER_ADMIN:
+					//Not implemented
+					return getBusinessLogic().createUser("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword", response);
+				}
+			} catch (DuplicatedEntityException e) {
+				e.printStackTrace();
 			}
 		}
 		System.exit(0);
 		return null;
 	}
-	
+
 	public static ApplicationFacadeInterface getBusinessLogic(){
 		return appFacadeInterface;
 	}
@@ -154,7 +176,7 @@ public class MainWindow extends JFrame {
 		//		});
 
 		contentPane.add(tabbedPane);
-		
+
 		setMinimumSize(new Dimension(780, 600));
 		setSize(900, 800);
 		//pack();

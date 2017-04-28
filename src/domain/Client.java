@@ -14,10 +14,6 @@ public class Client extends AbstractUser {
 		super(email, username, password, Role.CLIENT);
 	}
 
-	public int getIdClient() {
-		return super.getId();
-	}
-
 	@Override
 	public String toString() {
 		return super.toString();

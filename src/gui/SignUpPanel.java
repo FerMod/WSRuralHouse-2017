@@ -394,7 +394,7 @@ public class SignUpPanel extends JPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setBorder(new TitledBorder(new LineBorder(new Color(255, 51, 51), 0, true), "* Required information", TitledBorder.RIGHT, TitledBorder.BOTTOM, null, Color.RED));
+			panel.setBorder(new TitledBorder(new LineBorder(new Color(255, 51, 51), 0, true), "* Required information  ", TitledBorder.RIGHT, TitledBorder.BOTTOM, null, Color.RED));
 			panel.setBounds(0, 118, 360, 157);
 			panel.setLayout(null);
 			//panel.add(getLblUsername());
