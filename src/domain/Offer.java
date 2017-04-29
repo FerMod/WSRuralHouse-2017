@@ -156,6 +156,6 @@ public class Offer implements Serializable {
 	}
 
 	public String toString(){
-		return id+";"+firstDay.toString()+";"+lastDay.toString()+";"+price+";"+booked;
+		return id+";"+startDate.toString()+";"+endDate.toString()+";"+price+";"+booked;
 	}
 }

@@ -26,8 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 import domain.Booking;
+import domain.City;
 import domain.Client;
 import domain.Offer;
+import domain.Owner;
 import domain.RuralHouse;
 
 public class RuralHousePage {
@@ -47,7 +49,7 @@ public class RuralHousePage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RuralHouse r = new RuralHouse("Esto es una casa rural", 3);
+					RuralHouse r = new RuralHouse(new Owner("yeh@mail.com", "owneruser", "supersecurepass"), "AwesomeHouse", "Little but pretty", new City("This city exists?"), "callefalsa 123");
 					
 					Client c = new Client("fost@gma.com", "fost", "bob");
 					RuralHousePage window = new RuralHousePage(r, c);
