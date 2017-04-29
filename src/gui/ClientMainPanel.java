@@ -71,7 +71,6 @@ import javax.swing.text.Highlighter;
 
 import domain.Offer;
 import domain.Review.ReviewState;
-import domain.RuralHouse;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
@@ -907,6 +906,9 @@ public class ClientMainPanel extends JPanel {
 
 			dateRangeComponent = new JTextArea();
 			dateRangeComponent.setText("startDate - endDate");
+			dateRangeComponent.setOpaque(false);
+			dateRangeComponent.setEditable(false);
+			dateRangeComponent.setFocusable(false);
 			GridBagConstraints gbcDateRange = new GridBagConstraints();
 			gbcDateRange.insets = new Insets(0, 0, 5, 5);
 			gbcDateRange.fill = GridBagConstraints.HORIZONTAL;
@@ -915,8 +917,8 @@ public class ClientMainPanel extends JPanel {
 			panel.add(dateRangeComponent, gbcDateRange);
 
 			descriptionComponent = new JTextArea("description");
-			descriptionComponent.setOpaque(true);
-			descriptionComponent.setEditable(true);
+			descriptionComponent.setOpaque(false);
+			descriptionComponent.setEditable(false);
 			descriptionComponent.setFocusable(false);
 			GridBagConstraints gbcDescription = new GridBagConstraints();
 			gbcDescription.gridwidth = 2;
@@ -927,8 +929,8 @@ public class ClientMainPanel extends JPanel {
 			panel.add(descriptionComponent, gbcDescription);
 
 			addressComponent = new JTextArea("address [ city/address ]");
-			addressComponent.setOpaque(true);
-			addressComponent.setEditable(true);
+			addressComponent.setOpaque(false);
+			addressComponent.setEditable(false);
 			addressComponent.setFocusable(false);
 			GridBagConstraints gbcAdress = new GridBagConstraints();
 			gbcDescription.gridwidth = 1;
@@ -940,8 +942,8 @@ public class ClientMainPanel extends JPanel {
 			addressComponent.setColumns(10);
 
 			priceComponent = new JTextArea("price");
-			priceComponent.setOpaque(true);
-			priceComponent.setEditable(true);
+			priceComponent.setOpaque(false);
+			priceComponent.setEditable(false);
 			priceComponent.setFocusable(false);
 			priceComponent.setColumns(4);
 

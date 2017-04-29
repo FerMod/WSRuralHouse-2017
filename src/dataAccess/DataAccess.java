@@ -19,7 +19,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import javax.jdo.annotations.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
@@ -43,7 +42,6 @@ import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
-import gui.prototypes.ReviewersView_Prototype;
 
 public class DataAccess implements DataAccessInterface {
 
