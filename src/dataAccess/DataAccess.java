@@ -866,21 +866,16 @@ public class DataAccess implements DataAccessInterface {
 	 * @return a list with the offer specified by his id
 	 */
 	@Override
-	public List<Offer> getOfferById(int idOffer) {
+	public Vector<Offer> getOfferById(int idOffer) {
 		Vector<Offer> result = null;
 		try{
 			open();
 			System.out.println(">> DataAccess: getOfferById");
 			TypedQuery<Offer> query = db.createQuery("SELECT o "
-					+ "FROM Offer o ", Offer.class);
+					+ "FROM Offer o WHERE o.id== :idOffer", Offer.class)
+					.setParameter("idOffer", idOffer);
 			result = new Vector<Offer>(query.getResultList());
-			for(int i = 0; i < result.size()-1; i++) {
-				if(result.get(i).getId()!=idOffer) {
-					result.remove(i); //Remove all offers except the definied.
-				}
-			}
-			
-			printVector(result);
+			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -911,7 +906,7 @@ public class DataAccess implements DataAccessInterface {
 	 * @return a list with his bookings
 	 */
 	@Override
-	public List<Offer> getBookingsOfClient(int idClient) {
+	public Vector<Offer> getBookingsOfClient(int idClient) {
 		Vector<Offer> result = null;
 		try{
 			open();
@@ -919,16 +914,16 @@ public class DataAccess implements DataAccessInterface {
 			TypedQuery<Booking> queryB = db.createQuery("SELECT b"
 					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
 					.setParameter("idClient", idClient);
-			List<Booking> bookings = new Vector<Booking>(queryB.getResultList());
+			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
 			
 			result = new Vector<Offer>();
 			
 			for(Booking bo : bookings) {
-				List<Offer> offer = getOfferById(bo.getIdOffer());
+				Vector<Offer> offer = getOfferById(bo.getIdOffer());
 				result.add(offer.get(0));
 			}
 			
-			printVector(result);
+			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
