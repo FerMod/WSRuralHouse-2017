@@ -161,8 +161,6 @@ public class DataAccess implements DataAccessInterface {
 			
 			createBooking(20, 3);
 			getOfferById(20);
-			//offerBookedControl(of, true);
-			getBookingsOfClient(20);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
@@ -919,8 +917,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>();
 			
 			for(Booking bo : bookings) {
-				Vector<Offer> offer = getOfferById(bo.getIdOffer());
-				result.add(offer.get(0));
+				result.add(getOfferById(bo.getIdOffer()).get(0)); //Get the offers and stores in result vector.
 			}
 			
 			printCollection(result);
