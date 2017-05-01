@@ -1,5 +1,6 @@
 package dataAccess;
 
+import java.awt.List;
 import java.util.Date;
 import java.util.Vector;
 
@@ -76,5 +77,13 @@ public interface DataAccessInterface {
 	Vector<City> getCities();
 	
 	void deleteTableContent(String table);
+	
+	Booking createBooking(int idClient, int idOffer);
+	
+	Vector<Offer> getOfferById(int idOffer);
+	
+	void offerBookedControl(Offer of, boolean booked);
+	
+	Vector<Offer> getBookingsOfClient(int idClient);
 
 }
