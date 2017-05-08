@@ -14,22 +14,21 @@ public class ImagePanel extends JPanel {
 	 * Generated serial version UID
 	 */
 	private static final long serialVersionUID = -886982507395266888L;
-	
+
 	/**
 	 * When no image is provided in the constructor this one will be used
 	 */
 	public static final ImageIcon NO_IMAGE = new ImageIcon(ImagePanel.class.getResource("/img/icons/loading.gif"));
 
-	private ImageIcon imageIcon;
+	private ImageIcon imageIcon = NO_IMAGE;
 
 	public ImagePanel() {
-		this(NO_IMAGE, null);
 	}
-	
+
 	public ImagePanel(ImageIcon imageIcon) {
 		this(imageIcon, null);
 	}
-	
+
 	public ImagePanel(ImageIcon imageIcon, Dimension dimension) {
 		setImage(imageIcon);
 		setPreferredSize(dimension);
@@ -43,7 +42,7 @@ public class ImagePanel extends JPanel {
 		setImage(pathname);
 		setPreferredSize(dimension);
 	}
-	
+
 	public ImagePanel(URL url) {		
 		this(url, null);
 	}
@@ -90,11 +89,18 @@ public class ImagePanel extends JPanel {
 	}
 
 	@Override
+	public Dimension getMinimumSize() {
+		return getImageSize();
+	}
+
+	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		int x = (this.getWidth() - imageIcon.getIconWidth()) / 2;
-		int y = (this.getHeight() - imageIcon.getIconHeight()) / 2;
-		g.drawImage(imageIcon.getImage(), x, y, this);  // see javadoc for more info on the parameters            
+		if(imageIcon != null) {
+			int x = (this.getWidth() - imageIcon.getIconWidth()) / 2;
+			int y = (this.getHeight() - imageIcon.getIconHeight()) / 2;
+			g.drawImage(imageIcon.getImage(), x, y, this);  // see javadoc for more info on the parameters    
+		}
 	}
 
 }
