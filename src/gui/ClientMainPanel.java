@@ -91,7 +91,7 @@ public class ClientMainPanel extends JPanel {
 	private JScrollPane tableScrollPanel;
 	//	private GridBagLayout gridBagLayout;
 	//	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
-	private JButton btnAdd, btnEdit, btnRemove, btnDetails;
+	private JButton btnAdd, btnEdit, btnRemove;
 	private JSlider priceSlider;
 
 	private NumberFormat priceFormat;
