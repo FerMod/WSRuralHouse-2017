@@ -81,3 +81,7 @@ local.properties
 .DS_Store
 
 .travis.yml
+
+#Do not ignore the library .jars
+!lib
+
