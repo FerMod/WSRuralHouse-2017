@@ -11,7 +11,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -151,7 +150,7 @@ public class ProgressBarDialog extends JDialog implements ActionListener, Proper
 		private Optional<String> taskName = Optional.empty();
 		private long startTime = System.nanoTime();
 		private long elapsedTime = System.nanoTime() - startTime;
-		private int progress;
+//		private int progress;
 
 		public Task() {
 		}
@@ -173,7 +172,7 @@ public class ProgressBarDialog extends JDialog implements ActionListener, Proper
 		 */
 		@Override
 		public Void doInBackground() {
-			Random random = new Random();
+			//			Random random = new Random();
 			//			progress = 0;
 			//Initialize progress property.
 			setProgress(0);

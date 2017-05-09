@@ -292,7 +292,6 @@ public class OfferInfoDialog extends JDialog {
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 1;
-		//imagePanel.setPreferredSize(imagePanel.getImageSize());
 		imagePanel.setMinimumSize(imagePanel.getImageSize());
 		contentPanel.add(imagePanel, gbc_panel);
 
@@ -419,11 +418,13 @@ public class OfferInfoDialog extends JDialog {
 
 	}
 
+	@SuppressWarnings("unused")
 	private Calendar getMinDate(Calendar startDate) {
 		Calendar currentDate = Calendar.getInstance();
 		return startDate.before(currentDate)? currentDate : startDate;
 	}
 
+	@SuppressWarnings("unused")
 	private Calendar getMaxDate(Calendar endDate) {
 		return null; //TODO Return end date
 	}

@@ -14,14 +14,9 @@ public class InfoTextPane extends JTextPane {
 	 */
 	private static final long serialVersionUID = -73593325903127059L;
 
-	private String title, body;
-	private ImagePanel imagePanel;
-
 	public InfoTextPane(String title, ImagePanel imagePanel, String body) {
 
-		this.title = title;
-		this.body = body;
-		this.imagePanel = imagePanel;
+		
 
 
 		//		String[] initString = { "The title goes here\n",            //bold
