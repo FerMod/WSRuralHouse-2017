@@ -19,6 +19,12 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,9 +47,8 @@ import gui.components.InfoTextPane;
 
 import javax.swing.JTextField;
 import java.awt.Cursor;
-import javax.swing.JTextArea;
 import java.awt.Font;
-import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 import java.awt.Rectangle;
 
 public class OfferInfoDialog extends JDialog {
@@ -54,11 +59,18 @@ public class OfferInfoDialog extends JDialog {
 	private static final long serialVersionUID = -5923341666785935549L;
 
 	private final JPanel contentPanel = new JPanel();
-	private JScrollPane scrollPane;
+	private JPanel dialogTitleBar;
+	private ImagePanel imagePanel;
+	private JTabbedPane tabbedPane;
+	private InfoTextPane infoTextPane;
+	private JScrollPane scrollPane, infoTextScrollPane;
 	private Component parentFrame;
 	private FrameShader frameShader;
 	private JTextField title;
+	private JDateChooser firstDateChooser, lastDateChooser;
+	private JButton btnX;
 
+	private Calendar firstDate, lastDate;
 	/**
 	 * Launch the application.
 	 */
@@ -201,84 +213,29 @@ public class OfferInfoDialog extends JDialog {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 490, 657);
 		getContentPane().setLayout(new BorderLayout());
+
 		scrollPane = new JScrollPane(contentPanel);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
 		gbl_contentPanel.columnWidths = new int[]{218, 45, 0};
-		gbl_contentPanel.rowHeights = new int[]{20, 20, 0, 0, 77, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{20, 20, 0, 0, 77, 0, 0, 0};
 		gbl_contentPanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 
-		ImagePanel imagePanel = new ImagePanel();
-		imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridheight = 4;
-		gbc_panel.insets = new Insets(0, 5, 5, 5);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 1;
-		contentPanel.add(imagePanel, gbc_panel);
-		//imagePanel.setPreferredSize(imagePanel.getImageSize());
-		imagePanel.setMinimumSize(imagePanel.getImageSize());
-
-		InfoTextPane textPane = new InfoTextPane("Title goes here", new ImagePanel(), "JTextPane is a subclass of JEditorPane that " +
-				"uses a StyledEditorKit and StyledDocument, and provides " +
-				"cover methods for interacting with those objects.");
-		textPane.setEditable(false);
-		textPane.setHighlighter(null); //Disable text selection
-		textPane.setOpaque(false);
-		JScrollPane paneScrollPane = new JScrollPane(textPane);
-		paneScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		paneScrollPane.setPreferredSize(new Dimension(250, 155));
-		paneScrollPane.setMinimumSize(new Dimension(10, 10));
-		GridBagConstraints gbc_textPane = new GridBagConstraints();
-		gbc_textPane.gridheight = 4;
-		gbc_textPane.insets = new Insets(0, 5, 5, 0);
-		gbc_textPane.fill = GridBagConstraints.BOTH;
-		gbc_textPane.gridx = 1;
-		gbc_textPane.gridy = 1;
-		contentPanel.add(paneScrollPane, gbc_textPane);
-
-		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
-		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
-		gbc_tabbedPane.gridwidth = 2;
-		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
-		gbc_tabbedPane.gridx = 0;
-		gbc_tabbedPane.gridy = 7;
-		contentPanel.add(tabbedPane, gbc_tabbedPane);
-
-		//		OfferIntervalSelectionPanel offerIntervalSelectionPanel = new OfferIntervalSelectionPanel();	
-		//		offerIntervalSelectionPanel.setVisible(true);
-		JPanel tabPanel = new JPanel();
-		tabbedPane.addTab("Book Offer", null, tabPanel, null);
-
-		tabbedPane.addTab("New tab", null, tabPanel, null);
-		
-		JCalendar calendar = new JCalendar();
-		calendar.setBounds(new Rectangle(190, 60, 225, 150));
-		tabPanel.add(calendar);
-
-
-		JButton btnNewButton = new JButton("Book Offer");
-		tabPanel.add(btnNewButton);
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton.setPreferredSize(new Dimension(150, 40));
-
-
-		JPanel dialogTitleBar = new JPanel();
+		dialogTitleBar = new JPanel();
 		dialogTitleBar.setBackground(UIManager.getColor("TextField.light"));
 		dialogTitleBar.setForeground(UIManager.getColor("Button.foreground"));
 		dialogTitleBar.setBorder(null);
 		dialogTitleBar.setOpaque(true);
-		getContentPane().add(dialogTitleBar, BorderLayout.NORTH);
 		GridBagLayout gbl_dialogTitleBar = new GridBagLayout();
 		gbl_dialogTitleBar.columnWidths = new int[]{318, 22, 0};
 		gbl_dialogTitleBar.rowHeights = new int[]{22, 0};
 		gbl_dialogTitleBar.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		gbl_dialogTitleBar.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		dialogTitleBar.setLayout(gbl_dialogTitleBar);
-		
+		getContentPane().add(dialogTitleBar, BorderLayout.NORTH);
+
 		title = new JTextField("Dialog Title");
 		title.setOpaque(false);
 		title.setBorder(null);
@@ -295,9 +252,10 @@ public class OfferInfoDialog extends JDialog {
 		gbc_title.fill = GridBagConstraints.HORIZONTAL;
 		dialogTitleBar.add(title, gbc_title);
 
-		JButton btnX = new JButton("");
+		btnX = new JButton();
 		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnX.setBorderPainted(false);
+		btnX.setIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close.png")));
 		btnX.setSelectedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close.png")));
 		btnX.setRolloverSelectedIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close_pressed.png")));
 		btnX.setRolloverIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close_hover.png")));
@@ -307,19 +265,18 @@ public class OfferInfoDialog extends JDialog {
 		btnX.setFocusPainted(false);
 		btnX.setFocusable(false);
 		btnX.setFocusTraversalKeysEnabled(false);
-		btnX.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});			
 		btnX.setBackground(UIManager.getColor("Button.light"));
 		btnX.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnX.setPreferredSize(new Dimension(22, 22));
 		btnX.setMinimumSize(new Dimension(9, 9));
 		btnX.setMaximumSize(new Dimension(9, 9));
 		btnX.setIconTextGap(0);
-		btnX.setIcon(new ImageIcon(OfferInfoDialog.class.getResource("/img/icons/close_button/window-close.png")));
+		btnX.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});			
 		GridBagConstraints gbc_btnX = new GridBagConstraints();
 		gbc_btnX.anchor = GridBagConstraints.EAST;
 		gbc_btnX.gridx = 1;
@@ -327,6 +284,115 @@ public class OfferInfoDialog extends JDialog {
 		gbc_btnX.insets = new Insets(5, 5, 5, 5);
 		dialogTitleBar.add(btnX, gbc_btnX);
 
+		imagePanel = new ImagePanel();
+		imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.gridheight = 4;
+		gbc_panel.insets = new Insets(0, 5, 5, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 1;
+		//imagePanel.setPreferredSize(imagePanel.getImageSize());
+		imagePanel.setMinimumSize(imagePanel.getImageSize());
+		contentPanel.add(imagePanel, gbc_panel);
+
+		infoTextPane = new InfoTextPane("Title goes here", new ImagePanel(), "JTextPane is a subclass of JEditorPane that " +
+				"uses a StyledEditorKit and StyledDocument, and provides " +
+				"cover methods for interacting with those objects.");
+		infoTextPane.setEditable(false);
+		infoTextPane.setHighlighter(null); //Disable text selection
+		infoTextPane.setOpaque(false);
+		infoTextScrollPane = new JScrollPane(infoTextPane);
+		infoTextScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		infoTextScrollPane.setPreferredSize(new Dimension(250, 155));
+		infoTextScrollPane.setMinimumSize(new Dimension(10, 10));
+		GridBagConstraints gbc_textPane = new GridBagConstraints();
+		gbc_textPane.gridheight = 4;
+		gbc_textPane.insets = new Insets(0, 5, 5, 0);
+		gbc_textPane.fill = GridBagConstraints.BOTH;
+		gbc_textPane.gridx = 1;
+		gbc_textPane.gridy = 1;
+		contentPanel.add(infoTextScrollPane, gbc_textPane);
+
+		tabbedPane = new JTabbedPane(SwingConstants.TOP);
+		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
+		gbc_tabbedPane.gridwidth = 2;
+		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
+		gbc_tabbedPane.gridx = 0;
+		gbc_tabbedPane.gridy = 6;
+		contentPanel.add(tabbedPane, gbc_tabbedPane);
+
+		//		OfferIntervalSelectionPanel offerIntervalSelectionPanel = new OfferIntervalSelectionPanel();	
+		//		offerIntervalSelectionPanel.setVisible(true);
+		JPanel tabPanel = new JPanel();
+		tabbedPane.addTab("New tab", null, tabPanel, null);
+
+		GridBagLayout gbl_tabPanel = new GridBagLayout();
+		gbl_tabPanel.columnWidths = new int[]{180, 177, 0};
+		gbl_tabPanel.rowHeights = new int[]{40, 0, 0, 0, 0};
+		gbl_tabPanel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_tabPanel.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		tabPanel.setLayout(gbl_tabPanel);
+		tabbedPane.addTab("Book Offer", null, tabPanel, null);
+
+		firstDateChooser = new JDateChooser();
+		firstDateChooser.setMinSelectableDate(Calendar.getInstance().getTime());
+		//firstDateChooser.setSelectableDateRange(getMinDate( OFFER_START_DATE ), max); //TODO Get first day offer, and last day offer
+		firstDateChooser.getJCalendar().setWeekOfYearVisible(true);
+		firstDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
+		firstDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date")) {
+					firstDate = new GregorianCalendar();
+					firstDate.setTime((Date) e.getNewValue());
+					lastDateChooser.setMinSelectableDate(firstDate.getTime());
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
+					System.out.println(e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
+				}
+			}
+		});
+		GridBagConstraints gbc_firstDateChooser = new GridBagConstraints();
+		gbc_firstDateChooser.fill = GridBagConstraints.HORIZONTAL;
+		gbc_firstDateChooser.insets = new Insets(5, 20, 5, 20);
+		gbc_firstDateChooser.gridx = 0;
+		gbc_firstDateChooser.gridy = 0;
+		tabPanel.add(firstDateChooser, gbc_firstDateChooser);
+
+		lastDateChooser = new JDateChooser();
+		lastDateChooser.setMinSelectableDate(firstDateChooser.getMinSelectableDate());
+		//lastDateChooser.setSelectableDateRange(firstDateChooser.getMinSelectableDate(), max); //TODO Get first day offer, and last day offer
+		lastDateChooser.getJCalendar().setWeekOfYearVisible(true);
+		lastDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
+		lastDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				if (e.getPropertyName().equals("date")) {
+					lastDate = new GregorianCalendar();
+					lastDate.setTime((Date) e.getNewValue());
+					firstDateChooser.setMaxSelectableDate(lastDate.getTime());
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
+					System.out.println(e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
+				}
+			}
+		});
+		lastDateChooser.setMinSelectableDate(firstDateChooser.getMinSelectableDate());
+		GridBagConstraints gbc_lastDateChooser = new GridBagConstraints();
+		gbc_lastDateChooser.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lastDateChooser.insets = new Insets(5, 20, 5, 20);
+		gbc_lastDateChooser.gridx = 1;
+		gbc_lastDateChooser.gridy = 0;
+		tabPanel.add(lastDateChooser, gbc_lastDateChooser);
+
+		JButton btnNewButton = new JButton("Book Offer");
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnNewButton.gridwidth = 2;
+		gbc_btnNewButton.gridx = 0;
+		gbc_btnNewButton.gridy = 3;
+		tabPanel.add(btnNewButton, gbc_btnNewButton);
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton.setPreferredSize(new Dimension(150, 40));
 
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
@@ -351,7 +417,15 @@ public class OfferInfoDialog extends JDialog {
 		cancelButton.setActionCommand("Cancel");
 		buttonPane.add(cancelButton);
 
+	}
 
+	private Calendar getMinDate(Calendar startDate) {
+		Calendar currentDate = Calendar.getInstance();
+		return startDate.before(currentDate)? currentDate : startDate;
+	}
+
+	private Calendar getMaxDate(Calendar endDate) {
+		return null; //TODO Return end date
 	}
 
 	public Component getParentComponent() {
