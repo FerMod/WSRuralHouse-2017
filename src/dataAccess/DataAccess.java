@@ -32,6 +32,7 @@ import configuration.ConfigXML;
 import domain.AbstractUser;
 import domain.Admin;
 import domain.AbstractUser.Role;
+import domain.Booking;
 import domain.City;
 import domain.Client;
 import domain.Offer;
@@ -155,6 +156,11 @@ public class DataAccess implements DataAccessInterface {
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
+			
+			createBooking(20, 3);
+			getOfferById(20);
+			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
+
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
@@ -703,6 +709,8 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return city;
 	}
+	
+	
 
 	@Override
 	public boolean existsCity(City city) {
@@ -826,6 +834,97 @@ public class DataAccess implements DataAccessInterface {
 	 */
 	private <E> void printCollection(Collection<E> collection) {
 		System.out.println(Arrays.deepToString(collection.toArray()));
+	}
+	
+	@Override
+	public Booking createBooking(int idClient, int idOffer) {
+		Booking booking= null;
+		try {
+			open();
+			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
+			db.getTransaction().begin();
+			booking = new Booking(idClient, idOffer);
+			db.persist(booking);
+			db.getTransaction().commit();
+			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return booking;
+	}
+	
+	/**
+	 * Returns a list with the offer identified by his id
+	 * 
+	 * @param id of offer
+	 * @return a list with the offer specified by his id
+	 */
+	@Override
+	public Vector<Offer> getOfferById(int idOffer) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getOfferById");
+			TypedQuery<Offer> query = db.createQuery("SELECT o "
+					+ "FROM Offer o WHERE o.id== :idOffer", Offer.class)
+					.setParameter("idOffer", idOffer);
+			result = new Vector<Offer>(query.getResultList());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Control the boolean booked of the offer
+	 * 
+	 * @param offer for set his booked value
+	 * @param boolean for control the state of booking
+	 */
+	@Override
+	public void offerBookedControl(Offer of, boolean booked) {
+		open();
+		db.getTransaction().begin();
+		of.setBooked(booked);
+		db.getTransaction().commit();
+		close();
+	}
+	
+	/**
+	 * Return a list of bookings of the client specified
+	 * 
+	 * @param id of a client
+	 * @return a list with his bookings
+	 */
+	@Override
+	public Vector<Offer> getBookingsOfClient(int idClient) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getBookingsOfClient");
+			TypedQuery<Booking> queryB = db.createQuery("SELECT b"
+					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
+					.setParameter("idClient", idClient);
+			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
+			
+			result = new Vector<Offer>();
+			
+			for(Booking bo : bookings) {
+				result.add(getOfferById(bo.getIdOffer()).get(0)); //Get the offers and stores in result vector.
+			}
+			
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
 	}
 
 }

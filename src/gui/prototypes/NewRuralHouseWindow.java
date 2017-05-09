@@ -1,4 +1,4 @@
-package gui;
+package gui.prototypes;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,6 +20,9 @@ import javax.swing.border.EmptyBorder;
 import businessLogic.ApplicationFacadeInterface;
 import domain.City;
 import exceptions.DuplicatedEntityException;
+import gui.MainGUI;
+import gui.MainWindow;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

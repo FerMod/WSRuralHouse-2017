@@ -1,5 +1,6 @@
 package dataAccess;
 
+import java.awt.List;
 import java.util.Date;
 import java.util.Vector;
 
@@ -7,6 +8,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Booking;
 import domain.City;
 import domain.Offer;
 import domain.Owner;
@@ -63,11 +65,11 @@ public interface DataAccessInterface {
 	boolean existsEmail(String email);
 
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
-
+	
 	City createCity(String name);
 	
 	boolean existsCity(City city);
-
+	
 	boolean existsCity(int id);
 	
 	boolean existsCity(String name);
@@ -75,5 +77,13 @@ public interface DataAccessInterface {
 	Vector<City> getCities();
 	
 	void deleteTableContent(String table);
+	
+	Booking createBooking(int idClient, int idOffer);
+	
+	Vector<Offer> getOfferById(int idOffer);
+	
+	void offerBookedControl(Offer of, boolean booked);
+	
+	Vector<Offer> getBookingsOfClient(int idClient);
 
 }

@@ -4,6 +4,8 @@ package gui;
  * @author Software Engineering teachers
  */
 
+import gui.prototypes.NewRuralHouseWindow;
+
 import javax.swing.*;
 
 import domain.RuralHouse;

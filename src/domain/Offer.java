@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlIDREF;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class Offer implements Serializable {
-	
+
 
 	@Id
 	@GeneratedValue
@@ -25,19 +25,21 @@ public class Offer implements Serializable {
 	private Date startDate; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
 	private Date endDate;  // because, they are not well stored in db4o as java.util.Date objects
 	private double price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
+
 	@XmlIDREF
 	private RuralHouse ruralHouse;
+	private boolean booked = false;
 
 	public Offer(){
 	}
-	
+
 	public Offer(Date firstDay, Date lastDay, double price, RuralHouse ruralHouse){
-		  this.startDate=firstDay;
-		  this.endDate=lastDay;
-		  this.price=price;
-		  this.ruralHouse=ruralHouse;
+		this.startDate=firstDay;
+		this.endDate=lastDay;
+		this.price=price;
+		this.ruralHouse=ruralHouse;
 	}
-	
+
 	/**
 	 * Get the house number of the offer
 	 * 
@@ -82,7 +84,7 @@ public class Offer implements Serializable {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	
+
 	/**
 	 * Set the starting date of the offer
 	 * 
@@ -144,8 +146,16 @@ public class Offer implements Serializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
+	public boolean isBooked() {
+		return booked;
+	}
+
+	public void setBooked(boolean booked) {
+		this.booked = booked;
+	}
+
 	public String toString(){
-		return id+";"+startDate.toString()+";"+endDate.toString()+";"+price;
+		return id+";"+startDate.toString()+";"+endDate.toString()+";"+price+";"+booked;
 	}
 }
