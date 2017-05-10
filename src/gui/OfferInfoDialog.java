@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,6 +52,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Rectangle;
+import javax.swing.JLabel;
 
 public class OfferInfoDialog extends JDialog {
 
@@ -71,6 +74,8 @@ public class OfferInfoDialog extends JDialog {
 	private JButton btnX;
 
 	private Calendar firstDate, lastDate;
+	private JLabel lblPrice;
+	private JTextField label;
 	/**
 	 * Launch the application.
 	 */
@@ -381,7 +386,24 @@ public class OfferInfoDialog extends JDialog {
 		gbc_lastDateChooser.insets = new Insets(5, 20, 5, 20);
 		gbc_lastDateChooser.gridx = 1;
 		gbc_lastDateChooser.gridy = 0;
+		gbc_lastDateChooser.fill = GridBagConstraints.HORIZONTAL;
 		tabPanel.add(lastDateChooser, gbc_lastDateChooser);
+		
+		lblPrice = new JLabel("Price: ");
+		GridBagConstraints gbc_lblPrice = new GridBagConstraints();
+		gbc_lblPrice.anchor = GridBagConstraints.EAST;
+		gbc_lblPrice.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPrice.gridx = 0;
+		gbc_lblPrice.gridy = 2;
+		tabPanel.add(lblPrice, gbc_lblPrice);
+		
+		label = new JTextField("");
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.anchor = GridBagConstraints.WEST;
+		gbc_label.insets = new Insets(0, 0, 5, 0);
+		gbc_label.gridx = 1;
+		gbc_label.gridy = 2;
+		tabPanel.add(label, gbc_label);
 
 		JButton btnNewButton = new JButton("Book Offer");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -427,6 +449,18 @@ public class OfferInfoDialog extends JDialog {
 	@SuppressWarnings("unused")
 	private Calendar getMaxDate(Calendar endDate) {
 		return null; //TODO Return end date
+	}
+	
+	/**
+	 * Get the difference between two dates
+	 * @param date1 the oldest date
+	 * @param date2 the newest date
+	 * @param timeUnit the unit in which you want the difference
+	 * @return the difference value, in the provided unit
+	 */
+	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+	    long diffInMillis = date2.getTime() - date1.getTime();
+	    return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
 	}
 
 	public Component getParentComponent() {
