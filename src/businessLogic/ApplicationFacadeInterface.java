@@ -180,5 +180,6 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
+	
 
 }
