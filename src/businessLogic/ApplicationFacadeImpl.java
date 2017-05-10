@@ -162,8 +162,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return dataAccess.createReview(rh);
 	}
 	
-	public void updateReviewRH(RuralHouse rh, Review r) {
-		dataAccess.updateReviewRH(rh, r);
+	public void updateReview(RuralHouse rh, Review r) {
+		dataAccess.updateReview(rh, r);
 	}
 
 	//	private getConfig() {

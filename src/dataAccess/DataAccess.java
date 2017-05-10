@@ -955,7 +955,7 @@ public class DataAccess implements DataAccessInterface {
 	 * @param Review of a Rural House
 	 */
 	@Override
-	public void updateReviewRH(RuralHouse rh, Review r) {
+	public void updateReview(RuralHouse rh, Review r) {
 		rh.setReview(r);
 		update(r);
 	}

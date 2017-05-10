@@ -197,6 +197,6 @@ public interface ApplicationFacadeInterface  {
 	 * @param r the review
 	 */
 	@WebMethod
-	void updateReviewRH(RuralHouse rh, Review r);
+	void updateReview(RuralHouse rh, Review r);
 	
 }

@@ -89,6 +89,6 @@ public interface DataAccessInterface {
 	
 	Review createReview(RuralHouse rh);
 	
-	void updateReviewRH(RuralHouse rh, Review r);
+	void updateReview(RuralHouse rh, Review r);
 
 }
