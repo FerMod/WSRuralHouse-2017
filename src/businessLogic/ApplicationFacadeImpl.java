@@ -10,6 +10,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
 import domain.Offer;
+import domain.Review;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
@@ -155,6 +156,14 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
 		return dataAccess.login(username, password);
+	}
+	
+	public Review createReview(RuralHouse rh) {
+		return dataAccess.createReview(rh);
+	}
+	
+	public void updateReviewRH(RuralHouse rh, Review r) {
+		dataAccess.updateReviewRH(rh, r);
 	}
 
 	//	private getConfig() {

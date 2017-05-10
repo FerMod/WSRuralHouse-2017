@@ -181,5 +181,22 @@ public interface ApplicationFacadeInterface  {
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 	
-
+	/**
+	 * Create a review for a rural house.
+	 * 
+	 * @param rh the rural house
+	 * @return review created of the rural house
+	 */
+	@WebMethod
+	Review createReview(RuralHouse rh);
+	
+	/**
+	 * Update a review of a rural house.
+	 * 
+	 * @param rh the rural house
+	 * @param r the review
+	 */
+	@WebMethod
+	void updateReviewRH(RuralHouse rh, Review r);
+	
 }
