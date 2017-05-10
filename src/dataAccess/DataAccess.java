@@ -150,6 +150,7 @@ public class DataAccess implements DataAccessInterface {
 			//			deleteTableContent("Client");
 			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
+			
 
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
@@ -925,6 +926,38 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return result;
+	}
+	
+	
+	@Override
+	public Review createReview(RuralHouse rh) {
+		Review review = null;
+		try {
+			open();
+			System.out.print(">> DataAccess: createReview(\"" + rh.getName() + "\") -> ");
+			db.getTransaction().begin();
+			review = new Review(rh);
+			db.persist(review);
+			db.getTransaction().commit();
+			System.out.println("Created in Rural House " + rh.toString());
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return review;
+	}
+	
+	/**
+	 * Update a review of a Rural House
+	 * 
+	 * @param Rural House of a Owner
+	 * @param Review of a Rural House
+	 */
+	@Override
+	public void updateReviewRH(RuralHouse rh, Review r) {
+		rh.setReview(r);
+		update(r);
 	}
 
 }
