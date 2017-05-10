@@ -29,7 +29,7 @@ public class RuralHouse implements Serializable {
 	/**
 	 * When no image is available this one will be used 
 	 */
-	private static final ImageIcon NO_IMAGE_AVAILABLE =  new ImageIcon(RuralHouse.class.getResource("/img/no_image_available.png"));
+	private static final ImageIcon NO_IMAGE_AVAILABLE = new ImageIcon(RuralHouse.class.getResource("/img/no_image_available.png"));
 
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
