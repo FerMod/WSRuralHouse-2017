@@ -168,27 +168,27 @@ public class DataAccess implements DataAccessInterface {
 			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", createCity("Ezkio"), "Calle Falsa / 123");
 			rh1.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh1);
-			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 293);
-			createOffer(rh1, date.parse("2017/5/23"), date.parse("2017/7/16"), 593);
-			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 773);
+			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 13);
+			createOffer(rh1, date.parse("2017/5/23"), date.parse("2017/7/16"), 24);
+			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
 			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", createCity("Iruna"), "Plz. square 1 3ºA");
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
-			createOffer(rh2, date.parse("2013/10/3"), date.parse("2017/2/8"), 773);		
+			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
 			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", createCity("Bilbo"), "ñeñeñe 3 3ºñe");		
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
-			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 93);		
-			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 876);		
-			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 233);		
+			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 17);		
+			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 9);		
+			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 5);		
 
 			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", createCity("Renteria"), "Plhasa Bonitah 2 3sero se");	
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
-			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 128);		
-			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 455);		
+			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
+			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 
 			System.out.println("Database initialized");
 
