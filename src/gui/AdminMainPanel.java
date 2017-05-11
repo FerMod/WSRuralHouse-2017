@@ -125,7 +125,6 @@ public class AdminMainPanel extends JPanel {
 				textPane.setEnabled(false);
 				textPane.setText("");
 				textPanePrompt.setAlpha(64);
-				btnSend.setEnabled(false);
 			}
 		});		
 		buttonGroup.add(rdbtnApproved);
@@ -144,7 +143,6 @@ public class AdminMainPanel extends JPanel {
 				textPane.setEnabled(true);
 				textPanePrompt.setAlpha(200);
 				lblDescription.setEnabled(true);
-				btnSend.setEnabled(true);
 			}
 		});
 		buttonGroup.add(rdbtnRejected);
