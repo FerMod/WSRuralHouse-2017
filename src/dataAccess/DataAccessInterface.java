@@ -42,15 +42,16 @@ public interface DataAccessInterface {
 
 	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
 
-	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
-	
-	RuralHouse createRuralHouse(Owner owner, String description, City city, String address) throws DuplicatedEntityException;
+	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
 
 	Vector<RuralHouse> getRuralHouses();
 
 	Vector<RuralHouse> getRuralHouses(ReviewState reviewState);
 	
 	boolean existsRuralHouse(String description, int city);
+
+	@Deprecated
+	RuralHouse createRuralHouse(Owner owner, String description, City city, String address)	throws DuplicatedEntityException;
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
