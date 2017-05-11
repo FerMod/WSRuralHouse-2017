@@ -12,6 +12,7 @@ import domain.Booking;
 import domain.City;
 import domain.Offer;
 import domain.Owner;
+import domain.Review;
 import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.AuthException;
@@ -86,5 +87,9 @@ public interface DataAccessInterface {
 	void offerBookedControl(Offer of, boolean booked);
 	
 	Vector<Offer> getBookingsOfClient(int idClient);
+	
+	Review createReview(RuralHouse rh);
+	
+	void updateReview(RuralHouse rh, Review r);
 
 }

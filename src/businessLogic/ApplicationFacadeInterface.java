@@ -13,6 +13,7 @@ import domain.AbstractUser.Role;
 import domain.City;
 import domain.Offer;
 import domain.Owner;
+import domain.Review;
 import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.AuthException;
@@ -184,5 +185,23 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
-
+	
+	/**
+	 * Create a review for a rural house.
+	 * 
+	 * @param rh the rural house
+	 * @return review created of the rural house
+	 */
+	@WebMethod
+	Review createReview(RuralHouse rh);
+	
+	/**
+	 * Update a review of a rural house.
+	 * 
+	 * @param rh the rural house
+	 * @param r the review
+	 */
+	@WebMethod
+	void updateReview(RuralHouse rh, Review r);
+	
 }

@@ -282,8 +282,7 @@ public class MainWindow extends JFrame {
 			return (JPanel) new MainGUI(role).getContentPane();
 			//return new OwnerMainPanel(this);
 		case ADMIN:
-			//return new AdminMainPanel(this);
-			return null;
+			return new AdminMainPanel(this);
 		case SUPER_ADMIN:
 			//return new SuperAdminMainPanel(this);
 			return null;
