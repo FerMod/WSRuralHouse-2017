@@ -151,13 +151,13 @@ public class NewRuralHouseWindow extends JDialog {
 						String description = textFieldDescription.getText();
 						City city = (City) comboBoxCity.getSelectedItem();
 						Double price = Double.valueOf(textFieldPrice.getText());
-						try {
-							facade.createRuralHouse(description, city);
+//						try {
+//							facade.createRuralHouse(description, city); //FIXME using non existing method
 							dispose();
 							JOptionPane.showMessageDialog(null,	"Rural house added successfuly", "Info", JOptionPane.INFORMATION_MESSAGE);
-						} catch (DuplicatedEntityException e1) {
-							JOptionPane.showMessageDialog(null,	"There is already a rural house with the same name and city.", "Duplicated rural house", JOptionPane.WARNING_MESSAGE);
-						}
+//						} catch (DuplicatedEntityException ex) {
+//							JOptionPane.showMessageDialog(null,	"There is already a rural house with the same name and city.", "Duplicated rural house", JOptionPane.WARNING_MESSAGE);
+//						}
 					}
 				}
 			});
