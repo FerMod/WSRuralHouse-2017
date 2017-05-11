@@ -887,7 +887,7 @@ public class ClientMainPanel extends JPanel {
 
 		private static final long serialVersionUID = 2711709042458345572L;
 
-		private JTextArea descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
+		private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 		private JButton infoButton;
 		private JPanel panel;
 
@@ -903,22 +903,26 @@ public class ClientMainPanel extends JPanel {
 			gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0};
 			panel.setLayout(gridBagLayout);
 
-			dateRangeComponent = new JTextArea();
-			dateRangeComponent.setText("startDate - endDate");
-			dateRangeComponent.setOpaque(false);
-			dateRangeComponent.setEditable(false);
-			dateRangeComponent.setFocusable(false);
-			GridBagConstraints gbcDateRange = new GridBagConstraints();
-			gbcDateRange.insets = new Insets(0, 0, 5, 5);
-			gbcDateRange.fill = GridBagConstraints.HORIZONTAL;
-			gbcDateRange.gridx = 0;
-			gbcDateRange.gridy = 0;
-			panel.add(dateRangeComponent, gbcDateRange);
+			titleComponent = new JTextArea();
+			titleComponent.setText("title\nDate: startDate - endDate");
+			titleComponent.setOpaque(false);
+			titleComponent.setEditable(false);
+			titleComponent.setFocusable(false);
+			titleComponent.setRows(2);
+			GridBagConstraints gbcTitle = new GridBagConstraints();
+			gbcTitle.insets = new Insets(0, 0, 5, 5);
+			gbcTitle.fill = GridBagConstraints.HORIZONTAL;
+			gbcTitle.gridx = 0;
+			gbcTitle.gridy = 0;
+			panel.add(titleComponent, gbcTitle);
 
 			descriptionComponent = new JTextArea("description");
 			descriptionComponent.setOpaque(false);
 			descriptionComponent.setEditable(false);
 			descriptionComponent.setFocusable(false);
+			descriptionComponent.setLineWrap(true);
+			descriptionComponent.setWrapStyleWord(true);
+			descriptionComponent.setRows(4);
 			GridBagConstraints gbcDescription = new GridBagConstraints();
 			gbcDescription.gridwidth = 2;
 			gbcDescription.insets = new Insets(5, 0, 5, 5);
@@ -965,15 +969,16 @@ public class ClientMainPanel extends JPanel {
 
 		}
 
-		//		descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
-		//		private JButton infoButton;
-		//		private JPanel panel;
-
 		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
 			rowContent.setTableDetailsCell(this);
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-			dateRangeComponent.setText(date.format(rowContent.getOffer().getStartDate()) + " - " + date.format(rowContent.getOffer().getEndDate()));
-			descriptionComponent.setText(rowContent.getOffer().getRuralHouse().getDescription());
+			titleComponent.setText(rowContent.getOffer().getRuralHouse().getName() + "\n" + date.format(rowContent.getOffer().getStartDate()) + " - " + date.format(rowContent.getOffer().getEndDate()));
+			String description = rowContent.getOffer().getRuralHouse().getDescription();
+			//Limit to 140 char, if the text exceeds the limit it will place ' (...)'
+			if(description.length() >= 300) {
+				description = String.format("%1.140s%1.140s", description, " (...)");
+			}
+			descriptionComponent.setText(description);
 			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
 			addressComponent.setText(rowContent.getOffer().getRuralHouse().getCity() + " " + rowContent.getOffer().getRuralHouse().getAddress());
 			priceComponent.setText(currencyFormatter.format(rowContent.getOffer().getPrice()));
@@ -982,7 +987,7 @@ public class ClientMainPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					System.out.println(rowContent.getOffer().toString());					
-					OfferInfoDialog dialog = new OfferInfoDialog(frame, rowContent); //FIXME
+					OfferInfoDialog dialog = new OfferInfoDialog(frame, rowContent);
 					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					dialog.validate();
 					//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.

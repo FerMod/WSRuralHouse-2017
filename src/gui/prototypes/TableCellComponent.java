@@ -15,7 +15,7 @@ public class TableCellComponent extends JPanel {
 
 	private static final long serialVersionUID = -4506206726643163476L;
 
-	private JTextArea descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
+	private JTextArea descriptionComponent, addressComponent, priceComponent, titleComponent;
 	private JButton infoButton;
 	private JPanel panel;
 
@@ -28,22 +28,26 @@ public class TableCellComponent extends JPanel {
 		gridBagLayout.columnWidths = new int[] {128, 34, 0, 2};
 		gridBagLayout.rowHeights = new int[] {0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0};
 		panel.setLayout(gridBagLayout);
 		
-		dateRangeComponent = new JTextArea();
-		dateRangeComponent.setText("startDate - endDate");
-		GridBagConstraints gbcDateRange = new GridBagConstraints();
-		gbcDateRange.insets = new Insets(0, 0, 5, 5);
-		gbcDateRange.fill = GridBagConstraints.HORIZONTAL;
-		gbcDateRange.gridx = 0;
-		gbcDateRange.gridy = 0;
-		panel.add(dateRangeComponent, gbcDateRange);
+		titleComponent = new JTextArea();
+		titleComponent.setText("title\n[startDate - endDate]");
+		titleComponent.setLineWrap(true);
+		titleComponent.setWrapStyleWord(true);
+		GridBagConstraints gbcTitle = new GridBagConstraints();
+		gbcTitle.insets = new Insets(0, 0, 5, 5);
+		gbcTitle.fill = GridBagConstraints.HORIZONTAL;
+		gbcTitle.gridx = 0;
+		gbcTitle.gridy = 0;
+		panel.add(titleComponent, gbcTitle);
 
-		descriptionComponent = new JTextArea("description");
+		descriptionComponent = new JTextArea("description description description description description");
 		descriptionComponent.setOpaque(true);
 		descriptionComponent.setEditable(true);
 		descriptionComponent.setFocusable(false);
+		descriptionComponent.setLineWrap(true);
+		descriptionComponent.setWrapStyleWord(true);
 		GridBagConstraints gbcDescription = new GridBagConstraints();
 		gbcDescription.gridwidth = 2;
 		gbcDescription.insets = new Insets(5, 0, 5, 5);

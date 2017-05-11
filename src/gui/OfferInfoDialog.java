@@ -14,8 +14,6 @@ import java.awt.RenderingHints;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -425,6 +423,8 @@ public class OfferInfoDialog extends JDialog {
 			infoTextPane.setEditable(false);
 			infoTextPane.setHighlighter(null); //Disable text selection
 			infoTextPane.setOpaque(false);
+			//Place in top the caret (also setting the scrollbar top)
+			infoTextPane.setCaretPosition(0);
 		}
 		return infoTextPane;
 	}
@@ -519,8 +519,7 @@ public class OfferInfoDialog extends JDialog {
 						firstDate.setTime((Date) e.getNewValue());
 						lastDateChooser.setMinSelectableDate(firstDate.getTime());
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
-						NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-						textFieldPrice.setText(formatter.format(getPrice()));
+						updatePrice();			
 						System.out.println(e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
 					}
 				}
@@ -545,8 +544,7 @@ public class OfferInfoDialog extends JDialog {
 						lastDate.setTime((Date) e.getNewValue());
 						firstDateChooser.setMaxSelectableDate(lastDate.getTime());
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
-						NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-						textFieldPrice.setText(formatter.format(getPrice()));
+						updatePrice();
 						System.out.println(e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
 					}
 				}
@@ -575,8 +573,17 @@ public class OfferInfoDialog extends JDialog {
 	private JButton getBtnBookOffer() {
 		if (btnBookOffer == null) {
 			btnBookOffer = new JButton("Book Offer");
+			btnBookOffer.setEnabled(false);
 			btnBookOffer.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnBookOffer.setPreferredSize(new Dimension(150, 40));
+			btnBookOffer.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {	
+					//					MainWindow.getBusinessLogic(). //TODO book offer
+					frameShader.setEnabled(false);
+					dispose();
+				}
+			});
 		}
 		return btnBookOffer;
 	}
@@ -620,6 +627,14 @@ public class OfferInfoDialog extends JDialog {
 		return cancelButton;
 	}
 
+	private void updatePrice() {
+		if(firstDate != null && lastDate != null) {
+			NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+			textFieldPrice.setText(formatter.format(getPrice()));	
+			btnBookOffer.setEnabled(true);
+		}
+	}
+
 	public Date getMinDate(Date date) {
 		Calendar startDate = Calendar.getInstance();
 		startDate.setTime(date);		
@@ -655,7 +670,7 @@ public class OfferInfoDialog extends JDialog {
 	}
 
 	private double getPrice() {
-		long days = getDateDiff(firstDateChooser.getDate(), lastDateChooser.getDate(), TimeUnit.DAYS);
+		long days = getDateDiff(firstDate.getTime(), lastDate.getTime(), TimeUnit.DAYS) + 1;
 		return days * rowContent.getOffer().getPrice();
 	}
 
