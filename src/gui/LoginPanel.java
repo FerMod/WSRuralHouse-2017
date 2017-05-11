@@ -1,34 +1,28 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import domain.AbstractUser;
-import domain.AbstractUser.Role;
-
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JSeparator;
-
-import exceptions.AuthException;
-import gui.components.TextPrompt;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import java.awt.Font;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import javax.swing.UIManager;
-
-import java.awt.Color;
+import domain.AbstractUser;
+import exceptions.AuthException;
+import gui.components.TextPrompt;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel {

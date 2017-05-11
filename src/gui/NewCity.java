@@ -1,11 +1,5 @@
 package gui;
 
-import domain.City;
-import exceptions.DuplicatedEntityException;
-
-import java.awt.EventQueue;
-
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -17,10 +11,13 @@ import businessLogic.ApplicationFacadeInterface;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import exceptions.DuplicatedEntityException;
-
 public class NewCity extends JFrame {
 
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = 5387963549648398180L;
+	
 	private JFrame frame;
 	private JTextField textFieldCity;
 
