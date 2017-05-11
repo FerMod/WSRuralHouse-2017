@@ -5,11 +5,13 @@ import java.util.Vector;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Booking;
 import domain.City;
 import domain.Offer;
 import domain.Owner;
@@ -185,6 +187,46 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
+	
+	/**
+	 * Allow to the client make bookings
+	 * 
+	 * @param idClient the id of client
+	 * @param idOffer the id of offer to book
+	 * 
+	 * @return the booking done
+	 */
+	@WebMethod
+	Booking createBooking(int idClient, int idOffer);
+
+	/**
+	 * Return the offer with a id definied
+	 * 
+	 * @param idOffer the id of offer
+	 * @return the offer
+	 */
+	@WebMethod
+	Vector<Offer> getOfferById(int idOffer);
+
+
+	/**
+	 * Control the offers, for see if it's booked or not
+	 * 
+	 * @param offer to set his booked value
+	 * @param boolean to control the state of booking
+	 */
+	@WebMethod
+	void offerBookedControl(Offer of, boolean booked);
+
+
+	/**
+	 * Return a list of bookings of the client specified
+	 * 
+	 * @param id of a client
+	 * @return a list with his bookings
+	 */
+	@WebMethod
+	Vector<Offer> getBookingsOfClient(int idClient);
 	
 	/**
 	 * Create a review for a rural house.

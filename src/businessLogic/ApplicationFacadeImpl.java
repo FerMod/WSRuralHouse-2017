@@ -9,6 +9,7 @@ import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
+import domain.Booking;
 import domain.Offer;
 import domain.Owner;
 import domain.Review;
@@ -165,6 +166,26 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	
 	public void updateReview(RuralHouse rh, Review r) {
 		dataAccess.updateReview(rh, r);
+	}
+
+	@Override
+	public Booking createBooking(int idClient, int idOffer) {
+		return dataAccess.createBooking(idClient, idOffer);
+	}
+
+	@Override
+	public Vector<Offer> getOfferById(int idOffer) {
+		return dataAccess.getOfferById(idOffer);
+	}
+
+	@Override
+	public void offerBookedControl(Offer of, boolean booked) {
+		dataAccess.offerBookedControl(of, booked);
+	}
+
+	@Override
+	public Vector<Offer> getBookingsOfClient(int idClient) {
+		return dataAccess.getBookingsOfClient(idClient);
 	}
 
 	//	private getConfig() {
