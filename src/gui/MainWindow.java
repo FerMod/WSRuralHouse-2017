@@ -139,10 +139,10 @@ public class MainWindow extends JFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setUI(new CustomTabbedPaneUI());
 		//contentPane.add(tabbedPane);
-		tabbedPane.addTab("Rural Houses", getRolePanel(user.getRole()));
+		tabbedPane.addTab("Rural Houses", getRootPane().add(getRolePanel(user.getRole())));
 		tabbedPane.addTab("Profile", getProfilePanel());
-		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
-		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
+//		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
+//		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
 
 		//		JButton logOutButton = new JButton("Log Out");
 		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);

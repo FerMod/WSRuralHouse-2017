@@ -120,26 +120,10 @@ public class LoginPanel extends JPanel {
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
-
 							AbstractUser user = MainWindow.getBusinessLogic().login(username, password); //[TODO]: Login con correo electronico
-
-							//FIXME: TEMPORAL SOLUTION //////////
-							//
-							JFrame jframe = null; 
-							if(user.getRole() == Role.OWNER) {
-								jframe = new MainGUI(user.getRole());
-								jframe.setVisible(true);
-								sharedFrame.dispose();
-							} else if(user.getRole() == Role.CLIENT)  {
-								jframe = new MainWindow(user);
-								jframe.setVisible(true);
-								sharedFrame.dispose();					
-							} else {
-								JOptionPane.showMessageDialog(sharedFrame, "The " + user.getRole() + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
-							}
-							//
-							///////////////////////////////////
-
+							JFrame frame = new MainWindow(user);
+							frame.setVisible(true);
+							sharedFrame.dispose();					
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
 							JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							
