@@ -58,23 +58,15 @@ public class RuralHouse implements Serializable {
 	}
 
 	/**
-	 * This constructor only remains here as backward compatibility.
-	 * <p>
-	 * <strong><em>This will be removed in a nearby future!<em><strong>
-	 */
-	@Deprecated
-	public RuralHouse(String description, City city) {
-		this(null, null, description, city, null);
-	}
-
-	/**
 	 * Constructor of {@code RuralHouse}.
 	 * 
 	 * @param owner the owner of the rural house
 	 * @param description a short text that describes the rural house 
 	 * @param city the city where the rural house is located
 	 * @param address the address where the rural house is
+	 * @deprecated No longer the rural house name is optional, so this constructor will be removed in a near future
 	 */
+	@Deprecated
 	public RuralHouse(Owner owner, String description, City city, String address) {
 		this(owner, null, description, city, address);
 	}
