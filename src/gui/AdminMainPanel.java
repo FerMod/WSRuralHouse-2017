@@ -22,6 +22,9 @@ import domain.RuralHouse;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 
 public class AdminMainPanel extends JPanel {
@@ -37,35 +40,38 @@ public class AdminMainPanel extends JPanel {
 	 */
 	public AdminMainPanel(JFrame frame) {
 		this.frame = frame;
-		setLayout(null);
+		initializeComboBox();
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{107, 105, 155, 0};
+		gridBagLayout.rowHeights = new int[]{24, 36, 24, 38, 14, 131, 23, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(10, 39, 276, 36);
-		initializeComboBox();
 		comboBox.setModel(ruralHouses);
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				rh = (RuralHouse) comboBox.getSelectedItem();
 			}
 		});
-		add(comboBox);
 
-
-		JEditorPane editorPane = new JEditorPane();
-		editorPane.setBounds(10, 203, 418, 131);
-		add(editorPane);
-		
-
-
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Approved");
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rS = ReviewState.APPROVED;
-			}
-		});
-		buttonGroup.add(rdbtnNewRadioButton);
-		rdbtnNewRadioButton.setBounds(10, 135, 107, 38);
-		add(rdbtnNewRadioButton);
+		JLabel lblCasaRuralA = new JLabel("Casa rural a revisar");
+		lblCasaRuralA.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblCasaRuralA = new GridBagConstraints();
+		gbc_lblCasaRuralA.fill = GridBagConstraints.BOTH;
+		gbc_lblCasaRuralA.insets = new Insets(0, 0, 5, 0);
+		gbc_lblCasaRuralA.gridwidth = 3;
+		gbc_lblCasaRuralA.gridx = 0;
+		gbc_lblCasaRuralA.gridy = 0;
+		add(lblCasaRuralA, gbc_lblCasaRuralA);
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox.gridwidth = 2;
+		gbc_comboBox.gridx = 0;
+		gbc_comboBox.gridy = 1;
+		add(comboBox, gbc_comboBox);
 
 
 
@@ -75,22 +81,61 @@ public class AdminMainPanel extends JPanel {
 				rS = ReviewState.REJECTED;
 			}
 		});
-		buttonGroup.add(rdbtnNewRadioButton_1);
-		rdbtnNewRadioButton_1.setBounds(119, 135, 105, 38);
-		add(rdbtnNewRadioButton_1);
 
-		JLabel lblCasaRuralA = new JLabel("Casa rural a revisar");
-		lblCasaRuralA.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblCasaRuralA.setBounds(10, 14, 276, 24);
-		add(lblCasaRuralA);
+
+
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("Approved");
+		rdbtnNewRadioButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rS = ReviewState.APPROVED;
+			}
+		});
 
 		JLabel lblEstadoDeRevisin = new JLabel("Estado de revisi\u00F3n");
-		lblEstadoDeRevisin.setBounds(10, 110, 144, 24);
-		add(lblEstadoDeRevisin);
+		GridBagConstraints gbc_lblEstadoDeRevisin = new GridBagConstraints();
+		gbc_lblEstadoDeRevisin.anchor = GridBagConstraints.WEST;
+		gbc_lblEstadoDeRevisin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEstadoDeRevisin.gridwidth = 2;
+		gbc_lblEstadoDeRevisin.gridx = 0;
+		gbc_lblEstadoDeRevisin.gridy = 2;
+		add(lblEstadoDeRevisin, gbc_lblEstadoDeRevisin);
+		buttonGroup.add(rdbtnNewRadioButton);
+		GridBagConstraints gbc_rdbtnNewRadioButton = new GridBagConstraints();
+		gbc_rdbtnNewRadioButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_rdbtnNewRadioButton.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnNewRadioButton.gridx = 0;
+		gbc_rdbtnNewRadioButton.gridy = 3;
+		add(rdbtnNewRadioButton, gbc_rdbtnNewRadioButton);
+
+		buttonGroup.add(rdbtnNewRadioButton);
+		buttonGroup.add(rdbtnNewRadioButton_1);
+		GridBagConstraints gbc_rdbtnNewRadioButton_1 = new GridBagConstraints();
+		gbc_rdbtnNewRadioButton_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_rdbtnNewRadioButton_1.insets = new Insets(0, 0, 5, 5);
+		gbc_rdbtnNewRadioButton_1.gridx = 1;
+		gbc_rdbtnNewRadioButton_1.gridy = 3;
+		add(rdbtnNewRadioButton_1, gbc_rdbtnNewRadioButton_1);
+		buttonGroup.add(rdbtnNewRadioButton_1);
 
 		JLabel lblDescripcinDeLa = new JLabel("Descripci\u00F3n de la revisi\u00F3n");
-		lblDescripcinDeLa.setBounds(10, 178, 214, 14);
-		add(lblDescripcinDeLa);
+		GridBagConstraints gbc_lblDescripcinDeLa = new GridBagConstraints();
+		gbc_lblDescripcinDeLa.anchor = GridBagConstraints.SOUTH;
+		gbc_lblDescripcinDeLa.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblDescripcinDeLa.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescripcinDeLa.gridwidth = 2;
+		gbc_lblDescripcinDeLa.gridx = 0;
+		gbc_lblDescripcinDeLa.gridy = 4;
+		add(lblDescripcinDeLa, gbc_lblDescripcinDeLa);
+
+
+		JEditorPane editorPane = new JEditorPane();
+		GridBagConstraints gbc_editorPane = new GridBagConstraints();
+		gbc_editorPane.gridwidth = 3;
+		gbc_editorPane.fill = GridBagConstraints.BOTH;
+		gbc_editorPane.insets = new Insets(0, 0, 10, 5);
+		gbc_editorPane.gridx = 0;
+		gbc_editorPane.gridy = 5;
+		add(editorPane, gbc_editorPane);
 		description = editorPane.getText();
 
 		JButton btnNewButton = new JButton("Enviar");
@@ -100,9 +145,9 @@ public class AdminMainPanel extends JPanel {
 					description = editorPane.getText();
 					Review r = rh.getReview();
 					r.setDescription(description);
-					//r.setState(r.getReviewer(), rS);
+					r.setState(r.getReviewer(), rS);
 					//Send the review
-					//MainWindow.getBusinessLogic().updateReview(rh, r);
+					MainWindow.getBusinessLogic().updateReview(rh, r);
 					rS = null;
 					editorPane.setText("");
 					buttonGroup.clearSelection();
@@ -113,11 +158,12 @@ public class AdminMainPanel extends JPanel {
 				}
 			}
 		});
-		btnNewButton.setBounds(273, 342, 155, 23);
-		add(btnNewButton);
-
-		buttonGroup.add(rdbtnNewRadioButton);
-		buttonGroup.add(rdbtnNewRadioButton_1);
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.anchor = GridBagConstraints.SOUTH;
+		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.gridy = 6;
+		add(btnNewButton, gbc_btnNewButton);
 
 	}
 
