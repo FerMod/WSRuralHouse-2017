@@ -4,11 +4,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 
@@ -20,22 +18,16 @@ import javax.swing.JButton;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
-import domain.Offer;
 import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.TextPrompt;
 import domain.RuralHouse;
 
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 import javax.swing.border.CompoundBorder;
 
 
