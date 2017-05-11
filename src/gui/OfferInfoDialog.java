@@ -469,7 +469,7 @@ public class OfferInfoDialog extends JDialog {
 		if(firstDateChooser == null) {
 			firstDateChooser = new JDateChooser();
 			//			firstDateChooser.setMinSelectableDate(Calendar.getInstance().getTime());
-			firstDateChooser.setSelectableDateRange(getMinDate(rowContent.getOffer().getStartDate()), rowContent.getOffer().getEndDate()); //TODO Get first day offer, and last day offer
+			firstDateChooser.setSelectableDateRange(getMinDate(rowContent.getOffer().getStartDate()), rowContent.getOffer().getEndDate());
 			//			firstDateChooser.setDate(firstDateChooser.getMinSelectableDate());
 			firstDateChooser.getJCalendar().setWeekOfYearVisible(true);
 			firstDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
@@ -494,7 +494,7 @@ public class OfferInfoDialog extends JDialog {
 		if(lastDateChooser == null) {
 			lastDateChooser = new JDateChooser();
 			//			lastDateChooser.setMinSelectableDate(firstDateChooser.getMinSelectableDate());
-			lastDateChooser.setSelectableDateRange(firstDateChooser.getMinSelectableDate(), rowContent.getOffer().getEndDate()); //TODO Get first day offer, and last day offer
+			lastDateChooser.setSelectableDateRange(firstDateChooser.getMinSelectableDate(), rowContent.getOffer().getEndDate());
 			//			lastDateChooser.setDate(lastDateChooser.getMaxSelectableDate());
 			lastDateChooser.getJCalendar().setWeekOfYearVisible(true);
 			lastDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
@@ -541,7 +541,7 @@ public class OfferInfoDialog extends JDialog {
 			btnBookOffer.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
-					//					MainWindow.getBusinessLogic(). //TODO book offer
+					// MainWindow.getBusinessLogic(). //TODO Add create booking method in the application facade
 					frameShader.setEnabled(false);
 					dispose();
 				}
