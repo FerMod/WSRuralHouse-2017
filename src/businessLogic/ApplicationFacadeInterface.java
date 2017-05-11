@@ -3,22 +3,22 @@ package businessLogic;
 import java.util.Date;
 import java.util.Vector;
 
-import domain.Offer;
-import domain.Review;
-import domain.RuralHouse;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.security.auth.login.AccountNotFoundException;
+
+import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-import domain.Review.ReviewState;
 import domain.City;
+import domain.Offer;
+import domain.Owner;
+import domain.Review.ReviewState;
+import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
-
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.security.auth.login.AccountNotFoundException;
-import dataAccess.DataAccessInterface;
 
 @WebService
 public interface ApplicationFacadeInterface  {
@@ -96,12 +96,16 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * Creates a new rural house and stores it in the database.
 	 * 
+	 * @param owner the owner of the rural house
+	 * @param name the name of the rural house
 	 * @param description the description of the rural house
 	 * @param city the city which the rural house is located
+	 * @param address the address where the house is located
 	 * @return the created rural house, null if none was created
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
-	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
+	@WebMethod
+	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
 
 	/**
 	 * This method retrieves the existing rural houses 

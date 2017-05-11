@@ -10,6 +10,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
 import domain.Offer;
+import domain.Owner;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
@@ -77,15 +78,15 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public double getOffersHighestPrice() {
 		return dataAccess.getOffersHighestPrice();
 	}
-
+	
 	@Override
-	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException{
+	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
 
 		RuralHouse ruralHouse = null;
 
 		if(!dataAccess.existsRuralHouse(description, city.getId())) {
-			ruralHouse = dataAccess.createRuralHouse(description, city);
+			ruralHouse = dataAccess.createRuralHouse(owner, name, description, city, address);
 		} else {
 			throw new DuplicatedEntityException();
 		}
