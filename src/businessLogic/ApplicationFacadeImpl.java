@@ -18,6 +18,7 @@ import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Review.ReviewState;
 import domain.City;
+import domain.Client;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
@@ -169,8 +170,14 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
+	@Deprecated
 	public Booking createBooking(int idClient, int idOffer) {
 		return dataAccess.createBooking(idClient, idOffer);
+	}
+	
+	@Override
+	public Booking createBooking(Client client, Offer offer) {
+		return createBooking(client.getId(), offer.getId());
 	}
 
 	@Override
@@ -179,8 +186,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public void offerBookedControl(Offer of, boolean booked) {
-		dataAccess.offerBookedControl(of, booked);
+	public void offerBookedControl(Offer offer, boolean isBooked) {
+		dataAccess.offerBookedControl(offer, isBooked);
 	}
 
 	@Override

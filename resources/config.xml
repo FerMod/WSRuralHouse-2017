@@ -9,8 +9,8 @@
 	<database local="true">
 		<databaseNode>0.0.0.0</databaseNode>
 		<databaseFileName>resources\ruralHouses.odb</databaseFileName>
-		<databaseInitValues>false</databaseInitValues>
-		<databaseOverwriteFile>false</databaseOverwriteFile>
+		<databaseInitValues>true</databaseInitValues>
+		<databaseOverwriteFile>true</databaseOverwriteFile>
 		<databasePort>6136</databasePort>
 		<user>admin</user>
 		<password>admin</password>

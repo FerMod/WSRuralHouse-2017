@@ -13,6 +13,7 @@ import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Booking;
 import domain.City;
+import domain.Client;
 import domain.Offer;
 import domain.Owner;
 import domain.Review;
@@ -189,17 +190,6 @@ public interface ApplicationFacadeInterface  {
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 	
 	/**
-	 * Allow to the client make bookings
-	 * 
-	 * @param idClient the id of client
-	 * @param idOffer the id of offer to book
-	 * 
-	 * @return the booking done
-	 */
-	@WebMethod
-	Booking createBooking(int idClient, int idOffer);
-
-	/**
 	 * Return the offer with a id definied
 	 * 
 	 * @param idOffer the id of offer
@@ -218,6 +208,29 @@ public interface ApplicationFacadeInterface  {
 	@WebMethod
 	void offerBookedControl(Offer of, boolean booked);
 
+
+	/**
+	 * Allow to the client make bookings
+	 * 
+	 * @param idClient the id of client
+	 * @param idOffer the id of offer to book
+	 * 
+	 * @return the booking done
+	 */
+	@WebMethod
+	@Deprecated
+	Booking createBooking(int idClient, int idOffer);
+	
+	/**
+	 * Create a booking for the introduced client of the introduced booking
+	 * 
+	 * @param client the client who is making the booking
+	 * @param offer the offer to book
+	 * 
+	 * @return the booking done
+	 */
+	@WebMethod
+	Booking createBooking(Client client, Offer offer);
 
 	/**
 	 * Return a list of bookings of the client specified

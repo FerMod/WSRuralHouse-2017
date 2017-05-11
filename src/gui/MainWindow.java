@@ -45,7 +45,7 @@ public class MainWindow extends JFrame {
 	private static ApplicationFacadeInterface appFacadeInterface;
 
 	private JPanel contentPane;
-	private AbstractUser user;
+	public static AbstractUser user;
 	private JTabbedPane tabbedPane;
 
 	/**
@@ -61,18 +61,18 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+
 					new ConsoleKeyEventDispatcher();
-					
+
 					ApplicationFacadeImpl aplicationFacade = new ApplicationFacadeImpl();
 					aplicationFacade.setDataAccess(new DataAccess());
 					MainWindow.setBussinessLogic(aplicationFacade);
-					
+
 					AbstractUser user = setupDebugAccount();					
 					MainWindow frame = new MainWindow(user);
 					frame.setFocusable(true);
 					frame.setVisible(true); 
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -122,7 +122,7 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow(AbstractUser user) {
 
-		this.user = user;
+		MainWindow.user = user;
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		getRolePanel(user.getRole());
@@ -139,8 +139,8 @@ public class MainWindow extends JFrame {
 		//contentPane.add(tabbedPane);
 		tabbedPane.addTab("Rural Houses", getRootPane().add(getRolePanel(user.getRole())));
 		tabbedPane.addTab("Profile", getProfilePanel());
-//		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
-//		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
+		//		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
+		//		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
 
 		//		JButton logOutButton = new JButton("Log Out");
 		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);
@@ -379,7 +379,8 @@ public class MainWindow extends JFrame {
 	public boolean logOutQuestion() {
 		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?", null, JOptionPane.YES_NO_OPTION);
 		switch (reply) {
-		case JOptionPane.YES_OPTION:			
+		case JOptionPane.YES_OPTION:	
+			MainWindow.user = null;
 			return true;
 		case JOptionPane.NO_OPTION:
 		default:

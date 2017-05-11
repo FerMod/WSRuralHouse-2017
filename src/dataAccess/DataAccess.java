@@ -840,6 +840,26 @@ public class DataAccess implements DataAccessInterface {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
 	
+//	TODO MAKE BOOKINGS PASSING THE OBJECT
+//	@Override 
+//	public Booking createBooking(Client client, Offer offer) {
+//		Booking booking= null;
+//		try {
+//			open();
+//			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
+//			db.getTransaction().begin();
+//			booking = new Booking(client, offer);
+//			db.persist(booking);
+//			db.getTransaction().commit();
+//			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
+//		} catch	(Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			close();
+//		}
+//		return booking;
+//	}
+	
 	@Override
 	public Booking createBooking(int idClient, int idOffer) {
 		Booking booking= null;

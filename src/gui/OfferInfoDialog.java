@@ -48,6 +48,9 @@ import javax.swing.JTextField;
 import java.awt.Cursor;
 import java.awt.Font;
 import com.toedter.calendar.JDateChooser;
+
+import domain.Client;
+
 import java.awt.Rectangle;
 import javax.swing.JLabel;
 
@@ -541,7 +544,7 @@ public class OfferInfoDialog extends JDialog {
 			btnBookOffer.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
-					// MainWindow.getBusinessLogic(). //TODO Add create booking method in the application facade
+					MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getOffer());
 					frameShader.setEnabled(false);
 					dispose();
 				}
