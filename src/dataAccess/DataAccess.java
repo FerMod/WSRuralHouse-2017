@@ -840,7 +840,6 @@ public class DataAccess implements DataAccessInterface {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
 	
-
 	@Override
 	public Booking createBooking(int idClient, int idOffer) {
 		Booking booking= null;
