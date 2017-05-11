@@ -5,13 +5,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -80,44 +76,7 @@ public class OfferInfoDialog extends JDialog {
 	private Calendar firstDate, lastDate;
 	private JLabel lblPrice;
 
-	/**
-	 * Launch the application.
-	 */
-	//	public static void main(String[] args) {
-	//		try {
-	//			SwingUtilities.invokeLater(new Runnable() {
-	//				@Override
-	//				public void run() {
-	//					JFrame parentFrame = new JFrame();
-	//					parentFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	//					parentFrame.setSize(800, 800);
-	//					parentFrame.setLocationByPlatform(true);
-	//					parentFrame.setVisible(true);
-	//					parentFrame.getContentPane().setLayout(new GridBagLayout());
-	//					JButton launchDialog = new JButton("LaunchDialog");	
-	//					parentFrame.getContentPane().add(launchDialog);
-	//
-	//					launchDialog.addActionListener(new ActionListener() {				
-	//						@Override
-	//						public void actionPerformed(ActionEvent e) {
-	//							OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, null);
-	//							dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	//							dialog.validate();
-	//							//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
-	//							dialog.setLocationRelativeTo(parentFrame);
-	//							//dialog.setLocation(getFrameCenter(parentFrame));
-	//							dialog.setVisible(true);
-	//
-	//							//							JOptionPane.showInternalMessageDialog(parentFrame.getContentPane(), dialog.getRootPane());
-	//						}
-	//					});
-	//				}
-	//			});
-	//		} catch (Exception e) {
-	//			e.printStackTrace();
-	//		}
-	//	}
-
+	/*
 	public void clearMarks(Window frame) {
 		Graphics2D g2 = (Graphics2D)frame.getGraphics();
 		g2.clearRect(0, 0, frame.getSize().width, frame.getSize().height);
@@ -143,10 +102,13 @@ public class OfferInfoDialog extends JDialog {
 
 		return new Point(x, y);
 	}
+	 */
 
 	/**
-	 * Create the dialog.
-	 * @param rowContent 
+	 * A constructor to create the dialog filled with the row information
+	 * 
+	 * @param parentFrame the parent frame of this dialog
+	 * @param rowContent the object of type {@code CellDetails} that contains all the data, that will be displayed
 	 */
 	public OfferInfoDialog(JFrame parentFrame, CellDetails rowContent) {
 		super(parentFrame);
