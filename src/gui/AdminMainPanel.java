@@ -45,6 +45,7 @@ public class AdminMainPanel extends JPanel {
 	private String description;
 	private JButton btnSend;
 	private JLabel lblReviewState, lblDescription;
+	private JRadioButton rdbtnApproved, rdbtnRejected;
 	private JTextPane textPane;
 	private boolean enableButtonGroup = false;
 	private TextPrompt textPanePrompt;
@@ -64,6 +65,7 @@ public class AdminMainPanel extends JPanel {
 		JComboBox<RuralHouse> comboBox = new JComboBox<RuralHouse>();
 		comboBox.setModel(ruralHouses);
 		comboBox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				boolean enable;
@@ -76,16 +78,33 @@ public class AdminMainPanel extends JPanel {
 				}
 
 				if(enable != enableButtonGroup) {
+
 					enableButtonGroup = enable;
+
 					Enumeration<AbstractButton> enumeration = buttonGroup.getElements();
 					while (enumeration.hasMoreElements()) {
 						AbstractButton abstractButton = enumeration.nextElement();
 						abstractButton.setEnabled(enableButtonGroup);
 					}
+
 					lblReviewState.setEnabled(enableButtonGroup);
+					lblDescription.setEnabled(enableButtonGroup);
+					textPane.setEnabled(rdbtnRejected.isSelected());
+
+					if(enableButtonGroup && rdbtnRejected.isSelected()) {
+						textPanePrompt.setAlpha(128);
+					} else {
+						textPanePrompt.setAlpha(64);
+					}
+
+					if(rdbtnApproved.isSelected() || rdbtnRejected.isSelected()) {
+						btnSend.setEnabled(enableButtonGroup);
+					}
+
 				}
 
 			}
+
 		});
 
 		JLabel lblCasaRural = new JLabel("Casa rural a revisar");
@@ -116,7 +135,7 @@ public class AdminMainPanel extends JPanel {
 		add(lblReviewState, gbc_lblReviewState);
 
 
-		JRadioButton rdbtnApproved = new JRadioButton("Approved");
+		rdbtnApproved = new JRadioButton("Approved");
 		rdbtnApproved.setEnabled(false);
 		rdbtnApproved.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,6 +144,7 @@ public class AdminMainPanel extends JPanel {
 				textPane.setEnabled(false);
 				textPane.setText("");
 				textPanePrompt.setAlpha(64);
+				btnSend.setEnabled(true);
 			}
 		});		
 		buttonGroup.add(rdbtnApproved);
@@ -135,7 +155,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_rdbtnNewRadioButton_1.gridy = 3;
 		add(rdbtnApproved, gbc_rdbtnNewRadioButton_1);
 
-		JRadioButton rdbtnRejected = new JRadioButton("Rejected");
+		rdbtnRejected = new JRadioButton("Rejected");
 		rdbtnRejected.setEnabled(false);
 		rdbtnRejected.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -143,6 +163,7 @@ public class AdminMainPanel extends JPanel {
 				textPane.setEnabled(true);
 				textPanePrompt.setAlpha(200);
 				lblDescription.setEnabled(true);
+				btnSend.setEnabled(true);
 			}
 		});
 		buttonGroup.add(rdbtnRejected);
@@ -166,14 +187,14 @@ public class AdminMainPanel extends JPanel {
 
 		textPane = new JTextPane();
 		textPane.setEnabled(false);
-		
+
 		textPanePrompt = new TextPrompt(textPane);
 		textPanePrompt.setBorder(new CompoundBorder());
 		textPanePrompt.setText("(optional)");
 		textPanePrompt.setStyle(Font.BOLD);
 		textPanePrompt.setAlpha(64);
 		textPanePrompt.setVerticalAlignment(SwingConstants.TOP);
-		
+
 		GridBagConstraints gbc_editorPane = new GridBagConstraints();
 		gbc_editorPane.gridwidth = 3;
 		gbc_editorPane.fill = GridBagConstraints.BOTH;
