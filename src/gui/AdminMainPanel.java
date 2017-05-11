@@ -22,8 +22,7 @@ import domain.RuralHouse;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 
 public class AdminMainPanel extends JPanel {
 	private JFrame frame;
@@ -55,6 +54,7 @@ public class AdminMainPanel extends JPanel {
 		JEditorPane editorPane = new JEditorPane();
 		editorPane.setBounds(10, 203, 418, 131);
 		add(editorPane);
+		
 
 
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("Approved");
@@ -96,17 +96,18 @@ public class AdminMainPanel extends JPanel {
 		JButton btnNewButton = new JButton("Enviar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(rS != null && rh != null) {
-					System.out.println(description);
-					editorPane.setText("");
+				if(rS != null && rh != null) {	
+					description = editorPane.getText();
 					Review r = rh.getReview();
 					r.setDescription(description);
-					//r.setState(, rS); <--- Help here pls.
+					//r.setState(r.getReviewer(), rS);
 					//Send the review
 					//MainWindow.getBusinessLogic().updateReview(rh, r);
 					rS = null;
+					editorPane.setText("");
 					buttonGroup.clearSelection();
-					JOptionPane.showMessageDialog(null,	"Se ha enviado la revisión correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);					
+					JOptionPane.showMessageDialog(null,	"Se ha enviado la revisión correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);	
+					System.out.println("Review of " + rh.toString() + ": " + description);
 				} else {	
 					JOptionPane.showMessageDialog(null, "No se puede enviar una revisión sin su estado o su casa rural", "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -123,7 +124,7 @@ public class AdminMainPanel extends JPanel {
 	public void initializeComboBox() {
 		Vector<RuralHouse> rhs = MainWindow.getBusinessLogic().getRuralHouses();
 
-		ruralHouses.addElement(null); //For that the user selected a RuralHouse
+		ruralHouses.addElement(null); //For that the user have selected a RuralHouse
 
 		for(RuralHouse rh : rhs) {
 			ruralHouses.addElement(rh);
