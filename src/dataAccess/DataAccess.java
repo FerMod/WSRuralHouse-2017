@@ -839,7 +839,13 @@ public class DataAccess implements DataAccessInterface {
 	private <E> void printCollection(Collection<E> collection) {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
-
+	
+	/**
+	 * Create a booking for the client
+	 * 
+	 * @param idClient id of Client
+	 * @param idOffer id of Offer
+	 */
 	@Override
 	public Booking createBooking(int idClient, int idOffer) {
 		Booking booking= null;
