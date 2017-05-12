@@ -3,22 +3,26 @@ package businessLogic;
 import java.util.Date;
 import java.util.Vector;
 
-import domain.Offer;
-import domain.Review;
-import domain.RuralHouse;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.persistence.TypedQuery;
+import javax.security.auth.login.AccountNotFoundException;
+
+import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-import domain.Review.ReviewState;
+import domain.Booking;
 import domain.City;
+import domain.Client;
+import domain.Offer;
+import domain.Owner;
+import domain.Review;
+import domain.Review.ReviewState;
+import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
-
-import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.security.auth.login.AccountNotFoundException;
-import dataAccess.DataAccessInterface;
 
 @WebService
 public interface ApplicationFacadeInterface  {
@@ -96,12 +100,16 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * Creates a new rural house and stores it in the database.
 	 * 
+	 * @param owner the owner of the rural house
+	 * @param name the name of the rural house
 	 * @param description the description of the rural house
 	 * @param city the city which the rural house is located
+	 * @param address the address where the house is located
 	 * @return the created rural house, null if none was created
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
-	RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException;
+	@WebMethod
+	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
 
 	/**
 	 * This method retrieves the existing rural houses 
@@ -180,5 +188,75 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
+	
+	/**
+	 * Return the offer with a id definied
+	 * 
+	 * @param idOffer the id of offer
+	 * @return the offer
+	 */
+	@WebMethod
+	Vector<Offer> getOfferById(int idOffer);
 
+
+	/**
+	 * Control the offers, for see if it's booked or not
+	 * 
+	 * @param offer to set his booked value
+	 * @param boolean to control the state of booking
+	 */
+	@WebMethod
+	void offerBookedControl(Offer of, boolean booked);
+
+
+	/**
+	 * Allow to the client make bookings
+	 * 
+	 * @param idClient the id of client
+	 * @param idOffer the id of offer to book
+	 * 
+	 * @return the booking done
+	 */
+	@WebMethod
+	@Deprecated
+	Booking createBooking(int idClient, int idOffer);
+	
+	/**
+	 * Create a booking for the introduced client of the introduced booking
+	 * 
+	 * @param client the client who is making the booking
+	 * @param offer the offer to book
+	 * 
+	 * @return the booking done
+	 */
+	@WebMethod
+	Booking createBooking(Client client, Offer offer);
+
+	/**
+	 * Return a list of bookings of the client specified
+	 * 
+	 * @param id of a client
+	 * @return a list with his bookings
+	 */
+	@WebMethod
+	Vector<Offer> getBookingsOfClient(int idClient);
+	
+	/**
+	 * Create a review for a rural house.
+	 * 
+	 * @param rh the rural house
+	 * @return review created of the rural house
+	 */
+	@WebMethod
+	Review createReview(RuralHouse rh);
+	
+	/**
+	 * Update a review of a rural house.
+	 * 
+	 * @param rh the rural house
+	 * @param r the review
+	 */
+	@WebMethod
+	void updateReview(RuralHouse rh, Review r);
+	
 }

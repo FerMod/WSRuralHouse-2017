@@ -20,7 +20,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -473,14 +472,14 @@ public class ClientMainPanel extends JPanel {
 				CellDetails cellDetails = (CellDetails) entry.getValue(1);
 				//JTextArea textArea = null;
 
-				System.out.println("cellDetails.getDescription().contains(text) -> " + cellDetails.getDescription().contains(text));
-				if(cellDetails.getDescription().contains(text)) {
+				System.out.println("cellDetails.getDescription().contains(text) -> " + cellDetails.getOffer().getRuralHouse().getDescription().contains(text));
+				if(cellDetails.getOffer().getRuralHouse().getDescription().contains(text)) {
 					//textArea = cellDetails.getTableDetailsCell().getDescriptionTextArea();
 					include = true;
 				}
 
-				System.out.println("cellDetails.getAddress().contains(text) -> " + cellDetails.getAddress().contains(text));
-				if(cellDetails.getAddress().contains(text)) {
+				System.out.println("cellDetails.getAddress().contains(text) -> " + cellDetails.getOffer().getRuralHouse().getAddress().contains(text));
+				if(cellDetails.getOffer().getRuralHouse().getAddress().contains(text)) {
 					//textArea = cellDetails.getTableDetailsCell().getAddressField();
 					include = true;
 				}
@@ -500,7 +499,7 @@ public class ClientMainPanel extends JPanel {
 		RowFilter<Object, Object> filter = new RowFilter<Object, Object>() {
 			public boolean include(Entry<? extends Object, ? extends Object> entry) {
 				CellDetails cellDetails = (CellDetails) entry.getValue(1);
-				return cellDetails.getPrice() > minPrice.doubleValue() && cellDetails.getPrice() <= maxPrice.doubleValue();
+				return cellDetails.getOffer().getPrice() > minPrice.doubleValue() && cellDetails.getOffer().getPrice() <= maxPrice.doubleValue();
 			}
 		};
 		sorter.setRowFilter(filter);		
@@ -718,9 +717,9 @@ public class ClientMainPanel extends JPanel {
 		private void fillTableData() {
 
 			//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses(ReviewState.APPROVED);
-//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses();
-//			System.out.println("###############################\nRURAL HOUSES\n" + MainWindow.getBusinessLogic().getRuralHouses());
-			
+			//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses();
+			//			System.out.println("###############################\nRURAL HOUSES\n" + MainWindow.getBusinessLogic().getRuralHouses());
+
 			Vector<Offer> offerVector = MainWindow.getBusinessLogic().getOffers(ReviewState.APPROVED);
 			data = new Object[offerVector.size()][2];
 			System.out.println(Arrays.deepToString(data));
@@ -888,7 +887,7 @@ public class ClientMainPanel extends JPanel {
 
 		private static final long serialVersionUID = 2711709042458345572L;
 
-		private JTextArea descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
+		private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 		private JButton infoButton;
 		private JPanel panel;
 
@@ -904,22 +903,26 @@ public class ClientMainPanel extends JPanel {
 			gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0};
 			panel.setLayout(gridBagLayout);
 
-			dateRangeComponent = new JTextArea();
-			dateRangeComponent.setText("startDate - endDate");
-			dateRangeComponent.setOpaque(false);
-			dateRangeComponent.setEditable(false);
-			dateRangeComponent.setFocusable(false);
-			GridBagConstraints gbcDateRange = new GridBagConstraints();
-			gbcDateRange.insets = new Insets(0, 0, 5, 5);
-			gbcDateRange.fill = GridBagConstraints.HORIZONTAL;
-			gbcDateRange.gridx = 0;
-			gbcDateRange.gridy = 0;
-			panel.add(dateRangeComponent, gbcDateRange);
+			titleComponent = new JTextArea();
+			titleComponent.setText("title\nDate: startDate - endDate");
+			titleComponent.setOpaque(false);
+			titleComponent.setEditable(false);
+			titleComponent.setFocusable(false);
+			titleComponent.setRows(2);
+			GridBagConstraints gbcTitle = new GridBagConstraints();
+			gbcTitle.insets = new Insets(0, 0, 5, 5);
+			gbcTitle.fill = GridBagConstraints.HORIZONTAL;
+			gbcTitle.gridx = 0;
+			gbcTitle.gridy = 0;
+			panel.add(titleComponent, gbcTitle);
 
 			descriptionComponent = new JTextArea("description");
 			descriptionComponent.setOpaque(false);
 			descriptionComponent.setEditable(false);
 			descriptionComponent.setFocusable(false);
+			descriptionComponent.setLineWrap(true);
+			descriptionComponent.setWrapStyleWord(true);
+			descriptionComponent.setRows(4);
 			GridBagConstraints gbcDescription = new GridBagConstraints();
 			gbcDescription.gridwidth = 2;
 			gbcDescription.insets = new Insets(5, 0, 5, 5);
@@ -966,24 +969,27 @@ public class ClientMainPanel extends JPanel {
 
 		}
 
-		//		descriptionComponent, addressComponent, priceComponent, dateRangeComponent;
-		//		private JButton infoButton;
-		//		private JPanel panel;
-
 		private void updateData(CellDetails rowContent, boolean isSelected, JTable table) {
 			rowContent.setTableDetailsCell(this);
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-			dateRangeComponent.setText(date.format(rowContent.getStartDate()) + " - " + date.format(rowContent.getEndDate()));
-			descriptionComponent.setText(rowContent.getDescription());
+			titleComponent.setText(rowContent.getOffer().getRuralHouse().getName() + "\n" + date.format(rowContent.getOffer().getStartDate()) + " - " + date.format(rowContent.getOffer().getEndDate()));
+			String description = rowContent.getOffer().getRuralHouse().getDescription();
+			//Limit to 140 char, if the text exceeds the limit it will place ' (...)'
+			if(description.length() >= 300) {
+				description = String.format("%1.140s%1.140s", description, " (...)");
+			}
+			descriptionComponent.setText(description);
 			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-			addressComponent.setText(rowContent.getCity() + " " + rowContent.getAddress());
-			priceComponent.setText(currencyFormatter.format(rowContent.getPrice()));
+			addressComponent.setText(rowContent.getOffer().getRuralHouse().getCity() + " " + rowContent.getOffer().getRuralHouse().getAddress());
+			priceComponent.setText(currencyFormatter.format(rowContent.getOffer().getPrice()));
 
 			infoButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					OfferInfoDialog dialog = new OfferInfoDialog(frame); //FIXME
+					System.out.println(rowContent.getOffer().toString());					
+					OfferInfoDialog dialog = new OfferInfoDialog(frame, rowContent);
 					dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					dialog.validate();
 					//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
 					dialog.setLocationRelativeTo(frame);
 					dialog.setVisible(true);
@@ -1082,53 +1088,69 @@ public class ClientMainPanel extends JPanel {
 			this.tableCellComponent = tableCellComponent;
 		}
 
-		public Date getStartDate() {
-			return offer.getStartDate();
+		public Offer getOffer() {
+			return offer;
 		}
 
-		public void setStartDate(Date startDate) {
-			offer.setStartDate(startDate);
+		public void setOffer(Offer offer) {
+			this.offer = offer;
 		}
-
-		public Date getEndDate() {
-			return offer.getEndDate();
-		}
-
-		public void setEndDate(Date endDate) {
-			offer.getEndDate();
-		}
-
-		public String getDescription() {
-			return offer.getRuralHouse().getDescription();
-		}
-
-		public void setDescription(String description) {
-			offer.getRuralHouse().setDescription(description);
-		}
-
-		public String getCity() {
-			return offer.getRuralHouse().getCity().getName();
-		}
-
-		public void setCity(String cityName) {
-			offer.getRuralHouse().getCity().setName(cityName);
-		}
-
-		public String getAddress() {
-			return offer.getRuralHouse().getAddress();
-		}
-
-		public void setAddress(String address) {
-			offer.getRuralHouse().setAddress(address);
-		}
-
-		public double getPrice() {
-			return offer.getPrice();
-		}
-
-		public void setPrice(double price) {
-			offer.setPrice(price);
-		}
+		//
+		//		public Date getStartDate() {
+		//			return offer.getStartDate();
+		//		}
+		//
+		//		public void setStartDate(Date startDate) {
+		//			offer.setStartDate(startDate);
+		//		}
+		//
+		//		public Date getEndDate() {
+		//			return offer.getEndDate();
+		//		}
+		//
+		//		public void setEndDate(Date endDate) {
+		//			offer.getEndDate();
+		//		}
+		//		
+		//		public String getName() {
+		//			return offer.getRuralHouse().getName();
+		//		}
+		//		
+		//		public void setName(String name) {
+		//			offer.getRuralHouse().setName(name);
+		//		}
+		//
+		//		public String getDescription() {
+		//			return offer.getRuralHouse().getDescription();
+		//		}
+		//
+		//		public void setDescription(String description) {
+		//			offer.getRuralHouse().setDescription(description);
+		//		}
+		//
+		//		public String getCity() {
+		//			return offer.getRuralHouse().getCity().getName();
+		//		}
+		//
+		//		public void setCity(String cityName) {
+		//			offer.getRuralHouse().getCity().setName(cityName);
+		//		}
+		//
+		//		public String getAddress() {
+		//			return offer.getRuralHouse().getAddress();
+		//		}
+		//
+		//		public void setAddress(String address) {
+		//			offer.getRuralHouse().setAddress(address);
+		//		}
+		//
+		//		public double getPrice() {
+		//			return offer.getPrice();
+		//		}
+		//
+		//		public void setPrice(double price) {
+		//			offer.setPrice(price);
+		//		}
 
 	}
 

@@ -150,13 +150,14 @@ public class DataAccess implements DataAccessInterface {
 			//			deleteTableContent("Client");
 			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
+			
 
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
-			
+
 			createBooking(20, 3);
 			getOfferById(20);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
@@ -165,30 +166,33 @@ public class DataAccess implements DataAccessInterface {
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
-			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", createCity("Ezkio"), "Calle Falsa / 123");
+			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", "Una descripcion de la casa", createCity("Ezkio"), "Calle Falsa / 123");
 			rh1.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh1);
-			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 293);
-			createOffer(rh1, date.parse("2017/5/23"), date.parse("2017/7/16"), 593);
-			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 773);
+			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 13);
+			createOffer(rh1, date.parse("2017/5/2"), date.parse("2017/7/16"), 24);
+			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
-			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", createCity("Iruna"), "Plz. square 1 3ºA");
+			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ºA");
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
-			createOffer(rh2, date.parse("2013/10/3"), date.parse("2017/2/8"), 773);		
+			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", createCity("Bilbo"), "ñeñeñe 3 3ºñe");		
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");		
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
-			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 93);		
-			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 876);		
-			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 233);		
+			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 17);		
+			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 9);		
+			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 5);		
 
-			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", createCity("Renteria"), "Plhasa Bonitah 2 3sero se");	
+			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", "Se me acaban las ideas para descripciones de casa, pero quiero que sea una larga para ver como se representaría.\n"
+					+ "Y si admás tiene saltos de linea?\n"
+					+ "Se verá como reacciona todo, pero debería caber y si no, poner un limite.\n"
+					+ "Como por ejemplo poner tres puntos suspensivos cuando supera ciertos caracterers.", createCity("Renteria"), "Plaza Grande 5 8-C");	
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
-			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 128);		
-			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 455);		
+			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
+			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 
 			System.out.println("Database initialized");
 
@@ -400,20 +404,20 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException {
-		return createRuralHouse(description, city);
+	@Deprecated
+	public RuralHouse createRuralHouse(Owner owner, String description, City city, String address) throws DuplicatedEntityException {
+		return createRuralHouse(owner, null, description, city, address);
 	}
 
 	@Override
-	public RuralHouse createRuralHouse(Owner owner, String description, City city, String address) throws DuplicatedEntityException {
+	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createRuralHouse(" + owner + ", " + description + ", " + city + ", " + address + ") -> ");
+			System.out.print(">> DataAccess: createRuralHouse(" + owner + ", " + name + ", " + description + ", " + city + ", " + address + ") -> ");
 			db.getTransaction().begin();
-			ruralHouse = new RuralHouse(owner, description, city, address);	
-			Review review = new Review(ruralHouse);
-			ruralHouse.setReview(review);
+			ruralHouse = new RuralHouse(owner, name, description, city, address);
+			ruralHouse.setReview(new Review(ruralHouse));
 			db.persist(ruralHouse);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + ruralHouse.getId());
@@ -709,8 +713,8 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return city;
 	}
-	
-	
+
+
 
 	@Override
 	public boolean existsCity(City city) {
@@ -836,6 +840,26 @@ public class DataAccess implements DataAccessInterface {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
 	
+//	TODO MAKE BOOKINGS PASSING THE OBJECT
+//	@Override 
+//	public Booking createBooking(Client client, Offer offer) {
+//		Booking booking= null;
+//		try {
+//			open();
+//			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
+//			db.getTransaction().begin();
+//			booking = new Booking(client, offer);
+//			db.persist(booking);
+//			db.getTransaction().commit();
+//			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
+//		} catch	(Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			close();
+//		}
+//		return booking;
+//	}
+	
 	@Override
 	public Booking createBooking(int idClient, int idOffer) {
 		Booking booking= null;
@@ -854,7 +878,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return booking;
 	}
-	
+
 	/**
 	 * Returns a list with the offer identified by his id
 	 * 
@@ -879,7 +903,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Control the boolean booked of the offer
 	 * 
@@ -894,7 +918,7 @@ public class DataAccess implements DataAccessInterface {
 		db.getTransaction().commit();
 		close();
 	}
-	
+
 	/**
 	 * Return a list of bookings of the client specified
 	 * 
@@ -913,11 +937,11 @@ public class DataAccess implements DataAccessInterface {
 			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
 			
 			result = new Vector<Offer>();
-			
+
 			for(Booking bo : bookings) {
 				result.add(getOfferById(bo.getIdOffer()).get(0)); //Get the offers and stores in result vector.
 			}
-			
+
 			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
@@ -925,6 +949,38 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return result;
+	}
+	
+	
+	@Override
+	public Review createReview(RuralHouse rh) {
+		Review review = null;
+		try {
+			open();
+			System.out.print(">> DataAccess: createReview(\"" + rh.getName() + "\") -> ");
+			db.getTransaction().begin();
+			review = new Review(rh);
+			db.persist(review);
+			db.getTransaction().commit();
+			System.out.println("Created in Rural House " + rh.toString());
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return review;
+	}
+	
+	/**
+	 * Update a review of a Rural House
+	 * 
+	 * @param Rural House of a Owner
+	 * @param Review of a Rural House
+	 */
+	@Override
+	public void updateReview(RuralHouse rh, Review r) {
+		rh.setReview(r);
+		update(r);
 	}
 
 }

@@ -1,34 +1,28 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import domain.AbstractUser;
-import domain.AbstractUser.Role;
-
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JSeparator;
-
-import exceptions.AuthException;
-import gui.components.TextPrompt;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import java.awt.Font;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import javax.swing.UIManager;
-
-import java.awt.Color;
+import domain.AbstractUser;
+import exceptions.AuthException;
+import gui.components.TextPrompt;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel {
@@ -120,26 +114,10 @@ public class LoginPanel extends JPanel {
 						String username = textFieldUsername.getText();
 						String password = String.valueOf(passwordField.getPassword());
 						try {
-
 							AbstractUser user = MainWindow.getBusinessLogic().login(username, password); //[TODO]: Login con correo electronico
-
-							//FIXME: TEMPORAL SOLUTION //////////
-							//
-							JFrame jframe = null; 
-							if(user.getRole() == Role.OWNER) {
-								jframe = new MainGUI(user.getRole());
-								jframe.setVisible(true);
-								sharedFrame.dispose();
-							} else if(user.getRole() == Role.CLIENT)  {
-								jframe = new MainWindow(user);
-								jframe.setVisible(true);
-								sharedFrame.dispose();					
-							} else {
-								JOptionPane.showMessageDialog(sharedFrame, "The " + user.getRole() + " view is not implemented yet.", "WIP", JOptionPane.INFORMATION_MESSAGE);
-							}
-							//
-							///////////////////////////////////
-
+							JFrame frame = new MainWindow(user);
+							frame.setVisible(true);
+							sharedFrame.dispose();					
 						} catch (AuthException | AccountNotFoundException ex) {
 							System.err.println(ex.getMessage());
 							JOptionPane.showMessageDialog(sharedFrame,	"Wrong username or password.", "Login Failed!", JOptionPane.WARNING_MESSAGE);							

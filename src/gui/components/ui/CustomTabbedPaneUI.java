@@ -1,9 +1,7 @@
 package gui.components.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Event;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -11,7 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
@@ -23,6 +20,7 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
  */
 public class CustomTabbedPaneUI extends BasicTabbedPaneUI {
 
+	@SuppressWarnings("unused")
 	private static final Insets NO_INSETS = new Insets(0, 0, 0, 0);
 
 	/**

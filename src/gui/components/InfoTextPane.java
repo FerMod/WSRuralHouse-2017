@@ -14,14 +14,16 @@ public class InfoTextPane extends JTextPane {
 	 */
 	private static final long serialVersionUID = -73593325903127059L;
 
-	private String title, body;
-	private ImagePanel imagePanel;
+	String title, body;
 
-	public InfoTextPane(String title, ImagePanel imagePanel, String body) {
+	public InfoTextPane() {
+		StyledDocument doc = getStyledDocument();
+		addStylesToDocument(doc);
+	}
 
-		this.title = title;
-		this.body = body;
-		this.imagePanel = imagePanel;
+	public InfoTextPane(String title,/* ImagePanel imagePanel,*/ String body) {
+
+
 
 
 		//		String[] initString = { "The title goes here\n",            //bold
@@ -38,6 +40,11 @@ public class InfoTextPane extends JTextPane {
 		//					"cover methods for interacting with those objects."
 		//			};
 
+		setText(title, body);
+
+	}
+
+	public void setText(String title, String body) {
 		String[] initString = {	
 				title + "\n\n",		//title
 				/*" ",*/					//imagePanel
@@ -56,7 +63,6 @@ public class InfoTextPane extends JTextPane {
 		} catch (BadLocationException ble) {
 			System.err.println("Couldn't insert initial text into text pane.");
 		}
-
 	}
 
 	protected void addStylesToDocument(StyledDocument doc) {
@@ -113,12 +119,14 @@ public class InfoTextPane extends JTextPane {
 		button.setMargin(new Insets(0,0,0,0));
 		button.setActionCommand(buttonString);
 		button.addActionListener(this);
-		*/
-		
-//		style = doc.addStyle("imagePanel", regular);
-//		StyleConstants.setAlignment(style, StyleConstants.ALIGN_LEFT);
-//
-//		StyleConstants.setIcon(style, imagePanel.getImage());
+		 */
+
+		//		style = doc.addStyle("imagePanel", regular);
+		//		StyleConstants.setAlignment(style, StyleConstants.ALIGN_LEFT);
+		//
+		//		StyleConstants.setIcon(style, imagePanel.getImage());
 	}
+
+
 
 }

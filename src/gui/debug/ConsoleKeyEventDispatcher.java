@@ -150,40 +150,40 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 				System.out.println("[" + this.getClass().getSimpleName() + "]: ConsoleWindow disposed");
 				ConsoleWindow.dispose();
 				return true;
-			case KeyEvent.VK_F10:
-
-				Object o = e.getSource();
-				if(o instanceof JFrame) {
-					if(mousePointLabel == null) {
-						JFrame source = (JFrame)o;
-						System.out.println(source.toString());
-						mousePointLabel = new MousePointLabel(source);	
-					}
-					//					mousePointLabel.setVisible(true);
-					//					Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);
-
-					if(!mousePointLabel.isVisible()) {
-						mousePointLabel.setVisible(true);
-						Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);			
-						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing enabled");						
-					} else {
-						mousePointLabel.setVisible(false);
-						Toolkit.getDefaultToolkit().removeAWTEventListener(mousePointLabel);				
-						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing disabled");						
-					}
-				}
-				return true;
-			case KeyEvent.VK_F9:
-				if(debugEventListener == null) {
-					debugEventListener = new DebugBorderEventListener();					
-					Toolkit.getDefaultToolkit().addAWTEventListener(debugEventListener, AWTEvent.MOUSE_MOTION_EVENT_MASK);
-					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing enabled");
-				} else {
-					Toolkit.getDefaultToolkit().removeAWTEventListener(debugEventListener);
-					debugEventListener = null;
-					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing disabled");
-				}
-				return false;
+//			case KeyEvent.VK_F10:
+//
+//				Object o = e.getSource();
+//				if(o instanceof JFrame) {
+//					if(mousePointLabel == null) {
+//						JFrame source = (JFrame)o;
+//						System.out.println(source.toString());
+//						mousePointLabel = new MousePointLabel(source);	
+//					}
+//					//					mousePointLabel.setVisible(true);
+//					//					Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+//
+//					if(!mousePointLabel.isVisible()) {
+//						mousePointLabel.setVisible(true);
+//						Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);			
+//						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing enabled");						
+//					} else {
+//						mousePointLabel.setVisible(false);
+//						Toolkit.getDefaultToolkit().removeAWTEventListener(mousePointLabel);				
+//						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing disabled");						
+//					}
+//				}
+//				return true;
+//			case KeyEvent.VK_F9:
+//				if(debugEventListener == null) {
+//					debugEventListener = new DebugBorderEventListener();					
+//					Toolkit.getDefaultToolkit().addAWTEventListener(debugEventListener, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+//					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing enabled");
+//				} else {
+//					Toolkit.getDefaultToolkit().removeAWTEventListener(debugEventListener);
+//					debugEventListener = null;
+//					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing disabled");
+//				}
+//				return false;
 			}
 		}
 		//The KeyEvent is passed to the next KeyEventDispatcher in the chain

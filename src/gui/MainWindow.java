@@ -3,7 +3,6 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -11,7 +10,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -47,7 +45,7 @@ public class MainWindow extends JFrame {
 	private static ApplicationFacadeInterface appFacadeInterface;
 
 	private JPanel contentPane;
-	private AbstractUser user;
+	public static AbstractUser user;
 	private JTabbedPane tabbedPane;
 
 	/**
@@ -63,18 +61,18 @@ public class MainWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+
 					new ConsoleKeyEventDispatcher();
-					
+
 					ApplicationFacadeImpl aplicationFacade = new ApplicationFacadeImpl();
 					aplicationFacade.setDataAccess(new DataAccess());
 					MainWindow.setBussinessLogic(aplicationFacade);
-					
+
 					AbstractUser user = setupDebugAccount();					
 					MainWindow frame = new MainWindow(user);
 					frame.setFocusable(true);
 					frame.setVisible(true); 
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -124,7 +122,7 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow(AbstractUser user) {
 
-		this.user = user;
+		MainWindow.user = user;
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		getRolePanel(user.getRole());
@@ -139,10 +137,10 @@ public class MainWindow extends JFrame {
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setUI(new CustomTabbedPaneUI());
 		//contentPane.add(tabbedPane);
-		tabbedPane.addTab("Rural Houses", getRolePanel(user.getRole()));
+		tabbedPane.addTab("Rural Houses", getRootPane().add(getRolePanel(user.getRole())));
 		tabbedPane.addTab("Profile", getProfilePanel());
-		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
-		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
+		//		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
+		//		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
 
 		//		JButton logOutButton = new JButton("Log Out");
 		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);
@@ -282,8 +280,7 @@ public class MainWindow extends JFrame {
 			return (JPanel) new MainGUI(role).getContentPane();
 			//return new OwnerMainPanel(this);
 		case ADMIN:
-			//return new AdminMainPanel(this);
-			return null;
+			return new AdminMainPanel(this);
 		case SUPER_ADMIN:
 			//return new SuperAdminMainPanel(this);
 			return null;
@@ -382,7 +379,8 @@ public class MainWindow extends JFrame {
 	public boolean logOutQuestion() {
 		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?", null, JOptionPane.YES_NO_OPTION);
 		switch (reply) {
-		case JOptionPane.YES_OPTION:			
+		case JOptionPane.YES_OPTION:	
+			MainWindow.user = null;
 			return true;
 		case JOptionPane.NO_OPTION:
 		default:

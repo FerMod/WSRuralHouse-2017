@@ -9,12 +9,16 @@ import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
+import domain.Booking;
 import domain.Offer;
+import domain.Owner;
+import domain.Review;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Review.ReviewState;
 import domain.City;
+import domain.Client;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
@@ -77,15 +81,15 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public double getOffersHighestPrice() {
 		return dataAccess.getOffersHighestPrice();
 	}
-
+	
 	@Override
-	public RuralHouse createRuralHouse(String description, City city) throws DuplicatedEntityException{
+	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
 
 		RuralHouse ruralHouse = null;
 
 		if(!dataAccess.existsRuralHouse(description, city.getId())) {
-			ruralHouse = dataAccess.createRuralHouse(description, city);
+			ruralHouse = dataAccess.createRuralHouse(owner, name, description, city, address);
 		} else {
 			throw new DuplicatedEntityException();
 		}
@@ -155,6 +159,40 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
 		return dataAccess.login(username, password);
+	}
+	
+	public Review createReview(RuralHouse rh) {
+		return dataAccess.createReview(rh);
+	}
+	
+	public void updateReview(RuralHouse rh, Review r) {
+		dataAccess.updateReview(rh, r);
+	}
+
+	@Override
+	@Deprecated
+	public Booking createBooking(int idClient, int idOffer) {
+		return dataAccess.createBooking(idClient, idOffer);
+	}
+	
+	@Override
+	public Booking createBooking(Client client, Offer offer) {
+		return createBooking(client.getId(), offer.getId());
+	}
+
+	@Override
+	public Vector<Offer> getOfferById(int idOffer) {
+		return dataAccess.getOfferById(idOffer);
+	}
+
+	@Override
+	public void offerBookedControl(Offer offer, boolean isBooked) {
+		dataAccess.offerBookedControl(offer, isBooked);
+	}
+
+	@Override
+	public Vector<Offer> getBookingsOfClient(int idClient) {
+		return dataAccess.getBookingsOfClient(idClient);
 	}
 
 	//	private getConfig() {

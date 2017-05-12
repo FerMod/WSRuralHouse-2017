@@ -208,25 +208,13 @@ public class SignUpPanel extends JPanel {
 					if(fieldsFilled()) {
 						if(passwordMatch() && correctEmailFormat()) {
 							clearFieldsColors();
-							
+
 							String email = textFieldEmail.getText();
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
-								
-								AbstractUser user = MainWindow.getBusinessLogic().createUser(email, username, password, role);
-								
-								//FIXME: TEMPORAL SOLUTION //////////
-								//
-								JFrame jframe = null; 
-								if(user.getRole() == Role.OWNER) {
-									jframe = new MainGUI(user.getRole()); //TODO Should be like this: MainWindow(dbManager.login(username, password)));					
-								} else if(user.getRole() == Role.CLIENT)  {
-									jframe = new MainWindow(MainWindow.getBusinessLogic().login(username, password));
-								}
-								//
-								////////////////////////////////////
-								
+								MainWindow.getBusinessLogic().createUser(email, username, password, role);
+								JFrame jframe = new MainWindow(MainWindow.getBusinessLogic().login(username, password));
 								jframe.setVisible(true);
 								sharedFrame.dispose();								
 								JOptionPane.showMessageDialog(jframe, "Welcome!", "Account created", JOptionPane.INFORMATION_MESSAGE);
