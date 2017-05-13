@@ -10,6 +10,7 @@ import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Booking;
 import domain.City;
+import domain.Client;
 import domain.Offer;
 import domain.Owner;
 import domain.Review;
@@ -80,16 +81,14 @@ public interface DataAccessInterface {
 	
 	void deleteTableContent(String table);
 	
-	Booking createBooking(int idClient, int idOffer);
-	
-	Vector<Offer> getOfferById(int idOffer);
-	
 	void offerBookedControl(Offer of, boolean booked);
-	
-	Vector<Offer> getBookingsOfClient(int idClient);
 	
 	Review createReview(RuralHouse rh);
 	
 	void updateReview(RuralHouse rh, Review r);
+
+	Booking createBooking(Client c, Offer o);
+
+	Vector<Booking> getBookings();
 
 }
