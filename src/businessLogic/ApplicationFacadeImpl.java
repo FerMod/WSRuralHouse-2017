@@ -184,7 +184,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		Vector<Booking> bs = dataAccess.getBookings();
 
 		for(Booking b : bs) {
-			if(b.getC().getId() != idClient) {
+			if(b.getClient().getId() != idClient) {
 				bs.remove(b);
 			}
 		}

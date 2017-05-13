@@ -870,7 +870,7 @@ public class DataAccess implements DataAccessInterface {
 			booking = new Booking(c, o);
 			db.persist(booking);
 			db.getTransaction().commit();
-			System.out.println("Created with client " + booking.getC().getUsername() + "and with offer " + booking.getO().toString());
+			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {

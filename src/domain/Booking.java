@@ -17,40 +17,40 @@ public class Booking {
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
-	private Client c;
+	private Client client;
 	
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
-	private Offer o;
+	private Offer offer;
 
 	private Date creationDate;
 	
 	public Booking(Client c, Offer o) {
-		this.c = c;
-		this.o = o;
+		this.client = c;
+		this.offer = o;
 		creationDate = Calendar.getInstance().getTime();
 	}
 
-	public Client getC() {
-		return c;
+	public Client getClient() {
+		return client;
 	}
 
-	public void setC(Client c) {
-		this.c = c;
+	public void setClient(Client c) {
+		this.client = c;
 	}
 
-	public Offer getO() {
-		return o;
+	public Offer getOffer() {
+		return offer;
 	}
 
-	public void setO(Offer o) {
-		this.o = o;
+	public void setOffer(Offer o) {
+		this.offer = o;
 	}
 
 	@Override
 	public String toString() {
-		return "Booking [c=" + c.toString() + ", o=" + o.toString() + "]";
+		return "Booking [c=" + client.toString() + ", o=" + offer.toString() + "]";
 	}
 
 }
