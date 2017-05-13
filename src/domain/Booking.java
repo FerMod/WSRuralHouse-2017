@@ -1,5 +1,8 @@
 package domain;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -14,37 +17,40 @@ public class Booking {
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
-	private int idClient;
+	private Client c;
 	
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
-	private int idOffer;
+	private Offer o;
+
+	private Date creationDate;
 	
-	public Booking(int idClient, int idOffer) {
-		this.idClient = idClient;
-		this.idOffer = idOffer;
+	public Booking(Client c, Offer o) {
+		this.c = c;
+		this.o = o;
+		creationDate = Calendar.getInstance().getTime();
 	}
 
-	public int getIdClient() {
-		return idClient;
+	public Client getC() {
+		return c;
 	}
 
-	public void setIdClient(int idClient) {
-		this.idClient = idClient;
+	public void setC(Client c) {
+		this.c = c;
 	}
 
-	public int getIdOffer() {
-		return idOffer;
+	public Offer getO() {
+		return o;
 	}
 
-	public void setIdOffer(int idOffer) {
-		this.idOffer = idOffer;
+	public void setO(Offer o) {
+		this.o = o;
 	}
 
 	@Override
 	public String toString() {
-		return "Booking [idClient=" + idClient + ", idOffer=" + idOffer + "]";
+		return "Booking [c=" + c.toString() + ", o=" + o.toString() + "]";
 	}
 
 }
