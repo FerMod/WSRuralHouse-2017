@@ -159,7 +159,7 @@ public class DataAccess implements DataAccessInterface {
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
 
 			//createBooking(20, 3);
-			getOfferById(20);
+			//getOfferById(20);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
