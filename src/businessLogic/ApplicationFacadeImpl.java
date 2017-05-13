@@ -192,6 +192,32 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return bs;
 	}
 
+	@Override
+	public Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, ReviewState reviewSt) {
+		Vector<RuralHouse> rhs = dataAccess.getRuralHouses(reviewSt);
+		
+		for(RuralHouse rh : rhs) {
+			if(!rh.getOwner().equals(ow)) {
+				rhs.remove(rh);
+			}
+		}
+		
+		return rhs;
+	}
+	
+	@Override
+	public Vector<RuralHouse> getRuralHousesOfOwner(Owner ow) {
+		Vector<RuralHouse> rhs = dataAccess.getRuralHouses();
+		
+		for(RuralHouse rh : rhs) {
+			if(!rh.getOwner().equals(ow)) {
+				rhs.remove(rh);
+			}
+		}
+		
+		return rhs;
+	}
+
 	//	private getConfig() {
 	//		return dataAccess.ge
 	//	}
