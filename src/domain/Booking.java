@@ -26,9 +26,9 @@ public class Booking {
 
 	private Date creationDate;
 	
-	public Booking(Client c, Offer o) {
-		this.client = c;
-		this.offer = o;
+	public Booking(Client client, Offer offer) {
+		this.client = client;
+		this.offer = offer;
 		creationDate = Calendar.getInstance().getTime();
 	}
 
@@ -36,16 +36,16 @@ public class Booking {
 		return client;
 	}
 
-	public void setClient(Client c) {
-		this.client = c;
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	public Offer getOffer() {
 		return offer;
 	}
 
-	public void setOffer(Offer o) {
-		this.offer = o;
+	public void setOffer(Offer offer) {
+		this.offer = offer;
 	}
 
 	@Override
