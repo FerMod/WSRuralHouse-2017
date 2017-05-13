@@ -239,7 +239,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a list with his bookings
 	 */
 	@WebMethod
-	Vector<Offer> getBookingsOfClient(int idClient);
+	Vector<Booking> getBookingsOfClient(int idClient);
 	
 	/**
 	 * Create a review for a rural house.

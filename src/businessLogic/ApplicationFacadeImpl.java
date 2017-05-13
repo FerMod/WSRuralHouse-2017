@@ -67,11 +67,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Offer> getOffers() {
 		return dataAccess.getOffers();
 	}
-	
+
 	public Vector<Offer> getOffers(ReviewState reviewState) {
-		 return dataAccess.getOffers(reviewState);
-	 }
-	
+		return dataAccess.getOffers(reviewState);
+	}
+
 	@Override
 	public int getOfferCount() {
 		return dataAccess.getOfferCount();
@@ -81,7 +81,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public double getOffersHighestPrice() {
 		return dataAccess.getOffersHighestPrice();
 	}
-	
+
 	@Override
 	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
@@ -160,29 +160,18 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
 		return dataAccess.login(username, password);
 	}
-	
+
 	public Review createReview(RuralHouse rh) {
 		return dataAccess.createReview(rh);
 	}
-	
+
 	public void updateReview(RuralHouse rh, Review r) {
 		dataAccess.updateReview(rh, r);
 	}
 
 	@Override
-	@Deprecated
-	public Booking createBooking(int idClient, int idOffer) {
-		return dataAccess.createBooking(idClient, idOffer);
-	}
-	
-	@Override
 	public Booking createBooking(Client client, Offer offer) {
-		return createBooking(client.getId(), offer.getId());
-	}
-
-	@Override
-	public Vector<Offer> getOfferById(int idOffer) {
-		return dataAccess.getOfferById(idOffer);
+		return createBooking(client, offer);
 	}
 
 	@Override
@@ -191,8 +180,16 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<Offer> getBookingsOfClient(int idClient) {
-		return dataAccess.getBookingsOfClient(idClient);
+	public Vector<Booking> getBookingsOfClient(int idClient) {
+		Vector<Booking> bs = dataAccess.getBookings();
+
+		for(Booking b : bs) {
+			if(b.getC().getId() != idClient) {
+				bs.remove(b);
+			}
+		}
+		
+		return bs;
 	}
 
 	//	private getConfig() {
