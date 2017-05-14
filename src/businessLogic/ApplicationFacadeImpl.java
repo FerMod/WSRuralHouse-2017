@@ -181,19 +181,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	@Deprecated
-	public Booking createBooking(int idClient, int idOffer) {
-		return dataAccess.createBooking(idClient, idOffer);
-	}
-
-	@Override
 	public Booking createBooking(Client client, Offer offer) {
-		return createBooking(client.getId(), offer.getId());
-	}
-
-	@Override
-	public Vector<Offer> getOfferById(int idOffer) {
-		return dataAccess.getOfferById(idOffer);
+		return createBooking(client, offer);
 	}
 
 	@Override
@@ -202,8 +191,42 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<Offer> getBookingsOfClient(int idClient) {
-		return dataAccess.getBookingsOfClient(idClient);
+	public Vector<Booking> getBookingsOfClient(int idClient) {
+		Vector<Booking> bs = dataAccess.getBookings();
+
+		for(Booking b : bs) {
+			if(b.getClient().getId() != idClient) {
+				bs.remove(b);
+			}
+		}
+		
+		return bs;
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, ReviewState reviewSt) {
+		Vector<RuralHouse> rhs = dataAccess.getRuralHouses(reviewSt);
+		
+		for(RuralHouse rh : rhs) {
+			if(!rh.getOwner().equals(ow)) {
+				rhs.remove(rh);
+			}
+		}
+		
+		return rhs;
+	}
+	
+	@Override
+	public Vector<RuralHouse> getRuralHousesOfOwner(Owner ow) {
+		Vector<RuralHouse> rhs = dataAccess.getRuralHouses();
+		
+		for(RuralHouse rh : rhs) {
+			if(!rh.getOwner().equals(ow)) {
+				rhs.remove(rh);
+			}
+		}
+		
+		return rhs;
 	}
 
 	//	private getConfig() {

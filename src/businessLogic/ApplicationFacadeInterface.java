@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
@@ -208,16 +207,6 @@ public interface ApplicationFacadeInterface  {
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 
 	/**
-	 * Return the offer with a id definied
-	 * 
-	 * @param idOffer the id of offer
-	 * @return the offer
-	 */
-	@WebMethod
-	Vector<Offer> getOfferById(int idOffer);
-
-
-	/**
 	 * Control the offers, for see if it's booked or not
 	 * 
 	 * @param offer to set his booked value
@@ -225,20 +214,7 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	void offerBookedControl(Offer of, boolean booked);
-
-
-	/**
-	 * Allow to the client make bookings
-	 * 
-	 * @param idClient the id of client
-	 * @param idOffer the id of offer to book
-	 * 
-	 * @return the booking done
-	 */
-	@WebMethod
-	@Deprecated
-	Booking createBooking(int idClient, int idOffer);
-
+	
 	/**
 	 * Create a booking for the introduced client of the introduced booking
 	 * 
@@ -257,8 +233,8 @@ public interface ApplicationFacadeInterface  {
 	 * @return a list with his bookings
 	 */
 	@WebMethod
-	Vector<Offer> getBookingsOfClient(int idClient);
-
+	Vector<Booking> getBookingsOfClient(int idClient);
+	
 	/**
 	 * Create a review for a rural house.
 	 * 
@@ -276,5 +252,25 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	void updateReview(RuralHouse rh, Review r);
-
+	
+	/**
+	 * Return a vector of Rural Houses of the Owner definied with a determined revstate
+	 * 
+	 * @param ow the owner
+	 * @param reviewSt reviewstate of the houses
+	 * @return a vector of Rural Houses of owner
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, Review.ReviewState reviewSt);
+	
+	/**
+	 * Return a vector of Rural Houses of the Owner definied
+	 * 
+	 * 
+	 * @param ow the owner
+	 * @return a vector of Rural Houses of owner
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHousesOfOwner(Owner ow);
+	
 }

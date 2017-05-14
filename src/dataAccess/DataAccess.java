@@ -159,8 +159,8 @@ public class DataAccess implements DataAccessInterface {
 			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
 
-			createBooking(20, 3);
-			getOfferById(20);
+			//createBooking(20, 3);
+			//getOfferById(20);
 			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
@@ -913,16 +913,16 @@ public class DataAccess implements DataAccessInterface {
 	//	}
 
 	@Override
-	public Booking createBooking(int idClient, int idOffer) {
+	public Booking createBooking(Client c, Offer o) {
 		Booking booking= null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
+			System.out.print(">> DataAccess: createBooking(\"" + c.getUsername() + ", " + o.toString() + "\") -> ");
 			db.getTransaction().begin();
-			booking = new Booking(idClient, idOffer);
+			booking = new Booking(c, o);
 			db.persist(booking);
 			db.getTransaction().commit();
-			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
+			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -931,30 +931,6 @@ public class DataAccess implements DataAccessInterface {
 		return booking;
 	}
 
-	/**
-	 * Returns a list with the offer identified by his id
-	 * 
-	 * @param id of offer
-	 * @return a list with the offer specified by his id
-	 */
-	@Override
-	public Vector<Offer> getOfferById(int idOffer) {
-		Vector<Offer> result = null;
-		try{
-			open();
-			System.out.println(">> DataAccess: getOfferById");
-			TypedQuery<Offer> query = db.createQuery("SELECT o "
-					+ "FROM Offer o WHERE o.id== :idOffer", Offer.class)
-					.setParameter("idOffer", idOffer);
-			result = new Vector<Offer>(query.getResultList());
-			printCollection(result);
-		} catch	(Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return result;
-	}
 
 	/**
 	 * Control the boolean booked of the offer
@@ -972,27 +948,32 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
-	 * Return a list of bookings of the client specified
+	 * Return a list of bookings
 	 * 
-	 * @param id of a client
 	 * @return a list with his bookings
 	 */
 	@Override
-	public Vector<Offer> getBookingsOfClient(int idClient) {
-		Vector<Offer> result = null;
+	public Vector<Booking> getBookings() {
+		Vector<Booking> result = null;
 		try{
 			open();
-			System.out.println(">> DataAccess: getBookingsOfClient");
+			System.out.println(">> DataAccess: getBookings");
 			TypedQuery<Booking> queryB = db.createQuery("SELECT b"
-					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
-					.setParameter("idClient", idClient);
-			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
-
-			result = new Vector<Offer>();
-
-			for(Booking bo : bookings) {
-				result.add(getOfferById(bo.getIdOffer()).get(0)); //Get the offers and stores in result vector.
-			}
+//<<<<<<< HEAD
+//					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
+//					.setParameter("idClient", idClient);
+//			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
+//
+//			result = new Vector<Offer>();
+//
+//			for(Booking bo : bookings) {
+//				result.add(getOfferById(bo.getIdOffer()).get(0)); //Get the offers and stores in result vector.
+//			}
+//=======
+					+ " FROM Booking b", Booking.class);
+					
+			result = new Vector<Booking>(queryB.getResultList());
+//>>>>>>> refs/remotes/origin/FosterGun
 
 			printCollection(result);
 		} catch	(Exception e) {
