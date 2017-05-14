@@ -79,7 +79,25 @@ public interface ApplicationFacadeInterface  {
 	 *
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
+	@WebMethod
 	Vector<Offer> getOffers(ReviewState reviewState);
+	
+	/**
+	 * Get all the active offers. This means, that this will query 
+	 * the offers that had not reached the end date.
+	 * 
+	 * @return the {@code Vector} with elements of the type {@code Offer}, that represent the active offers
+	 */
+	@WebMethod
+	Vector<Offer> getActiveOffers();
+
+	/**
+	 * Obtain all the offers stored in the database that haven't ended yet, and matches with the given {@code ReviewState} of their rural house
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the active offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
+	 */
+	@WebMethod
+	Vector<Offer> getActiveOffers(ReviewState reviewState);
 
 	/**
 	 * Returns the number of offers stored in the database
@@ -188,7 +206,7 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
-	
+
 	/**
 	 * Return the offer with a id definied
 	 * 
@@ -220,7 +238,7 @@ public interface ApplicationFacadeInterface  {
 	@WebMethod
 	@Deprecated
 	Booking createBooking(int idClient, int idOffer);
-	
+
 	/**
 	 * Create a booking for the introduced client of the introduced booking
 	 * 
@@ -240,7 +258,7 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<Offer> getBookingsOfClient(int idClient);
-	
+
 	/**
 	 * Create a review for a rural house.
 	 * 
@@ -249,7 +267,7 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Review createReview(RuralHouse rh);
-	
+
 	/**
 	 * Update a review of a rural house.
 	 * 
@@ -258,5 +276,5 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	void updateReview(RuralHouse rh, Review r);
-	
+
 }

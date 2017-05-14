@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -150,7 +151,7 @@ public class DataAccess implements DataAccessInterface {
 			//			deleteTableContent("Client");
 			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
-			
+
 
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
@@ -307,6 +308,57 @@ public class DataAccess implements DataAccessInterface {
 					"FROM Offer o " +
 					"WHERE o.ruralHouse.review.reviewState == :reviewState", Offer.class)
 					.setParameter("reviewState", reviewState);
+			result = new Vector<Offer>(query.getResultList());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+	
+	/**
+	 * Get all the active offers. This means, that this will query 
+	 * the offers that had not reached the end date.
+	 * 
+	 * @return the {@code Vector} with elements of the type {@code Offer}, that represent the active offers
+	 */
+	public Vector<Offer> getActiveOffers() {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getActiveOffers()");
+			TypedQuery<Offer> query = db.createQuery("SELECT o "
+					+ "FROM Offer o "
+					+ "AND o.endDate >= :currentDate", Offer.class)
+					.setParameter("currentDate", Calendar.getInstance().getTime());
+			result = new Vector<Offer>(query.getResultList());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
+	 * Obtain all the offers stored in the database that haven't ended yet, and matches with the given {@code ReviewState} of their rural house
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the active offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
+	 */
+	public Vector<Offer> getActiveOffers(ReviewState reviewState) {
+		Vector<Offer> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getActiveOffers(" + reviewState + ")");
+			TypedQuery<Offer> query = db.createQuery("SELECT o "
+					+ "FROM Offer o "
+					+ "WHERE o.ruralHouse.review.reviewState == :reviewState "
+					+ "AND o.endDate >= :currentDate", Offer.class)
+					.setParameter("reviewState", reviewState)
+					.setParameter("currentDate", Calendar.getInstance().getTime());
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
@@ -839,27 +891,27 @@ public class DataAccess implements DataAccessInterface {
 	private <E> void printCollection(Collection<E> collection) {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
-	
-//	TODO MAKE BOOKINGS PASSING THE OBJECT
-//	@Override 
-//	public Booking createBooking(Client client, Offer offer) {
-//		Booking booking= null;
-//		try {
-//			open();
-//			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
-//			db.getTransaction().begin();
-//			booking = new Booking(client, offer);
-//			db.persist(booking);
-//			db.getTransaction().commit();
-//			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
-//		} catch	(Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			close();
-//		}
-//		return booking;
-//	}
-	
+
+	//	TODO MAKE BOOKINGS PASSING THE OBJECT
+	//	@Override 
+	//	public Booking createBooking(Client client, Offer offer) {
+	//		Booking booking= null;
+	//		try {
+	//			open();
+	//			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
+	//			db.getTransaction().begin();
+	//			booking = new Booking(client, offer);
+	//			db.persist(booking);
+	//			db.getTransaction().commit();
+	//			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
+	//		} catch	(Exception e) {
+	//			e.printStackTrace();
+	//		} finally {
+	//			close();
+	//		}
+	//		return booking;
+	//	}
+
 	@Override
 	public Booking createBooking(int idClient, int idOffer) {
 		Booking booking= null;
@@ -935,7 +987,7 @@ public class DataAccess implements DataAccessInterface {
 					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
 					.setParameter("idClient", idClient);
 			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
-			
+
 			result = new Vector<Offer>();
 
 			for(Booking bo : bookings) {
@@ -950,8 +1002,8 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
-	
+
+
 	@Override
 	public Review createReview(RuralHouse rh) {
 		Review review = null;
@@ -970,7 +1022,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return review;
 	}
-	
+
 	/**
 	 * Update a review of a Rural House
 	 * 

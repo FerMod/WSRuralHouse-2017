@@ -67,11 +67,22 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Offer> getOffers() {
 		return dataAccess.getOffers();
 	}
-	
+
+	@Override
 	public Vector<Offer> getOffers(ReviewState reviewState) {
-		 return dataAccess.getOffers(reviewState);
-	 }
-	
+		return dataAccess.getOffers(reviewState);
+	}
+
+	@Override
+	public Vector<Offer> getActiveOffers() {
+		return dataAccess.getActiveOffers();
+	}
+
+	@Override
+	public Vector<Offer> getActiveOffers(ReviewState reviewState) {
+		return dataAccess.getActiveOffers(reviewState);
+	}
+
 	@Override
 	public int getOfferCount() {
 		return dataAccess.getOfferCount();
@@ -81,7 +92,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public double getOffersHighestPrice() {
 		return dataAccess.getOffersHighestPrice();
 	}
-	
+
 	@Override
 	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
@@ -160,11 +171,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
 		return dataAccess.login(username, password);
 	}
-	
+
 	public Review createReview(RuralHouse rh) {
 		return dataAccess.createReview(rh);
 	}
-	
+
 	public void updateReview(RuralHouse rh, Review r) {
 		dataAccess.updateReview(rh, r);
 	}
@@ -174,7 +185,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Booking createBooking(int idClient, int idOffer) {
 		return dataAccess.createBooking(idClient, idOffer);
 	}
-	
+
 	@Override
 	public Booking createBooking(Client client, Offer offer) {
 		return createBooking(client.getId(), offer.getId());

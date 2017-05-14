@@ -1,6 +1,5 @@
 package dataAccess;
 
-import java.awt.List;
 import java.util.Date;
 import java.util.Vector;
 
@@ -34,6 +33,10 @@ public interface DataAccessInterface {
 	Vector<Offer> getOffers();
 	
 	Vector<Offer> getOffers(ReviewState reviewState);
+	
+	Vector<Offer> getActiveOffers();
+	
+	Vector<Offer> getActiveOffers(ReviewState reviewState);
 	
 	int getOfferCount();
 	
