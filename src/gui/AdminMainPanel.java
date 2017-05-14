@@ -20,6 +20,7 @@ import javax.swing.ButtonGroup;
 
 import domain.Review;
 import domain.Review.ReviewState;
+import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import domain.RuralHouse;
 
@@ -187,6 +188,8 @@ public class AdminMainPanel extends JPanel {
 
 		textPane = new JTextPane();
 		textPane.setEnabled(false);
+		RightClickMenu rightClickMenu = new RightClickMenu(textPane);
+		textPane.setComponentPopupMenu(rightClickMenu);
 
 		textPanePrompt = new TextPrompt(textPane);
 		textPanePrompt.setBorder(new CompoundBorder());
