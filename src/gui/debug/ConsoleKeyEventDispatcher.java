@@ -1,9 +1,7 @@
 package gui.debug;
 
-import java.awt.AWTEvent;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,8 +9,9 @@ import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import gui.debug.ConsoleWindow.CloseOperation;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 //public abstract class ConsoleKeyEvent<T> implements KeyEventDispatcher, ConsoleKeyEventDispatcher<T> {
 public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
@@ -29,9 +28,23 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	private Konami konami;
 	private static int count = 0;
 	private int millis;
+	private ConsoleWindow consoleWindow;
 
 	public ConsoleKeyEventDispatcher() {
-		ConsoleWindow.setDefaultCloseOperation(CloseOperation.DISPOSE_ON_CLOSE);
+
+		LookAndFeel previousLookAndFeel = UIManager.getLookAndFeel();
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			consoleWindow = new ConsoleWindow();
+			System.out.println(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(previousLookAndFeel);
+			System.out.println(UIManager.getSystemLookAndFeelClassName());
+
+		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			System.err.println(e.toString());
+		}
+
+		consoleWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		debugEventListener = null;
 		addKeyEventDispatcher(this);
 		konami = new Konami(new Runnable() { // ^.^		
@@ -108,7 +121,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 
 		if(count == 3) {
 			try {
-				ConsoleWindow.showInBrowse(new URI("https://youtu.be/zqqq8uqSDnk?t=1s"));
+				consoleWindow.showInBrowse(new URI("https://youtu.be/zqqq8uqSDnk?t=1s"));
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -127,7 +140,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 	}
 
 	public void showConsole() {
-		ConsoleWindow.setVisible(true);
+		consoleWindow.setVisible(true);
 		System.out.println("[" + this.getClass().getSimpleName() + "]: ConsoleWindow visible");
 	}
 
@@ -138,52 +151,52 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 			konami.checkCode(e.getKeyCode());
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_F12:
-				if(ConsoleWindow.isVisible()) {
+				if(consoleWindow.isVisible()) {
+					consoleWindow.setVisible(false);
 					System.out.println("[" + this.getClass().getSimpleName() + "]: ConsoleWindow hidden");
-					ConsoleWindow.setVisible(false);
 				} else {
-					ConsoleWindow.setVisible(true);
+					consoleWindow.setVisible(true);
 					System.out.println("[" + this.getClass().getSimpleName() + "]: ConsoleWindow visible");
 				}
 				return true;
 			case KeyEvent.VK_F11:
 				System.out.println("[" + this.getClass().getSimpleName() + "]: ConsoleWindow disposed");
-				ConsoleWindow.dispose();
+				consoleWindow.dispose();
 				return true;
-//			case KeyEvent.VK_F10:
-//
-//				Object o = e.getSource();
-//				if(o instanceof JFrame) {
-//					if(mousePointLabel == null) {
-//						JFrame source = (JFrame)o;
-//						System.out.println(source.toString());
-//						mousePointLabel = new MousePointLabel(source);	
-//					}
-//					//					mousePointLabel.setVisible(true);
-//					//					Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);
-//
-//					if(!mousePointLabel.isVisible()) {
-//						mousePointLabel.setVisible(true);
-//						Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);			
-//						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing enabled");						
-//					} else {
-//						mousePointLabel.setVisible(false);
-//						Toolkit.getDefaultToolkit().removeAWTEventListener(mousePointLabel);				
-//						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing disabled");						
-//					}
-//				}
-//				return true;
-//			case KeyEvent.VK_F9:
-//				if(debugEventListener == null) {
-//					debugEventListener = new DebugBorderEventListener();					
-//					Toolkit.getDefaultToolkit().addAWTEventListener(debugEventListener, AWTEvent.MOUSE_MOTION_EVENT_MASK);
-//					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing enabled");
-//				} else {
-//					Toolkit.getDefaultToolkit().removeAWTEventListener(debugEventListener);
-//					debugEventListener = null;
-//					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing disabled");
-//				}
-//				return false;
+				//			case KeyEvent.VK_F10:
+				//
+				//				Object o = e.getSource();
+				//				if(o instanceof JFrame) {
+				//					if(mousePointLabel == null) {
+				//						JFrame source = (JFrame)o;
+				//						System.out.println(source.toString());
+				//						mousePointLabel = new MousePointLabel(source);	
+				//					}
+				//					//					mousePointLabel.setVisible(true);
+				//					//					Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+				//
+				//					if(!mousePointLabel.isVisible()) {
+				//						mousePointLabel.setVisible(true);
+				//						Toolkit.getDefaultToolkit().addAWTEventListener(mousePointLabel, AWTEvent.MOUSE_MOTION_EVENT_MASK);			
+				//						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing enabled");						
+				//					} else {
+				//						mousePointLabel.setVisible(false);
+				//						Toolkit.getDefaultToolkit().removeAWTEventListener(mousePointLabel);				
+				//						System.out.println("[" + this.getClass().getSimpleName() + "]: Mouse coordinates drawing disabled");						
+				//					}
+				//				}
+				//				return true;
+				//			case KeyEvent.VK_F9:
+				//				if(debugEventListener == null) {
+				//					debugEventListener = new DebugBorderEventListener();					
+				//					Toolkit.getDefaultToolkit().addAWTEventListener(debugEventListener, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+				//					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing enabled");
+				//				} else {
+				//					Toolkit.getDefaultToolkit().removeAWTEventListener(debugEventListener);
+				//					debugEventListener = null;
+				//					System.out.println("[" + this.getClass().getSimpleName() + "]: Border drawing disabled");
+				//				}
+				//				return false;
 			}
 		}
 		//The KeyEvent is passed to the next KeyEventDispatcher in the chain

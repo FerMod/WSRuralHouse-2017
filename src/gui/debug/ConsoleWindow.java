@@ -8,6 +8,10 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,25 +21,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import javax.imageio.ImageIO;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -43,72 +43,138 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 import javax.swing.text.TextAction;
 
-public final class ConsoleWindow {
+import gui.components.RightClickMenu;
 
-	private static JFrame frame;
-	private static String frameTitle = "Console Output";
-	private static CloseOperation defaultCloseOperation = CloseOperation.HIDE_ON_CLOSE;
-	private static CapturePane capturePane;
+public class ConsoleWindow extends JFrame {
 
-	public enum CloseOperation {
-		HIDE_ON_CLOSE(JFrame.HIDE_ON_CLOSE), 
-		DISPOSE_ON_CLOSE(JFrame.DISPOSE_ON_CLOSE),
-		EXIT_ON_CLOSE(JFrame.EXIT_ON_CLOSE),
-		DO_NOTHING_ON_CLOSE(JFrame.DO_NOTHING_ON_CLOSE);
+	/**
+	 *  Generated serial version ID
+	 */
+	private static final long serialVersionUID = -2968340110042327344L;
 
-		private final int operation;
-
-		private CloseOperation(int operation) {
-			this.operation = operation;
-		}
-
-		public int getValue() {
-			return this.operation;
-		}
-
-	}
+	private CapturePane capturePane;
 
 	public static void main(String[] args) {
-		new ConsoleWindow();
-	}
 
-	private ConsoleWindow() {
+		ConsoleWindow consoleWindow = new ConsoleWindow();
+		consoleWindow.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		consoleWindow.setVisible(true);
+
 		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					/*
+					 *	┌─────────────────────┒
+					 *	│ Press 'ESC' to exit ┃
+					 *	┕━━━━━━━━━━━━━━━━━━━━━┛
+					 */
+					//					System.out.println("┌─────────────────────┒");
+					//					System.out.println("│ Press 'ESC' to exit ┃");	
+					//					System.out.println("┕━━━━━━━━━━━━━━━━━━━━━┛");
+					System.out.println(consoleWindow.wrapTextInBox("Press 'ESC' to exit"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});	
+
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {					
 			@Override
 			public void run() {
-				createAndShowGui();
-			}            
+				System.out.println("Testing ConsoleWindow");						
+			}
+		}, Calendar.getInstance().getTime(), 1000);
+
+		consoleWindow.addKeyListener(new KeyListener() {			
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					System.exit(0);
+				}				
+			}
 		});
+
+		consoleWindow.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				timer.cancel();
+			}
+		});
+
 	}
 
-	private void createAndShowGui() {
+	public String wrapTextInBox(String text) {
 
-		try {
-			// Set System L&F
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (UnsupportedLookAndFeelException e) {
-			// handle exception
-		} catch (ClassNotFoundException e) {
-			// handle exception
-		} catch (InstantiationException e) {
-			// handle exception
-		} catch (IllegalAccessException e) {
-			// handle exception
-		}
+		char topLeftCorner = 0x250C; 		// ┌
+		char topHorizontal = 0x2500; 		// ─
+		char topRightCorner = 0x2512; 		// ┒
+		char leftVertical = 0x2502;			// │
+		char rightVertical = 0x2503; 		// ┃
+		char bottomLeftCorner = 0x2515;		// ┕
+		char bottomHorizontal = 0x2501;		// ━
+		char bottomRightCorner = 0x251B;	// ┛
 
-		frame = new JFrame(frameTitle);
-		frame.setDefaultCloseOperation(defaultCloseOperation.getValue());
+		// create a string made up of n copies of s
+		// String.join("", Collections.nCopies(n, s))
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(Character.toString((char)topLeftCorner));
+		sb.append(String.join("", Collections.nCopies(text.length()+2, Character.toString((char)topHorizontal))));
+		sb.append(Character.toString((char)topRightCorner));
+
+		sb.append(System.getProperty("line.separator"));
+
+		sb.append(Character.toString((char)leftVertical));
+		sb.append(" " + text + " ");
+		sb.append(Character.toString((char)rightVertical));
+
+		sb.append(System.getProperty("line.separator"));
+
+		sb.append(Character.toString((char)bottomLeftCorner));
+		sb.append(String.join("", Collections.nCopies(text.length()+2, Character.toString((char)bottomHorizontal))));
+		sb.append(Character.toString((char)bottomRightCorner));
+
+		sb.append(System.getProperty("line.separator"));
+
+		return sb.toString();		
+	}
+
+	public ConsoleWindow() {
+		this("Console Output");
+	}
+
+	public ConsoleWindow(String title) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					setTitle(title);
+					initComponents();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});	
+	}
+
+	private void initComponents() {
 		capturePane = new CapturePane();
-		frame.setContentPane(capturePane.getContentPanel()); 
-		frame.setLocationByPlatform(true);
+		setContentPane(capturePane.getContentPanel()); 
+		setFocusable(true);
 		//frame.setMinimumSize(new Dimension(272, 39));
-		frame.setSize(650, 350);
-		frame.setFocusable(true);
+		setSize(650, 350);
+		setLocationRelativeTo(null);
 
 		System.setOut(new PrintStream(new StreamCapturer(capturePane, System.out)));
 		System.setErr(new PrintStream(new StreamCapturer(Color.RED, capturePane, System.err)));
-
-		frame.setVisible(true);
 
 		/*
 		JMenuBar menuBar;
@@ -164,11 +230,16 @@ public final class ConsoleWindow {
 		 */		
 	}
 
-	public static void showInBrowse(File file) {
+	@Override
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+	}
+
+	public void showInBrowse(File file) {
 		showInBrowse(file.toURI());
 	}
 
-	public static void showInBrowse(URL url) {
+	public void showInBrowse(URL url) {
 		try {
 			showInBrowse(url.toURI());
 		} catch (URISyntaxException e) {
@@ -176,7 +247,7 @@ public final class ConsoleWindow {
 		}
 	}
 
-	public static void showInBrowse(URI uri) {
+	public void showInBrowse(URI uri) {
 		Desktop desktop = Desktop.isDesktopSupported()? Desktop.getDesktop() : null;
 		if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
 			try {
@@ -189,11 +260,11 @@ public final class ConsoleWindow {
 		}
 	}
 
-	public static void showInConsole(File file) {
+	public void showInConsole(File file) {
 		showInConsole(file.toURI());
 	}
 
-	public static void showInConsole(URI uri) {
+	public void showInConsole(URI uri) {
 		try {
 			showFile(uri.toURL());
 		} catch (MalformedURLException e) {
@@ -201,11 +272,11 @@ public final class ConsoleWindow {
 		}
 	}
 
-	public static void showInConsole(URL url) {
+	public void showInConsole(URL url) {
 		showFile(url);
 	}
 
-	public static void showFile(URL url) {
+	public void showFile(URL url) {
 		try {
 			capturePane.getTextPane().setPage(url);
 		} catch (MalformedURLException e) {
@@ -215,89 +286,7 @@ public final class ConsoleWindow {
 		}
 	}
 
-	public static boolean isVisible() {
-		if(frame != null) {
-			return frame.isVisible();
-		} else {
-			return false;
-		}
-	}
-
-	public static void setVisible(boolean b) {
-		if(frame != null) {
-			//the frame exists, and will show (b = true) or hide (b = false) de window
-			frame.setVisible(b);
-		} else if(b) {
-			//The frame does not exist, and
-			new ConsoleWindow();
-		}
-	}
-
-	public static void dispose() {
-		if(frame != null) {
-			frame.dispose();
-		}
-	}
-
-	public static String getTitle() {
-		return frameTitle;
-	}
-
-	public static void setTitle(String title) {
-		frameTitle = title;
-	}
-
-	/**
-	 * Sets the operation that will happen by default when
-	 * the user initiates a "close" on this frame.
-	 * You must specify one of the following choices:
-	 * <br><br>
-	 * <ul>
-	 * <li><code>DO_NOTHING_ON_CLOSE</code>
-	 * (defined in <code>WindowConstants</code>):
-	 * Don't do anything; require the
-	 * program to handle the operation in the <code>windowClosing</code>
-	 * method of a registered <code>WindowListener</code> object.
-	 *
-	 * <li><code>HIDE_ON_CLOSE</code>
-	 * (defined in <code>WindowConstants</code>):
-	 * Automatically hide the frame after
-	 * invoking any registered <code>WindowListener</code>
-	 * objects.
-	 *
-	 * <li><code>DISPOSE_ON_CLOSE</code>
-	 * (defined in <code>WindowConstants</code>):
-	 * Automatically hide and dispose the
-	 * frame after invoking any registered <code>WindowListener</code>
-	 * objects.
-	 *
-	 * <li><code>EXIT_ON_CLOSE</code>
-	 * (defined in <code>JFrame</code>):
-	 * Exit the application using the <code>System</code>
-	 * <code>exit</code> method.  Use this only in applications.
-	 * </ul>
-	 * <p>
-	 * The value is set to <code>HIDE_ON_CLOSE</code> by default. Changes
-	 * to the value of this property cause the firing of a property
-	 * change event, with property name "defaultCloseOperation".
-	 * <p>
-	 * <b>Note</b>: When the last displayable window within the
-	 * Java virtual machine (VM) is disposed of, the VM may
-	 * terminate.  See <a href="../../java/awt/doc-files/AWTThreadIssues.html">
-	 * AWT Threading Issues</a> for more information.
-	 *
-	 * @param operation the operation which should be performed when the
-	 *        user closes the frame
-	 */
-	public static void setDefaultCloseOperation(CloseOperation operation) {
-		defaultCloseOperation = operation;
-	}
-
-	public static CloseOperation getDefaultCloseOperation() {
-		return defaultCloseOperation;
-	}
-
-	public static void restartApplication(Class<?> applicationClass) {
+	public void restartApplication(Class<?> applicationClass) {
 
 		try {
 
@@ -338,19 +327,20 @@ public final class ConsoleWindow {
 			panel = new JPanel(new BorderLayout());
 
 			output = new OutputTextPane();
-
 			output.setEditable(false);
 			//output.setHighlighter(null); //Disable text selection
+			//output.setComponentPopupMenu(getPopupMenu());
+			RightClickMenu rightClickMenu = new RightClickMenu(output);
+			output.setComponentPopupMenu(rightClickMenu);
 			output.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-
 			panel.add(output);
 			scrollPane = new JScrollPane(panel);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-			output.setComponentPopupMenu(getPopupMenu());
 
 		}
 
+		/*
 		private JPopupMenu getPopupMenu() {
 
 			JPopupMenu popupMenu = null;
@@ -370,18 +360,17 @@ public final class ConsoleWindow {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				cut.putValue(Action.SMALL_ICON, icon);
 				cut.setEnabled(output.isEditable());
 
 				popupMenu.add(cut);
 
-
 				// Copy
 				Action copy = new DefaultEditorKit.CopyAction();
 				copy.putValue(Action.NAME, "Copy");
 				copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
-				
+
 				try {
 					icon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/img/icons/copy.png")));
 				} catch (IOException e) {
@@ -391,7 +380,7 @@ public final class ConsoleWindow {
 				copy.putValue(Action.SMALL_ICON, icon);
 
 				popupMenu.add(copy);
-				
+
 
 				// Paste
 				Action paste = new DefaultEditorKit.PasteAction();
@@ -403,10 +392,10 @@ public final class ConsoleWindow {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
-				paste.putValue(Action.SMALL_ICON, icon);
+
+				paste.putValue(Action.SMALL_ICON, icon);			
 				paste.setEnabled(output.isEditable());
-				
+
 				popupMenu.add(paste);
 
 
@@ -425,11 +414,11 @@ public final class ConsoleWindow {
 
 				popupMenu.add(selectAllMenuItem);
 
-
 			}
 
 			return popupMenu;
 		}
+		 */
 
 		public static class SelectAllAction extends TextAction {
 			/**
@@ -470,15 +459,18 @@ public final class ConsoleWindow {
 		public void appendText(final String text, final Color color) {
 			if (EventQueue.isDispatchThread()) {
 				StyledDocument doc = output.getStyledDocument();
-				StyleContext sc = StyleContext.getDefaultStyleContext();
+				StyleContext sc = StyleContext.getDefaultStyleContext();				
 				AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
-
 				aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
 				aset = sc.addAttribute(aset, StyleConstants.Size, new JEditorPane().getFont().getSize());
 				aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_LEFT);
 				aset = sc.addAttribute(aset, StyleConstants.Foreground, color);
 
 				try {
+					// Charset.forName(Charset.defaultCharset().name()).encode(text);
+
+					//					byte[] bytes = text.getBytes(Charset.forName("UTF-8"));
+					//					doc.insertString(doc.getLength(), new String(bytes, Charset.forName("UTF-8")), aset);
 					doc.insertString(doc.getLength(), text, aset);
 				} catch (BadLocationException e) {
 					e.printStackTrace();
