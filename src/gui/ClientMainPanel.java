@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -70,12 +71,10 @@ import javax.swing.text.Highlighter;
 
 import domain.Offer;
 import domain.Review.ReviewState;
+import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 
 public class ClientMainPanel extends JPanel {
-
-	@SuppressWarnings("unused")
-	private static final boolean DEBUG = true;
 
 	private static final long serialVersionUID = 3063325462028186709L;
 
@@ -106,8 +105,7 @@ public class ClientMainPanel extends JPanel {
 
 		setupNumberFormat();
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+
 
 		//// GridBagConstraints fields ///////////////////
 		// gbc.ipadx = 0;								//
@@ -122,41 +120,48 @@ public class ClientMainPanel extends JPanel {
 		// gbc.gridy = 2;								//
 		//////////////////////////////////////////////////
 
-		gbc.ipady = 10;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0;
-		gbc.anchor = GridBagConstraints.PAGE_START;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridwidth = 5;
-		gbc.insets = new Insets(20, 5, 0, 10);
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		add(getSearchField(), gbc);
+		GridBagConstraints gbcSearchField = new GridBagConstraints();
+		gbcSearchField.fill = GridBagConstraints.HORIZONTAL;
+		gbcSearchField.ipady = 10;
+		gbcSearchField.weightx = 0.5;
+		gbcSearchField.weighty = 0;
+		gbcSearchField.anchor = GridBagConstraints.PAGE_START;
+		gbcSearchField.fill = GridBagConstraints.HORIZONTAL;
+		gbcSearchField.gridwidth = 5;
+		gbcSearchField.insets = new Insets(20, 5, 0, 10);
+		gbcSearchField.gridx = 0;
+		gbcSearchField.gridy = 0;
+		add(getSearchField(), gbcSearchField);
+		RightClickMenu rightClickMenu = new RightClickMenu(getSearchField());
+		getSearchField().setComponentPopupMenu(rightClickMenu);
 
-		gbc.weightx = 0.1;
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.insets = new Insets(5, 10, -5, 10);
-		gbc.gridwidth = 2;
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		add(getMaxPriceField(), gbc);
+		GridBagConstraints gbcMaxPriceField = new GridBagConstraints();
+		gbcMaxPriceField.weightx = 0.1;
+		gbcMaxPriceField.anchor = GridBagConstraints.CENTER;
+		gbcMaxPriceField.insets = new Insets(5, 10, -5, 10);
+		gbcMaxPriceField.gridwidth = 2;
+		gbcMaxPriceField.gridx = 0;
+		gbcMaxPriceField.gridy = 1;
+		add(getMaxPriceField(), gbcMaxPriceField);
 
-		gbc.ipadx = 0;
-		gbc.ipady = 0;
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0.1;
-		gbc.gridwidth = 2;
-		gbc.insets = new Insets(0, 5, 2, 0);
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		add(getPriceSlider(), gbc);
+		GridBagConstraints gbcPriceSlider = new GridBagConstraints();
+		gbcPriceSlider.ipadx = 0;
+		gbcPriceSlider.ipady = 0;
+		gbcPriceSlider.anchor = GridBagConstraints.CENTER;
+		gbcPriceSlider.fill = GridBagConstraints.HORIZONTAL;
+		gbcPriceSlider.weightx = 0.1;
+		gbcPriceSlider.gridwidth = 2;
+		gbcPriceSlider.insets = new Insets(0, 5, 2, 0);
+		gbcPriceSlider.gridx = 0;
+		gbcPriceSlider.gridy = 2;
+		add(getPriceSlider(), gbcPriceSlider);
 
-		gbc.ipadx = 0;
-		gbc.ipady = 0;
-		gbc.weighty = 0;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
+		GridBagConstraints gbcTableScrollPanel = new GridBagConstraints();
+		gbcTableScrollPanel.ipadx = 0;
+		gbcTableScrollPanel.ipady = 0;
+		gbcTableScrollPanel.weighty = 0;
+		gbcTableScrollPanel.gridwidth = 1;
+		gbcTableScrollPanel.gridheight = 1;
 
 		//		gbc.weightx = 0.1;
 		//		gbc.anchor = GridBagConstraints.PAGE_START;
@@ -172,19 +177,19 @@ public class ClientMainPanel extends JPanel {
 		//		gbc.gridy = 2;
 		//		add(getMaxPriceField(), gbc);
 
-		gbc.ipady = 0;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.anchor = GridBagConstraints.CENTER;
-		gbc.gridwidth = 2;
-		gbc.gridheight = 3;
-		gbc.insets = new Insets(0, 10, 10, 10);
-		gbc.weightx = 1;
-		gbc.weighty = 1;
+		gbcTableScrollPanel.ipady = 0;
+		gbcTableScrollPanel.fill = GridBagConstraints.BOTH;
+		gbcTableScrollPanel.anchor = GridBagConstraints.CENTER;
+		gbcTableScrollPanel.gridwidth = 2;
+		gbcTableScrollPanel.gridheight = 3;
+		gbcTableScrollPanel.insets = new Insets(0, 10, 10, 10);
+		gbcTableScrollPanel.weightx = 1;
+		gbcTableScrollPanel.weighty = 1;
 
-		gbc.gridwidth = 3;
-		gbc.gridx = 2;
-		gbc.gridy = 1;
-		add(getTableScrollPanel(), gbc);
+		gbcTableScrollPanel.gridwidth = 3;
+		gbcTableScrollPanel.gridx = 2;
+		gbcTableScrollPanel.gridy = 1;
+		add(getTableScrollPanel(), gbcTableScrollPanel);
 
 		//		gbc.anchor = GridBagConstraints.PAGE_START;		
 		//		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -680,62 +685,33 @@ public class ClientMainPanel extends JPanel {
 
 		private Dimension imageDimension;
 
-		//		private String[] columnNames = {"Image", "Description", "Address", "Price"};
 		private String[] columnNames = {"Image", "Details"};
 
-
-		//		private Object[][] data = {
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 1 with minor details", "Address 1", new Double(110.2)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 2 with minor details", "Address 2", new Double(154.52)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 3 with minor details", "Address 3", new Double(356.0)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 4 with minor details", "Address 4", new Double(165.4)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 5 with minor details", "Address 5", new Double(170.2)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 6 with minor details", "Address 6", new Double(666.5)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 7 with minor details", "Address 7", new Double(336.6)},
-		//				{new ImageIcon("/img/house00.png"), "Description of the house 8 with minor details", "Address 8", new Double(63.1)},
-		//		};
-
 		private Object[][] data; 
-		//		= {
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 1 with minor details.\nHi", "Address 1",  new Double(110.2))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 2 with minor details.", "Address 2", new Double(154.52))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 3 with minor details", "Direccion 3", new Double(356.0))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 4 with minor details\nHi, more details.", "Address 4", new Double(165.4))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 5 with minor details\nHi", "Direccion 5", new Double(170.2))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 6 with minor details, text.", "Address 6", new Double(666.5))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 7 with minor details\nMore details.", "Address 7", new Double(336.6))},
-		//				{new ImageIcon("/img/house00.png"), new CellDetails("Description of the house 8 with minor details", "ñeñeñe 8", new Double(63.1))},
-		//		};
 
+		//TODO REMOVE
 		private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 		private TableModel() {
 			this.imageDimension = new Dimension(60, 60);			
-			fillTableData();			
+			initTableData();			
 		}
 
-		private void fillTableData() {
-
-			//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses(ReviewState.APPROVED);
-			//			Vector<RuralHouse> ruralHousesVector = MainWindow.getBusinessLogic().getRuralHouses();
-			//			System.out.println("###############################\nRURAL HOUSES\n" + MainWindow.getBusinessLogic().getRuralHouses());
-
-			Vector<Offer> offerVector = MainWindow.getBusinessLogic().getOffers(ReviewState.APPROVED);
+		private void initTableData() {
+			Vector<Offer> offerVector = MainWindow.getBusinessLogic().getActiveOffers(ReviewState.APPROVED);
 			data = new Object[offerVector.size()][2];
-			System.out.println(Arrays.deepToString(data));
-			System.out.println();
 			int i = 0;
 			for (Offer offer : offerVector) {
 				data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
-				System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());				
+				System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());			
 				data[i][1] = new CellDetails(offer);
 				System.out.println("data[" + i + "][1] " + offer);
 				i++;					
 			}
 			System.out.println();
-
 		}
 
+		@Deprecated
 		public void setRandomImages() {		
 			for (Object[] object: data) {
 				// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
@@ -743,13 +719,6 @@ public class ClientMainPanel extends JPanel {
 				object[0] = getScaledImage(images[randomNum]);
 			}
 		}
-
-		//			// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
-		//			for (int i = 0; i < data.length; i++) {
-		//				int randomNum = ThreadLocalRandom.current().nextInt(0, data.length);
-		//				System.out.println(images[randomNum]);
-		//				setValueAt(i, 0, new ImageIcon(images[randomNum]));
-		//			}
 
 		private ImageIcon getScaledImage(String path) {
 			ImageIcon imageIcon = null;
@@ -922,7 +891,7 @@ public class ClientMainPanel extends JPanel {
 			descriptionComponent.setFocusable(false);
 			descriptionComponent.setLineWrap(true);
 			descriptionComponent.setWrapStyleWord(true);
-			descriptionComponent.setRows(4);
+			descriptionComponent.setRows(3);
 			GridBagConstraints gbcDescription = new GridBagConstraints();
 			gbcDescription.gridwidth = 2;
 			gbcDescription.insets = new Insets(5, 0, 5, 5);
@@ -974,7 +943,7 @@ public class ClientMainPanel extends JPanel {
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 			titleComponent.setText(rowContent.getOffer().getRuralHouse().getName() + "\n" + date.format(rowContent.getOffer().getStartDate()) + " - " + date.format(rowContent.getOffer().getEndDate()));
 			String description = rowContent.getOffer().getRuralHouse().getDescription();
-			//Limit to 140 char, if the text exceeds the limit it will place ' (...)'
+			//Limit to 300 char, if the text exceeds the limit it will place ' (...)'
 			if(description.length() >= 300) {
 				description = String.format("%1.140s%1.140s", description, " (...)");
 			}
