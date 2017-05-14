@@ -38,11 +38,13 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.text.JTextComponent;
 
 import gui.ClientMainPanel.CellDetails;
 import gui.components.FrameShader;
 import gui.components.ImagePanel;
 import gui.components.InfoTextPane;
+import gui.components.TextPrompt;
 
 import javax.swing.JTextField;
 import java.awt.Cursor;
@@ -473,13 +475,20 @@ public class OfferInfoDialog extends JDialog {
 			firstDateChooser = new JDateChooser();
 			//			firstDateChooser.setMinSelectableDate(Calendar.getInstance().getTime());
 			firstDateChooser.setSelectableDateRange(getMinDate(rowContent.getOffer().getStartDate()), rowContent.getOffer().getEndDate());
-			//			firstDateChooser.setDate(firstDateChooser.getMinSelectableDate());
+
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(rowContent.getOffer().getStartDate());
+			firstDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
+
+			firstDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
+			firstDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+
 			firstDateChooser.getJCalendar().setWeekOfYearVisible(true);
 			firstDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
 			firstDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent e) {
-					if (e.getPropertyName().equals("date")) {
+					if (e.getPropertyName().equals("date") || e.getPropertyName().equals("day")) {
 						firstDate = new GregorianCalendar();
 						firstDate.setTime((Date) e.getNewValue());
 						lastDateChooser.setMinSelectableDate(firstDate.getTime());
@@ -489,6 +498,9 @@ public class OfferInfoDialog extends JDialog {
 					}
 				}
 			});
+			TextPrompt tp = new TextPrompt("Select first date", (JTextComponent) firstDateChooser.getDateEditor().getUiComponent());
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
 		}
 		return firstDateChooser;
 	}
@@ -497,8 +509,15 @@ public class OfferInfoDialog extends JDialog {
 		if(lastDateChooser == null) {
 			lastDateChooser = new JDateChooser();
 			//			lastDateChooser.setMinSelectableDate(firstDateChooser.getMinSelectableDate());
-			lastDateChooser.setSelectableDateRange(firstDateChooser.getMinSelectableDate(), rowContent.getOffer().getEndDate());
-			//			lastDateChooser.setDate(lastDateChooser.getMaxSelectableDate());
+			lastDateChooser.setSelectableDateRange(rowContent.getOffer().getStartDate(), rowContent.getOffer().getEndDate());
+
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(rowContent.getOffer().getEndDate());
+			lastDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
+			
+			lastDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
+			lastDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+
 			lastDateChooser.getJCalendar().setWeekOfYearVisible(true);
 			lastDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
 			lastDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
@@ -510,10 +529,13 @@ public class OfferInfoDialog extends JDialog {
 						firstDateChooser.setMaxSelectableDate(lastDate.getTime());
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
 						updatePrice();
-						System.out.println(e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
+						System.out.println("Property changed! " + e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
 					}
 				}
 			});
+			TextPrompt tp = new TextPrompt("Select last date", (JTextComponent) lastDateChooser.getDateEditor().getUiComponent());
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
 		}
 		return lastDateChooser;
 	}
