@@ -11,16 +11,16 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -68,7 +68,14 @@ public class MainWindow extends JFrame {
 					aplicationFacade.setDataAccess(new DataAccess());
 					MainWindow.setBussinessLogic(aplicationFacade);
 
-					AbstractUser user = setupDebugAccount();					
+					AbstractUser user = setupDebugAccount();
+
+					try {
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+					} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+						System.err.println(e.toString());
+					}
+
 					MainWindow frame = new MainWindow(user);
 					frame.setFocusable(true);
 					frame.setVisible(true); 
@@ -213,49 +220,7 @@ public class MainWindow extends JFrame {
 
 	}
 
-	private JPanel getProfilePanel() {
-		JPanel profilePanel = new JPanel();
-		profilePanel.setLayout(null);
-		//TODO: Make a separate class with the user profile /////////////////
-		JLabel lblUser = new JLabel("User: ");
-		lblUser.setBounds(10, 11, 64, 14);
-		profilePanel.add(lblUser);
 
-		JLabel lblNewLabel = new JLabel(user.getUsername());
-		lblNewLabel.setBounds(84, 11, 411, 14);
-		profilePanel.add(lblNewLabel);
-
-		JLabel lblEmail = new JLabel("Password:");
-		lblEmail.setBounds(10, 36, 64, 14);
-		profilePanel.add(lblEmail);
-
-		JPasswordField lblNewLabel_1 = new JPasswordField(user.getPassword().replaceAll(".", "*"));
-		//lblNewLabel_1.setEchoChar('☺');
-		lblNewLabel_1.setBorder(null);
-		lblNewLabel_1.setFocusTraversalKeysEnabled(false);
-		lblNewLabel_1.setFocusable(false);
-		lblNewLabel_1.setEditable(false);
-		lblNewLabel_1.setBounds(84, 36, 190, 19);
-		profilePanel.add(lblNewLabel_1);
-
-		JLabel lblRole = new JLabel("e-mail: ");
-		lblRole.setBounds(10, 61, 64, 14);
-		profilePanel.add(lblRole);
-
-		JLabel lblNewLabel_2 = new JLabel(user.getEmail());
-		lblNewLabel_2.setBounds(84, 61, 411, 19);
-		profilePanel.add(lblNewLabel_2);
-
-		JLabel label = new JLabel("Role: ");
-		label.setBounds(10, 86, 64, 14);
-		profilePanel.add(label);
-
-		JLabel label_1 = new JLabel(user.getRole().toString());
-		label_1.setBounds(84, 84, 411, 19);
-		profilePanel.add(label_1);		
-		///////////////////////////////////////////////
-		return profilePanel;
-	}
 
 	//		private void adjustCursor(MouseEvent e) {
 	//	
@@ -291,7 +256,12 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	private JPanel getProfilePanel() {
+		return new ProfilePane(user);
+	}
+
 	@SuppressWarnings("unused")
+	@Deprecated
 	private JMenuBar getRoleMenuBar() {
 		//Where the GUI is created:
 		JMenuBar menuBar;
