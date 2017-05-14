@@ -39,7 +39,7 @@ public class ProfilePane extends JPanel {
 		this.user = user;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{90, 222, 0, 0};
-		gridBagLayout.rowHeights = new int[]{35, 35, 35, 35, 0, 0};
+		gridBagLayout.rowHeights = new int[]{40, 35, 35, 35, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
@@ -125,7 +125,6 @@ public class ProfilePane extends JPanel {
 			usernameField.setFocusTraversalKeysEnabled(false);
 			usernameField.setOpaque(false);
 			usernameField.setEditable(false);
-			usernameField.setSize(204, 30);
 			usernameField.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			usernameField.setFocusable(false);
 			
