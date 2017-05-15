@@ -87,15 +87,15 @@ public class OwnerRuralHousesPanel extends JPanel {
 				//Here create the booking with the dates and the rural house
 			}
 		});
-		btnNewButton_1.setBounds(295, 114, 131, 23);
+		btnNewButton_1.setBounds(368, 114, 131, 23);
 		add(btnNewButton_1);
 		
 		JLabel lblDiaEnt = new JLabel("Fecha in");
-		lblDiaEnt.setBounds(25, 116, 119, 19);
+		lblDiaEnt.setBounds(25, 116, 157, 19);
 		add(lblDiaEnt);
 		
 		JLabel lblFechaFin = new JLabel("Fecha fin");
-		lblFechaFin.setBounds(154, 116, 131, 19);
+		lblFechaFin.setBounds(201, 116, 157, 19);
 		add(lblFechaFin);
 		
 		JLabel lblMisCasas = new JLabel("Mis casas");
