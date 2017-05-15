@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
+import domain.Admin;
 import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.RightClickMenu;
@@ -215,7 +216,7 @@ public class AdminMainPanel extends JPanel {
 					description = textPane.getText();
 					Review review = ruralHouse.getReview();
 					review.setDescription(description);
-					review.setState(review.getReviewer(), reviewState);
+					review.setState(ruralHouse.getReview().getReviewer(), reviewState);
 					//Send the review
 					MainWindow.getBusinessLogic().updateReview(ruralHouse, review);
 					reviewState = null;

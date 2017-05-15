@@ -51,12 +51,14 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private DefaultComboBoxModel<RuralHouse> ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
 	private JComboBox comboBox_1;
 	private JComboBox comboBox;
+	private Owner owner;
 	
 	/**
 	 * Create the panel.
 	 */
-	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane
+	public OwnerRuralHousesPanel(JFrame frame, Owner owner) { //Need a JScrollPane
 		//initializeRuralHousesComboBox(o); o should be the owner that is using the application
+		owner = this.owner;
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
