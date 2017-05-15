@@ -244,6 +244,7 @@ public class MainWindow extends JFrame {
 			//FIXME VERY VERY TEMPORAL!!
 			return (JPanel) new MainGUI(role).getContentPane();
 			//return new OwnerMainPanel(this);
+			//return new OwnerRuralHousesPanel(this);
 		case ADMIN:
 			return new AdminMainPanel(this);
 		case SUPER_ADMIN:
