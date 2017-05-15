@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -257,96 +255,6 @@ public class ClientMainPanel extends JPanel {
 		labelTable.put(getPriceSlider().getMaximum(), new JLabel(currencyFormatter.format(maxPrice)));
 		return labelTable;
 	}
-
-	//	private JFormattedTextField getMinPriceField() {
-	//		if(minPriceField == null) {
-	//			if(priceFormat == null) {
-	//				setupNumberFormat();
-	//			}
-	//			minPriceField = new JFormattedTextField(priceFormat);
-	//			minPriceField.setColumns(4);
-	//			minPriceField.setValue(0);
-	//			minPriceField.setInputVerifier(new FormattedTextFieldVerifier());
-	//
-	//			///////////
-	//			// minPriceField.setVisible(false);
-	//			///////////
-	//
-	//
-	//			minPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {
-	//				@Override
-	//				public void propertyChange(PropertyChangeEvent e) {
-	//					if(e.getPropertyName() == "value" && e.getSource() == minPriceField) {
-	//						if(getPriceSlider().getMaximum() != 0) {
-	//							updatePriceRange((Number)minPriceField.getValue(), getPriceSlider().getMaximum()/100);
-	//
-	//						} else {
-	//							updatePriceRange((Number)minPriceField.getValue(), 0);
-	//						}
-	//						//TODO filter table
-	//						//refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
-	//					}
-	//				}
-	//			});
-	//
-	//		}
-	//		return minPriceField;
-	//	}
-
-	//	private JFormattedTextField getMaxPriceField() {
-	//		if(maxPriceField == null) {
-	//			if(priceFormat == null) {
-	//				setupNumberFormat();
-	//			}
-	//			maxPriceField = new JFormattedTextField(priceFormat);
-	//			maxPriceField.setColumns(4);
-	//			maxPriceField.setValue(getPriceSlider().getMaximum()/100);
-	//			maxPriceField.setInputVerifier(new FormattedTextFieldVerifier());
-	//
-	//			///////////
-	//			// maxPriceField.setFocusable(false);
-	//			// maxPriceField.setEditable(false);
-	//			// maxPriceField.setOpaque(false);
-	//			// maxPriceField.setHorizontalAlignment(SwingConstants.RIGHT);
-	//			// maxPriceField.setBorder(new EmptyBorder(0, 0, 0, 0));
-	//			///////////
-	//
-	//
-	//			maxPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {
-	//				@Override
-	//				public void propertyChange(PropertyChangeEvent e) {
-	//					if(e.getPropertyName() == "value" && e.getSource() == maxPriceField) {
-	//						if(getPriceSlider().getMinimum() != 0) {
-	//							// Number oldValue = (Number) e.getOldValue();
-	//							// Number newValue = (Number) e.getNewValue();
-	//
-	//							// if(oldValue.doubleValue() <= newValue.doubleValue()) {
-	//							//	 getPriceSlider().setValue(newValue.intValue()/100);
-	//							// }
-	//
-	//							updatePriceRange(getPriceSlider().getMinimum()/100, (Number)maxPriceField.getValue());
-	//
-	//						} else {
-	//							updatePriceRange(0, (Number)maxPriceField.getValue());
-	//						}
-	//						//TODO filter table
-	//						refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
-	//					}
-	//
-	//				}
-	//			});
-	//
-	//
-	//			//			maxPriceField.addPropertyChangeListener("value", new PropertyChangeListener() {				
-	//			//				@Override
-	//			//				public void propertyChange(PropertyChangeEvent evt) {	
-	//			//					System.out.println(evt.getSource());
-	//			//					updatePriceRange((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
-	//			//				}
-	//			//			});
-	//		}
-	//		return maxPriceField;
-	//	}
 
 	private Component getMaxPriceField() {
 		if(maxPriceField == null) {
@@ -671,7 +579,6 @@ public class ClientMainPanel extends JPanel {
 	 */
 	public void setTableColumnWidthPercentages(JTable table, double... percentages) {
 		final double factor = 10000;
-
 		TableColumnModel model = table.getColumnModel();
 		for (int columnIndex = 0; columnIndex < percentages.length; columnIndex++) {
 			TableColumn column = model.getColumn(columnIndex);
