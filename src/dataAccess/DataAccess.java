@@ -317,7 +317,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Get all the active offers. This means, that this will query 
 	 * the offers that had not reached the end date.
@@ -892,26 +892,6 @@ public class DataAccess implements DataAccessInterface {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
 
-	//	TODO MAKE BOOKINGS PASSING THE OBJECT
-	//	@Override 
-	//	public Booking createBooking(Client client, Offer offer) {
-	//		Booking booking= null;
-	//		try {
-	//			open();
-	//			System.out.print(">> DataAccess: createBooking(\"" + idClient + ", " + idOffer + "\") -> ");
-	//			db.getTransaction().begin();
-	//			booking = new Booking(client, offer);
-	//			db.persist(booking);
-	//			db.getTransaction().commit();
-	//			System.out.println("Created with idClient " + booking.getIdClient() + "and with idOffer " + booking.getIdOffer());
-	//		} catch	(Exception e) {
-	//			e.printStackTrace();
-	//		} finally {
-	//			close();
-	//		}
-	//		return booking;
-	//	}
-
 	@Override
 	public Booking createBooking(Client c, Offer o) {
 		Booking booking= null;
@@ -958,23 +938,9 @@ public class DataAccess implements DataAccessInterface {
 		try{
 			open();
 			System.out.println(">> DataAccess: getBookings");
-			TypedQuery<Booking> queryB = db.createQuery("SELECT b"
-//<<<<<<< HEAD
-//					+ " FROM Booking b WHERE b.idClient== :idClient", Booking.class)
-//					.setParameter("idClient", idClient);
-//			Vector<Booking> bookings = new Vector<Booking>(queryB.getResultList());
-//
-//			result = new Vector<Offer>();
-//
-//			for(Booking bo : bookings) {
-//				result.add(getOfferById(bo.getIdOffer()).get(0)); //Get the offers and stores in result vector.
-//			}
-//=======
-					+ " FROM Booking b", Booking.class);
-					
+			TypedQuery<Booking> queryB = db.createQuery("SELECT b "
+					+ "FROM Booking b", Booking.class);
 			result = new Vector<Booking>(queryB.getResultList());
-//>>>>>>> refs/remotes/origin/FosterGun
-
 			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
