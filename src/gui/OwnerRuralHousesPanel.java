@@ -24,6 +24,7 @@ import com.toedter.calendar.JDateChooser;
 
 import domain.Admin;
 import domain.City;
+import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
@@ -37,6 +38,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,9 +56,16 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private JComboBox comboBox;
 	private Owner owner;
 	private JEditorPane editorPane;
-	private JTextField textField_1;
-	private JTextField textField_3;
+	private JTextField textField_1; //Date fin
+	private JTextField textField_3; //Date init
+	private JTextField textField_4; //Price
 	
+	private static String pattern = "dd/MM/yyyy";
+	private static SimpleDateFormat format = new SimpleDateFormat(pattern);
+	    
+	private Date dateIn;
+	private Date dateFin;
+
 	
 	/**
 	 * Create the panel.
@@ -69,8 +78,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String name = textField.getText();
 				City city = (City) comboBox_1.getSelectedItem();
-				String address = editorPane.getText();
-				String description = textField_2.getText();
+				String address = textField_2.getText();
+				String description = editorPane.getText();
 				
 				rh.setName(name);
 				rh.setCity(city);
@@ -80,8 +89,12 @@ public class OwnerRuralHousesPanel extends JPanel {
 				Admin reviewer = review.getReviewer();
 				review.setState(reviewer, ReviewState.AWAITING_REVIEW); //The state of review pass to be awaiting for edit the rural house
 				rh.setReview(review);
+				textField.setText("");
+				textField_2.setText("");
+				editorPane.setText("");
 				
-				MainWindow.getBusinessLogic().update(rh);
+				
+				//MainWindow.getBusinessLogic().update(rh);
 				JOptionPane.showMessageDialog(null,	"Se ha actualizado la casa rural correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
@@ -92,6 +105,20 @@ public class OwnerRuralHousesPanel extends JPanel {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Here create the booking with the dates and the rural house
+				try {
+				      dateIn = format.parse(textField_3.getText());
+				      dateFin = format.parse(textField_1.getText());
+				      //Offer o = new Offer(dateIn, dateFin, Double.valueOf(textField_4.getText()), rh);
+				      textField_1.setText("");
+				      textField_3.setText("");
+				      textField_4.setText("");
+				      JOptionPane.showMessageDialog(null, "La oferta se ha creado correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);
+				    } catch (ParseException | NumberFormatException e) {
+				      JOptionPane.showMessageDialog(null, "Revise si ha escrito mal el precio o el formato de las fechas introducidas no es el adecuado e inténtelo de nuevo", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
+				      e.printStackTrace();
+				    }
+				    // formatting
+				    System.out.println(format.format(new Date()));
 			}
 		});
 		btnNewButton_1.setBounds(368, 135, 131, 23);
@@ -158,6 +185,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 					textField_3.setEnabled(false);
 					editorPane.setEnabled(true);
 					textField_2.setEnabled(true);
+					textField_4.setEnabled(false);
 					btnNewButton_1.setEnabled(false);
 					btnNewButton.setEnabled(true);
 				} else {
@@ -167,6 +195,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 					textField_3.setEnabled(true);
 					editorPane.setEnabled(false);
 					textField_2.setEnabled(false);
+					textField_4.setEnabled(true);
 					btnNewButton_1.setEnabled(true);
 					btnNewButton.setEnabled(false);
 				}
@@ -181,12 +210,12 @@ public class OwnerRuralHousesPanel extends JPanel {
 		add(editorPane);
 		
 		textField_1 = new JTextField();
-		textField_1.setBounds(187, 135, 152, 22);
+		textField_1.setBounds(130, 135, 95, 22);
 		add(textField_1);
 		textField_1.setColumns(10);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(25, 135, 152, 22);
+		textField_3.setBounds(25, 135, 95, 22);
 		add(textField_3);
 		textField_3.setColumns(10);
 		
@@ -195,7 +224,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		add(lblFechaDeInicio);
 		
 		JLabel lblFechaFinal = new JLabel("Fecha final");
-		lblFechaFinal.setBounds(187, 114, 131, 23);
+		lblFechaFinal.setBounds(130, 120, 95, 10);
 		add(lblFechaFinal);
 		
 		JLabel lblformatoAUtilizar = new JLabel("*Formato a utilizar DD/MM/YYYY");
@@ -203,6 +232,15 @@ public class OwnerRuralHousesPanel extends JPanel {
 		lblformatoAUtilizar.setForeground(Color.RED);
 		lblformatoAUtilizar.setBounds(25, 168, 196, 14);
 		add(lblformatoAUtilizar);
+		
+		JLabel lblPrecioPorNoche = new JLabel("Precio por noche");
+		lblPrecioPorNoche.setBounds(235, 118, 102, 14);
+		add(lblPrecioPorNoche);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(235, 135, 102, 23);
+		add(textField_4);
+		textField_4.setColumns(10);
 
 	}
 
