@@ -29,6 +29,7 @@ import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import domain.Owner;
 import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
@@ -242,9 +243,9 @@ public class MainWindow extends JFrame {
 			return new ClientMainPanel(this);
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!
-			return (JPanel) new MainGUI(role).getContentPane();
+			//return (JPanel) new MainGUI(role).getContentPane();
 			//return new OwnerMainPanel(this);
-			//return new OwnerRuralHousesPanel(this);
+			return new OwnerRuralHousesPanel(this);
 		case ADMIN:
 			return new AdminMainPanel(this);
 		case SUPER_ADMIN:

@@ -27,6 +27,7 @@ import domain.City;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
+import gui.ClientMainPanel.CellDetails;
 import gui.components.TextPrompt;
 import domain.RuralHouse;
 
@@ -42,29 +43,33 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
+import javax.swing.JEditorPane;
 
 public class OwnerRuralHousesPanel extends JPanel {
 	private JTextField textField;
-	private JTextField textField_1;
 	private JTextField textField_2;
 	private RuralHouse rh;
 	private DefaultComboBoxModel<RuralHouse> ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
 	private JComboBox comboBox_1;
 	private JComboBox comboBox;
 	private Owner owner;
+	private JEditorPane editorPane;
+	private JTextField textField_1;
+	private JTextField textField_3;
+	
 	
 	/**
 	 * Create the panel.
 	 */
-	public OwnerRuralHousesPanel(JFrame frame, Owner owner) { //Need a JScrollPane
+	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane
 		//initializeRuralHousesComboBox(o); o should be the owner that is using the application
-		owner = this.owner;
 		JButton btnNewButton = new JButton("Guardar");
+		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = textField.getText();
 				City city = (City) comboBox_1.getSelectedItem();
-				String address = textField_1.getText();
+				String address = editorPane.getText();
 				String description = textField_2.getText();
 				
 				rh.setName(name);
@@ -89,16 +94,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 				//Here create the booking with the dates and the rural house
 			}
 		});
-		btnNewButton_1.setBounds(368, 114, 131, 23);
+		btnNewButton_1.setBounds(368, 135, 131, 23);
 		add(btnNewButton_1);
-		
-		JLabel lblDiaEnt = new JLabel("Fecha in");
-		lblDiaEnt.setBounds(25, 116, 157, 19);
-		add(lblDiaEnt);
-		
-		JLabel lblFechaFin = new JLabel("Fecha fin");
-		lblFechaFin.setBounds(201, 116, 157, 19);
-		add(lblFechaFin);
 		
 		JLabel lblMisCasas = new JLabel("Mis casas");
 		lblMisCasas.setBounds(25, 11, 95, 31);
@@ -109,31 +106,29 @@ public class OwnerRuralHousesPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				rh = (RuralHouse) comboBox.getSelectedItem();
 				textField.setText(rh.getName()); //Get the name of the rural house selected
-				textField_1.setText(rh.getDescription()); //Get the description of the rural house selected
+				editorPane.setText(rh.getDescription()); //Get the description of the rural house selected
 				textField_2.setText(rh.getAddress());	////Get the address of the rural house selected
 			}
 		});
 		comboBox.setBounds(25, 44, 260, 52);
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(25, 182, 72, 20);
+		lblNombre.setBounds(25, 222, 72, 20);
 		
 		textField = new JTextField();
-		textField.setBounds(25, 213, 260, 20);
+		textField.setEnabled(false);
+		textField.setBounds(25, 253, 260, 20);
 		textField.setColumns(10);
 		
 		JLabel lblDescripcin = new JLabel("Descripci\u00F3n");
-		lblDescripcin.setBounds(25, 372, 95, 20);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(25, 398, 260, 159);
-		textField_1.setColumns(10);
+		lblDescripcin.setBounds(25, 412, 95, 20);
 		
 		JLabel lblDireccin = new JLabel("Direcci\u00F3n");
-		lblDireccin.setBounds(25, 323, 72, 20);
+		lblDireccin.setBounds(25, 363, 72, 20);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(25, 346, 260, 20);
+		textField_2.setEnabled(false);
+		textField_2.setBounds(25, 386, 260, 20);
 		textField_2.setColumns(10);
 		setLayout(null);
 		add(lblMisCasas);
@@ -141,38 +136,73 @@ public class OwnerRuralHousesPanel extends JPanel {
 		add(lblNombre);
 		add(textField);
 		add(lblDescripcin);
-		add(textField_1);
 		add(lblDireccin);
 		add(textField_2);
 		
 		JLabel lblCiudad = new JLabel("Ciudad");
-		lblCiudad.setBounds(25, 243, 72, 20);
+		lblCiudad.setBounds(25, 283, 72, 20);
 		add(lblCiudad);
 		
 		comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(25, 274, 260, 38);
+		comboBox_1.setEnabled(false);
+		comboBox_1.setBounds(25, 314, 260, 38);
 		add(comboBox_1);
 		
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Editar casa");
 		chckbxNewCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxNewCheckBox.isSelected()) {
-					textField.setEnabled(false);
+					comboBox_1.setEnabled(true);
+					textField.setEnabled(true);
 					textField_1.setEnabled(false);
-					textField_2.setEnabled(false);
+					textField_3.setEnabled(false);
+					editorPane.setEnabled(true);
+					textField_2.setEnabled(true);
 					btnNewButton_1.setEnabled(false);
 					btnNewButton.setEnabled(true);
 				} else {
-					textField.setEnabled(true);
+					comboBox_1.setEnabled(false);
+					textField.setEnabled(false);
 					textField_1.setEnabled(true);
-					textField_2.setEnabled(true);
+					textField_3.setEnabled(true);
+					editorPane.setEnabled(false);
+					textField_2.setEnabled(false);
 					btnNewButton_1.setEnabled(true);
 					btnNewButton.setEnabled(false);
 				}
 			}
 		});
-		chckbxNewCheckBox.setBounds(18, 152, 102, 23);
+		chckbxNewCheckBox.setBounds(18, 192, 102, 23);
 		add(chckbxNewCheckBox);
+		
+		editorPane = new JEditorPane();
+		editorPane.setEnabled(false);
+		editorPane.setBounds(25, 434, 260, 127);
+		add(editorPane);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(187, 135, 152, 22);
+		add(textField_1);
+		textField_1.setColumns(10);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(25, 135, 152, 22);
+		add(textField_3);
+		textField_3.setColumns(10);
+		
+		JLabel lblFechaDeInicio = new JLabel("Fecha inicio");
+		lblFechaDeInicio.setBounds(25, 114, 131, 23);
+		add(lblFechaDeInicio);
+		
+		JLabel lblFechaFinal = new JLabel("Fecha final");
+		lblFechaFinal.setBounds(187, 114, 131, 23);
+		add(lblFechaFinal);
+		
+		JLabel lblformatoAUtilizar = new JLabel("*Formato a utilizar DD/MM/YYYY");
+		lblformatoAUtilizar.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblformatoAUtilizar.setForeground(Color.RED);
+		lblformatoAUtilizar.setBounds(25, 168, 196, 14);
+		add(lblformatoAUtilizar);
 
 	}
 
@@ -185,74 +215,4 @@ public class OwnerRuralHousesPanel extends JPanel {
 				ruralHousesOfOwner.addElement(rh);
 			}	
 	}
-	
-// For get time of offer 
-//
-//	private JDateChooser getFirstDateChooser() {
-//		if(firstDateChooser == null) {
-//			firstDateChooser = new JDateChooser();
-//			//			firstDateChooser.setMinSelectableDate(Calendar.getInstance().getTime());
-//
-//			Calendar calendar = new GregorianCalendar();
-//			calendar.setTime(rowContent.getOffer().getStartDate());
-//			firstDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
-//
-//			firstDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
-//			firstDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-//
-//			firstDateChooser.getJCalendar().setWeekOfYearVisible(true);
-//			firstDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
-//			firstDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
-//				@Override
-//				public void propertyChange(PropertyChangeEvent e) {
-//					if (e.getPropertyName().equals("date") || e.getPropertyName().equals("day")) {
-//						firstDate = new GregorianCalendar();
-//						firstDate.setTime((Date) e.getNewValue());
-//						lastDateChooser.setMinSelectableDate(firstDate.getTime());
-//						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
-//						System.out.println(e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
-//					}
-//				}
-//			});
-//			TextPrompt tp = new TextPrompt("Select first date", (JTextComponent) firstDateChooser.getDateEditor().getUiComponent());
-//			tp.setStyle(Font.BOLD);
-//			tp.setAlpha(128);	
-//		}
-//		return firstDateChooser;
-//	}
-//
-//	private JDateChooser getLastDateChooser() {
-//		if(lastDateChooser == null) {
-//			lastDateChooser = new JDateChooser();
-//			//			lastDateChooser.setMinSelectableDate(firstDateChooser.getMinSelectableDate());
-//			lastDateChooser.setSelectableDateRange(rowContent.getOffer().getStartDate(), rowContent.getOffer().getEndDate());
-//
-//			Calendar calendar = new GregorianCalendar();
-//			calendar.setTime(rowContent.getOffer().getEndDate());
-//			lastDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
-//			
-//			lastDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
-//			lastDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-//
-//			lastDateChooser.getJCalendar().setWeekOfYearVisible(true);
-//			lastDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
-//			lastDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
-//				@Override
-//				public void propertyChange(PropertyChangeEvent e) {
-//					if (e.getPropertyName().equals("date")) {
-//						lastDate = new GregorianCalendar();
-//						lastDate.setTime((Date) e.getNewValue());
-//						firstDateChooser.setMaxSelectableDate(lastDate.getTime());
-//						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
-//						updatePrice();
-//						System.out.println("Property changed! " + e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
-//					}
-//				}
-//			});
-//			TextPrompt tp = new TextPrompt("Select last date", (JTextComponent) lastDateChooser.getDateEditor().getUiComponent());
-//			tp.setStyle(Font.BOLD);
-//			tp.setAlpha(128);	
-//		}
-//		return lastDateChooser;
-//	}
 }
