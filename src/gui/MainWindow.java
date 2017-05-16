@@ -7,6 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -48,6 +57,7 @@ public class MainWindow extends JFrame {
 	private JPanel contentPane;
 	public static AbstractUser user;
 	private JTabbedPane tabbedPane;
+	private int lastPaneIndex = 0;
 
 	/**
 	 * Launches the {@code MainWindow} application.</br>
@@ -132,62 +142,19 @@ public class MainWindow extends JFrame {
 
 		MainWindow.user = user;
 
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		getRolePanel(user.getRole());
-		//setJMenuBar(getRoleMenuBar());
-
-
-		contentPane = new JPanel();
-		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setUI(new CustomTabbedPaneUI());
-		//contentPane.add(tabbedPane);
-		tabbedPane.addTab("Rural Houses", getRootPane().add(getRolePanel(user.getRole())));
-		tabbedPane.addTab("Profile", getProfilePanel());
-		//		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
-		//		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
-
-		//		JButton logOutButton = new JButton("Log Out");
-		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);
-		tabbedPane.addTab("Log Out", null);
-
-		ChangeListener changeListener = new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent changeEvent) {
-				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-				int index = sourceTabbedPane.getSelectedIndex();				
-				System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
-				if(index == sourceTabbedPane.getTabCount()-1) {
-					if(logOutQuestion()) {
-						SharedFrame sharedFrame = new SharedFrame();
-						sharedFrame.setVisible(true);
-						dispose();
-					}
-					tabbedPane.setSelectedIndex(0); //TODO cleanup
-				}
-			}
-		};
-		tabbedPane.addChangeListener(changeListener);
-
-		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
-		//			@Override
-		//			public void mouseDragged(MouseEvent e) {}
-		//			@Override
-		//			public void mouseMoved(MouseEvent e){
-		//				adjustCursor(e);
-		//			}
-		//		});
-
-		contentPane.add(tabbedPane);
-
 		setMinimumSize(new Dimension(780, 600));
 		setSize(900, 800);
-		//pack();
 		validate();
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		//setJMenuBar(getRoleMenuBar());
+
+		contentPane = new JPanel();
+		// contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.add(getTabbedPane());
+		setContentPane(contentPane);
+
 
 		//		addComponentListener(new ComponentListener() {
 		//			@Override
@@ -223,42 +190,80 @@ public class MainWindow extends JFrame {
 
 
 
-	//		private void adjustCursor(MouseEvent e) {
-	//	
-	//			TabbedPaneUI ui = tabbedPane.getUI();
-	//	
-	//			int index = ui.tabForCoordinate(tabbedPane, e.getX(), e.getY());
-	//	
-	//			if (index >= 0) {
-	//				tabbedPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	//			} else {
-	//				tabbedPane.setCursor(null);
-	//			}
-	//	
-	//		}
+private JTabbedPane getTabbedPane() {
+	if(tabbedPane == null) {
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setUI(new CustomTabbedPaneUI());
+		setupTabs(MainWindow.user.getRole());
 
-	public JPanel getRolePanel(Role role) {
-		switch (role) {
-		case CLIENT:
-			return new ClientMainPanel(this);
-		case OWNER:
-			//FIXME VERY VERY TEMPORAL!!
-			//return (JPanel) new MainGUI(role).getContentPane();
-			//return new OwnerMainPanel(this);
-			return new OwnerRuralHousesPanel(this);
-		case ADMIN:
-			return new AdminMainPanel(this);
-		case SUPER_ADMIN:
-			//return new SuperAdminMainPanel(this);
-			return null;
-		default:
-			//[TODO]: Throw exception when the user role content pane is not defined 
-			System.exit(1);
-			return null;
-		}
+		ChangeListener changeListener = new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent changeEvent) {
+				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+				int index = sourceTabbedPane.getSelectedIndex();				
+				System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+				if(index == sourceTabbedPane.getTabCount()-1) {
+					if(logOutQuestion()) {
+						SharedFrame sharedFrame = new SharedFrame();
+						sharedFrame.setVisible(true);
+						dispose();
+					} else {
+						tabbedPane.setSelectedIndex(lastPaneIndex);
+					}
+				} else {
+					lastPaneIndex = tabbedPane.getSelectedIndex();
+				}
+			}
+		};
+		tabbedPane.addChangeListener(changeListener);
+
 	}
+	return tabbedPane;
+}
 
-	private JPanel getProfilePanel() {
+private void setupTabs(Role role) {
+	Map<String, JPanel> panelMap = getRoleTabPanels(role);
+	for (Entry<String, JPanel> entry : panelMap.entrySet()) {
+		tabbedPane.add(entry.getKey(), entry.getValue());
+	}
+}
+
+/**
+ * Obtain a {@code LinkedHashMap<String, JPanel>} with the tab panels that the user will see
+ * 
+ * @param role the role of the user
+ * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
+ * 
+ * @see Li
+ */
+public LinkedHashMap<String, JPanel> getRoleTabPanels(Role role) {
+	LinkedHashMap<String, JPanel> panelMap = new LinkedHashMap<String, JPanel>();
+	switch (role) {
+	case CLIENT:
+		panelMap.put("Rural House Offers", new ClientMainPanel(this));
+		break;
+	case OWNER:
+		//FIXME VERY VERY TEMPORAL!!
+		panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
+		// panelMap.put("Main Menu", new OwnerMainPanel(this));
+		break;
+	case ADMIN:
+		panelMap.put("Admin Main Menu", new AdminMainPanel(this));
+		break;
+	case SUPER_ADMIN:
+		//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
+		break;
+	default:
+		//[TODO]: Throw exception when the user role content pane is not defined 
+		System.exit(1);
+		break;
+	}
+	panelMap.put("Profile", getProfilePanel(MainWindow.user));
+	panelMap.put("Log Out", null);
+	return panelMap;
+}
+
+	public JPanel getProfilePanel(AbstractUser user) {
 		return new ProfilePane(user);
 	}
 
