@@ -28,7 +28,6 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
-import gui.ClientMainPanel.CellDetails;
 import gui.components.TextPrompt;
 import domain.RuralHouse;
 
