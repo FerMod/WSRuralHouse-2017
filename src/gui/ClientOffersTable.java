@@ -12,9 +12,11 @@ import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import domain.Offer;
@@ -28,12 +30,15 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 	 */
 	private static final long serialVersionUID = 2711709042458345572L;
 
+	private JFrame parentFrame;
+	
 	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 	private JButton infoButton;
 	private JPanel panel;
 
-	public ClientOffersTable() {
-
+	public ClientOffersTable(JFrame frame) {
+		this.parentFrame = frame;
+		
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
 
@@ -110,31 +115,30 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 
 	}
 
-	public void updateData(CellComponent<Offer> rowContent, boolean isSelected, JTable table) {
+	private void updateData(CellComponent<Offer> rowContent, boolean isSelected, JTable table) {
 		rowContent.setCellComponentTable(this);
-		Offer o = (Offer) rowContent.getElement();
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-		titleComponent.setText(o.getRuralHouse().getName() + "\n" + date.format(o.getStartDate()) + " - " + date.format(o.getEndDate()));
-		String description = o.getRuralHouse().getDescription();
+		titleComponent.setText(rowContent.getElement().getRuralHouse().getName() + "\n" + date.format(rowContent.getElement().getStartDate()) + " - " + date.format(rowContent.getElement().getEndDate()));
+		String description = rowContent.getElement().getRuralHouse().getDescription();
 		//Limit to 300 char, if the text exceeds the limit it will place ' (...)'
 		if(description.length() >= 300) {
 			description = String.format("%1.140s%1.140s", description, " (...)");
 		}
 		descriptionComponent.setText(description);
 		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-		addressComponent.setText(o.getRuralHouse().getCity() + " " + o.getRuralHouse().getAddress());
-		priceComponent.setText(currencyFormatter.format(o.getPrice()));
+		addressComponent.setText(rowContent.getElement().getRuralHouse().getCity() + " " + rowContent.getElement().getRuralHouse().getAddress());
+		priceComponent.setText(currencyFormatter.format(rowContent.getElement().getPrice()));
 
 		infoButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//						System.out.println(rowContent.getOffer().toString());					
-				//						OfferInfoDialog dialog = new OfferInfoDialog(frame, rowContent);
-				//						dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-				//						dialog.validate();
-				//						//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
-				//						dialog.setLocationRelativeTo(frame);
-				//						dialog.setVisible(true);
+				System.out.println(rowContent.getElement().toString());					
+				OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, rowContent);
+				dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+				dialog.validate();
+				//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
+				dialog.setLocationRelativeTo(parentFrame);
+				dialog.setVisible(true);
 			}
 		});
 
