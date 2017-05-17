@@ -7,12 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -38,7 +33,6 @@ import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
-import domain.Owner;
 import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
@@ -159,8 +153,6 @@ public class MainWindow extends JFrame {
 		//		addComponentListener(new ComponentListener() {
 		//			@Override
 		//			public void componentShown(ComponentEvent e) {
-		//				// TODO Auto-generated method stub
-		//
 		//			}
 		//			@Override
 		//			public void componentResized(ComponentEvent e) {
@@ -168,13 +160,9 @@ public class MainWindow extends JFrame {
 		//			}
 		//			@Override
 		//			public void componentMoved(ComponentEvent e) {
-		//				// TODO Auto-generated method stub
-		//
 		//			}
 		//			@Override
 		//			public void componentHidden(ComponentEvent e) {
-		//				// TODO Auto-generated method stub
-		//
 		//			}
 		//		});
 
@@ -190,79 +178,79 @@ public class MainWindow extends JFrame {
 
 
 
-private JTabbedPane getTabbedPane() {
-	if(tabbedPane == null) {
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setUI(new CustomTabbedPaneUI());
-		setupTabs(MainWindow.user.getRole());
+	private JTabbedPane getTabbedPane() {
+		if(tabbedPane == null) {
+			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			tabbedPane.setUI(new CustomTabbedPaneUI());
+			setupTabs(MainWindow.user.getRole());
 
-		ChangeListener changeListener = new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent changeEvent) {
-				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-				int index = sourceTabbedPane.getSelectedIndex();				
-				System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
-				if(index == sourceTabbedPane.getTabCount()-1) {
-					if(logOutQuestion()) {
-						SharedFrame sharedFrame = new SharedFrame();
-						sharedFrame.setVisible(true);
-						dispose();
+			ChangeListener changeListener = new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent changeEvent) {
+					JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+					int index = sourceTabbedPane.getSelectedIndex();				
+					System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+					if(index == sourceTabbedPane.getTabCount()-1) {
+						if(logOutQuestion()) {
+							SharedFrame sharedFrame = new SharedFrame();
+							sharedFrame.setVisible(true);
+							dispose();
+						} else {
+							tabbedPane.setSelectedIndex(lastPaneIndex);
+						}
 					} else {
-						tabbedPane.setSelectedIndex(lastPaneIndex);
+						lastPaneIndex = tabbedPane.getSelectedIndex();
 					}
-				} else {
-					lastPaneIndex = tabbedPane.getSelectedIndex();
 				}
-			}
-		};
-		tabbedPane.addChangeListener(changeListener);
+			};
+			tabbedPane.addChangeListener(changeListener);
 
+		}
+		return tabbedPane;
 	}
-	return tabbedPane;
-}
 
-private void setupTabs(Role role) {
-	Map<String, JPanel> panelMap = getRoleTabPanels(role);
-	for (Entry<String, JPanel> entry : panelMap.entrySet()) {
-		tabbedPane.add(entry.getKey(), entry.getValue());
+	private void setupTabs(Role role) {
+		Map<String, JPanel> panelMap = getRoleTabPanels(role);
+		for (Entry<String, JPanel> entry : panelMap.entrySet()) {
+			tabbedPane.add(entry.getKey(), entry.getValue());
+		}
 	}
-}
 
-/**
- * Obtain a {@code LinkedHashMap<String, JPanel>} with the tab panels that the user will see
- * 
- * @param role the role of the user
- * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
- * 
- * @see Li
- */
-public LinkedHashMap<String, JPanel> getRoleTabPanels(Role role) {
-	LinkedHashMap<String, JPanel> panelMap = new LinkedHashMap<String, JPanel>();
-	switch (role) {
-	case CLIENT:
-		panelMap.put("Rural House Offers", new ClientMainPanel(this));
-		break;
-	case OWNER:
-		//FIXME VERY VERY TEMPORAL!!
-		//panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
-		panelMap.put("Ower Main Menu", (JPanel) new OwnerRuralHousesPanel(this));
-		// panelMap.put("Main Menu", new OwnerMainPanel(this));
-		break;
-	case ADMIN:
-		panelMap.put("Admin Main Menu", new AdminMainPanel(this));
-		break;
-	case SUPER_ADMIN:
-		//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
-		break;
-	default:
-		//[TODO]: Throw exception when the user role content pane is not defined 
-		System.exit(1);
-		break;
+	/**
+	 * Obtain a {@code LinkedHashMap<String, JPanel>} with the tab panels that the user will see
+	 * 
+	 * @param role the role of the user
+	 * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
+	 * 
+	 * @see Li
+	 */
+	public LinkedHashMap<String, JPanel> getRoleTabPanels(Role role) {
+		LinkedHashMap<String, JPanel> panelMap = new LinkedHashMap<String, JPanel>();
+		switch (role) {
+		case CLIENT:
+			panelMap.put("Rural House Offers", new ClientMainPanel(this));
+			break;
+		case OWNER:
+			//FIXME VERY VERY TEMPORAL!!
+			//panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
+			panelMap.put("Ower Main Menu", (JPanel) new OwnerRuralHousesPanel(this));
+			// panelMap.put("Main Menu", new OwnerMainPanel(this));
+			break;
+		case ADMIN:
+			panelMap.put("Admin Main Menu", new AdminMainPanel(this));
+			break;
+		case SUPER_ADMIN:
+			//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
+			break;
+		default:
+			//[TODO]: Throw exception when the user role content pane is not defined 
+			System.exit(1);
+			break;
+		}
+		panelMap.put("Profile", getProfilePanel(MainWindow.user));
+		panelMap.put("Log Out", null);
+		return panelMap;
 	}
-	panelMap.put("Profile", getProfilePanel(MainWindow.user));
-	panelMap.put("Log Out", null);
-	return panelMap;
-}
 
 	public JPanel getProfilePanel(AbstractUser user) {
 		return new ProfilePane(user);
