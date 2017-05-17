@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-public interface ComponentTableInterface extends TableCellEditor, TableCellRenderer {
+public interface CellComponentInterface extends TableCellEditor, TableCellRenderer {
 
 	@Override
 	Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column);

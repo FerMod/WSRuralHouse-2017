@@ -1,22 +1,20 @@
 package gui.components.component.table;
 
-import gui.ClientTableCell;
-
 public class CellComponent<T> {
 
-	private ClientTableCell tableCellComponent;
+	private CellComponentInterface cellComponentInterface;
 	private T t;
 	
 	public CellComponent(T t) {
 		this.t = t;
 	}
 
-	public CellComponentInterface getTableCellComponent() {
-		return tableCellComponent;
+	public CellComponentInterface getCellComponentTable(){
+		return cellComponentInterface;
 	}
 
-	public void setTableCellComponent(ClientTableCell tableCellComponent) {
-		this.tableCellComponent = tableCellComponent;
+	public void setCellComponentTable(CellComponentInterface cellComponentInterface) {
+		this.cellComponentInterface = cellComponentInterface;
 	}
 
 	public T getElement() {

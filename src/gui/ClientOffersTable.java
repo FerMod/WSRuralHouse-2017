@@ -19,9 +19,9 @@ import javax.swing.border.EmptyBorder;
 
 import domain.Offer;
 import gui.components.component.table.CellComponent;
-import gui.components.component.table.ComponentTableInterface;
+import gui.components.component.table.CellComponentInterface;
 
-public class ClientOffersTable extends AbstractCellEditor implements ComponentTableInterface {
+public class ClientOffersTable extends AbstractCellEditor implements CellComponentInterface {
 
 	/**
 	 * Generated serial version ID
@@ -111,7 +111,7 @@ public class ClientOffersTable extends AbstractCellEditor implements ComponentTa
 	}
 
 	public void updateData(CellComponent<Offer> rowContent, boolean isSelected, JTable table) {
-		rowContent.setTableCellComponent(this);
+		rowContent.setCellComponentTable(this);
 		Offer o = (Offer) rowContent.getElement();
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 		titleComponent.setText(o.getRuralHouse().getName() + "\n" + date.format(o.getStartDate()) + " - " + date.format(o.getEndDate()));
