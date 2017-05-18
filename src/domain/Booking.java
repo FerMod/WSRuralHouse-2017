@@ -28,14 +28,14 @@ public class Booking {
 	
 	private Date startDate;
 	private Date endDate;
+	private double price;
 	
-	public Booking(Client client, Offer offer, Date startDate, Date endDate) {
+	public Booking(Client client, Offer offer, double price, Date startDate, Date endDate) {
 		this.client = client;
-		client.getBookings().add(this);
 		this.offer = offer;
-		offer.setBooked(true);
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.price = price;
 		bookingDate = Calendar.getInstance().getTime();
 	}
 
@@ -53,6 +53,14 @@ public class Booking {
 
 	public void setOffer(Offer offer) {
 		this.offer = offer;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public Date getBookingDate() {
