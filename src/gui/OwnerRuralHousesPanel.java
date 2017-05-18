@@ -3,6 +3,9 @@ package gui;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTree;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -12,6 +15,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
@@ -30,6 +34,7 @@ import domain.Review;
 import domain.Review.ReviewState;
 import gui.ClientMainPanel.CellDetails;
 import gui.components.TextPrompt;
+import gui.prototypes.NewRuralHouseWindow;
 import domain.RuralHouse;
 
 
@@ -46,6 +51,7 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JEditorPane;
+import javax.swing.ImageIcon;
 
 public class OwnerRuralHousesPanel extends JPanel {
 	private JTextField textField;	//Name of RuralHouse
@@ -54,7 +60,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private JTextField textField_3; //Date init
 	private JTextField textField_4; //Price
 	private JEditorPane editorPane; //Description
-	
+
 	private RuralHouse rh;
 	private City city;
 
@@ -78,6 +84,11 @@ public class OwnerRuralHousesPanel extends JPanel {
 	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane
 		//initializeRuralHousesComboBox(o);
 		initializeCitiesComboBox();
+		
+		Border matterBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+		Border empty = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(matterBorder, empty);
+		
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -161,6 +172,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		lblNombre.setBounds(25, 222, 72, 20);
 
 		textField = new JTextField();
+		textField.setBorder(border);
 		textField.setEnabled(false);
 		textField.setBounds(25, 253, 260, 20);
 		textField.setColumns(10);
@@ -172,6 +184,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		lblDireccin.setBounds(25, 363, 72, 20);
 
 		textField_2 = new JTextField();
+		textField_2.setBorder(border);
 		textField_2.setEnabled(false);
 		textField_2.setBounds(25, 386, 260, 20);
 		textField_2.setColumns(10);
@@ -225,21 +238,24 @@ public class OwnerRuralHousesPanel extends JPanel {
 				}
 			}
 		});
-		chckbxNewCheckBox.setBounds(18, 192, 102, 23);
+		chckbxNewCheckBox.setBounds(21, 192, 99, 23);
 		add(chckbxNewCheckBox);
 
 		editorPane = new JEditorPane();
+		editorPane.setBorder(border);
 		editorPane.setEnabled(false);
 		editorPane.setBounds(25, 434, 260, 127);
 		add(editorPane);
 
 		textField_1 = new JTextField();
 		textField_1.setBounds(130, 135, 95, 22);
+		textField_1.setBorder(border);
 		add(textField_1);
 		textField_1.setColumns(10);
 
 		textField_3 = new JTextField();
 		textField_3.setBounds(25, 135, 95, 22);
+		textField_3.setBorder(border);
 		add(textField_3);
 		textField_3.setColumns(10);
 
@@ -263,8 +279,35 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 		textField_4 = new JTextField();
 		textField_4.setBounds(235, 135, 102, 23);
+		textField_4.setBorder(border);
 		add(textField_4);
 		textField_4.setColumns(10);
+
+		JButton btnNewButton_2 = new JButton("");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//initializeRuralHousesComboBox(ow);
+			}
+		});
+		btnNewButton_2.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/updaterhs0.gif")));
+		btnNewButton_2.setBounds(295, 44, 52, 52);
+		add(btnNewButton_2);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/editrh.gif")));
+		lblNewLabel.setBounds(265, 192, 19, 19);
+		add(lblNewLabel);
+		
+		JButton button = new JButton("");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JDialog newRuralHouse = new NewRuralHouseWindow();
+				newRuralHouse.setVisible(true);
+			}
+		});
+		button.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/newrhs0.gif")));
+		button.setBounds(357, 44, 52, 52);
+		add(button);
 
 	}
 
