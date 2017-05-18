@@ -31,10 +31,11 @@ import exceptions.DuplicatedEntityException.Error;
 public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface {
 
 	private DataAccessInterface dataAccess;
-	private Locale locale = Locale.getDefault();
+	private Locale locale;
 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
+		Locale.forLanguageTag(dataAccess.getConfig().getLocale());
 	}
 
 	@Override
@@ -201,7 +202,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public void offerBookedControl(Offer offer, boolean isBooked) {
 		dataAccess.offerBookedControl(offer, isBooked);
 	}
-	
+
 	@Override
 	public Vector<Booking> getBookings(Client client) {
 		return dataAccess.getBookings(client);
@@ -215,30 +216,34 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	@Override
 	public Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, ReviewState reviewSt) {
 		Vector<RuralHouse> rhs = dataAccess.getRuralHouses(reviewSt);
-		
+
 		for(RuralHouse rh : rhs) {
 			if(!rh.getOwner().equals(ow)) {
 				rhs.remove(rh);
 			}
 		}
-		
+
 		return rhs;
 	}
-	
+
 	@Override
 	public Vector<RuralHouse> getRuralHousesOfOwner(Owner ow) {
 		Vector<RuralHouse> rhs = dataAccess.getRuralHouses();
-		
+
 		for(RuralHouse rh : rhs) {
 			if(!rh.getOwner().equals(ow)) {
 				rhs.remove(rh);
 			}
 		}
-		
+
 		return rhs;
 	}
 
 	public Locale getLocale() {
+		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
+		if(locale == null) {
+			locale = Locale.getDefault();
+		}
 		return locale;
 	}
 
