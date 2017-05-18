@@ -21,7 +21,7 @@ import domain.Booking;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
 
-public class BookingsCellComponent extends AbstractCellEditor implements CellComponentInterface {
+public class BookingsComponent extends AbstractCellEditor implements CellComponentInterface {
 
 	private static final long serialVersionUID = 2711709042458345572L;
 
@@ -30,7 +30,7 @@ public class BookingsCellComponent extends AbstractCellEditor implements CellCom
 	private JPanel panel;
 	private CellComponent<Booking> selectedComponent;
 
-	public BookingsCellComponent() {
+	public BookingsComponent() {
 
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
