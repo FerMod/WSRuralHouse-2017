@@ -26,10 +26,16 @@ public class Booking {
 	private Offer offer;
 	private Date bookingDate;
 	
-	public Booking(Client client, Offer offer) {
+	private Date startDate;
+	private Date endDate;
+	
+	public Booking(Client client, Offer offer, Date startDate, Date endDate) {
 		this.client = client;
 		client.getBookings().add(this);
 		this.offer = offer;
+		offer.setBooked(true);
+		this.startDate = startDate;
+		this.endDate = endDate;
 		bookingDate = Calendar.getInstance().getTime();
 	}
 
@@ -49,13 +55,24 @@ public class Booking {
 		this.offer = offer;
 	}
 
-	public Date getCreationDate() {
+	public Date getBookingDate() {
 		return bookingDate;
 	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
 
-	@Deprecated
-	public void setCreationDate(Date creationDate) {
-		this.bookingDate = creationDate;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	@Override
