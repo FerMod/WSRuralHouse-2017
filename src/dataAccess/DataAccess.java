@@ -124,6 +124,11 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Database closed");
 		}
 	}
+	
+	@Override
+	public ConfigXML getConfig() {
+		return CONFIG;	
+	}
 
 	/**
 	 * Method used to update a entity with their changes to the database
