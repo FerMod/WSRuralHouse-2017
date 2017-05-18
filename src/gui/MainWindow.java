@@ -245,7 +245,7 @@ public class MainWindow extends JFrame {
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!
 			//panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
-			panelMap.put("Ower Main Menu", (JPanel) new OwnerRuralHousesPanel(this));
+			panelMap.put("Owner Main Menu", (JPanel) new OwnerRuralHousesPanel(this));
 			// panelMap.put("Main Menu", new OwnerMainPanel(this));
 			break;
 		case ADMIN:

@@ -34,7 +34,6 @@ import domain.Review;
 import domain.Review.ReviewState;
 import gui.ClientMainPanel.CellDetails;
 import gui.components.TextPrompt;
-import gui.prototypes.NewRuralHouseWindow;
 import domain.RuralHouse;
 
 
@@ -85,10 +84,6 @@ public class OwnerRuralHousesPanel extends JPanel {
 		//initializeRuralHousesComboBox(o);
 		initializeCitiesComboBox();
 		
-		Border matterBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
-		Border empty = new EmptyBorder(0, 5, 0, 0);
-		CompoundBorder border = new CompoundBorder(matterBorder, empty);
-		
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -115,11 +110,11 @@ public class OwnerRuralHousesPanel extends JPanel {
 					//MainWindow.getBusinessLogic().update(rh);
 					JOptionPane.showMessageDialog(null,	"Se ha actualizado la casa rural correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);
 				} catch(NullPointerException er) {
-					JOptionPane.showMessageDialog(null,	"Compruebe que no se deja ningún campo vacío a la hora de editar la casa", "No se ha podido editar la casa rural", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,	"Compruebe que no se deja ningÃºn campo vacio a la hora de editar la casa", "No se ha podido editar la casa rural", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
-		btnNewButton.setBounds(154, 568, 131, 26);
+		btnNewButton.setBounds(154, 502, 131, 26);
 		add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("Crear oferta");
@@ -143,14 +138,14 @@ public class OwnerRuralHousesPanel extends JPanel {
 						JOptionPane.showMessageDialog(null, "La fecha de inicio debe de ser anterior a la final y estas no pueden ser fechas pasadas", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (ParseException | NullPointerException | NumberFormatException e) {
-					JOptionPane.showMessageDialog(null, "Revise si ha escrito mal el precio o el formato de las fechas introducidas no es el adecuado e inténtelo de nuevo", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Revise si ha escrito mal el precio o el formato de las fechas introducidas no es el adecuado e intÃ©ntelo de nuevo", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 				}
 				// formatting
 				System.out.println(format.format(new Date()));
 			}
 		});
-		btnNewButton_1.setBounds(368, 135, 131, 23);
+		btnNewButton_1.setBounds(357, 135, 131, 23);
 		add(btnNewButton_1);
 
 		JLabel lblMisCasas = new JLabel("Mis casas");
@@ -168,37 +163,29 @@ public class OwnerRuralHousesPanel extends JPanel {
 		});
 		comboBox.setBounds(25, 44, 260, 52);
 
-		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(25, 222, 72, 20);
-
 		textField = new JTextField();
-		textField.setBorder(border);
+		
+		applyStyle("Nombre", textField);
+		
 		textField.setEnabled(false);
-		textField.setBounds(25, 253, 260, 20);
+		textField.setBounds(25, 222, 260, 20);
 		textField.setColumns(10);
 
-		JLabel lblDescripcin = new JLabel("Descripci\u00F3n");
-		lblDescripcin.setBounds(25, 412, 95, 20);
-
-		JLabel lblDireccin = new JLabel("Direcci\u00F3n");
-		lblDireccin.setBounds(25, 363, 72, 20);
-
 		textField_2 = new JTextField();
-		textField_2.setBorder(border);
+		
+		applyStyle("DirecciÃ³n", textField_2);
+		
 		textField_2.setEnabled(false);
-		textField_2.setBounds(25, 386, 260, 20);
+		textField_2.setBounds(25, 333, 260, 20);
 		textField_2.setColumns(10);
 		setLayout(null);
 		add(lblMisCasas);
 		add(comboBox);
-		add(lblNombre);
 		add(textField);
-		add(lblDescripcin);
-		add(lblDireccin);
 		add(textField_2);
 
 		JLabel lblCiudad = new JLabel("Ciudad");
-		lblCiudad.setBounds(25, 283, 72, 20);
+		lblCiudad.setBounds(25, 253, 72, 20);
 		add(lblCiudad);
 
 		comboBox_1 = new JComboBox();
@@ -209,7 +196,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		});
 		comboBox_1.setModel(someCities);
 		comboBox_1.setEnabled(false);
-		comboBox_1.setBounds(25, 314, 260, 38);
+		comboBox_1.setBounds(25, 284, 260, 38);
 		add(comboBox_1);
 
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Editar casa");
@@ -242,30 +229,28 @@ public class OwnerRuralHousesPanel extends JPanel {
 		add(chckbxNewCheckBox);
 
 		editorPane = new JEditorPane();
-		editorPane.setBorder(border);
+		
+		applyStyle("DescripciÃ³n", editorPane);
+		
 		editorPane.setEnabled(false);
-		editorPane.setBounds(25, 434, 260, 127);
+		editorPane.setBounds(25, 364, 260, 127);
 		add(editorPane);
 
 		textField_1 = new JTextField();
 		textField_1.setBounds(130, 135, 95, 22);
-		textField_1.setBorder(border);
+		
+		applyStyle("Fecha final", textField_1);
+		
 		add(textField_1);
 		textField_1.setColumns(10);
 
 		textField_3 = new JTextField();
 		textField_3.setBounds(25, 135, 95, 22);
-		textField_3.setBorder(border);
+		
+		applyStyle("Fecha inicio", textField_3);
+		
 		add(textField_3);
 		textField_3.setColumns(10);
-
-		JLabel lblFechaDeInicio = new JLabel("Fecha inicio");
-		lblFechaDeInicio.setBounds(25, 114, 131, 23);
-		add(lblFechaDeInicio);
-
-		JLabel lblFechaFinal = new JLabel("Fecha final");
-		lblFechaFinal.setBounds(130, 120, 95, 10);
-		add(lblFechaFinal);
 
 		JLabel lblformatoAUtilizar = new JLabel("*Formato a utilizar DD/MM/YYYY");
 		lblformatoAUtilizar.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -273,13 +258,11 @@ public class OwnerRuralHousesPanel extends JPanel {
 		lblformatoAUtilizar.setBounds(25, 168, 196, 14);
 		add(lblformatoAUtilizar);
 
-		JLabel lblPrecioPorNoche = new JLabel("Precio por noche");
-		lblPrecioPorNoche.setBounds(235, 118, 102, 14);
-		add(lblPrecioPorNoche);
-
 		textField_4 = new JTextField();
-		textField_4.setBounds(235, 135, 102, 23);
-		textField_4.setBorder(border);
+		textField_4.setBounds(235, 135, 112, 23);
+		
+		applyStyle("Precio por noche", textField_4);
+		
 		add(textField_4);
 		textField_4.setColumns(10);
 
@@ -329,5 +312,17 @@ public class OwnerRuralHousesPanel extends JPanel {
 		for(City city : cities) {
 			someCities.addElement(city);
 		}	
+	}
+	
+	private JTextComponent applyStyle(String tipText, JTextComponent textComponent) {
+	    TextPrompt textPrompt = new TextPrompt(textComponent);
+	    textPrompt.setText(tipText);
+	    textPrompt.setStyle(Font.BOLD);
+	    textPrompt.setAlpha(128);
+	    Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+	    Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+	    CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+	    textComponent.setBorder(border);
+	    return textComponent;
 	}
 }

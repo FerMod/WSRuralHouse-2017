@@ -1,4 +1,4 @@
-package gui;
+package gui.prototypes;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import businessLogic.ApplicationFacadeInterface;
+import gui.MainGUI;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
