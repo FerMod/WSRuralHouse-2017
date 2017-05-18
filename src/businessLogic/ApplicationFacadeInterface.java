@@ -1,6 +1,7 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.jws.WebMethod;
@@ -306,5 +307,9 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<RuralHouse> getRuralHousesOfOwner(Owner ow);
+	
+	Locale getLocale();
+	
+	void setLocale(Locale locale);
 	
 }

@@ -1,6 +1,7 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ import exceptions.DuplicatedEntityException.Error;
 public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface {
 
 	private DataAccessInterface dataAccess;
+	private Locale locale = Locale.getDefault();
 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
@@ -236,9 +238,13 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return rhs;
 	}
 
-	//	private getConfig() {
-	//		return dataAccess.ge
-	//	}
+	public Locale getLocale() {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
 }
 
