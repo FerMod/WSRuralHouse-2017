@@ -125,7 +125,7 @@ public class ClientMainPanel extends JPanel {
 		GridBagConstraints gbcMaxPriceField = new GridBagConstraints();
 		gbcMaxPriceField.weightx = 0.1;
 		gbcMaxPriceField.anchor = GridBagConstraints.CENTER;
-		gbcMaxPriceField.insets = new Insets(5, 10, -5, 10);
+		gbcMaxPriceField.insets = new Insets(5, 10, 0, 10);
 		gbcMaxPriceField.gridwidth = 2;
 		gbcMaxPriceField.gridx = 0;
 		gbcMaxPriceField.gridy = 1;
@@ -251,7 +251,6 @@ public class ClientMainPanel extends JPanel {
 				setupNumberFormat();
 			}
 			maxPriceField = new JFormattedTextField(priceFormat);
-			maxPriceField.setColumns(4);
 			maxPriceField.setValue(getPriceSlider().getMaximum()/100);
 			maxPriceField.setInputVerifier(new FormattedTextFieldVerifier());
 			maxPriceField.setFocusable(false);
