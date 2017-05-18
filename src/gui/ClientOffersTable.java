@@ -31,14 +31,14 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 	private static final long serialVersionUID = 2711709042458345572L;
 
 	private JFrame parentFrame;
-	
 	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 	private JButton infoButton;
 	private JPanel panel;
+	private CellComponent<Offer> selectedComponent;
 
 	public ClientOffersTable(JFrame frame) {
 		this.parentFrame = frame;
-		
+
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
 
@@ -113,40 +113,49 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 		gbcInfoButton.insets = new Insets(5, 5, 0, 0);
 		panel.add(infoButton, gbcInfoButton);
 
+		infoButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == infoButton && selectedComponent != null) {			
+					openOfferDialog(parentFrame, selectedComponent);
+				}
+			}
+		});
+
 	}
 
-	private void updateData(CellComponent<Offer> rowContent, boolean isSelected, JTable table) {
-		rowContent.setCellComponentTable(this);
+	private void updateData(CellComponent<Offer> value, boolean isSelected, JTable table) {
+		value.setCellComponentTable(this);
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-		titleComponent.setText(rowContent.getElement().getRuralHouse().getName() + "\n" + date.format(rowContent.getElement().getStartDate()) + " - " + date.format(rowContent.getElement().getEndDate()));
-		String description = rowContent.getElement().getRuralHouse().getDescription();
+		titleComponent.setText(value.getElement().getRuralHouse().getName() + "\n" + date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getEndDate()));
+		String description = value.getElement().getRuralHouse().getDescription();
 		//Limit to 300 char, if the text exceeds the limit it will place ' (...)'
 		if(description.length() >= 300) {
 			description = String.format("%1.140s%1.140s", description, " (...)");
 		}
 		descriptionComponent.setText(description);
 		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-		addressComponent.setText(rowContent.getElement().getRuralHouse().getCity() + " " + rowContent.getElement().getRuralHouse().getAddress());
-		priceComponent.setText(currencyFormatter.format(rowContent.getElement().getPrice()));
+		addressComponent.setText(value.getElement().getRuralHouse().getCity() + " " + value.getElement().getRuralHouse().getAddress());
+		priceComponent.setText(currencyFormatter.format(value.getElement().getPrice()));
 
-		infoButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println(rowContent.getElement().toString());					
-				OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, rowContent);
-				dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-				dialog.validate();
-				//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
-				dialog.setLocationRelativeTo(parentFrame);
-				dialog.setVisible(true);
-			}
-		});
+		selectedComponent = value;
 
 		if (isSelected) {
 			panel.setBackground(table.getSelectionBackground());
 		}else{
 			panel.setBackground(table.getBackground());
 		}
+
+	}
+
+	private void openOfferDialog(JFrame parentFrame, CellComponent<Offer> rowContent) {
+		System.out.printf("openDialog(%s, %s)%n", parentFrame.getClass().getSimpleName(), ((Offer)rowContent.getElement()).toString());
+		OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, rowContent);
+		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		dialog.validate();
+		//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
+		dialog.setLocationRelativeTo(parentFrame);
+		dialog.setVisible(true);				
 	}
 
 	/* (non-Javadoc)
@@ -155,7 +164,7 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		updateData((CellComponent<Offer>) value, true, table);
+		updateData((CellComponent<Offer>) value, true, table);		
 		return panel;
 	}
 
