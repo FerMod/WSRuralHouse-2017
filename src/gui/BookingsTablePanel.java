@@ -25,7 +25,7 @@ import domain.Booking;
 import domain.Client;
 import gui.components.table.CellComponent;
 import gui.components.table.CustomTableModel;
-import gui.components.table.cell.BookingsCellComponent;
+import gui.components.table.cell.BookingsComponent;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -116,7 +116,7 @@ public class BookingsTablePanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(table, new double[]{0.1, 0.9});
-			BookingsCellComponent bookingsTable = new BookingsCellComponent();
+			BookingsComponent bookingsTable = new BookingsComponent();
 			table.setDefaultRenderer(Object.class, bookingsTable);
 			table.setDefaultEditor(Object.class, bookingsTable);
 

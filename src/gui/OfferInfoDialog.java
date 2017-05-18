@@ -44,7 +44,7 @@ import gui.components.FrameShader;
 import gui.components.ImagePanel;
 import gui.components.InfoTextPane;
 import gui.components.TextPrompt;
-import gui.components.component.table.CellComponent;
+import gui.components.table.CellComponent;
 
 import javax.swing.JTextField;
 import java.awt.Cursor;

@@ -229,6 +229,7 @@ public class MainWindow extends JFrame {
 		switch (role) {
 		case CLIENT:
 			panelMap.put("Rural House Offers", new ClientMainPanel(this));
+			panelMap.put("Offer Bookings", new BookingsTablePanel(this));
 			break;
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!

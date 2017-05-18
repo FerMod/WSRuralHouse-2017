@@ -1,4 +1,4 @@
-package gui;
+package gui.components.table.cell;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -20,10 +20,11 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import domain.Offer;
-import gui.components.component.table.CellComponent;
-import gui.components.component.table.CellComponentInterface;
+import gui.OfferInfoDialog;
+import gui.components.table.CellComponent;
+import gui.components.table.CellComponentInterface;
 
-public class ClientOffersTable extends AbstractCellEditor implements CellComponentInterface {
+public class OffersComponent extends AbstractCellEditor implements CellComponentInterface {
 
 	/**
 	 * Generated serial version ID
@@ -36,7 +37,7 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 	private JPanel panel;
 	private CellComponent<Offer> selectedComponent;
 
-	public ClientOffersTable(JFrame frame) {
+	public OffersComponent(JFrame frame) {
 		this.parentFrame = frame;
 
 		panel = new JPanel();

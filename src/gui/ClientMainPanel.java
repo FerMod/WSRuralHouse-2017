@@ -58,8 +58,9 @@ import domain.Offer;
 import domain.Review.ReviewState;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
-import gui.components.component.table.CellComponent;
-import gui.components.component.table.CustomTableModel;
+import gui.components.table.CellComponent;
+import gui.components.table.CustomTableModel;
+import gui.components.table.cell.OffersComponent;
 
 public class ClientMainPanel extends JPanel {
 
@@ -478,8 +479,9 @@ public class ClientMainPanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(table, 0.1, 0.9);
-			table.setDefaultRenderer(Object.class, new ClientOffersTable(parentFrame));
-			table.setDefaultEditor(Object.class, new ClientOffersTable(parentFrame));
+			OffersComponent offersCellComponent = new OffersComponent(parentFrame);
+			table.setDefaultRenderer(Object.class, offersCellComponent);
+			table.setDefaultEditor(Object.class, offersCellComponent);
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
