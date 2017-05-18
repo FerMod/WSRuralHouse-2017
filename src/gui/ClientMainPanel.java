@@ -439,21 +439,21 @@ public class ClientMainPanel extends JPanel {
 	private JTable getTable() {
 		if(table == null) {
 
-			List<Offer> offerVector = MainWindow.getBusinessLogic().getActiveOffers(ReviewState.APPROVED);
+			//TODO Move to another method /////
+			List<Offer> activeOffersList = MainWindow.getBusinessLogic().getActiveOffers(ReviewState.APPROVED);
 
-			List<CellComponent<Offer>> list = new Vector<>();
+			List<CellComponent<Offer>> offerComponentList = new Vector<>();
 			List<ImageIcon> imageVector = new Vector<ImageIcon>();
-			for (Offer offer : offerVector) {
+			
+			for (Offer offer : activeOffersList) {
 				imageVector.add(offer.getRuralHouse().getImage(0));
-				list.add(new CellComponent<Offer>(offer));
+				offerComponentList.add(new CellComponent<Offer>(offer));
 			}
 
 			imageVector.stream().forEachOrdered(e -> System.out.println(e.getDescription()));
+			///////////////////////////////////
 
-			System.out.println(offerVector.size());
-			System.out.println(imageVector.size());
-
-			tableModel = new CustomTableModel(imageVector, list);
+			tableModel = new CustomTableModel(imageVector, offerComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
 			table = new JTable(tableModel);
 			table.setRowSorter(sorter);
