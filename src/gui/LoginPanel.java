@@ -134,12 +134,18 @@ public class LoginPanel extends JPanel {
 	private boolean fieldsFilled() {
 		clearFieldsColors();
 		if(textFieldUsername.getText().trim().equals("")){
-			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			textFieldUsername.setBorder(border);
 			textFieldUsername.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(passwordField.getPassword()).equals("")) {
-			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			passwordField.setBorder(border);
 			passwordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -225,7 +231,10 @@ public class LoginPanel extends JPanel {
 	}
 
 	public void clearFieldsColors() {
-		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+		Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+		textFieldUsername.setBorder(border);
+		passwordField.setBorder(border);
 	}
 }

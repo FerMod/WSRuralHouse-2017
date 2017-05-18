@@ -228,12 +228,16 @@ public class SignUpPanel extends JPanel {
 								System.err.println(ex.getMessage());
 								System.out.println(ex.getError().toString());
 
+								Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+								Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+								CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+
 								switch(ex.getError().getCode()) {
 								case 1:
-									textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+									textFieldUsername.setBorder(border);
 									break;
 								case 2:
-									textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+									textFieldEmail.setBorder(border);
 									break;
 								default:
 									break;
@@ -253,24 +257,30 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean fieldsFilled() {
+		
 		clearFieldsColors();
+		
+		Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+		Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+		
 		if(textFieldEmail.getText().equals("")) {
-			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldEmail.setBorder(border);
 			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"email\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(textFieldUsername.getText().trim().equals("")){
-			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldUsername.setBorder(border);
 			textFieldUsername.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(passwordField.getPassword()).equals("")) {
-			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			passwordField.setBorder(border);
 			passwordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(confirmPasswordField.getPassword()).equals("")) {
-			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			confirmPasswordField.setBorder(border);
 			confirmPasswordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"confirm password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -279,9 +289,12 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean passwordMatch() {
-		clearFieldsColors();
+		clearFieldsColors();		
 		if(!Arrays.equals(passwordField.getPassword(), confirmPasswordField.getPassword())) {
-			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			confirmPasswordField.setBorder(border);
 			confirmPasswordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The two passwords does not match.", "Password mismatch", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -292,7 +305,10 @@ public class SignUpPanel extends JPanel {
 	private boolean correctEmailFormat() {
 		clearFieldsColors();
 		if(!textFieldEmail.getText().matches(EMAIL_PATTERN)) {
-			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			textFieldEmail.setBorder(border);
 			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The email dont have the correct format.", "Invalid email format", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -411,9 +427,12 @@ public class SignUpPanel extends JPanel {
 	}
 
 	public void clearFieldsColors() {
-		textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+		Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+		textFieldEmail.setBorder(border);
+		textFieldUsername.setBorder(border);
+		passwordField.setBorder(border);
+		confirmPasswordField.setBorder(border);
 	}
 }
