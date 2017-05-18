@@ -1,4 +1,4 @@
-package gui.components.component.table;
+package gui.components.table;
 
 import java.awt.Dimension;
 import java.awt.Image;

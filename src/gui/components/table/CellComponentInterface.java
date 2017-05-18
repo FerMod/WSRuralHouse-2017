@@ -1,4 +1,4 @@
-package gui.components.component.table;
+package gui.components.table;
 
 import java.awt.Component;
 import java.util.EventObject;
