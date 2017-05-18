@@ -116,8 +116,18 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner) {
+		return dataAccess.getRuralHouses(owner);
+	}
+
+	@Override
 	public Vector<RuralHouse> getRuralHouses(ReviewState reviewState) {
 		return dataAccess.getRuralHouses(reviewState);
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
+		return dataAccess.getRuralHouses(owner, reviewState);
 	}
 
 	@Override
@@ -182,25 +192,22 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	@Override
 	public Booking createBooking(Client client, Offer offer) {
-		return createBooking(client, offer);
+		return dataAccess.createBooking(client, offer);
 	}
 
 	@Override
 	public void offerBookedControl(Offer offer, boolean isBooked) {
 		dataAccess.offerBookedControl(offer, isBooked);
 	}
+	
+	@Override
+	public Vector<Booking> getBookings(Client client) {
+		return dataAccess.getBookings(client);
+	}
 
 	@Override
-	public Vector<Booking> getBookingsOfClient(int idClient) {
-		Vector<Booking> bs = dataAccess.getBookings();
-
-		for(Booking b : bs) {
-			if(b.getClient().getId() != idClient) {
-				bs.remove(b);
-			}
-		}
-		
-		return bs;
+	public Vector<Booking> getBookings() {
+		return dataAccess.getBookings();
 	}
 
 	@Override

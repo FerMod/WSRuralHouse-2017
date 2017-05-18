@@ -127,14 +127,17 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
-
+	
 	/**
-	 * This method retrieves the existing rural houses 
+	 * Obtain all the rural houses matching with the entered {@code Owner}
+	 *
+	 * @param owner the owner of the rural house
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses 
+	 * matching with the {@code Owner}, {@code null} if none is found
 	 * 
-	 * @return a {@code Vector} of rural houses
 	 */
 	@WebMethod
-	Vector<RuralHouse> getRuralHouses();
+	Vector<RuralHouse> getRuralHouses(Owner owner);
 
 	/**
 	 * Obtain all the rural houses matching with the entered {@code ReviewState}
@@ -146,6 +149,27 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<RuralHouse> getRuralHouses(ReviewState reviewState);
+	
+	/**
+	 * Obtain all the rural houses matching with the entered {@code Owner} and {@code ReviewState}
+	 *
+	 * @param owner the owner of the rural house
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses 
+	 * matching with the {@code Owner} and {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState);
+	
+	/**
+	 * This method retrieves the existing rural houses 
+	 * 
+	 * @return a {@code Vector} of rural houses
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHouses();
 
 	/**
 	 * Creates a city and stores it in the database.
@@ -227,13 +251,23 @@ public interface ApplicationFacadeInterface  {
 	Booking createBooking(Client client, Offer offer);
 
 	/**
-	 * Return a list of bookings of the client specified
+	 * Obtain a {@code Vector} filled with bookings made
+	 * by the matching client.
 	 * 
-	 * @param id of a client
-	 * @return a list with his bookings
+	 * @param client the client of the bookings
+	 * @return a {@code Vector} filled with elements of type {@code Booking}, that
+	 * represents the bookings made by the client, returns {@code null} otherwise.
 	 */
 	@WebMethod
-	Vector<Booking> getBookingsOfClient(int idClient);
+	Vector<Booking> getBookings(Client client);
+	
+	/**
+	 * Return a {@code Vector} with all the stored bookings in the ddbb
+	 * 
+	 * @return a {@code Vector} filled with bookings
+	 */
+	@WebMethod
+	Vector<Booking> getBookings();
 	
 	/**
 	 * Create a review for a rural house.

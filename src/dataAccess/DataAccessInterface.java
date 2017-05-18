@@ -51,12 +51,13 @@ public interface DataAccessInterface {
 
 	Vector<RuralHouse> getRuralHouses();
 
+	Vector<RuralHouse> getRuralHouses(Owner owner);
+
 	Vector<RuralHouse> getRuralHouses(ReviewState reviewState);
 	
+	Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState);
+	
 	boolean existsRuralHouse(String description, int city);
-
-	@Deprecated
-	RuralHouse createRuralHouse(Owner owner, String description, City city, String address)	throws DuplicatedEntityException;
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
@@ -92,6 +93,9 @@ public interface DataAccessInterface {
 
 	Booking createBooking(Client c, Offer o);
 
+	Vector<Booking> getBookings(Client client);
+
 	Vector<Booking> getBookings();
+
 
 }
