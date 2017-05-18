@@ -194,13 +194,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Booking createBooking(Client client, Offer offer) {
-		return dataAccess.createBooking(client, offer);
-	}
-
-	@Override
-	public void offerBookedControl(Offer offer, boolean isBooked) {
-		dataAccess.offerBookedControl(offer, isBooked);
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
+		return dataAccess.createBooking(client, offer, startDate, endDate);
 	}
 
 	@Override

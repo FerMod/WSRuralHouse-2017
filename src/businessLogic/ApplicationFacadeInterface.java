@@ -230,26 +230,19 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
-
-	/**
-	 * Control the offers, for see if it's booked or not
-	 * 
-	 * @param offer to set his booked value
-	 * @param boolean to control the state of booking
-	 */
-	@WebMethod
-	void offerBookedControl(Offer of, boolean booked);
 	
 	/**
 	 * Create a booking for the introduced client of the introduced booking
 	 * 
 	 * @param client the client who is making the booking
 	 * @param offer the offer to book
+	 * @param startDate the first date of the booking
+	 * @param endDate the end date of the booking
 	 * 
 	 * @return the booking done
 	 */
 	@WebMethod
-	Booking createBooking(Client client, Offer offer);
+	Booking createBooking(Client client, Offer offer, Date startDate, Date endDate);
 
 	/**
 	 * Obtain a {@code Vector} filled with bookings made

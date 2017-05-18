@@ -19,6 +19,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -124,7 +125,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Database closed");
 		}
 	}
-	
+
 	@Override
 	public ConfigXML getConfig() {
 		return CONFIG;	
@@ -195,7 +196,7 @@ public class DataAccess implements DataAccessInterface {
 			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 
-			createBooking(client1, offer);
+			createBooking(client1, offer, date.parse("2017/5/4"), date.parse("2019/6/2"));
 			getBookings(client1);
 
 			System.out.println("Database initialized");
@@ -514,7 +515,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Obtain all the rural houses matching with the entered {@code Owner}
 	 *
@@ -952,13 +953,16 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Booking createBooking(Client c, Offer o) {
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
 		Booking booking= null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createBooking(\"" + c.getUsername() + ", " + o.toString() + "\") -> ");
+			System.out.print(">> DataAccess: createBooking(" +  client + ", " + offer + ", " + startDate + ", " + endDate + ") -> ");
 			db.getTransaction().begin();
-			booking = new Booking(c, o);
+			double price = getPrice(offer.getPrice(), startDate, endDate);
+			booking = new Booking(client, offer, price, startDate, endDate);
+			client.getBookings().add(booking);
+			offer.setBooked(true);
 			db.persist(booking);
 			db.getTransaction().commit();
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
@@ -967,24 +971,26 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
+		update(offer);
+		update(client);
 		return booking;
 	}
 
-
 	/**
-	 * Control the boolean booked of the offer
-	 * 
-	 * @param offer for set his booked value
-	 * @param boolean for control the state of booking
+	 * Get the difference between two dates
+	 * @param date1 the oldest date
+	 * @param date2 the newest date
+	 * @param timeUnit the unit in which you want the difference
+	 * @return the difference value, in the provided unit
 	 */
-	@Override
-	@Deprecated
-	public void offerBookedControl(Offer of, boolean booked) {
-		open();
-		db.getTransaction().begin();
-		of.setBooked(booked);
-		db.getTransaction().commit();
-		close();
+	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+		long diffInMillis = date2.getTime() - date1.getTime();
+		return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+	}
+
+	private double getPrice(double price, Date startDate, Date endDate) {
+		long days = getDateDiff(startDate, endDate, TimeUnit.DAYS) + 1;
+		return days * price;
 	}
 
 	/**

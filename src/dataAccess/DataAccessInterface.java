@@ -88,13 +88,11 @@ public interface DataAccessInterface {
 	
 	void deleteTableContent(String table);
 	
-	void offerBookedControl(Offer of, boolean booked);
-	
 	Review createReview(RuralHouse rh);
 	
 	void updateReview(RuralHouse rh, Review r);
 
-	Booking createBooking(Client c, Offer o);
+	Booking createBooking(Client client, Offer offer, Date startDate, Date endDate);
 
 	Vector<Booking> getBookings(Client client);
 
