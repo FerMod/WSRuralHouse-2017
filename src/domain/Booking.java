@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -17,17 +19,16 @@ public class Booking {
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
-	private Client client;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 	
-	@XmlID
-	@XmlJavaTypeAdapter(IntegerAdapter.class)
-	@Id
+	private Client client;
 	private Offer offer;
-
 	private Date creationDate;
 	
 	public Booking(Client client, Offer offer) {
 		this.client = client;
+		client.getBookings().add(this);
 		this.offer = offer;
 		creationDate = Calendar.getInstance().getTime();
 	}
@@ -48,9 +49,18 @@ public class Booking {
 		this.offer = offer;
 	}
 
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	@Deprecated
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
 	@Override
 	public String toString() {
-		return "Booking [c=" + client.toString() + ", o=" + offer.toString() + "]";
+		return "Booking [client=" + client + ", offer=" + offer + ", creationDate=" + creationDate + "]";
 	}
 
 }
