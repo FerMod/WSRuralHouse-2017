@@ -86,6 +86,7 @@ public class RuralHouse implements Serializable {
 	 */
 	public RuralHouse(Owner owner, String name, String description, City city, String address) {
 		this.owner = owner;
+		owner.getRuralHouses().add(this);
 		this.name = name;
 		this.description = description;
 		this.city = city;
