@@ -17,6 +17,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
@@ -157,12 +159,15 @@ public class LoginPanel extends JPanel {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
 			passwordField.setBounds(20, 115, 204, 30);
-			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-			//passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
-			TextPrompt tp = new TextPrompt(passwordField);
-			tp.setText("Password");
-			tp.setStyle(Font.BOLD);
-			tp.setAlpha(128);	
+			TextPrompt textPrompt = new TextPrompt(passwordField);
+			textPrompt.setText("Password");
+			textPrompt.setStyle(Font.BOLD);
+			textPrompt.setAlpha(128);
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			passwordField.setBorder(border);
+			//passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));	
 			//ImageIcon imageIcon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/password.png")));
 			//tp.setIcon(imageIcon);
 		}
@@ -184,11 +189,14 @@ public class LoginPanel extends JPanel {
 			textFieldUsername.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldUsername.setBounds(20, 62, 204, 30);
 			textFieldUsername.setColumns(10);
-			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-			TextPrompt tp = new TextPrompt(textFieldUsername);
-			tp.setText("Username");
-			tp.setStyle(Font.BOLD);
-			tp.setAlpha(128);
+			TextPrompt textPrompt = new TextPrompt(textFieldUsername);
+			textPrompt.setText("Username");
+			textPrompt.setStyle(Font.BOLD);
+			textPrompt.setAlpha(128);
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			textFieldUsername.setBorder(border);
 			//ImageIcon imageIcon = new ImageIcon(Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/username.png")));
 			//tp.setIcon(imageIcon);
 			textFieldUsername.requestFocus();
