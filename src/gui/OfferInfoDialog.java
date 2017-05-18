@@ -76,7 +76,7 @@ public class OfferInfoDialog extends JDialog {
 	private FrameShader frameShader;
 	private JTextField dialogTitle, textFieldPrice;
 	private JDateChooser firstDateChooser, lastDateChooser;
-	private JButton btnX, btnBookOffer, okButton, cancelButton;
+	private JButton btnX, btnBookOffer;
 
 	private CellComponent<Offer> rowContent;
 	private Calendar firstDate, lastDate;
@@ -459,14 +459,6 @@ public class OfferInfoDialog extends JDialog {
 			gbc_textFieldPrice.gridy = 2;
 			bookOfferTabPanel.add(getTextFieldPrice(), gbc_textFieldPrice);
 
-			//btnBookOffer
-			GridBagConstraints gbc_btnBookOffer = new GridBagConstraints();
-			gbc_btnBookOffer.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnBookOffer.gridwidth = 2;
-			gbc_btnBookOffer.gridx = 0;
-			gbc_btnBookOffer.gridy = 3;
-			bookOfferTabPanel.add(getBtnBookOffer(), gbc_btnBookOffer);
-
 		}
 		return bookOfferTabPanel;
 	}
@@ -515,7 +507,7 @@ public class OfferInfoDialog extends JDialog {
 			Calendar calendar = new GregorianCalendar();
 			calendar.setTime(rowContent.getElement().getEndDate());
 			lastDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
-			
+
 			lastDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
 			lastDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
 
@@ -579,40 +571,11 @@ public class OfferInfoDialog extends JDialog {
 	private JPanel getButtonPane() {
 		if(buttonPane == null) {
 			buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-			//okButton
-			buttonPane.add(getOkButton());
-
-			//cancelButton
-			buttonPane.add(getCancelButton());
+			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
+			buttonPane.add(getBtnBookOffer());
 
 		}
 		return buttonPane;
-	}
-
-	private JButton getOkButton() {
-		if(okButton == null) {
-			okButton = new JButton("OK");
-			okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
-		}
-		return okButton;
-	}
-
-	private JButton getCancelButton() {
-		if (cancelButton == null) {		
-			cancelButton = new JButton("Cancel");
-			cancelButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-				}
-			});
-			cancelButton.setActionCommand("Cancel");
-		}
-		return cancelButton;
 	}
 
 	private void updatePrice() {
@@ -669,6 +632,5 @@ public class OfferInfoDialog extends JDialog {
 	public void setParentComponent(Component parentComponent) {
 		this.parentFrame = parentComponent;
 	}
-
 
 }
