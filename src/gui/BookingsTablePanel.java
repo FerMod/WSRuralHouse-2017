@@ -5,15 +5,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -53,6 +59,20 @@ public class BookingsTablePanel extends JPanel {
 		this.parentFrame = parentFrame;
 
 		initComponents();
+
+		updateRowHeights();
+
+	}
+
+	private void updateRowHeights() {
+		for (int row = 0; row < table.getRowCount(); row++) {
+			int rowHeight = table.getRowHeight();
+			for (int column = 0; column < table.getColumnCount(); column++) {
+				Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
+				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+			}
+			table.setRowHeight(row, rowHeight);
+		}
 	}
 
 	private void initComponents() {
@@ -116,9 +136,8 @@ public class BookingsTablePanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(table, new double[]{0.1, 0.9});
-			BookingsComponent bookingsTable = new BookingsComponent();
-			table.setDefaultRenderer(Object.class, bookingsTable);
-			table.setDefaultEditor(Object.class, bookingsTable);
+			table.setDefaultRenderer(Object.class, new BookingsComponent(parentFrame));
+			table.setDefaultEditor(Object.class, new BookingsComponent(parentFrame));
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -182,5 +201,5 @@ public class BookingsTablePanel extends JPanel {
 			}
 		}
 	}
-	
+
 }

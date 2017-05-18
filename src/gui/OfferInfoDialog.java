@@ -3,11 +3,14 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -20,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
@@ -28,9 +30,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -40,22 +44,15 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
 
+import com.toedter.calendar.JDateChooser;
+
+import domain.Client;
+import domain.Offer;
 import gui.components.FrameShader;
 import gui.components.ImagePanel;
 import gui.components.InfoTextPane;
 import gui.components.TextPrompt;
 import gui.components.table.CellComponent;
-
-import javax.swing.JTextField;
-import java.awt.Cursor;
-import java.awt.Font;
-import com.toedter.calendar.JDateChooser;
-
-import domain.Client;
-import domain.Offer;
-
-import java.awt.Rectangle;
-import javax.swing.JLabel;
 
 public class OfferInfoDialog extends JDialog {
 
@@ -535,7 +532,7 @@ public class OfferInfoDialog extends JDialog {
 
 	private JLabel getLblPrice() {
 		if(lblPrice == null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
 			lblPrice = new JLabel("Price (" + formatter.format(rowContent.getElement().getPrice()) + " per night): ");
 		}
 		return lblPrice;
@@ -559,7 +556,7 @@ public class OfferInfoDialog extends JDialog {
 			btnBookOffer.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
-					MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement());
+					MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
 					frameShader.setEnabled(false);
 					dispose();
 				}
@@ -580,7 +577,8 @@ public class OfferInfoDialog extends JDialog {
 
 	private void updatePrice() {
 		if(firstDate != null && lastDate != null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+			System.out.println(MainWindow.getBusinessLogic().getLocale());
+			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
 			textFieldPrice.setText(formatter.format(getPrice()));	
 			btnBookOffer.setEnabled(true);
 		}

@@ -86,7 +86,7 @@ public class ClientMainPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ClientMainPanel(JFrame frame) {
-		
+
 		parentFrame = frame;
 
 		setLayout(new GridBagLayout());
@@ -237,7 +237,7 @@ public class ClientMainPanel extends JPanel {
 
 	private Hashtable<Integer, JLabel> getSliderLabelTable(double minPrice, double maxPrice) {
 
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
 
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();		
 		labelTable.put(getPriceSlider().getMinimum(), new JLabel(currencyFormatter.format(minPrice)));
@@ -272,7 +272,7 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	private void setupNumberFormat() {
-		priceFormat = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		priceFormat = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
 		priceFormat.setMinimumIntegerDigits(1);
 		priceFormat.setMaximumFractionDigits(2);
 	}
@@ -445,7 +445,7 @@ public class ClientMainPanel extends JPanel {
 
 			List<CellComponent<Offer>> offerComponentList = new Vector<>();
 			List<ImageIcon> imageVector = new Vector<ImageIcon>();
-			
+
 			for (Offer offer : activeOffersList) {
 				imageVector.add(offer.getRuralHouse().getImage(0));
 				offerComponentList.add(new CellComponent<Offer>(offer));
@@ -479,9 +479,8 @@ public class ClientMainPanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(table, 0.1, 0.9);
-			OffersComponent offersCellComponent = new OffersComponent(parentFrame);
-			table.setDefaultRenderer(Object.class, offersCellComponent);
-			table.setDefaultEditor(Object.class, offersCellComponent);
+			table.setDefaultRenderer(Object.class, new OffersComponent(parentFrame));
+			table.setDefaultEditor(Object.class, new OffersComponent(parentFrame));
 
 			//When selection changes, provide user with row numbers for both view and model.
 			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {

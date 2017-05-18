@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -28,10 +29,12 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 	private JButton infoButton;
 	private JPanel panel;
+	private JFrame parentFrame;
 	private CellComponent<Booking> selectedComponent;
 
-	public BookingsComponent() {
+	public BookingsComponent(JFrame frame) {
 
+		this.parentFrame = frame;
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
 
@@ -109,18 +112,19 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	}
 
 	private void updateData(CellComponent<Booking> value, boolean isSelected, JTable table) {
-		//		value.setCellComponentTable(this);
-		//		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-		//		titleComponent.setText(value.getOffer().getRuralHouse().getName() + "\n" + date.format(value.getOffer().getStartDate()) + " - " + date.format(value. getEndDate()));
-		//		String description = value.getOffer().getRuralHouse().getDescription();
-		//		//Limit to 300 char, if the text exceeds the limit it will place ' (...)'
-		//		if(description.length() >= 300) {
-		//			description = String.format("%1.140s%1.140s", description, " (...)");
-		//		}
-		//		descriptionComponent.setText(description);
-		//		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-		//		addressComponent.setText(value.getOffer().getRuralHouse().getCity() + " " + value.getOffer().getRuralHouse().getAddress());
-		//		priceComponent.setText(currencyFormatter.format(value.getOffer().getPrice()));
+		value.setCellComponentTable(this);
+		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+		titleComponent.setText(value.getElement().getOffer().getRuralHouse().getName() +"\n"
+				+ date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getStartDate()));
+		String description = "Booked: " + value.getElement().getBookingDate();
+		//Limit to 300 char, if the text exceeds the limit it will place ' (...)'
+		if(description.length() >= 300) {
+			description = String.format("%1.140s%1.140s", description, " (...)");
+		}
+		descriptionComponent.setText(description);
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		addressComponent.setText(value.getElement().getOffer().getRuralHouse().getCity() + " " + value.getElement().getOffer().getRuralHouse().getAddress());
+		priceComponent.setText(currencyFormatter.format(value.getElement().getOffer().getPrice()));
 
 		selectedComponent = value;
 
