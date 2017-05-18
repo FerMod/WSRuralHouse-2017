@@ -24,13 +24,13 @@ public class Booking {
 	
 	private Client client;
 	private Offer offer;
-	private Date creationDate;
+	private Date bookingDate;
 	
 	public Booking(Client client, Offer offer) {
 		this.client = client;
 		client.getBookings().add(this);
 		this.offer = offer;
-		creationDate = Calendar.getInstance().getTime();
+		bookingDate = Calendar.getInstance().getTime();
 	}
 
 	public Client getClient() {
@@ -50,17 +50,17 @@ public class Booking {
 	}
 
 	public Date getCreationDate() {
-		return creationDate;
+		return bookingDate;
 	}
 
 	@Deprecated
 	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+		this.bookingDate = creationDate;
 	}
 
 	@Override
 	public String toString() {
-		return "Booking [client=" + client + ", offer=" + offer + ", creationDate=" + creationDate + "]";
+		return "Booking [client=" + client + ", offer=" + offer + ", creationDate=" + bookingDate + "]";
 	}
 
 }
