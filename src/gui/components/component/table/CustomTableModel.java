@@ -31,19 +31,34 @@ public class CustomTableModel extends AbstractTableModel {
 	//TODO REMOVE
 	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
-	public <T> CustomTableModel(List<CellComponent<T>> data) {
-		this(Arrays.asList("Details"), null, data);	
+	public <T> CustomTableModel(List<CellComponent<T>> cellComponent) {
+		this(Arrays.asList("Details"), null, cellComponent);	
 	}
-	
-	public <T> CustomTableModel(List<ImageIcon> images, List<CellComponent<T>> data) {
-		this(Arrays.asList("Image", "Details"), images, data);
+
+	public <T> CustomTableModel(List<ImageIcon> imageList, List<CellComponent<T>> cellComponent) {
+		this(Arrays.asList("Image", "Details"), imageList, cellComponent);
 	}
-	
-	public <T> CustomTableModel(List<String> columnNames, List<ImageIcon> imageList, List<CellComponent<T>> cellComponentList) {
+
+	public <T> CustomTableModel(List<String> columnNames, List<ImageIcon> imageList, List<CellComponent<T>> cellComponent) {
 		super();
 		this.imageDimension = new Dimension(60, 60);
-		this.columnNames = (String[]) columnNames.toArray();		
-		initData(imageList, cellComponentList);		
+		this.columnNames = (String[]) columnNames.toArray();
+		if(cellComponent != null && imageList != null) {
+			initData(imageList, cellComponent);					
+		} else if(cellComponent != null) {
+			initData(cellComponent);
+		} 
+	}
+
+	private <T> void initData(List<CellComponent<T>> cellComponentList) {
+		data = new Object[cellComponentList.size()][1];
+		int i = 0;
+		for (CellComponent<T> component : cellComponentList) {
+			data[i][0] = component;
+			System.out.println("data[" + i + "][0] " + component.toString());
+			i++;					
+		}
+		System.out.println();
 	}
 
 	private <T> void initData(List<ImageIcon> imageList, List<CellComponent<T>> cellComponentList) {
@@ -51,7 +66,7 @@ public class CustomTableModel extends AbstractTableModel {
 		int i = 0;
 		for (CellComponent<T> component : cellComponentList) {
 			data[i][0] = getScaledImage(imageList.get(i));
-			System.out.println("data[" + i + "][0] " + imageList.get(i));			
+			System.out.println("data[" + i + "][0] " + imageList.get(i));
 			data[i][1] = component;
 			System.out.println("data[" + i + "][1] " + component.toString());
 			i++;					
@@ -59,18 +74,18 @@ public class CustomTableModel extends AbstractTableModel {
 		System.out.println();
 	}
 
-//	private void initTableData(List<Offer> offers) {			
-//		data = new Object[offers.size()][2];
-//		int i = 0;
-//		for (Offer offer : offers) {
-//			data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
-//			System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());			
-//			data[i][1] = new CellDetails(offer);
-//			System.out.println("data[" + i + "][1] " + offer);
-//			i++;					
-//		}
-//		System.out.println();
-//	}
+	//	private void initTableData(List<Offer> offers) {			
+	//		data = new Object[offers.size()][2];
+	//		int i = 0;
+	//		for (Offer offer : offers) {
+	//			data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
+	//			System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());			
+	//			data[i][1] = new CellDetails(offer);
+	//			System.out.println("data[" + i + "][1] " + offer);
+	//			i++;					
+	//		}
+	//		System.out.println();
+	//	}
 
 	@Deprecated
 	public void setRandomImages() {		
@@ -101,12 +116,18 @@ public class CustomTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return columnNames.length;
+		if(columnNames != null) {
+			return columnNames.length;			
+		}
+		return 0;
 	}
 
 	@Override
 	public int getRowCount() {
-		return data.length;
+		if(data != null) {
+			return data.length;			
+		}
+		return 0;
 	}
 
 	@Override
