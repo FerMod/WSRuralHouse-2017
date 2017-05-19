@@ -208,10 +208,9 @@ public class NewRuralHouseWindow extends JDialog {
 						} catch(NullPointerException err) {
 							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningún campo vacio", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						} catch(DuplicatedEntityException error) {
-							JOptionPane.showMessageDialog(null,	"Lol", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null,	"Tiene un campo repetido con otra casa ya existente, compruebelos de nuevo", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null,	"Debe añadir una foto para la casa", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}

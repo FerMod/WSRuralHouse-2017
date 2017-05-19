@@ -34,7 +34,8 @@ import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.TextPrompt;
 import domain.RuralHouse;
-
+import exceptions.BadDatesException;
+import exceptions.OverlappingOfferException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -43,6 +44,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -64,6 +66,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 	private DefaultComboBoxModel<RuralHouse> ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
 	private DefaultComboBoxModel<City> someCities = new DefaultComboBoxModel<City>();
+	private ArrayList<RuralHouse> rhs;
 
 
 	private JComboBox comboBox;   //RuralHouses
@@ -83,6 +86,17 @@ public class OwnerRuralHousesPanel extends JPanel {
 	 */
 	public OwnerRuralHousesPanel(JFrame frame, Owner owner) { //Need a JScrollPane
 		initializeRuralHousesComboBox(owner);
+		
+		if(!rhs.isEmpty()){
+			StringBuilder sb = new StringBuilder();
+			
+			for(RuralHouse rh : rhs) {
+				sb.append(rh.getName() + ", ");
+			}
+			
+			JOptionPane.showMessageDialog(null,	"Las casas: " + sb.toString() + " han sido rechazadas. Por favor, edite su información.", "Aviso", JOptionPane.WARNING_MESSAGE);
+		}
+		
 		initializeCitiesComboBox();
 
 		JButton btnNewButton = new JButton("Guardar");
@@ -116,6 +130,11 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 					MainWindow.getBusinessLogic().update(rh);
 					JOptionPane.showMessageDialog(null,	"Se ha actualizado la casa rural correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+					if(chckbxNuevaCiudad.isSelected()) {
+						someCities.addElement(city);
+						comboBox_1.setModel(someCities);
+					}
 				} catch(NullPointerException er) {
 					JOptionPane.showMessageDialog(null,	"Compruebe que no se deja ningún campo vacio a la hora de editar la casa", "No se ha podido editar la casa rural", JOptionPane.ERROR_MESSAGE);
 				}
@@ -134,19 +153,25 @@ public class OwnerRuralHousesPanel extends JPanel {
 					System.out.println(dateIn);
 					System.out.println(dateFin);
 
-
-					if(dateIn.compareTo(new Date()) >= 0 && dateFin.compareTo(new Date()) >= 0 && dateFin.compareTo(dateIn) >= 0) {
-						//Offer o = new Offer(dateIn, dateFin, Double.valueOf(textField_4.getText()), rh);
-						textField_1.setText("");
-						textField_3.setText("");
-						textField_4.setText("");
-						JOptionPane.showMessageDialog(null, "La oferta se ha creado correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);
+					if(rh!=null && rh.getReview().getState() == ReviewState.APPROVED) {
+						if(dateIn.compareTo(new Date()) >= 0 && dateFin.compareTo(new Date()) >= 0) {
+							Offer o = MainWindow.getBusinessLogic().createOffer(rh, dateIn, dateFin, Double.valueOf(textField_4.getText()));
+							textField_1.setText("");
+							textField_3.setText("");
+							textField_4.setText("");
+							JOptionPane.showMessageDialog(null, "La oferta se ha creado correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(null, "La fecha de inicio debe de ser anterior a la final y estas no pueden ser fechas pasadas", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
+						}
 					} else {
-						JOptionPane.showMessageDialog(null, "La fecha de inicio debe de ser anterior a la final y estas no pueden ser fechas pasadas", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Debe seleccionar una casa rural válida y aprobada por un admin", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
 					}
 				} catch (ParseException | NullPointerException | NumberFormatException e) {
 					JOptionPane.showMessageDialog(null, "Revise si ha escrito mal el precio o el formato de las fechas introducidas no es el adecuado e inténtelo de nuevo", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
+				} catch (OverlappingOfferException e) {
+					JOptionPane.showMessageDialog(null, "La fecha de inicio debe de ser anterior a la final y estas no pueden ser fechas pasadas", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
+				} catch (BadDatesException e) {
+					JOptionPane.showMessageDialog(null, "Las fechas no se han escrito correctamente, por favor, vuelva a intentarlo", "La oferta no se ha podido crear", JOptionPane.ERROR_MESSAGE);
 				}
 				// formatting
 				System.out.println(format.format(new Date()));
@@ -166,7 +191,9 @@ public class OwnerRuralHousesPanel extends JPanel {
 				textField.setText(rh.getName()); //Get the name of the rural house selected
 				editorPane.setText(rh.getDescription()); //Get the description of the rural house selected
 				textField_2.setText(rh.getAddress());	////Get the address of the rural house selected
+				comboBox_1.setEditable(true);
 				comboBox_1.setSelectedItem(rh.getCity());
+				comboBox_1.setEditable(false);
 			}
 		});
 		comboBox.setBounds(25, 44, 260, 52);
@@ -281,6 +308,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				comboBox.setEnabled(false);
 				ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
+				comboBox.setModel(ruralHousesOfOwner);
 				initializeRuralHousesComboBox(owner);
 				comboBox.setEnabled(true);
 			}
@@ -331,12 +359,17 @@ public class OwnerRuralHousesPanel extends JPanel {
 	}
 
 	private void initializeRuralHousesComboBox(Owner ow) {
+		rhs = new ArrayList<RuralHouse>();
 		Vector<RuralHouse> rhs = MainWindow.getBusinessLogic().getRuralHouses(ow);
 
 		ruralHousesOfOwner.addElement(null); //For that the owner have selected a RuralHouse
 
 		for(RuralHouse rh : rhs) {
 			ruralHousesOfOwner.addElement(rh);
+			
+			if(rh.getReview().getState() == ReviewState.REJECTED) {
+				rhs.add(rh);
+			}
 		}	
 	}
 
