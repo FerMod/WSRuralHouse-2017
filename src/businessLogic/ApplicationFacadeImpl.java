@@ -31,6 +31,7 @@ import exceptions.DuplicatedEntityException.Error;
 public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface {
 
 	private DataAccessInterface dataAccess;
+	private Locale locale;
 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
@@ -208,6 +209,24 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	public void setLocale(Locale locale) {
 		this.locale = locale;
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<Booking> getBookings() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

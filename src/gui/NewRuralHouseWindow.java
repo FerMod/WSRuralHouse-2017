@@ -35,6 +35,8 @@ import gui.prototypes.NewCity;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -195,10 +197,8 @@ public class NewRuralHouseWindow extends JDialog {
 
 							RuralHouse rh = facade.createRuralHouse(owner, name, description, city, address);
 							
-							ImageIcon img = new ImageIcon(imagePath);
-							
 							rh.setTags(tags);
-							rh.addImage(img);
+							rh.addImage(new File(imagePath).toURI());
 							rh.setOwner(owner);
 							
 							facade.update(rh);
@@ -209,6 +209,9 @@ public class NewRuralHouseWindow extends JDialog {
 							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningún campo vacio", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						} catch(DuplicatedEntityException error) {
 							JOptionPane.showMessageDialog(null,	"Lol", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 					}
 				}

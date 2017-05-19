@@ -201,8 +201,8 @@ public class DataAccess implements DataAccessInterface {
 			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 
-			createBooking(client1, offer, date.parse("2017/5/4"), date.parse("2019/6/2"));
-			getBookings(client1);
+			//createBooking(client1, offer, date.parse("2017/5/4"), date.parse("2019/6/2"));
+			//getBookings(client1);
 
 			System.out.println("Database initialized");
 
@@ -1087,5 +1087,6 @@ public class DataAccess implements DataAccessInterface {
 		rh.setReview(r);
 		update(r);
 	}
+
 
 }
