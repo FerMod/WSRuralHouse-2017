@@ -27,6 +27,7 @@ import javax.swing.text.JTextComponent;
 
 import businessLogic.ApplicationFacadeInterface;
 import domain.City;
+import domain.Owner;
 import domain.RuralHouse;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;
@@ -65,10 +66,13 @@ public class NewRuralHouseWindow extends JDialog {
 	private JLabel lblDebenIrSeparados;
 	private JLabel lblseleccionada;
 
+	private Owner owner;
+
 	/**
 	 * Create the frame.
 	 */
-	public NewRuralHouseWindow() {
+	public NewRuralHouseWindow(Owner owner) {
+		this.owner = owner;
 		setModalityType(ModalityType.TOOLKIT_MODAL);
 		setResizable(false);
 		setTitle("Nueva Casa Rural");
@@ -189,20 +193,22 @@ public class NewRuralHouseWindow extends JDialog {
 								city = facade.createCity(textField.getText());
 							}
 
-							//RuralHouse rh = facade.createRuralHouse(owner, name, description, city, address);
+							RuralHouse rh = facade.createRuralHouse(owner, name, description, city, address);
 							
-							RuralHouse rh = new RuralHouse();
 							ImageIcon img = new ImageIcon(imagePath);
 							
 							rh.setTags(tags);
 							rh.addImage(img);
+							rh.setOwner(owner);
 							
-							//facade.update(rh);
+							facade.update(rh);
 
 							dispose();
 							JOptionPane.showMessageDialog(null,	"Casa rural añadida exitosamente", "Info", JOptionPane.INFORMATION_MESSAGE);
 						} catch(NullPointerException err) {
 							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningún campo vacio", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
+						} catch(DuplicatedEntityException error) {
+							JOptionPane.showMessageDialog(null,	"Lol", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}

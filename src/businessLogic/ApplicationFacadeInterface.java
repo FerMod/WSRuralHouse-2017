@@ -254,16 +254,6 @@ public interface ApplicationFacadeInterface  {
 	void updateReview(RuralHouse rh, Review r);
 	
 	/**
-	 * Return a vector of Rural Houses of the Owner definied with a determined revstate
-	 * 
-	 * @param ow the owner
-	 * @param reviewSt reviewstate of the houses
-	 * @return a vector of Rural Houses of owner
-	 */
-	@WebMethod
-	Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, Review.ReviewState reviewSt);
-	
-	/**
 	 * Return a vector of Rural Houses of the Owner definied
 	 * 
 	 * 

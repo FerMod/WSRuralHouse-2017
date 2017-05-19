@@ -189,45 +189,13 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public void offerBookedControl(Offer offer, boolean isBooked) {
 		dataAccess.offerBookedControl(offer, isBooked);
 	}
-
-	@Override
-	public Vector<Booking> getBookingsOfClient(int idClient) {
-		Vector<Booking> bs = dataAccess.getBookings();
-
-		for(Booking b : bs) {
-			if(b.getClient().getId() != idClient) {
-				bs.remove(b);
-			}
-		}
-		
-		return bs;
-	}
-
-	@Override
-	public Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, ReviewState reviewSt) {
-		Vector<RuralHouse> rhs = dataAccess.getRuralHouses(reviewSt);
-		
-		for(RuralHouse rh : rhs) {
-			if(!rh.getOwner().equals(ow)) {
-				rhs.remove(rh);
-			}
-		}
-		
-		return rhs;
-	}
 	
 	@Override
 	public Vector<RuralHouse> getRuralHousesOfOwner(Owner ow) {
-		Vector<RuralHouse> rhs = dataAccess.getRuralHouses();
-		
-		for(RuralHouse rh : rhs) {
-			if(!rh.getOwner().equals(ow)) {
-				rhs.remove(rh);
-			}
-		}
-		
+		Vector<RuralHouse> rhs = dataAccess.getRuralHousesOfOwner(ow);
 		return rhs;
 	}
+
 
 	//	private getConfig() {
 	//		return dataAccess.ge

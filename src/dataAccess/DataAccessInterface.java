@@ -93,5 +93,7 @@ public interface DataAccessInterface {
 	Booking createBooking(Client c, Offer o);
 
 	Vector<Booking> getBookings();
+	
+	Vector<RuralHouse> getRuralHousesOfOwner(Owner owner);
 
 }

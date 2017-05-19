@@ -151,7 +151,7 @@ public class DataAccess implements DataAccessInterface {
 			//			deleteTableContent("Client");
 			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
-			
+
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
@@ -173,21 +173,21 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh1, date.parse("2017/5/2"), date.parse("2017/7/16"), 24);
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
-			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ºA");
+			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ï¿½A");
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");		
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ï¿½F");		
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
 			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 17);		
 			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 9);		
 			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 5);		
 
-			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", "Se me acaban las ideas para descripciones de casa, pero quiero que sea una larga para ver como se representaría.\n"
-					+ "Y si admás tiene saltos de linea?\n"
-					+ "Se verá como reacciona todo, pero debería caber y si no, poner un limite.\n"
+			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", "Se me acaban las ideas para descripciones de casa, pero quiero que sea una larga para ver como se representarï¿½a.\n"
+					+ "Y si admï¿½s tiene saltos de linea?\n"
+					+ "Se verï¿½ como reacciona todo, pero deberï¿½a caber y si no, poner un limite.\n"
 					+ "Como por ejemplo poner tres puntos suspensivos cuando supera ciertos caracterers.", createCity("Renteria"), "Plaza Grande 5 8-C");	
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
@@ -979,6 +979,33 @@ public class DataAccess implements DataAccessInterface {
 	public void updateReview(RuralHouse rh, Review r) {
 		rh.setReview(r);
 		update(r);
+	}
+
+	/**
+	 * Get a list of rural houses of a owner specified
+	 * 
+	 * @param Owner of the rural houses
+	 * @return A list of rural houses of Owner
+	 */
+	@Override
+	public Vector<RuralHouse> getRuralHousesOfOwner(Owner owner) {
+		Vector<RuralHouse> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getRuralHousesOfOwner(" + owner + ")");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
+					+ "FROM RuralHouse rh "
+					+ "WHERE rh.owner = :owner", RuralHouse.class)
+					.setParameter("owner", owner);
+			result = new Vector<RuralHouse>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
+			printCollection(result);
+		} catch    (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
 	}
 
 }
