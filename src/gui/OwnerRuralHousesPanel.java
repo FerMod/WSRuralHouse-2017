@@ -75,6 +75,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 	private Date dateIn;
 	private Date dateFin;
+	private JTextField textField_5;
+	private JCheckBox chckbxNuevaCiudad;
 
 
 	/**
@@ -83,16 +85,21 @@ public class OwnerRuralHousesPanel extends JPanel {
 	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane
 		//initializeRuralHousesComboBox(o);
 		initializeCitiesComboBox();
-		
+
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String name = textField.getText();
-					City city = (City) comboBox_1.getSelectedItem();
 					String address = textField_2.getText();
 					String description = editorPane.getText();
+
+					if(!chckbxNuevaCiudad.isSelected()) {
+						city = (City) comboBox_1.getSelectedItem();
+					} else {
+						city = MainWindow.getBusinessLogic().createCity(textField_5.getText());
+					}
 
 					rh.setName(name);
 					rh.setCity(city);
@@ -104,6 +111,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 					rh.setReview(review);
 					textField.setText("");
 					textField_2.setText("");
+					textField_5.setText("");
 					editorPane.setText("");
 
 
@@ -159,22 +167,23 @@ public class OwnerRuralHousesPanel extends JPanel {
 				textField.setText(rh.getName()); //Get the name of the rural house selected
 				editorPane.setText(rh.getDescription()); //Get the description of the rural house selected
 				textField_2.setText(rh.getAddress());	////Get the address of the rural house selected
+				comboBox_1.setSelectedItem(rh.getCity());
 			}
 		});
 		comboBox.setBounds(25, 44, 260, 52);
 
 		textField = new JTextField();
-		
+
 		applyStyle("Nombre", textField);
-		
+
 		textField.setEnabled(false);
 		textField.setBounds(25, 222, 260, 20);
 		textField.setColumns(10);
 
 		textField_2 = new JTextField();
-		
+
 		applyStyle("Dirección", textField_2);
-		
+
 		textField_2.setEnabled(false);
 		textField_2.setBounds(25, 333, 260, 20);
 		textField_2.setColumns(10);
@@ -203,6 +212,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		chckbxNewCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chckbxNewCheckBox.isSelected()) {
+					chckbxNuevaCiudad.setEnabled(true);
 					comboBox_1.setEnabled(true);
 					textField.setEnabled(true);
 					textField_1.setEnabled(false);
@@ -213,6 +223,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 					btnNewButton_1.setEnabled(false);
 					btnNewButton.setEnabled(true);
 				} else {
+					chckbxNuevaCiudad.setEnabled(false);
 					comboBox_1.setEnabled(false);
 					textField.setEnabled(false);
 					textField_1.setEnabled(true);
@@ -229,26 +240,26 @@ public class OwnerRuralHousesPanel extends JPanel {
 		add(chckbxNewCheckBox);
 
 		editorPane = new JEditorPane();
-		
+
 		applyStyle("Descripción", editorPane);
-		
+
 		editorPane.setEnabled(false);
 		editorPane.setBounds(25, 364, 260, 127);
 		add(editorPane);
 
 		textField_1 = new JTextField();
 		textField_1.setBounds(130, 135, 95, 22);
-		
+
 		applyStyle("Fecha final", textField_1);
-		
+
 		add(textField_1);
 		textField_1.setColumns(10);
 
 		textField_3 = new JTextField();
 		textField_3.setBounds(25, 135, 95, 22);
-		
+
 		applyStyle("Fecha inicio", textField_3);
-		
+
 		add(textField_3);
 		textField_3.setColumns(10);
 
@@ -260,27 +271,30 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 		textField_4 = new JTextField();
 		textField_4.setBounds(235, 135, 112, 23);
-		
+
 		applyStyle("Precio por noche", textField_4);
-		
+
 		add(textField_4);
 		textField_4.setColumns(10);
 
 		JButton btnNewButton_2 = new JButton("");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				comboBox.setEnabled(false);
+				ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
 				//initializeRuralHousesComboBox(ow);
+				comboBox.setEnabled(true);
 			}
 		});
 		btnNewButton_2.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/updaterhs0.gif")));
 		btnNewButton_2.setBounds(295, 44, 52, 52);
 		add(btnNewButton_2);
-		
+
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/editrh.gif")));
 		lblNewLabel.setBounds(265, 192, 19, 19);
 		add(lblNewLabel);
-		
+
 		JButton button = new JButton("");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -291,6 +305,29 @@ public class OwnerRuralHousesPanel extends JPanel {
 		button.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/newrhs0.gif")));
 		button.setBounds(357, 44, 52, 52);
 		add(button);
+
+		chckbxNuevaCiudad = new JCheckBox("Nueva ciudad");
+		chckbxNuevaCiudad.setEnabled(false);
+		chckbxNuevaCiudad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(chckbxNuevaCiudad.isSelected()) {
+					comboBox_1.setEnabled(false);
+					textField_5.setEnabled(true);
+				} else {
+					comboBox_1.setEnabled(true);
+					textField_5.setEnabled(false);
+				}
+			}
+		});
+		chckbxNuevaCiudad.setBounds(295, 252, 150, 23);
+		add(chckbxNuevaCiudad);
+
+		textField_5 = new JTextField();
+		textField_5.setEnabled(false);
+		applyStyle("Nombre de la ciudad", textField_5);
+		textField_5.setBounds(305, 284, 260, 20);
+		add(textField_5);
+		textField_5.setColumns(10);
 
 	}
 
@@ -313,16 +350,16 @@ public class OwnerRuralHousesPanel extends JPanel {
 			someCities.addElement(city);
 		}	
 	}
-	
+
 	private JTextComponent applyStyle(String tipText, JTextComponent textComponent) {
-	    TextPrompt textPrompt = new TextPrompt(textComponent);
-	    textPrompt.setText(tipText);
-	    textPrompt.setStyle(Font.BOLD);
-	    textPrompt.setAlpha(128);
-	    Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
-	    Border insideBorder = new EmptyBorder(0, 5, 0, 0);
-	    CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
-	    textComponent.setBorder(border);
-	    return textComponent;
+		TextPrompt textPrompt = new TextPrompt(textComponent);
+		textPrompt.setText(tipText);
+		textPrompt.setStyle(Font.BOLD);
+		textPrompt.setAlpha(128);
+		Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+		Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+		textComponent.setBorder(border);
+		return textComponent;
 	}
 }
