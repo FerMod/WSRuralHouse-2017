@@ -1,4 +1,4 @@
-package gui.user.client;
+package gui.user;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -48,9 +48,9 @@ import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
-import gui.user.ProfilePane;
-import gui.user.SharedFrame;
 import gui.user.admin.AdminMainPanel;
+import gui.user.client.BookingsTablePanel;
+import gui.user.client.ClientMainPanel;
 import gui.user.owner.OwnerRuralHousesPanel;
 
 /**

@@ -33,7 +33,7 @@ import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.TextPrompt;
-import gui.user.client.MainWindow;
+import gui.user.MainWindow;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;

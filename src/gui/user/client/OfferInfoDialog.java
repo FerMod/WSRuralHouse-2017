@@ -54,6 +54,7 @@ import gui.components.ImagePanel;
 import gui.components.InfoTextPane;
 import gui.components.TextPrompt;
 import gui.components.table.CellComponent;
+import gui.user.MainWindow;
 
 public class OfferInfoDialog extends JDialog {
 

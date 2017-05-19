@@ -36,7 +36,6 @@ import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;
-import gui.user.client.MainWindow;
 
 public class SignUpPanel extends JPanel {
 
