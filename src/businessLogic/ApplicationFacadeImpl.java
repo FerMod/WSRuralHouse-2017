@@ -1,6 +1,7 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -181,13 +182,13 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Booking createBooking(Client client, Offer offer) {
-		return createBooking(client, offer);
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
+		return dataAccess.createBooking(client, offer, startDate, endDate);
 	}
 
 	@Override
-	public void offerBookedControl(Offer offer, boolean isBooked) {
-		dataAccess.offerBookedControl(offer, isBooked);
+	public Vector<Booking> getBookings(Client client) {
+		return dataAccess.getBookings(client);
 	}
 	
 	@Override
@@ -197,9 +198,17 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 
-	//	private getConfig() {
-	//		return dataAccess.ge
-	//	}
+	public Locale getLocale() {
+		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
+		if(locale == null) {
+			locale = Locale.getDefault();
+		}
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
 }
 

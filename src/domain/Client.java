@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Vector;
+
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,9 +11,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class Client extends AbstractUser {
 
 	private static final long serialVersionUID = -1989696498234692075L;
+	
+	private Vector<Booking> bookings;
 
 	public Client(String email, String username, String password) {
 		super(email, username, password, Role.CLIENT);
+		bookings = new Vector<Booking>();
 	}
 
 	@Override
@@ -22,6 +27,14 @@ public class Client extends AbstractUser {
 	@Override
 	public Role getRole() {
 		return Role.CLIENT;
+	}
+
+	public Vector<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Vector<Booking> bookings) {
+		this.bookings = bookings;
 	}
 
 }

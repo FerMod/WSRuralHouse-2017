@@ -1,10 +1,8 @@
-package gui;
+package gui.components.table.cell;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
@@ -16,29 +14,27 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
-import domain.Offer;
-import gui.components.component.table.CellComponent;
-import gui.components.component.table.CellComponentInterface;
+import domain.Booking;
+import gui.components.table.CellComponent;
+import gui.components.table.CellComponentInterface;
 
-public class ClientOffersTable extends AbstractCellEditor implements CellComponentInterface {
+public class BookingsComponent extends AbstractCellEditor implements CellComponentInterface {
 
-	/**
-	 * Generated serial version ID
-	 */
 	private static final long serialVersionUID = 2711709042458345572L;
 
-	private JFrame parentFrame;
 	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 	private JButton infoButton;
 	private JPanel panel;
-	private CellComponent<Offer> selectedComponent;
+	private JFrame parentFrame;
+	private CellComponent<Booking> selectedComponent;
 
-	public ClientOffersTable(JFrame frame) {
+	public BookingsComponent(JFrame frame) {
+
 		this.parentFrame = frame;
-
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
 
@@ -113,30 +109,22 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 		gbcInfoButton.insets = new Insets(5, 5, 0, 0);
 		panel.add(infoButton, gbcInfoButton);
 
-		infoButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == infoButton && selectedComponent != null) {			
-					openOfferDialog(parentFrame, selectedComponent);
-				}
-			}
-		});
-
 	}
 
-	private void updateData(CellComponent<Offer> value, boolean isSelected, JTable table) {
+	private void updateData(CellComponent<Booking> value, boolean isSelected, JTable table) {
 		value.setCellComponentTable(this);
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-		titleComponent.setText(value.getElement().getRuralHouse().getName() + "\n" + date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getEndDate()));
-		String description = value.getElement().getRuralHouse().getDescription();
+		titleComponent.setText(value.getElement().getOffer().getRuralHouse().getName() +"\n"
+				+ date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getStartDate()));
+		String description = "Booked: " + value.getElement().getBookingDate();
 		//Limit to 300 char, if the text exceeds the limit it will place ' (...)'
 		if(description.length() >= 300) {
 			description = String.format("%1.140s%1.140s", description, " (...)");
 		}
 		descriptionComponent.setText(description);
 		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-		addressComponent.setText(value.getElement().getRuralHouse().getCity() + " " + value.getElement().getRuralHouse().getAddress());
-		priceComponent.setText(currencyFormatter.format(value.getElement().getPrice()));
+		addressComponent.setText(value.getElement().getOffer().getRuralHouse().getCity() + " " + value.getElement().getOffer().getRuralHouse().getAddress());
+		priceComponent.setText(currencyFormatter.format(value.getElement().getOffer().getPrice()));
 
 		selectedComponent = value;
 
@@ -145,52 +133,24 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 		}else{
 			panel.setBackground(table.getBackground());
 		}
-
 	}
 
-	private void openOfferDialog(JFrame parentFrame, CellComponent<Offer> rowContent) {
-		System.out.printf("openDialog(%s, %s)%n", parentFrame.getClass().getSimpleName(), ((Offer)rowContent.getElement()).toString());
-		OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, rowContent);
-		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		dialog.validate();
-		//Set location relative to the parent frame. ALWAYS BEFORE SHOWING THE DIALOG.
-		dialog.setLocationRelativeTo(parentFrame);
-		dialog.setVisible(true);				
-	}
-
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		updateData((CellComponent<Offer>) value, true, table);		
+		updateData((CellComponent<Booking>)value, true, table);
 		return panel;
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#getCellEditorValue()
-	 */
-	@Override
 	public Object getCellEditorValue() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#isCellEditable(java.util.EventObject)
-	 */
 	@Override
 	public boolean isCellEditable(EventObject e){
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		updateData((CellComponent<Offer>) value, isSelected, table);
+		updateData((CellComponent<Booking>) value, isSelected, table);
 		return panel;
 	}
 
@@ -232,96 +192,6 @@ public class ClientOffersTable extends AbstractCellEditor implements CellCompone
 
 	public void setInfoButton(JButton infoButton) {
 		this.infoButton = infoButton;
-	}
-
-	public class CellDetails {
-
-		private ClientOffersTable tableCellComponent;
-		//		private String description;
-		//		private String city;
-		//		private String address;
-		//		private Date startDate;
-		//		private Date endDate;
-		//		private double price;
-		private Offer offer;
-
-		//startDate endDate description address(city/address) price Image Offer
-		public CellDetails(Offer offer) {
-			this.offer = offer;
-		}
-
-		public ClientOffersTable getTableDetailsCell() {
-			return tableCellComponent;
-		}
-
-		public void setTableDetailsCell(ClientOffersTable tableCellComponent) {
-			this.tableCellComponent = tableCellComponent;
-		}
-
-		public Offer getOffer() {
-			return offer;
-		}
-
-		public void setOffer(Offer offer) {
-			this.offer = offer;
-		}
-		//
-		//		public Date getStartDate() {
-		//			return offer.getStartDate();
-		//		}
-		//
-		//		public void setStartDate(Date startDate) {
-		//			offer.setStartDate(startDate);
-		//		}
-		//
-		//		public Date getEndDate() {
-		//			return offer.getEndDate();
-		//		}
-		//
-		//		public void setEndDate(Date endDate) {
-		//			offer.getEndDate();
-		//		}
-		//		
-		//		public String getName() {
-		//			return offer.getRuralHouse().getName();
-		//		}
-		//		
-		//		public void setName(String name) {
-		//			offer.getRuralHouse().setName(name);
-		//		}
-		//
-		//		public String getDescription() {
-		//			return offer.getRuralHouse().getDescription();
-		//		}
-		//
-		//		public void setDescription(String description) {
-		//			offer.getRuralHouse().setDescription(description);
-		//		}
-		//
-		//		public String getCity() {
-		//			return offer.getRuralHouse().getCity().getName();
-		//		}
-		//
-		//		public void setCity(String cityName) {
-		//			offer.getRuralHouse().getCity().setName(cityName);
-		//		}
-		//
-		//		public String getAddress() {
-		//			return offer.getRuralHouse().getAddress();
-		//		}
-		//
-		//		public void setAddress(String address) {
-		//			offer.getRuralHouse().setAddress(address);
-		//		}
-		//
-		//		public double getPrice() {
-		//			return offer.getPrice();
-		//		}
-		//
-		//		public void setPrice(double price) {
-		//			offer.setPrice(price);
-		//		}
-
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -17,19 +19,24 @@ public class Booking {
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	
 	private Client client;
-	
-	@XmlID
-	@XmlJavaTypeAdapter(IntegerAdapter.class)
-	@Id
 	private Offer offer;
-
-	private Date creationDate;
+	private Date bookingDate;
 	
-	public Booking(Client client, Offer offer) {
+	private Date startDate;
+	private Date endDate;
+	private double price;
+	
+	public Booking(Client client, Offer offer, double price, Date startDate, Date endDate) {
 		this.client = client;
 		this.offer = offer;
-		creationDate = Calendar.getInstance().getTime();
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.price = price;
+		bookingDate = Calendar.getInstance().getTime();
 	}
 
 	public Client getClient() {
@@ -48,9 +55,37 @@ public class Booking {
 		this.offer = offer;
 	}
 
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public Date getBookingDate() {
+		return bookingDate;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	@Override
 	public String toString() {
-		return "Booking [c=" + client.toString() + ", o=" + offer.toString() + "]";
+		return "Booking [client=" + client + ", offer=" + offer + ", creationDate=" + bookingDate + "]";
 	}
 
 }

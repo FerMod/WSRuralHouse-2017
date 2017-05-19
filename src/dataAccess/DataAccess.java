@@ -19,6 +19,8 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,7 +29,6 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
-
 import businessLogic.util.Timer;
 import configuration.ConfigXML;
 import domain.AbstractUser;
@@ -56,6 +57,9 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManager  db;
 
 	private Timer timer;
+	
+	@Deprecated
+	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 	public DataAccess()  {
 
@@ -125,6 +129,11 @@ public class DataAccess implements DataAccessInterface {
 		}
 	}
 
+	@Override
+	public ConfigXML getConfig() {
+		return CONFIG;	
+	}
+
 	/**
 	 * Method used to update a entity with their changes to the database
 	 * 
@@ -145,28 +154,23 @@ public class DataAccess implements DataAccessInterface {
 	public void initializeDB(){
 		try{				
 
-			//			deleteTableContent("RuralHouse");
-			//			deleteTableContent("City");
-			//			deleteTableContent("Offer");
-			//			deleteTableContent("Client");
-			//			deleteTableContent("Owner");
-			//deleteTableContent("Admin");
+			// deleteTableContent("RuralHouse");
+			// deleteTableContent("City");
+			// deleteTableContent("Offer");
+			// deleteTableContent("Client");
+			// deleteTableContent("Owner");
+			// deleteTableContent("Admin");
 
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
-			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
-			createUser("juan@gmail.com", "juan", "juan321", Role.CLIENT);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
-
-			//createBooking(20, 3);
-			//getOfferById(20);
-			//createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
 			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", "Una descripcion de la casa", createCity("Ezkio"), "Calle Falsa / 123");
+			rh1.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh1.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh1);
 			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 13);
@@ -174,11 +178,13 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
 			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3�A");
+			rh2.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3�F");		
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3�F");	
+			rh3.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
 			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 17);		
@@ -189,10 +195,14 @@ public class DataAccess implements DataAccessInterface {
 					+ "Y si adm�s tiene saltos de linea?\n"
 					+ "Se ver� como reacciona todo, pero deber�a caber y si no, poner un limite.\n"
 					+ "Como por ejemplo poner tres puntos suspensivos cuando supera ciertos caracterers.", createCity("Renteria"), "Plaza Grande 5 8-C");	
+			rh4.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
-			createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
+			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
+
+			createBooking(client1, offer, date.parse("2017/5/4"), date.parse("2019/6/2"));
+			getBookings(client1);
 
 			System.out.println("Database initialized");
 
@@ -203,6 +213,12 @@ public class DataAccess implements DataAccessInterface {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	@Deprecated
+	public String getRandomImage() {
+		// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
+		return images[ThreadLocalRandom.current().nextInt(0, images.length)];
 	}
 
 	@Override
@@ -455,12 +471,6 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	@Deprecated
-	public RuralHouse createRuralHouse(Owner owner, String description, City city, String address) throws DuplicatedEntityException {
-		return createRuralHouse(owner, null, description, city, address);
-	}
-
-	@Override
 	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		RuralHouse ruralHouse= null;
 		try {
@@ -515,7 +525,35 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return result;
+	}
 
+	/**
+	 * Obtain all the rural houses matching with the entered {@code Owner}
+	 *
+	 * @param owner the owner of the rural house
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses 
+	 * matching with the {@code Owner}, {@code null} if none is found
+	 * 
+	 */
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner) {
+		Vector<RuralHouse> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getRuralHouses(" + owner + ")");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
+					+ "FROM RuralHouse rh "
+					+ "WHERE rh.owner = :owner ", RuralHouse.class)
+					.setParameter("owner", owner);
+			result = new Vector<RuralHouse>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
 	}
 
 	/**
@@ -537,6 +575,40 @@ public class DataAccess implements DataAccessInterface {
 					"WHERE rh.review.reviewState == :reviewState ", RuralHouse.class)
 					.setParameter("reviewState", reviewState);
 			result = new Vector<RuralHouse>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
+	/**
+	 * Obtain all the rural houses matching with the entered {@code Owner} and {@code ReviewState}
+	 *
+	 * @param owner the owner of the rural house
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses 
+	 * matching with the {@code Owner} and {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
+		Vector<RuralHouse> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getRuralHouses(" + owner + ", " + reviewState + ")");
+			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
+					+ "FROM RuralHouse rh "
+					+ "WHERE rh.owner = :owner "
+					+ "AND rh.review.reviewState = :reviewState ", RuralHouse.class)
+					.setParameter("owner", owner)
+					.setParameter("reviewState", reviewState);
+			result = new Vector<RuralHouse>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
@@ -892,13 +964,16 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Booking createBooking(Client c, Offer o) {
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
 		Booking booking= null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createBooking(\"" + c.getUsername() + ", " + o.toString() + "\") -> ");
+			System.out.print(">> DataAccess: createBooking(" +  client + ", " + offer + ", " + startDate + ", " + endDate + ") -> ");
 			db.getTransaction().begin();
-			booking = new Booking(c, o);
+			double price = getPrice(offer.getPrice(), startDate, endDate);
+			booking = new Booking(client, offer, price, startDate, endDate);
+			client.getBookings().add(booking);
+			offer.setBooked(true);
 			db.persist(booking);
 			db.getTransaction().commit();
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
@@ -907,39 +982,48 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
+		update(offer);
+		update(client);
 		return booking;
 	}
 
-
 	/**
-	 * Control the boolean booked of the offer
-	 * 
-	 * @param offer for set his booked value
-	 * @param boolean for control the state of booking
+	 * Get the difference between two dates
+	 * @param date1 the oldest date
+	 * @param date2 the newest date
+	 * @param timeUnit the unit in which you want the difference
+	 * @return the difference value, in the provided unit
 	 */
-	@Override
-	public void offerBookedControl(Offer of, boolean booked) {
-		open();
-		db.getTransaction().begin();
-		of.setBooked(booked);
-		db.getTransaction().commit();
-		close();
+	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+		long diffInMillis = date2.getTime() - date1.getTime();
+		return timeUnit.convert(diffInMillis, TimeUnit.MILLISECONDS);
+	}
+
+	private double getPrice(double price, Date startDate, Date endDate) {
+		long days = getDateDiff(startDate, endDate, TimeUnit.DAYS) + 1;
+		return days * price;
 	}
 
 	/**
-	 * Return a list of bookings
+	 * Obtain a {@code Vector} filled with bookings made
+	 * by the matching client.
 	 * 
-	 * @return a list with his bookings
+	 * @param client the client of the bookings
+	 * @return a {@code Vector} filled with elements of type {@code Booking}, that
+	 * represents the bookings made by the client, returns {@code null} otherwise.
 	 */
 	@Override
-	public Vector<Booking> getBookings() {
+	public Vector<Booking> getBookings(Client client) {
 		Vector<Booking> result = null;
 		try{
 			open();
-			System.out.println(">> DataAccess: getBookings");
-			TypedQuery<Booking> queryB = db.createQuery("SELECT b "
-					+ "FROM Booking b", Booking.class);
-			result = new Vector<Booking>(queryB.getResultList());
+			System.out.println(">> DataAccess: getBookings(" + client + ")");
+			TypedQuery<Booking> query = db.createQuery("SELECT b "
+					+ "FROM Booking b "
+					+ "WHERE b.client = :client", Booking.class)
+					.setParameter("client", client);
+			result = new Vector<Booking>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
 			e.printStackTrace();
@@ -949,6 +1033,29 @@ public class DataAccess implements DataAccessInterface {
 		return result;
 	}
 
+	/**
+	 * Return a {@code Vector} with all the stored bookings
+	 * 
+	 * @return a {@code Vector} filled with bookings
+	 */
+	@Override
+	public Vector<Booking> getBookings() {
+		Vector<Booking> result = null;
+		try{
+			open();
+			System.out.println(">> DataAccess: getBookings()");
+			TypedQuery<Booking> query = db.createQuery("SELECT b "
+					+ "FROM Booking b ", Booking.class);
+			result = new Vector<Booking>(query.getResultList());
+			System.out.println("Found " + query.getResultList().size());
+			printCollection(result);
+		} catch	(Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return result;
+	}
 
 	@Override
 	public Review createReview(RuralHouse rh) {
@@ -960,7 +1067,7 @@ public class DataAccess implements DataAccessInterface {
 			review = new Review(rh);
 			db.persist(review);
 			db.getTransaction().commit();
-			System.out.println("Created in Rural House " + rh.toString());
+			System.out.println("Created review in Rural House " + rh.toString());
 		} catch	(Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -979,33 +1086,6 @@ public class DataAccess implements DataAccessInterface {
 	public void updateReview(RuralHouse rh, Review r) {
 		rh.setReview(r);
 		update(r);
-	}
-
-	/**
-	 * Get a list of rural houses of a owner specified
-	 * 
-	 * @param Owner of the rural houses
-	 * @return A list of rural houses of Owner
-	 */
-	@Override
-	public Vector<RuralHouse> getRuralHousesOfOwner(Owner owner) {
-		Vector<RuralHouse> result = null;
-		try{
-			open();
-			System.out.println(">> DataAccess: getRuralHousesOfOwner(" + owner + ")");
-			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
-					+ "FROM RuralHouse rh "
-					+ "WHERE rh.owner = :owner", RuralHouse.class)
-					.setParameter("owner", owner);
-			result = new Vector<RuralHouse>(query.getResultList());
-			System.out.println("Found " + query.getResultList().size());
-			printCollection(result);
-		} catch    (Exception e) {
-			e.printStackTrace();
-		} finally {
-			close();
-		}
-		return result;
 	}
 
 }
