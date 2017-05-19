@@ -1,15 +1,25 @@
 package domain;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -48,7 +58,8 @@ public class RuralHouse implements Serializable {
 	 * The image in the first position (<i>index 0</i>) of the {@code Vector} will be used as the
 	 * rural house image icon.
 	 */
-	private Vector<ImageIcon> images;
+	@OneToOne(cascade=CascadeType.ALL)
+	private Vector<byte[]> images;
 	private String[] tags;                
 
 	public Vector<Offer> offers;
@@ -93,7 +104,7 @@ public class RuralHouse implements Serializable {
 		this.address = address;
 		this.review = new Review(this);
 		offers = new Vector<Offer>();
-		images = new Vector<ImageIcon>();
+		images = new Vector<byte[]>();
 	}
 
 	public Integer getId() {
@@ -141,7 +152,7 @@ public class RuralHouse implements Serializable {
 	 * 
 	 * @return the image vector
 	 */
-	public Vector<ImageIcon> getImages() {
+	public Vector<byte[]> getImages() {
 		return images;
 	}
 
@@ -150,7 +161,7 @@ public class RuralHouse implements Serializable {
 	 * 
 	 * @param images the <code>ImageIcon</code> <code>Vector</code>
 	 */
-	public void setImages(Vector<ImageIcon>  images) {
+	public void setImages(Vector<byte[]>  images) {
 		this.images = images;
 	}
 
@@ -161,22 +172,41 @@ public class RuralHouse implements Serializable {
 	 * @return the <code>ImageIcon</code> at the specified index
 	 */
 	public ImageIcon getImage(int index) {
-		if(images.size() > 0) {
-			return images.get(0);
-		} else {
-			//Return a image 
-			return NO_IMAGE_AVAILABLE;
+		if(images != null) {
+			if(images.size() > 0) {
+				try {
+					return new ImageIcon(ImageIO.read(new ByteArrayInputStream(images.get(0))));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		//Return a image 
+		return NO_IMAGE_AVAILABLE;
 	}
 
 	/**
 	 * Appends the specified image to the end of the image <code>Vector</code>.
 	 * 
-	 * @param image element to be appended to the <code>Vector</code>
+	 * @param imagePath path to the element to be appended to the <code>Vector</code>
 	 * @return <code>true</code> if the image is added to the <code>Vector</code> 
+	 * @throws IOException 
 	 */
-	public boolean addImage(ImageIcon image) {
-		return images.add(image);
+	public boolean addImage(String imagePath) throws IOException {
+		Path path = Paths.get(imagePath);
+		return images.add(Files.readAllBytes(path));
+	}
+
+	/**
+	 * Appends the specified image to the end of the image <code>Vector</code>.
+	 * 
+	 * @param URI uri the URI of the element to be appended to the <code>Vector</code>
+	 * @return <code>true</code> if the image is added to the <code>Vector</code> 
+	 * @throws IOException 
+	 */
+	public boolean addImage(URI uri) throws IOException {
+		Path path = Paths.get(uri);
+		return images.add(Files.readAllBytes(path));
 	}
 
 	/**
@@ -186,7 +216,13 @@ public class RuralHouse implements Serializable {
 	 * @return element that was removed
 	 */
 	public ImageIcon removeImage(int index) {
-		return images.remove(index);
+		ImageIcon imageIcon = null;
+		try {
+			imageIcon = new ImageIcon(ImageIO.read(new ByteArrayInputStream(images.remove(index)))); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return imageIcon;
 	}
 
 	/**

@@ -19,6 +19,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
@@ -28,7 +29,6 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
-
 import businessLogic.util.Timer;
 import configuration.ConfigXML;
 import domain.AbstractUser;
@@ -57,6 +57,9 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManager  db;
 
 	private Timer timer;
+	
+	@Deprecated
+	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 	public DataAccess()  {
 
@@ -169,6 +172,7 @@ public class DataAccess implements DataAccessInterface {
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
 			RuralHouse rh1 = createRuralHouse(owner1, "Ezkioko etxea", "Una descripcion de la casa", createCity("Ezkio"), "Calle Falsa / 123");
+			rh1.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh1.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh1);
 			createOffer(rh1, date.parse("2017/2/3"), date.parse("2017/3/23"), 13);
@@ -176,11 +180,13 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
 			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ºA");
+			rh2.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");		
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");	
+			rh3.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
 			createOffer(rh3, date.parse("2017/1/5"), date.parse("2019/1/19"), 17);		
@@ -191,6 +197,7 @@ public class DataAccess implements DataAccessInterface {
 					+ "Y si admás tiene saltos de linea?\n"
 					+ "Se verá como reacciona todo, pero debería caber y si no, poner un limite.\n"
 					+ "Como por ejemplo poner tres puntos suspensivos cuando supera ciertos caracterers.", createCity("Renteria"), "Plaza Grande 5 8-C");	
+			rh4.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
 			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
@@ -208,6 +215,12 @@ public class DataAccess implements DataAccessInterface {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	@Deprecated
+	public String getRandomImage() {
+		// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
+		return images[ThreadLocalRandom.current().nextInt(0, images.length)];
 	}
 
 	@Override
