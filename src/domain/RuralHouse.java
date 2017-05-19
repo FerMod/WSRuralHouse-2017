@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import domain.util.IntegerAdapter;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 public class RuralHouse implements Serializable {
