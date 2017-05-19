@@ -15,7 +15,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Locale;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
@@ -70,7 +69,7 @@ public class ClientMainPanel extends JPanel {
 	//	private JFormattedTextField minPriceField
 	private JFormattedTextField maxPriceField;
 	private JTextField searchField;
-	private JTable table;
+	private JTable offersTable;
 	private CustomTableModel tableModel;
 	private TableRowSorter<CustomTableModel> sorter;
 	//	private JPanel topPanel, bottomPanel;
@@ -290,13 +289,6 @@ public class ClientMainPanel extends JPanel {
 	//		priceFormat.setCurrency(currencyInstance);
 	//	}
 
-	private JScrollPane getTableScrollPanel() {
-		if(tableScrollPanel == null) {
-			tableScrollPanel = new JScrollPane(getTable());
-		}
-		return tableScrollPanel;
-	}
-
 	private JTextField getSearchField() {
 		if(searchField == null) {
 			searchField = new JTextField();
@@ -308,21 +300,21 @@ public class ClientMainPanel extends JPanel {
 				public void changedUpdate(DocumentEvent e) {
 					refreshTableContent(searchField.getText());
 					System.out.println("Finished");
-					getTable().clearSelection();
+					getOffersTable().clearSelection();
 				}
 
 				@Override
 				public void insertUpdate(DocumentEvent e) {
 					refreshTableContent(searchField.getText());
 					System.out.println("Finished");
-					getTable().clearSelection();
+					getOffersTable().clearSelection();
 				}
 
 				@Override
 				public void removeUpdate(DocumentEvent e) {
 					refreshTableContent(searchField.getText());
 					System.out.println("Finished");
-					getTable().clearSelection();
+					getOffersTable().clearSelection();
 				}
 
 			});
@@ -437,8 +429,28 @@ public class ClientMainPanel extends JPanel {
 
 	}
 
-	private JTable getTable() {
-		if(table == null) {
+	// Create and set up number formats. These objects also parse numbers input by user.
+	//	private void setUpFormats(Locale currentLocale) {
+	//		
+	//		System.out.println(currentLocale.getCountry() + " \\\\ " + currentLocale.getLanguage());
+	//
+	//		
+	//		currencyInstance =  Currency.getInstance(currentLocale);
+	//		
+	//		//priceFormat = NumberFormat.getNumberInstance();
+	//		priceFormat = NumberFormat.getCurrencyInstance(currentLocale);
+	//		priceFormat.setCurrency(currencyInstance);
+	//	}
+	
+	private JScrollPane getTableScrollPanel() {
+		if(tableScrollPanel == null) {
+			tableScrollPanel = new JScrollPane(getOffersTable());
+		}
+		return tableScrollPanel;
+	}
+
+	private JTable getOffersTable() {
+		if(offersTable == null) {
 
 			//TODO Move to another method /////
 			List<Offer> activeOffersList = MainWindow.getBusinessLogic().getActiveOffers(ReviewState.APPROVED);
@@ -456,17 +468,17 @@ public class ClientMainPanel extends JPanel {
 
 			tableModel = new CustomTableModel(imageVector, offerComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
-			table = new JTable(tableModel);
-			table.setRowSorter(sorter);
-			table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-			table.getTableHeader().setReorderingAllowed(false);
+			offersTable = new JTable(tableModel);
+			offersTable.setRowSorter(sorter);
+			offersTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+			offersTable.getTableHeader().setReorderingAllowed(false);
 			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setFocusable(false);
-			table.getTableHeader().setUI(null); //Hide the header
-			table.setShowVerticalLines(false);
-			table.setIntercellSpacing(new Dimension(0, 1));
-			table.setUpdateSelectionOnSort(true);
+			offersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			offersTable.setFocusable(false);
+			offersTable.getTableHeader().setUI(null); //Hide the header
+			offersTable.setShowVerticalLines(false);
+			offersTable.setIntercellSpacing(new Dimension(0, 1));
+			offersTable.setUpdateSelectionOnSort(true);
 			//			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			//			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 			//			table.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
@@ -478,39 +490,39 @@ public class ClientMainPanel extends JPanel {
 			//			table.setDefaultRenderer(String.class, centerCellRenderer);
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
-			setTableColumnWidthPercentages(table, 0.1, 0.9);
-			table.setDefaultRenderer(Object.class, new OffersComponent(parentFrame));
-			table.setDefaultEditor(Object.class, new OffersComponent(parentFrame));
+			setTableColumnWidthPercentages(offersTable, new double[] {0.1, 0.9});
+			offersTable.setDefaultRenderer(Object.class, new OffersComponent(parentFrame));
+			offersTable.setDefaultEditor(Object.class, new OffersComponent(parentFrame));
 
 			//When selection changes, provide user with row numbers for both view and model.
-			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			offersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent event) {
-					int row = table.getSelectedRow();
+					int row = offersTable.getSelectedRow();
 					if (row < 0) {
 						//Selection got filtered away.
 						//btnDetails.setEnabled(false);
 					} else {
 						//btnDetails.setEnabled(true);
-						int modelRow = table.convertRowIndexToModel(row);
+						int modelRow = offersTable.convertRowIndexToModel(row);
 						System.out.println(String.format("Selected Row in view: %d. Selected Row in model: %d.", row, modelRow));
 					}
 				}
 
 			});
 
-			table.addFocusListener(new FocusListener() {				
+			offersTable.addFocusListener(new FocusListener() {				
 				@Override
 				public void focusGained(FocusEvent e) {
 				}
 
 				@Override
 				public void focusLost(FocusEvent e) {
-					table.clearSelection();
+					offersTable.clearSelection();
 				}
 			});
 
-			table.addMouseListener(new MouseAdapter() {
+			offersTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
 					//					JTable table =(JTable) me.getSource();
@@ -523,17 +535,17 @@ public class ClientMainPanel extends JPanel {
 			});
 
 		}
-		return table;
+		return offersTable;
 	}
 
 	private void updateRowHeights() {
-		for (int row = 0; row < table.getRowCount(); row++) {
-			int rowHeight = table.getRowHeight();
-			for (int column = 0; column < table.getColumnCount(); column++) {
-				Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
+		for (int row = 0; row < offersTable.getRowCount(); row++) {
+			int rowHeight = offersTable.getRowHeight();
+			for (int column = 0; column < offersTable.getColumnCount(); column++) {
+				Component comp = offersTable.prepareRenderer(offersTable.getCellRenderer(row, column), row, column);
 				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
 			}
-			table.setRowHeight(row, rowHeight);
+			offersTable.setRowHeight(row, rowHeight);
 		}
 	}
 
@@ -583,7 +595,7 @@ public class ClientMainPanel extends JPanel {
 	 * <b>Note</b>: this method does <b>NOT</b> verify that all percentages add up to 100% and for
 	 * the columns to appear properly, it is recommended that the widths for <b>ALL</b> columns be specified.
 	 */
-	public void setTableColumnWidthPercentages(JTable table, double... percentages) {
+	public void setTableColumnWidthPercentages(JTable table, double[] percentages) {
 		final double factor = 10000;
 		TableColumnModel model = table.getColumnModel();
 		for (int columnIndex = 0; columnIndex < percentages.length; columnIndex++) {
