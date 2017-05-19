@@ -1,24 +1,30 @@
 package gui.components.table.cell;
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
 import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 import domain.Booking;
+import domain.Offer;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
 
@@ -26,15 +32,16 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 
 	private static final long serialVersionUID = 2711709042458345572L;
 
-	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
-	private JButton infoButton;
-	private JPanel panel;
 	private JFrame parentFrame;
+	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
+	private JButton btnCancelBooking;
+	private JPanel panel;
 	private CellComponent<Booking> selectedComponent;
 
 	public BookingsComponent(JFrame frame) {
 
 		this.parentFrame = frame;
+
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
 
@@ -78,7 +85,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		addressComponent.setEditable(false);
 		addressComponent.setFocusable(false);
 		GridBagConstraints gbcAdress = new GridBagConstraints();
-		gbcDescription.gridwidth = 1;
+		gbcAdress.gridwidth = 1;
 		gbcAdress.insets = new Insets(0, 0, 0, 5);
 		gbcAdress.fill = GridBagConstraints.HORIZONTAL;
 		gbcAdress.gridx = 0;
@@ -99,16 +106,13 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		gbcPrice.gridy = 2;
 		panel.add(priceComponent, gbcPrice);
 
-		infoButton = new JButton("Info. ");
-		infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GridBagConstraints gbcInfoButton = new GridBagConstraints();
-		gbcInfoButton.fill = GridBagConstraints.HORIZONTAL;
-		gbcInfoButton.gridheight = 3;
-		gbcInfoButton.gridx = 2;
-		gbcInfoButton.gridy = 0;	
-		gbcInfoButton.insets = new Insets(5, 5, 0, 0);
-		panel.add(infoButton, gbcInfoButton);
-
+		GridBagConstraints gbcCancelButton = new GridBagConstraints();
+		gbcCancelButton.anchor = GridBagConstraints.NORTHEAST;
+		gbcCancelButton.gridx = 2;
+		gbcCancelButton.gridy = 0;	
+		gbcCancelButton.insets = new Insets(5, 5, 0, 0);
+		panel.add(getBtnCancelBooking(), gbcCancelButton);
+		
 	}
 
 	private void updateData(CellComponent<Booking> value, boolean isSelected, JTable table) {
@@ -133,24 +137,41 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		}else{
 			panel.setBackground(table.getBackground());
 		}
+
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		updateData((CellComponent<Booking>)value, true, table);
+		if(value instanceof CellComponent) {
+			updateData((CellComponent<Booking>) value, true, table);	
+		}
 		return panel;
 	}
 
+	@Override
 	public Object getCellEditorValue() {
 		return null;
 	}
 
 	@Override
 	public boolean isCellEditable(EventObject e){
-		return true;
+		if(e.getSource() instanceof JTable) {
+			JTable table = (JTable) e.getSource();	
+			int selectedColumn = table.getSelectedColumn();
+			if(selectedColumn != -1) {
+				return table.getColumnClass(selectedColumn).equals(CellComponent.class);
+			}
+		}
+		return false;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		updateData((CellComponent<Booking>) value, isSelected, table);
+		if(value instanceof CellComponent) {
+			updateData((CellComponent<Booking>) value, isSelected, table);
+		}
 		return panel;
 	}
 
@@ -186,12 +207,42 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		this.priceComponent = priceComponent;
 	}
 
-	public JButton getInfoButton() {
-		return infoButton;
+	public JButton getBtnCancelBooking() {
+		if(btnCancelBooking == null) {
+			btnCancelBooking = new JButton();
+			btnCancelBooking.setAlignmentX(Component.CENTER_ALIGNMENT);
+			btnCancelBooking.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			btnCancelBooking.setBorderPainted(false);
+			btnCancelBooking.setIcon(new ImageIcon(BookingsComponent.class.getResource("/img/icons/cancel_button/cancel-offer_default.png")));
+			btnCancelBooking.setSelectedIcon(new ImageIcon(BookingsComponent.class.getResource("/img/icons/cancel_button/cancel-offer_default.png")));
+			btnCancelBooking.setRolloverIcon(new ImageIcon(BookingsComponent.class.getResource("/img/icons/cancel_button/cancel-offer_hover.png")));
+			btnCancelBooking.setRolloverSelectedIcon(new ImageIcon(BookingsComponent.class.getResource("/img/icons/cancel_button/cancel-offer_pressed.png")));
+			btnCancelBooking.setPressedIcon(new ImageIcon(BookingsComponent.class.getResource("/img/icons/cancel_button/cancel-offer_pressed.png")));
+			btnCancelBooking.setContentAreaFilled(false);
+			btnCancelBooking.setDefaultCapable(false);
+			btnCancelBooking.setFocusPainted(false);
+			btnCancelBooking.setFocusable(false);
+			btnCancelBooking.setFocusTraversalKeysEnabled(false);
+			btnCancelBooking.setBackground(UIManager.getColor("Button.light"));
+			btnCancelBooking.setAlignmentX(Component.CENTER_ALIGNMENT);
+			btnCancelBooking.setPreferredSize(new Dimension(16, 16));
+			btnCancelBooking.setMinimumSize(new Dimension(16, 16));
+			btnCancelBooking.setMaximumSize(new Dimension(16, 16));
+			btnCancelBooking.setIconTextGap(0);
+			btnCancelBooking.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(e.getSource() == btnCancelBooking && selectedComponent != null) {			
+						System.out.println("Cancel offer button pressed!");
+					}
+				}
+			});	
+		}
+		return btnCancelBooking;
 	}
 
-	public void setInfoButton(JButton infoButton) {
-		this.infoButton = infoButton;
+	public void setBtnCancelBooking(JButton btnCancelBooking) {
+		this.btnCancelBooking = btnCancelBooking;
 	}
 
 }

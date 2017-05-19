@@ -38,6 +38,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 	private CellComponent<Offer> selectedComponent;
 
 	public OffersComponent(JFrame frame) {
+
 		this.parentFrame = frame;
 
 		panel = new JPanel();
@@ -83,7 +84,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 		addressComponent.setEditable(false);
 		addressComponent.setFocusable(false);
 		GridBagConstraints gbcAdress = new GridBagConstraints();
-		gbcDescription.gridwidth = 1;
+		gbcAdress.gridwidth = 1;
 		gbcAdress.insets = new Insets(0, 0, 0, 5);
 		gbcAdress.fill = GridBagConstraints.HORIZONTAL;
 		gbcAdress.gridx = 0;
@@ -159,35 +160,32 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 		dialog.setVisible(true);				
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		updateData((CellComponent<Offer>) value, true, table);		
+		if(value instanceof CellComponent) {
+			updateData((CellComponent<Offer>) value, true, table);	
+		}
 		return panel;
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#getCellEditorValue()
-	 */
 	@Override
 	public Object getCellEditorValue() {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#isCellEditable(java.util.EventObject)
-	 */
 	@Override
 	public boolean isCellEditable(EventObject e){
-		return true;
+		if(e.getSource() instanceof JTable) {
+			JTable table = (JTable) e.getSource();	
+			int selectedColumn = table.getSelectedColumn();
+			if(selectedColumn != -1) {
+				return table.getColumnClass(selectedColumn).equals(CellComponent.class);
+			}
+		}
+		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see gui.components.table.CellComponentInterface#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

@@ -1,25 +1,20 @@
 package gui;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -36,6 +31,8 @@ import gui.components.table.cell.BookingsComponent;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Point;
 
 public class BookingsTablePanel extends JPanel {
 
@@ -44,18 +41,19 @@ public class BookingsTablePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -3609329976279893020L;
 
-	private JScrollPane scrollPane;
-	private JTable table;
+	private JScrollPane tableScrollPane;
+	private JTable bookingsTable;
 	private CustomTableModel tableModel;
 	private TableRowSorter<CustomTableModel> sorter;
 	private JFrame parentFrame;
-	private CellComponent<Booking> selectedComponent;
+	private JLabel lblBookings;
 
 	/**
 	 * Create the panel.
 	 * @param parentFrame 
 	 */
 	public BookingsTablePanel(JFrame parentFrame) {
+		
 		this.parentFrame = parentFrame;
 
 		initComponents();
@@ -64,66 +62,81 @@ public class BookingsTablePanel extends JPanel {
 
 	}
 
-	private void updateRowHeights() {
-		for (int row = 0; row < table.getRowCount(); row++) {
-			int rowHeight = table.getRowHeight();
-			for (int column = 0; column < table.getColumnCount(); column++) {
-				Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
-				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
-			}
-			table.setRowHeight(row, rowHeight);
-		}
-	}
-
 	private void initComponents() {
-
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0};
 		setLayout(gridBagLayout);
+		
+		GridBagConstraints gbcLblBookings = new GridBagConstraints();
+		gbcLblBookings.anchor = GridBagConstraints.WEST;
+		gbcLblBookings.insets = new Insets(10, 5, 0, 0);
+		gbcLblBookings.gridx = 1;
+		gbcLblBookings.gridy = 0;
+		add(getLblBookings(), gbcLblBookings);
 
 		GridBagConstraints gbcScrollPane = new GridBagConstraints();
+		gbcScrollPane.insets = new Insets(5, 5, 0, 0);
 		gbcScrollPane.fill = GridBagConstraints.BOTH;
-		gbcScrollPane.gridx = 0;
-		gbcScrollPane.gridy = 0;
-		add(getScrollPane(), gbcScrollPane);
+		gbcScrollPane.gridx = 1;
+		gbcScrollPane.gridy = 1;
+		add(getTableScrollPane(), gbcScrollPane);
 
 	}
 
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane((Component) getTable());
+	private void updateRowHeights() {
+		for (int row = 0; row < bookingsTable.getRowCount(); row++) {
+			int rowHeight = bookingsTable.getRowHeight();
+			for (int column = 0; column < bookingsTable.getColumnCount(); column++) {
+				Component comp = bookingsTable.prepareRenderer(bookingsTable.getCellRenderer(row, column), row, column);
+				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+			}
+			bookingsTable.setRowHeight(row, rowHeight);
 		}
-		return scrollPane;
 	}
 
-	private JTable getTable() {
-		if(table == null) {
+	private JLabel getLblBookings() {
+		if (lblBookings == null) {
+			lblBookings = new JLabel("Bookings:");
+		}
+		return lblBookings;
+	}
+
+	private JScrollPane getTableScrollPane() {
+		if (tableScrollPane == null) {
+			tableScrollPane = new JScrollPane(getBookingsTable());
+		}
+		return tableScrollPane;
+	}
+
+	private JTable getBookingsTable() {
+		if(bookingsTable == null) {
 
 			List<Booking> bookingList = MainWindow.getBusinessLogic().getBookings((Client)MainWindow.user);
 
-			List<CellComponent<Booking>> list = new Vector<>();
-
+			List<CellComponent<Booking>> bookingComponentList = new Vector<>();
+			List<ImageIcon> imageVector = new Vector<ImageIcon>();
 			for (Booking booking : bookingList) {
-				list.add(new CellComponent<Booking>(booking));
+				imageVector.add(booking.getOffer().getRuralHouse().getImage(0));
+				bookingComponentList.add(new CellComponent<Booking>(booking));
 			}
 
-			list.stream().forEachOrdered(e -> System.out.println(e.getElement().getOffer()));
-			tableModel = new CustomTableModel(list);
+			bookingComponentList.stream().forEachOrdered(e -> System.out.println(e.getElement().getOffer()));
+			
+			tableModel = new CustomTableModel(bookingComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
-			table = new JTable(tableModel);
-			table.setRowSorter(sorter);
-			table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-			table.getTableHeader().setReorderingAllowed(false);
+			bookingsTable = new JTable(tableModel);
+			bookingsTable.setRowSorter(sorter);
+			bookingsTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
+			bookingsTable.getTableHeader().setReorderingAllowed(false);
 			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setFocusable(false);
-			table.getTableHeader().setUI(null); //Hide the header
-			table.setShowVerticalLines(false);
-			table.setIntercellSpacing(new Dimension(0, 1));
-			table.setUpdateSelectionOnSort(true);
+			bookingsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			bookingsTable.setFocusable(false);
+			bookingsTable.getTableHeader().setUI(null); //Hide the header
+			bookingsTable.setShowVerticalLines(false);
+			bookingsTable.setIntercellSpacing(new Dimension(0, 1));
+			bookingsTable.setUpdateSelectionOnSort(true);
 			//			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 			//			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 			//			table.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
@@ -135,44 +148,46 @@ public class BookingsTablePanel extends JPanel {
 			//			table.setDefaultRenderer(String.class, centerCellRenderer);
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
-			setTableColumnWidthPercentages(table, new double[]{0.1, 0.9});
-			table.setDefaultRenderer(Object.class, new BookingsComponent(parentFrame));
-			table.setDefaultEditor(Object.class, new BookingsComponent(parentFrame));
+			setTableColumnWidthPercentages(bookingsTable, new double[] {1.0});
+			bookingsTable.setDefaultRenderer(Object.class, new BookingsComponent(parentFrame));
+			bookingsTable.setDefaultEditor(Object.class, new BookingsComponent(parentFrame));
 
 			//When selection changes, provide user with row numbers for both view and model.
-			table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			bookingsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent event) {
-					int row = table.getSelectedRow();
+					int row = bookingsTable.getSelectedRow();
 					if (row < 0) {
 						//Selection got filtered away.
 						//btnDetails.setEnabled(false);
 					} else {
 						//btnDetails.setEnabled(true);
-						int modelRow = table.convertRowIndexToModel(row);
+						int modelRow = bookingsTable.convertRowIndexToModel(row);
 						System.out.println(String.format("Selected Row in view: %d. Selected Row in model: %d.", row, modelRow));
 					}
 				}
 
 			});
 
-			table.addFocusListener(new FocusListener() {				
+			bookingsTable.addFocusListener(new FocusListener() {				
 				@Override
 				public void focusGained(FocusEvent e) {
 				}
 
 				@Override
 				public void focusLost(FocusEvent e) {
-					table.clearSelection();
+					bookingsTable.clearSelection();
 				}
 			});
 
-			table.addMouseListener(new MouseAdapter() {
+			bookingsTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
-					//					JTable table =(JTable) me.getSource();
-					//					Point p = me.getPoint();
-					//					int row = table.rowAtPoint(p);
+					/*
+					JTable table =(JTable) me.getSource();
+					Point p = me.getPoint();
+					int row = table.rowAtPoint(p);
+					*/
 					if (me.getClickCount() == 2) {
 						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, info window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -180,7 +195,7 @@ public class BookingsTablePanel extends JPanel {
 			});
 
 		}
-		return table;
+		return bookingsTable;
 	}
 
 	/**
@@ -201,5 +216,5 @@ public class BookingsTablePanel extends JPanel {
 			}
 		}
 	}
-
+	
 }

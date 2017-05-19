@@ -28,9 +28,6 @@ public class CustomTableModel extends AbstractTableModel {
 
 	private Object[][] data; 
 
-	//TODO REMOVE
-	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
-
 	public <T> CustomTableModel(List<CellComponent<T>> cellComponent) {
 		this(Arrays.asList("Details"), null, cellComponent);	
 	}
@@ -74,29 +71,7 @@ public class CustomTableModel extends AbstractTableModel {
 		System.out.println();
 	}
 
-	//	private void initTableData(List<Offer> offers) {			
-	//		data = new Object[offers.size()][2];
-	//		int i = 0;
-	//		for (Offer offer : offers) {
-	//			data[i][0] = getScaledImage(offer.getRuralHouse().getImage(0));
-	//			System.out.println("data[" + i + "][0] " + offer.getRuralHouse().getImage(0).getDescription());			
-	//			data[i][1] = new CellDetails(offer);
-	//			System.out.println("data[" + i + "][1] " + offer);
-	//			i++;					
-	//		}
-	//		System.out.println();
-	//	}
-
-	@Deprecated
-	public void setRandomImages() {		
-		for (Object[] object: data) {
-			// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
-			int randomNum = ThreadLocalRandom.current().nextInt(0, images.length);
-			object[0] = getScaledImage(images[randomNum]);
-		}
-	}
-
-	private ImageIcon getScaledImage(String path) {
+	public ImageIcon getScaledImage(String path) {
 		ImageIcon imageIcon = null;
 		try {
 			imageIcon = getScaledImage(ImageIO.read(getClass().getResource(path)));
@@ -106,11 +81,11 @@ public class CustomTableModel extends AbstractTableModel {
 		return imageIcon;
 	}
 
-	private ImageIcon getScaledImage(BufferedImage bufferedImage) {	 
+	public ImageIcon getScaledImage(BufferedImage bufferedImage) {	 
 		return new ImageIcon(bufferedImage.getScaledInstance(imageDimension.width, imageDimension.height, Image.SCALE_SMOOTH));
 	}
 
-	private ImageIcon getScaledImage(ImageIcon imageIcon) {
+	public ImageIcon getScaledImage(ImageIcon imageIcon) {
 		return new ImageIcon(imageIcon.getImage().getScaledInstance(imageDimension.width, imageDimension.height, Image.SCALE_SMOOTH));
 	}
 
@@ -190,11 +165,7 @@ public class CustomTableModel extends AbstractTableModel {
 
 	public boolean isCellEditable(int row, int col) {
 		//Note that the data/cell address is constant, no matter where the cell appears on screen.
-		if (col < 1) {
-			return false;
-		} else {
-			return true;
-		}
+		return true;
 	}
 
 
