@@ -7,10 +7,14 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Hashtable;
@@ -441,7 +445,7 @@ public class ClientMainPanel extends JPanel {
 	//		priceFormat = NumberFormat.getCurrencyInstance(currentLocale);
 	//		priceFormat.setCurrency(currencyInstance);
 	//	}
-	
+
 	private JScrollPane getTableScrollPanel() {
 		if(tableScrollPanel == null) {
 			tableScrollPanel = new JScrollPane(getOffersTable());
@@ -509,29 +513,6 @@ public class ClientMainPanel extends JPanel {
 					}
 				}
 
-			});
-
-			offersTable.addFocusListener(new FocusListener() {				
-				@Override
-				public void focusGained(FocusEvent e) {
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					offersTable.clearSelection();
-				}
-			});
-
-			offersTable.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mousePressed(MouseEvent me) {
-					//					JTable table =(JTable) me.getSource();
-					//					Point p = me.getPoint();
-					//					int row = table.rowAtPoint(p);
-					if (me.getClickCount() == 2) {
-						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, info window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
-					}
-				}
 			});
 
 		}

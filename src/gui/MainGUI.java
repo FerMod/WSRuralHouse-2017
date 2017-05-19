@@ -1,15 +1,10 @@
 package gui;
 
-/**
- * @author Software Engineering teachers
- */
-
-import gui.prototypes.NewRuralHouseWindow;
-
 import javax.swing.*;
 
 import domain.RuralHouse;
 import domain.AbstractUser.Role;
+import domain.Owner;
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
@@ -173,7 +168,7 @@ public class MainGUI extends JFrame {
 			btnAddRuralHouse.setText(ResourceBundle.getBundle("Etiquetas").getString("AddRuralHouse"));
 			btnAddRuralHouse.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JDialog newRuralHouse = new NewRuralHouseWindow();
+					JDialog newRuralHouse = new NewRuralHouseWindow((Owner)MainWindow.user);
 					newRuralHouse.setVisible(true);
 				}
 			});

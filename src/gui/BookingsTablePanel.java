@@ -180,19 +180,19 @@ public class BookingsTablePanel extends JPanel {
 				}
 			});
 
+			/*
 			bookingsTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
-					/*
-					JTable table =(JTable) me.getSource();
-					Point p = me.getPoint();
-					int row = table.rowAtPoint(p);
-					*/
+//					JTable table =(JTable) me.getSource();
+//					Point p = me.getPoint();
+//					int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
 						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, info window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
+			*/
 
 		}
 		return bookingsTable;

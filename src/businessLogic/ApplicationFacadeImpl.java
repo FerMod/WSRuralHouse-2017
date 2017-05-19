@@ -35,7 +35,6 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
-		Locale.forLanguageTag(dataAccess.getConfig().getLocale());
 	}
 
 	@Override
@@ -119,18 +118,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<RuralHouse> getRuralHouses(Owner owner) {
-		return dataAccess.getRuralHouses(owner);
-	}
-
-	@Override
 	public Vector<RuralHouse> getRuralHouses(ReviewState reviewState) {
 		return dataAccess.getRuralHouses(reviewState);
-	}
-
-	@Override
-	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
-		return dataAccess.getRuralHouses(owner, reviewState);
 	}
 
 	@Override
@@ -203,36 +192,6 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return dataAccess.getBookings(client);
 	}
 
-	@Override
-	public Vector<Booking> getBookings() {
-		return dataAccess.getBookings();
-	}
-
-	@Override
-	public Vector<RuralHouse> getRuralHousesWithRevSt(Owner ow, ReviewState reviewSt) {
-		Vector<RuralHouse> rhs = dataAccess.getRuralHouses(reviewSt);
-
-		for(RuralHouse rh : rhs) {
-			if(!rh.getOwner().equals(ow)) {
-				rhs.remove(rh);
-			}
-		}
-
-		return rhs;
-	}
-
-	@Override
-	public Vector<RuralHouse> getRuralHousesOfOwner(Owner ow) {
-		Vector<RuralHouse> rhs = dataAccess.getRuralHouses();
-
-		for(RuralHouse rh : rhs) {
-			if(!rh.getOwner().equals(ow)) {
-				rhs.remove(rh);
-			}
-		}
-
-		return rhs;
-	}
 
 	public Locale getLocale() {
 		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
@@ -244,6 +203,21 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	public void setLocale(Locale locale) {
 		this.locale = locale;
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner) {
+		return dataAccess.getRuralHouses(owner);
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
+		return dataAccess.getRuralHouses(owner, reviewState);
+	}
+
+	@Override
+	public Vector<Booking> getBookings() {
+		return dataAccess.getBookings();
 	}
 
 }

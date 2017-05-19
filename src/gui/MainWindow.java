@@ -183,6 +183,8 @@ public class MainWindow extends JFrame {
 		//		addComponentListener(new ComponentListener() {
 		//			@Override
 		//			public void componentShown(ComponentEvent e) {
+		//				// TODO Auto-generated method stub
+		//
 		//			}
 		//			@Override
 		//			public void componentResized(ComponentEvent e) {
@@ -190,9 +192,13 @@ public class MainWindow extends JFrame {
 		//			}
 		//			@Override
 		//			public void componentMoved(ComponentEvent e) {
+		//				// TODO Auto-generated method stub
+		//
 		//			}
 		//			@Override
 		//			public void componentHidden(ComponentEvent e) {
+		//				// TODO Auto-generated method stub
+		//
 		//			}
 		//		});
 

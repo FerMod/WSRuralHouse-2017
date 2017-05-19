@@ -3,8 +3,12 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
@@ -13,6 +17,7 @@ import java.util.Locale;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -123,7 +128,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 				}
 			}
 		});
-
+		
 	}
 
 	private void updateData(CellComponent<Offer> value, boolean isSelected, JTable table) {
@@ -150,7 +155,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 
 	}
 
-	private void openOfferDialog(JFrame parentFrame, CellComponent<Offer> rowContent) {
+	public void openOfferDialog(JFrame parentFrame, CellComponent<Offer> rowContent) {
 		System.out.printf("openDialog(%s, %s)%n", parentFrame.getClass().getSimpleName(), ((Offer)rowContent.getElement()).toString());
 		OfferInfoDialog dialog = new OfferInfoDialog(parentFrame, rowContent);
 		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
