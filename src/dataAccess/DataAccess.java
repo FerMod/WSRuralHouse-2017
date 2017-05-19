@@ -151,8 +151,7 @@ public class DataAccess implements DataAccessInterface {
 			//			deleteTableContent("Client");
 			//			deleteTableContent("Owner");
 			//deleteTableContent("Admin");
-
-
+			
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("client@gmail.com", "client", "client123", Role.CLIENT);
