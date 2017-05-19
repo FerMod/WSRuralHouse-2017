@@ -97,5 +97,5 @@ public interface DataAccessInterface {
 	Vector<Booking> getBookings(Client client);
 
 	Vector<Booking> getBookings();
-
+	
 }

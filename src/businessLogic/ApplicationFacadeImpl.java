@@ -191,12 +191,6 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Booking> getBookings(Client client) {
 		return dataAccess.getBookings(client);
 	}
-	
-	@Override
-	public Vector<RuralHouse> getRuralHousesOfOwner(Owner ow) {
-		Vector<RuralHouse> rhs = dataAccess.getRuralHousesOfOwner(ow);
-		return rhs;
-	}
 
 
 	public Locale getLocale() {
@@ -213,20 +207,17 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	@Override
 	public Vector<RuralHouse> getRuralHouses(Owner owner) {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAccess.getRuralHouses(owner);
 	}
 
 	@Override
 	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAccess.getRuralHouses(owner, reviewState);
 	}
 
 	@Override
 	public Vector<Booking> getBookings() {
-		// TODO Auto-generated method stub
-		return null;
+		return dataAccess.getBookings();
 	}
 
 }

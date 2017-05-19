@@ -281,16 +281,6 @@ public interface ApplicationFacadeInterface  {
 	@WebMethod
 	void updateReview(RuralHouse rh, Review r);
 	
-	/**
-	 * Return a vector of Rural Houses of the Owner definied
-	 * 
-	 * 
-	 * @param ow the owner
-	 * @return a vector of Rural Houses of owner
-	 */
-	@WebMethod
-	Vector<RuralHouse> getRuralHousesOfOwner(Owner ow);
-	
 	Locale getLocale();
 	
 	void setLocale(Locale locale);
