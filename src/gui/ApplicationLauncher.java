@@ -15,6 +15,9 @@ import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import gui.debug.ConsoleKeyEventDispatcher;
+import gui.old.MainGUI;
+import gui.user.SharedFrame;
+import gui.user.client.MainWindow;
 
 public class ApplicationLauncher {
 

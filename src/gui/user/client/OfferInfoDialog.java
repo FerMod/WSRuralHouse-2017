@@ -1,4 +1,4 @@
-package gui;
+package gui.user.client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
@@ -137,6 +138,7 @@ public class OfferInfoDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 
+		
 		// --------------------------------------------------------------------
 		//  Dialog title bar setup
 		// --------------------------------------------------------------------
@@ -354,9 +356,8 @@ public class OfferInfoDialog extends JDialog {
 	}
 
 	private ImagePanel getImagePanel() {
-		if(imagePanel == null) {
-			ImageIcon imageIcon = rowContent.getElement().getRuralHouse().getImage(0);				
-			imagePanel = new ImagePanel(imageIcon);
+		if(imagePanel == null) {	
+			imagePanel = new ImagePanel();
 			imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			imagePanel.setMinimumSize(imagePanel.getImageSize());
 		}

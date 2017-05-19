@@ -1,4 +1,4 @@
-package gui.components.table.cell;
+package gui.components.table.cell.component;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -25,9 +25,9 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import domain.Offer;
-import gui.OfferInfoDialog;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
+import gui.user.client.OfferInfoDialog;
 
 public class OffersComponent extends AbstractCellEditor implements CellComponentInterface {
 
@@ -184,7 +184,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 		if(e.getSource() instanceof JTable) {
 			JTable table = (JTable) e.getSource();	
 			int selectedColumn = table.getSelectedColumn();
-			if(selectedColumn != -1) {
+			if(selectedColumn >= 1) {
 				return table.getColumnClass(selectedColumn).equals(CellComponent.class);
 			}
 		}

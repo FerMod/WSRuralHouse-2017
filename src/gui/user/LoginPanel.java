@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -25,6 +25,7 @@ import javax.swing.border.TitledBorder;
 import domain.AbstractUser;
 import exceptions.AuthException;
 import gui.components.TextPrompt;
+import gui.user.client.MainWindow;
 
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel {

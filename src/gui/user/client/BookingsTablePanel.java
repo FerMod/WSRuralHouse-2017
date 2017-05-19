@@ -1,4 +1,4 @@
-package gui;
+package gui.user.client;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -26,7 +26,7 @@ import domain.Booking;
 import domain.Client;
 import gui.components.table.CellComponent;
 import gui.components.table.CustomTableModel;
-import gui.components.table.cell.BookingsComponent;
+import gui.components.table.cell.component.BookingsComponent;
 
 import java.awt.Component;
 import java.awt.Dimension;

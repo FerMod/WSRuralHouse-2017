@@ -1,4 +1,4 @@
-package gui;
+package gui.user.client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -41,11 +42,16 @@ import domain.Owner;
 import domain.RuralHouse;
 import domain.AbstractUser.Role;
 import domain.Review.ReviewState;
+import exceptions.AuthException;
 import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
+import gui.user.ProfilePane;
+import gui.user.SharedFrame;
+import gui.user.admin.AdminMainPanel;
+import gui.user.owner.OwnerRuralHousesPanel;
 
 /**
  * This is the core of the application, from where is choose which panel will be opened for which user.
@@ -114,27 +120,11 @@ public class MainWindow extends JFrame {
 			try {
 				switch (response) {
 				case CLIENT:					
-					Client client = (Client) getBusinessLogic().createUser("Client@clientmail.com", "Client", "ClientPassword", response);
-					Admin admin = (Admin) getBusinessLogic().createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
-					Owner owner = (Owner)getBusinessLogic().createUser("own@gmail.com", "own", "own", Role.OWNER);
-					SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
-					RuralHouse rh = getBusinessLogic().createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", getBusinessLogic().createCity("Donostia"), "La calle larga 4 - 3ºb");
-					rh.getReview().setState(admin, ReviewState.APPROVED);
-					getBusinessLogic().update(rh);
-					Offer offer1 = null, offer2 = null;
 					try {
-						offer1 = getBusinessLogic().createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
-						offer2 = getBusinessLogic().createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
-					} catch (OverlappingOfferException | BadDatesException | ParseException e) {
+						return getBusinessLogic().login("client", "cliet123");
+					} catch (AccountNotFoundException | AuthException e) {
 						e.printStackTrace();
 					}
-					try {
-						getBusinessLogic().createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
-						getBusinessLogic().createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-					return client;
 				case OWNER:
 					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
 				case ADMIN:

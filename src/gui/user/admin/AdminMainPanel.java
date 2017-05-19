@@ -1,4 +1,4 @@
-package gui;
+package gui.user.admin;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
@@ -23,6 +23,7 @@ import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
+import gui.user.client.MainWindow;
 import domain.RuralHouse;
 
 import java.awt.event.ActionListener;

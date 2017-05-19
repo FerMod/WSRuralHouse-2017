@@ -6,7 +6,7 @@ import com.toedter.calendar.JCalendar;
 
 import domain.Offer;
 import domain.RuralHouse;
-import gui.MainGUI;
+import gui.old.MainGUI;
 
 import javax.swing.*;
 

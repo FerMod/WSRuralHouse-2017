@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;

@@ -57,7 +57,7 @@ public class DataAccess implements DataAccessInterface {
 	private EntityManager  db;
 
 	private Timer timer;
-	
+
 	@Deprecated
 	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
@@ -164,7 +164,8 @@ public class DataAccess implements DataAccessInterface {
 			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
-
+			Client client = (Client) createUser("client@gamail.com", "client", "client123", Role.CLIENT);
+			
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
@@ -177,13 +178,13 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh1, date.parse("2017/5/2"), date.parse("2017/7/16"), 24);
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
-			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ï¿½A");
+			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ºA");
 			rh2.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ï¿½F");	
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");	
 			rh3.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
@@ -191,9 +192,9 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh3, date.parse("2016/12/14"), date.parse("2017/1/3"), 9);		
 			createOffer(rh3, date.parse("2013/10/10"), date.parse("2015/2/1"), 5);		
 
-			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", "Se me acaban las ideas para descripciones de casa, pero quiero que sea una larga para ver como se representarï¿½a.\n"
-					+ "Y si admï¿½s tiene saltos de linea?\n"
-					+ "Se verï¿½ como reacciona todo, pero deberï¿½a caber y si no, poner un limite.\n"
+			RuralHouse rh4 = createRuralHouse(owner2, "Gaztetxea", "Se me acaban las ideas para descripciones de casa, pero quiero que sea una larga para ver como se representaria.\n"
+					+ "Y si admins tiene saltos de linea?\n"
+					+ "Se vera como reacciona todo, pero deberia caber y si no, poner un limite.\n"
 					+ "Como por ejemplo poner tres puntos suspensivos cuando supera ciertos caracterers.", createCity("Renteria"), "Plaza Grande 5 8-C");	
 			rh4.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
@@ -201,8 +202,15 @@ public class DataAccess implements DataAccessInterface {
 			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 
-			//createBooking(client1, offer, date.parse("2017/5/4"), date.parse("2019/6/2"));
-			//getBookings(client1);
+			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
+			Owner owner = (Owner)createUser("own@gmail.com", "own", "own", Role.OWNER);
+			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3ºb");
+			rh.getReview().setState(admin, ReviewState.APPROVED);
+			update(rh);
+			Offer offer1 = createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
+			Offer offer2 = createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
+			createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
+			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
 
 			System.out.println("Database initialized");
 

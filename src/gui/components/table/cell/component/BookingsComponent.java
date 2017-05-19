@@ -1,4 +1,4 @@
-package gui.components.table.cell;
+package gui.components.table.cell.component;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;

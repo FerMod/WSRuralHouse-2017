@@ -1,4 +1,4 @@
-package gui;
+package gui.user.owner;
 
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -33,6 +33,7 @@ import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.TextPrompt;
+import gui.user.client.MainWindow;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
@@ -54,6 +55,12 @@ import javax.swing.JEditorPane;
 import javax.swing.ImageIcon;
 
 public class OwnerRuralHousesPanel extends JPanel {
+	
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = 6667016759542877447L;
+	
 	private JTextField textField;	//Name of RuralHouse
 	private JTextField textField_1; //Date fin	
 	private JTextField textField_2; //Address
@@ -69,8 +76,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private ArrayList<RuralHouse> rhs;
 
 
-	private JComboBox comboBox;   //RuralHouses
-	private JComboBox comboBox_1; //Cities
+	private JComboBox<RuralHouse> comboBox;   //RuralHouses
+	private JComboBox<City> comboBox_1; //Cities
 
 	private static String pattern = "dd/MM/yyyy";
 	private static SimpleDateFormat format = new SimpleDateFormat(pattern);
@@ -185,7 +192,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		JLabel lblMisCasas = new JLabel("Mis casas");
 		lblMisCasas.setBounds(25, 11, 95, 31);
 
-		comboBox = new JComboBox();
+		comboBox = new JComboBox<RuralHouse>();
 		comboBox.setModel(ruralHousesOfOwner);
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -225,7 +232,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		lblCiudad.setBounds(25, 253, 72, 20);
 		add(lblCiudad);
 
-		comboBox_1 = new JComboBox();
+		comboBox_1 = new JComboBox<City>();
 		comboBox_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				city = (City) comboBox_1.getSelectedItem();
@@ -306,6 +313,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		textField_4.setColumns(10);
 
 		JButton btnNewButton_2 = new JButton("");
+		btnNewButton_2.setToolTipText("Refresh rural house list");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comboBox.setEnabled(false);
@@ -325,6 +333,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 		add(lblNewLabel);
 
 		JButton button = new JButton("");
+		button.setToolTipText("Add new rural house");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog newRuralHouse = new NewRuralHouseWindow((Owner)MainWindow.user);

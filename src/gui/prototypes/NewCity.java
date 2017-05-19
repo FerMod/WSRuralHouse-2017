@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import businessLogic.ApplicationFacadeInterface;
-import gui.MainGUI;
+import gui.old.MainGUI;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

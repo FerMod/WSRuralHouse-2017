@@ -1,4 +1,4 @@
-package gui;
+package gui.user.client;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -63,7 +63,7 @@ import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import gui.components.table.CellComponent;
 import gui.components.table.CustomTableModel;
-import gui.components.table.cell.OffersComponent;
+import gui.components.table.cell.component.OffersComponent;
 
 public class ClientMainPanel extends JPanel {
 
@@ -182,6 +182,8 @@ public class ClientMainPanel extends JPanel {
 		gbcTableScrollPanel.gridy = 1;
 		add(getTableScrollPanel(), gbcTableScrollPanel);
 
+		updateRowHeights();
+		
 		//		gbc.anchor = GridBagConstraints.PAGE_START;		
 		//		gbc.fill = GridBagConstraints.HORIZONTAL;
 		//		gbc.weightx = 0.5;
@@ -207,10 +209,6 @@ public class ClientMainPanel extends JPanel {
 		btnLogOut.setPreferredSize(new Dimension(40, 20));
 		menuBar.add(btnLogOut);
 		 */
-
-		//[FIXME] Temporal images.
-		//tableModel.setRandomImages();
-		updateRowHeights();
 
 	}
 

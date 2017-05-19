@@ -1,4 +1,4 @@
-package gui;
+package gui.user.owner;
 
 import java.awt.Component;
 import java.awt.ComponentOrientation;

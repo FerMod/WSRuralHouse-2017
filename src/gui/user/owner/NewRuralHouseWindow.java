@@ -1,4 +1,4 @@
-package gui;
+package gui.user.owner;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,6 +32,7 @@ import domain.RuralHouse;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;
 import gui.prototypes.NewCity;
+import gui.user.client.MainWindow;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
