@@ -23,7 +23,7 @@ import domain.Review;
 import domain.Review.ReviewState;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
-import gui.user.client.MainWindow;
+import gui.user.MainWindow;
 import domain.RuralHouse;
 
 import java.awt.event.ActionListener;

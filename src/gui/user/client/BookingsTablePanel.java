@@ -27,6 +27,7 @@ import domain.Client;
 import gui.components.table.CellComponent;
 import gui.components.table.CustomTableModel;
 import gui.components.table.cell.component.BookingsComponent;
+import gui.user.MainWindow;
 
 import java.awt.Component;
 import java.awt.Dimension;

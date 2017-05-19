@@ -64,6 +64,7 @@ import gui.components.TextPrompt;
 import gui.components.table.CellComponent;
 import gui.components.table.CustomTableModel;
 import gui.components.table.cell.component.OffersComponent;
+import gui.user.MainWindow;
 
 public class ClientMainPanel extends JPanel {
 

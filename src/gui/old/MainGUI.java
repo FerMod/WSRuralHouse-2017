@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import domain.RuralHouse;
 import domain.AbstractUser.Role;
-import gui.user.client.MainWindow;
+import gui.user.MainWindow;
 import gui.user.owner.NewRuralHouseWindow;
 import domain.Owner;
 import businessLogic.ApplicationFacadeImpl;
