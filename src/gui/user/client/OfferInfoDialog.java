@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
@@ -358,6 +359,10 @@ public class OfferInfoDialog extends JDialog {
 	private ImagePanel getImagePanel() {
 		if(imagePanel == null) {	
 			imagePanel = new ImagePanel();
+			Vector<Offer> offer = MainWindow.getBusinessLogic().getOffer(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
+			ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
+			System.out.println(offer);
+			imagePanel.setImage(imageIcon);
 			imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			imagePanel.setMinimumSize(imagePanel.getImageSize());
 		}

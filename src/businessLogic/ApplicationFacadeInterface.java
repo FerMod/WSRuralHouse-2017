@@ -40,6 +40,14 @@ public interface ApplicationFacadeInterface  {
 	 * @return the managed instance that is updated
 	 */
 	<T> T update(T entity);
+	
+	/**
+	 * Method used to remove a entity from the database
+	 * 
+	 * @param entity the entity that will be removed
+	 * @return the managed instance that has been removed
+	 */	
+	<T> T remove(T entity);
 
 	/**
 	 * Creates an offer and stores it in the database.

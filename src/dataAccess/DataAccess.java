@@ -150,6 +150,23 @@ public class DataAccess implements DataAccessInterface {
 		return managedInstance;
 	}
 
+	/**
+	 * Method used to remove a entity from the database
+	 * 
+	 * @param entity the entity that will be removed
+	 * @return the managed instance that has been removed
+	 */	
+	@Override
+	public <T> T remove(T entity) {
+		open();
+		db.getTransaction().begin();
+		entity = db.merge(entity);
+		db.remove(entity);
+		db.getTransaction().commit();
+		close();
+		return entity;
+	}
+
 	@Override
 	public void initializeDB(){
 		try{				
@@ -165,7 +182,7 @@ public class DataAccess implements DataAccessInterface {
 			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
 			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
 			Client client = (Client) createUser("client@gamail.com", "client", "client123", Role.CLIENT);
-			
+
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
@@ -211,7 +228,7 @@ public class DataAccess implements DataAccessInterface {
 			Offer offer2 = createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
 			createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
 			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
-
+			
 			System.out.println("Database initialized");
 
 			for (RuralHouse ruralHouse : getRuralHouses()) {

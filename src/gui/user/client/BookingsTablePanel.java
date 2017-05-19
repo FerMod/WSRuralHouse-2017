@@ -7,11 +7,17 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.EventListener;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -50,22 +56,24 @@ public class BookingsTablePanel extends JPanel {
 	 * @param parentFrame 
 	 */
 	public BookingsTablePanel(JFrame parentFrame) {
-		
+
 		this.parentFrame = parentFrame;
 
 		initComponents();
 
 		updateRowHeights();
 
+		
+		
 	}
 
 	private void initComponents() {
-		
+
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.rowWeights = new double[]{0.0, 1.0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0};
 		setLayout(gridBagLayout);
-		
+
 		GridBagConstraints gbcLblBookings = new GridBagConstraints();
 		gbcLblBookings.anchor = GridBagConstraints.WEST;
 		gbcLblBookings.insets = new Insets(10, 5, 0, 0);
@@ -108,9 +116,16 @@ public class BookingsTablePanel extends JPanel {
 	}
 
 	private JTable getBookingsTable() {
-		if(bookingsTable == null) {
 
-			List<Booking> bookingList = MainWindow.getBusinessLogic().getBookings((Client)MainWindow.user);
+		boolean needsUpdate = false;
+		List<Booking> bookingList = MainWindow.getBusinessLogic().getBookings((Client)MainWindow.user);
+
+		System.out.println(bookingList);
+		if(bookingsTable != null) {
+			needsUpdate = bookingsTable.getRowCount() != bookingList.size();
+		}
+
+		if(bookingsTable == null || needsUpdate) {
 
 			List<CellComponent<Booking>> bookingComponentList = new Vector<>();
 			List<ImageIcon> imageVector = new Vector<ImageIcon>();
@@ -120,7 +135,7 @@ public class BookingsTablePanel extends JPanel {
 			}
 
 			bookingComponentList.stream().forEachOrdered(e -> System.out.println(e.getElement().getOffer()));
-			
+
 			tableModel = new CustomTableModel(bookingComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
 			bookingsTable = new JTable(tableModel);
@@ -146,8 +161,8 @@ public class BookingsTablePanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(bookingsTable, new double[] {1.0});
-			bookingsTable.setDefaultRenderer(Object.class, new BookingsComponent(parentFrame));
-			bookingsTable.setDefaultEditor(Object.class, new BookingsComponent(parentFrame));
+			bookingsTable.setDefaultRenderer(Object.class, new BookingsComponent(this));
+			bookingsTable.setDefaultEditor(Object.class, new BookingsComponent(this));
 
 			//When selection changes, provide user with row numbers for both view and model.
 			bookingsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -189,8 +204,7 @@ public class BookingsTablePanel extends JPanel {
 					}
 				}
 			});
-			*/
-
+			 */
 		}
 		return bookingsTable;
 	}
@@ -213,5 +227,9 @@ public class BookingsTablePanel extends JPanel {
 			}
 		}
 	}
-	
+
+	public void updateTable() {
+		getBookingsTable();		
+	}
+
 }

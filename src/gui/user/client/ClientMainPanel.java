@@ -359,25 +359,16 @@ public class ClientMainPanel extends JPanel {
 				boolean include = false;
 
 				CellComponent<Offer> cellComponent = (CellComponent<Offer>) entry.getValue(1);
-				//JTextArea textArea = null;
 
 				System.out.println("cellDetails.getDescription().contains(text) -> " + cellComponent.getElement().getRuralHouse().getDescription().contains(text));
 				if(cellComponent.getElement().getRuralHouse().getDescription().contains(text)) {
-					//textArea = cellDetails.getTableDetailsCell().getDescriptionTextArea();
 					include = true;
 				}
 
 				System.out.println("cellDetails.getAddress().contains(text) -> " + cellComponent.getElement().getRuralHouse().getAddress().contains(text));
 				if(cellComponent.getElement().getRuralHouse().getAddress().contains(text)) {
-					//textArea = cellDetails.getTableDetailsCell().getAddressField();
 					include = true;
 				}
-
-				// System.out.println("textArea != null -> " + textArea != null);
-				// if(include && !text.equals("") && textArea != null) {
-				// 	 highlightTextAreaWord(textArea, text, Color.YELLOW);
-				// }
-
 				return include;
 			}
 		};

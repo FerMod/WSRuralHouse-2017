@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,22 +17,27 @@ import domain.util.IntegerAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class Booking {
-	
+public class Booking implements Serializable {
+
+	/**
+	 * Generated serial version ID
+	 */
+	private static final long serialVersionUID = -8672637781397201363L;
+
 	@XmlID
 	@XmlJavaTypeAdapter(IntegerAdapter.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
+
 	private Client client;
 	private Offer offer;
 	private Date bookingDate;
-	
+
 	private Date startDate;
 	private Date endDate;
 	private double price;
-	
+
 	public Booking(Client client, Offer offer, double price, Date startDate, Date endDate) {
 		this.client = client;
 		this.offer = offer;
@@ -39,6 +45,10 @@ public class Booking {
 		this.endDate = endDate;
 		this.price = price;
 		bookingDate = Calendar.getInstance().getTime();
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 
 	public Client getClient() {
@@ -68,7 +78,7 @@ public class Booking {
 	public Date getBookingDate() {
 		return bookingDate;
 	}
-	
+
 	public Date getStartDate() {
 		return startDate;
 	}

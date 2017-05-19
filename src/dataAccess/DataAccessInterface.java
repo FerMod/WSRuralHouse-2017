@@ -27,6 +27,8 @@ public interface DataAccessInterface {
 	void initializeDB();
 	
 	<T> T update(T entity);
+	
+	<T> T remove(T entity);
 
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price);
 	

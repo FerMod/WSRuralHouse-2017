@@ -1,12 +1,18 @@
 package gui.user;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,6 +34,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.objectdb.o.IOM.B;
 
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
@@ -58,6 +66,8 @@ public class MainWindow extends JFrame {
 	public static AbstractUser user;
 	private JTabbedPane tabbedPane;
 	private int lastPaneIndex = 0;
+
+	private ChangeListener changeListener;
 
 	/**
 	 * Launches the {@code MainWindow} application.</br>
@@ -111,7 +121,7 @@ public class MainWindow extends JFrame {
 				switch (response) {
 				case CLIENT:					
 					try {
-						return getBusinessLogic().login("client", "cliet123");
+						return getBusinessLogic().login("client", "client123");
 					} catch (AccountNotFoundException | AuthException e) {
 						e.printStackTrace();
 					}
@@ -192,15 +202,13 @@ public class MainWindow extends JFrame {
 
 	}
 
-
-
 	private JTabbedPane getTabbedPane() {
 		if(tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setUI(new CustomTabbedPaneUI());
 			setupTabs(MainWindow.user.getRole());
 
-			ChangeListener changeListener = new ChangeListener() {
+			changeListener = new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent changeEvent) {
 					JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
@@ -219,8 +227,7 @@ public class MainWindow extends JFrame {
 					}
 				}
 			};
-			tabbedPane.addChangeListener(changeListener);
-
+			tabbedPane.addChangeListener(changeListener);			
 		}
 		return tabbedPane;
 	}
@@ -245,7 +252,7 @@ public class MainWindow extends JFrame {
 		switch (role) {
 		case CLIENT:
 			panelMap.put("Rural House Offers", new ClientMainPanel(this));
-			panelMap.put("Offer Bookings", new BookingsTablePanel(this));
+			panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
 			break;
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!

@@ -15,7 +15,7 @@ import java.util.Locale;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -25,20 +25,22 @@ import javax.swing.border.EmptyBorder;
 import domain.Booking;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
+import gui.user.MainWindow;
+import gui.user.client.BookingsTablePanel;
 
 public class BookingsComponent extends AbstractCellEditor implements CellComponentInterface {
 
 	private static final long serialVersionUID = 2711709042458345572L;
 
-	private JFrame parentFrame;
+	private BookingsTablePanel bookingsTablePanel;
 	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 	private JButton btnCancelBooking;
 	private JPanel panel;
 	private CellComponent<Booking> selectedComponent;
 
-	public BookingsComponent(JFrame frame) {
+	public BookingsComponent(BookingsTablePanel bookingsTablePanel) {
 
-		this.parentFrame = frame;
+		this.bookingsTablePanel = bookingsTablePanel;
 
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
@@ -110,7 +112,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		gbcCancelButton.gridy = 0;	
 		gbcCancelButton.insets = new Insets(5, 5, 0, 0);
 		panel.add(getBtnCancelBooking(), gbcCancelButton);
-		
+
 	}
 
 	private void updateData(CellComponent<Booking> value, boolean isSelected, JTable table) {
@@ -230,8 +232,11 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 			btnCancelBooking.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(e.getSource() == btnCancelBooking && selectedComponent != null) {			
-						System.out.println("Cancel offer button pressed!");
+					if(e.getSource() == btnCancelBooking && selectedComponent != null) {
+						if(cancelQuestion()) {
+							MainWindow.getBusinessLogic().remove(selectedComponent.getElement());
+							bookingsTablePanel.updateTable();
+						}
 					}
 				}
 			});	
@@ -241,6 +246,18 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 
 	public void setBtnCancelBooking(JButton btnCancelBooking) {
 		this.btnCancelBooking = btnCancelBooking;
+	}
+
+	private boolean cancelQuestion() {
+		int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel the booking?\nThis cannot undone.", null, JOptionPane.YES_NO_OPTION);
+		switch (reply) {
+		case JOptionPane.YES_OPTION:	
+			MainWindow.user = null;
+			return true;
+		case JOptionPane.NO_OPTION:
+		default:
+			return false;
+		}
 	}
 
 }
