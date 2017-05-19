@@ -13,13 +13,10 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlAccessType;
