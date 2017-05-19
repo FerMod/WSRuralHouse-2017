@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
@@ -24,7 +23,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import domain.Booking;
-import domain.Offer;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
 
