@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,8 +34,16 @@ import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
+import domain.Admin;
+import domain.Client;
+import domain.Offer;
+import domain.Owner;
+import domain.RuralHouse;
 import domain.AbstractUser.Role;
+import domain.Review.ReviewState;
+import exceptions.BadDatesException;
 import exceptions.DuplicatedEntityException;
+import exceptions.OverlappingOfferException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
 
@@ -103,8 +113,28 @@ public class MainWindow extends JFrame {
 		if(response != null) {
 			try {
 				switch (response) {
-				case CLIENT:
-					return getBusinessLogic().createUser("Client@clientmail.com", "Client", "ClientPassword", response);
+				case CLIENT:					
+					Client client = (Client) getBusinessLogic().createUser("Client@clientmail.com", "Client", "ClientPassword", response);
+					Admin admin = (Admin) getBusinessLogic().createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
+					Owner owner = (Owner)getBusinessLogic().createUser("own@gmail.com", "own", "own", Role.OWNER);
+					SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+					RuralHouse rh = getBusinessLogic().createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", getBusinessLogic().createCity("Donostia"), "La calle larga 4 - 3ºb");
+					rh.getReview().setState(admin, ReviewState.APPROVED);
+					getBusinessLogic().update(rh);
+					Offer offer1 = null, offer2 = null;
+					try {
+						offer1 = getBusinessLogic().createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
+						offer2 = getBusinessLogic().createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
+					} catch (OverlappingOfferException | BadDatesException | ParseException e) {
+						e.printStackTrace();
+					}
+					try {
+						getBusinessLogic().createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
+						getBusinessLogic().createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					return client;
 				case OWNER:
 					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
 				case ADMIN:
