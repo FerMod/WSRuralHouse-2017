@@ -7,6 +7,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Hashtable;
@@ -24,6 +28,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
@@ -175,7 +180,7 @@ public class ClientMainPanel extends JPanel {
 		add(getTableScrollPanel(), gbcTableScrollPanel);
 
 		updateRowHeights();
-		
+
 		//		gbc.anchor = GridBagConstraints.PAGE_START;		
 		//		gbc.fill = GridBagConstraints.HORIZONTAL;
 		//		gbc.weightx = 0.5;
@@ -495,6 +500,30 @@ public class ClientMainPanel extends JPanel {
 				}
 
 			});
+
+			offersTable.addFocusListener(new FocusListener() {				
+				@Override
+				public void focusGained(FocusEvent e) {
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					offersTable.clearSelection();
+				}
+			});
+
+			offersTable.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent me) {
+					//					JTable table =(JTable) me.getSource();
+					//					Point p = me.getPoint();
+					//					int row = table.rowAtPoint(p);
+					if (me.getClickCount() == 2) {
+						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, info window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			});
+
 
 		}
 		return offersTable;

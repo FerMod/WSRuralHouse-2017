@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
@@ -156,14 +157,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 
 	@Override
 	public boolean isCellEditable(EventObject e){
-		if(e.getSource() instanceof JTable) {
-			JTable table = (JTable) e.getSource();	
-			int selectedColumn = table.getSelectedColumn();
-			if(selectedColumn != -1) {
-				return table.getColumnClass(selectedColumn).equals(CellComponent.class);
-			}
-		}
-		return false;
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -235,7 +229,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 					if(e.getSource() == btnCancelBooking && selectedComponent != null) {
 						if(cancelQuestion()) {
 							MainWindow.getBusinessLogic().remove(selectedComponent.getElement());
-							bookingsTablePanel.updateTable();
+							MainWindow.getPropertyChangeSupport().firePropertyChange("bookingRemoved", selectedComponent, null);
 						}
 					}
 				}

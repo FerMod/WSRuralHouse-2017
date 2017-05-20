@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
@@ -22,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import domain.Offer;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
+import gui.user.client.BookingsTablePanel;
 import gui.user.client.OfferInfoDialog;
 
 public class OffersComponent extends AbstractCellEditor implements CellComponentInterface {
@@ -123,7 +126,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 				}
 			}
 		});
-		
+
 	}
 
 	private void updateData(CellComponent<Offer> value, boolean isSelected, JTable table) {
@@ -176,12 +179,10 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 
 	@Override
 	public boolean isCellEditable(EventObject e){
-		if(e.getSource() instanceof JTable) {
-			JTable table = (JTable) e.getSource();	
-			int selectedColumn = table.getSelectedColumn();
-			if(selectedColumn >= 1) {
-				return table.getColumnClass(selectedColumn).equals(CellComponent.class);
-			}
+		JTable table = (JTable) e.getSource();	
+		int selectedColumn = table.getSelectedColumn();
+		if(selectedColumn >= 1) {
+			return true;
 		}
 		return false;
 	}
@@ -231,6 +232,6 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 
 	public void setInfoButton(JButton infoButton) {
 		this.infoButton = infoButton;
-	}
+	}	
 
 }

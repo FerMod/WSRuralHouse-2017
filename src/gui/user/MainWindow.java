@@ -1,18 +1,15 @@
 package gui.user;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Iterator;
+import java.beans.PropertyChangeSupport;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -35,12 +32,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.objectdb.o.IOM.B;
-
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
+import domain.Booking;
+import domain.Client;
 import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -56,7 +53,7 @@ import gui.user.owner.OwnerRuralHousesPanel;
  *	
  *
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements PropertyChangeListener {
 
 	private static final long serialVersionUID = -1810393566512302281L;
 
@@ -67,7 +64,7 @@ public class MainWindow extends JFrame {
 	private JTabbedPane tabbedPane;
 	private int lastPaneIndex = 0;
 
-	private ChangeListener changeListener;
+	private static PropertyChangeSupport pcs = new PropertyChangeSupport(MainWindow.class);
 
 	/**
 	 * Launches the {@code MainWindow} application.</br>
@@ -208,11 +205,11 @@ public class MainWindow extends JFrame {
 			tabbedPane.setUI(new CustomTabbedPaneUI());
 			setupTabs(MainWindow.user.getRole());
 
-			changeListener = new ChangeListener() {
+			ChangeListener changeListener = new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent changeEvent) {
 					JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-					int index = sourceTabbedPane.getSelectedIndex();				
+					int index = sourceTabbedPane.getSelectedIndex();	
 					System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
 					if(index == sourceTabbedPane.getTabCount()-1) {
 						if(logOutQuestion()) {
@@ -233,6 +230,7 @@ public class MainWindow extends JFrame {
 	}
 
 	private void setupTabs(Role role) {
+		addPropertyChangeListener(this);
 		Map<String, JPanel> panelMap = getRoleTabPanels(role);
 		for (Entry<String, JPanel> entry : panelMap.entrySet()) {
 			tabbedPane.add(entry.getKey(), entry.getValue());
@@ -252,7 +250,8 @@ public class MainWindow extends JFrame {
 		switch (role) {
 		case CLIENT:
 			panelMap.put("Rural House Offers", new ClientMainPanel(this));
-			panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
+			BookingsTablePanel bookingsTablePanel = new BookingsTablePanel(this);
+			panelMap.put("Offer Bookings", bookingsTablePanel);			
 			break;
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!
@@ -375,6 +374,30 @@ public class MainWindow extends JFrame {
 		case JOptionPane.NO_OPTION:
 		default:
 			return false;
+		}
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.addPropertyChangeListener(propertyChangeListener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.removePropertyChangeListener(propertyChangeListener);
+	}
+
+	public static PropertyChangeSupport getPropertyChangeSupport() {
+		return pcs;
+	}
+
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getPropertyName().equals("bookingRemoved")) {
+			System.out.println("### Booking removed ###");
+		} else if(evt.getPropertyName().equals("bookingAdded")) {
+			System.out.println("### Booking Added ###");
+			Booking booking = (Booking) evt.getNewValue();
+			System.out.println(booking);
 		}
 	}
 

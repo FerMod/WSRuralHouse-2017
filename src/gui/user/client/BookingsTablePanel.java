@@ -50,10 +50,13 @@ public class BookingsTablePanel extends JPanel {
 	private TableRowSorter<CustomTableModel> sorter;
 	private JFrame parentFrame;
 	private JLabel lblBookings;
+	
+	 private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
 	/**
 	 * Create the panel.
 	 * @param parentFrame 
+	 * @param changeListener 
 	 */
 	public BookingsTablePanel(JFrame parentFrame) {
 
@@ -62,8 +65,6 @@ public class BookingsTablePanel extends JPanel {
 		initComponents();
 
 		updateRowHeights();
-
-		
 		
 	}
 
@@ -120,7 +121,6 @@ public class BookingsTablePanel extends JPanel {
 		boolean needsUpdate = false;
 		List<Booking> bookingList = MainWindow.getBusinessLogic().getBookings((Client)MainWindow.user);
 
-		System.out.println(bookingList);
 		if(bookingsTable != null) {
 			needsUpdate = bookingsTable.getRowCount() != bookingList.size();
 		}
@@ -228,8 +228,12 @@ public class BookingsTablePanel extends JPanel {
 		}
 	}
 
-	public void updateTable() {
-		getBookingsTable();		
-	}
+	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.addPropertyChangeListener(propertyChangeListener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+    	pcs.removePropertyChangeListener(propertyChangeListener);
+    }
 
 }

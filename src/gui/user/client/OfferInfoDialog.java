@@ -45,8 +45,11 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 import com.toedter.calendar.JDateChooser;
 
+import domain.Booking;
 import domain.Client;
 import domain.Offer;
 import gui.components.FrameShader;
@@ -490,7 +493,7 @@ public class OfferInfoDialog extends JDialog {
 						lastDateChooser.setMinSelectableDate(firstDate.getTime());
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
 						updatePrice();			
-						System.out.println(e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
+						System.out.println("Property changed! " + e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
 					}
 				}
 			});
@@ -562,7 +565,8 @@ public class OfferInfoDialog extends JDialog {
 			btnBookOffer.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
-					MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
+					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
+					MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);					
 					frameShader.setEnabled(false);
 					dispose();
 				}

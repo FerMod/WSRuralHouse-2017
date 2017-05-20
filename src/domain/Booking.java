@@ -37,6 +37,9 @@ public class Booking implements Serializable {
 	private Date startDate;
 	private Date endDate;
 	private double price;
+	
+	public Booking() {
+	}
 
 	public Booking(Client client, Offer offer, double price, Date startDate, Date endDate) {
 		this.client = client;

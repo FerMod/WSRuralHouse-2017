@@ -988,6 +988,9 @@ public class DataAccess implements DataAccessInterface {
 		System.out.println(Arrays.deepToString(collection.toArray()));
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
 		Booking booking= null;
@@ -1001,6 +1004,7 @@ public class DataAccess implements DataAccessInterface {
 			offer.setBooked(true);
 			db.persist(booking);
 			db.getTransaction().commit();
+			update(booking);
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
 		} catch	(Exception e) {
 			e.printStackTrace();
