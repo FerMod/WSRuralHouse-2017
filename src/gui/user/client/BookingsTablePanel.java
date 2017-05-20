@@ -37,7 +37,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-public class BookingsTablePanel extends JPanel {
+public class BookingsTablePanel extends JPanel implements PropertyChangeListener {
 
 	/**
 	 * Generated serial version ID
@@ -51,7 +51,7 @@ public class BookingsTablePanel extends JPanel {
 	private JFrame parentFrame;
 	private JLabel lblBookings;
 	
-	 private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+	 private static PropertyChangeSupport pcs = new PropertyChangeSupport(BookingsTablePanel.class);
 
 	/**
 	 * Create the panel.
@@ -65,6 +65,8 @@ public class BookingsTablePanel extends JPanel {
 		initComponents();
 
 		updateRowHeights();
+		
+		addPropertyChangeListener(this);
 		
 	}
 
@@ -235,5 +237,22 @@ public class BookingsTablePanel extends JPanel {
     public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
     	pcs.removePropertyChangeListener(propertyChangeListener);
     }
+    
+    public static PropertyChangeSupport getPropertyChangeSupport() {
+    	return pcs;
+    }
+    
+    @Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getPropertyName().equals("rowDeleted")) {
+			System.out.println("### Booking removed ###");
+			((CustomTableModel)bookingsTable.getModel()).fireTableRowsDeleted(bookingsTable.getSelectedRow(), bookingsTable.getSelectedRow());
+		} else if(evt.getPropertyName().equals("rowRemoved")) {
+			System.out.println("### Booking Added ###");
+			int row = (int)evt.getNewValue();
+			((CustomTableModel)bookingsTable.getModel()).fireTableRowsInserted(row, row);
+		}
+	}
+
 
 }

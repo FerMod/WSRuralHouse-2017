@@ -7,10 +7,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Hashtable;
@@ -501,16 +501,16 @@ public class ClientMainPanel extends JPanel {
 
 			});
 
-			offersTable.addFocusListener(new FocusListener() {				
-				@Override
-				public void focusGained(FocusEvent e) {
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					offersTable.clearSelection();
-				}
-			});
+			//			offersTable.addFocusListener(new FocusListener() {				
+			//				@Override
+			//				public void focusGained(FocusEvent e) {
+			//				}
+			//
+			//				@Override
+			//				public void focusLost(FocusEvent e) {
+			//					offersTable.clearSelection();
+			//				}
+			//			});
 
 			offersTable.addMouseListener(new MouseAdapter() {
 				@Override

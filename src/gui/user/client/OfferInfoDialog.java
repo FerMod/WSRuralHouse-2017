@@ -21,6 +21,7 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -364,7 +365,7 @@ public class OfferInfoDialog extends JDialog {
 			imagePanel = new ImagePanel();
 			Vector<Offer> offer = MainWindow.getBusinessLogic().getOffer(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
 			ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
-			System.out.println(offer);
+			System.out.println("Showing offer: " + offer);
 			imagePanel.setImage(imageIcon);
 			imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			imagePanel.setMinimumSize(imagePanel.getImageSize());
@@ -566,7 +567,8 @@ public class OfferInfoDialog extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
 					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
-					MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);					
+//					MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
+					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, booking);
 					frameShader.setEnabled(false);
 					dispose();
 				}
@@ -587,7 +589,6 @@ public class OfferInfoDialog extends JDialog {
 
 	private void updatePrice() {
 		if(firstDate != null && lastDate != null) {
-			System.out.println(MainWindow.getBusinessLogic().getLocale());
 			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
 			textFieldPrice.setText(formatter.format(getPrice()));	
 			btnBookOffer.setEnabled(true);

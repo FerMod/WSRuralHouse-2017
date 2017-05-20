@@ -1,5 +1,6 @@
 package gui.components.table.cell.component;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -108,24 +109,13 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 		gbcPrice.gridy = 2;
 		panel.add(priceComponent, gbcPrice);
 
-		infoButton = new JButton("Info. ");
-		infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GridBagConstraints gbcInfoButton = new GridBagConstraints();
 		gbcInfoButton.fill = GridBagConstraints.HORIZONTAL;
 		gbcInfoButton.gridheight = 3;
 		gbcInfoButton.gridx = 2;
 		gbcInfoButton.gridy = 0;	
 		gbcInfoButton.insets = new Insets(5, 5, 0, 0);
-		panel.add(infoButton, gbcInfoButton);
-
-		infoButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == infoButton && selectedComponent != null) {			
-					openOfferDialog(parentFrame, selectedComponent);
-				}
-			}
-		});
+		panel.add(getInfoButton(), gbcInfoButton);
 
 	}
 
@@ -180,8 +170,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 	@Override
 	public boolean isCellEditable(EventObject e){
 		JTable table = (JTable) e.getSource();	
-		int selectedColumn = table.getSelectedColumn();
-		if(selectedColumn >= 1) {
+		if(table.getSelectedColumn() > 0) {
 			return true;
 		}
 		return false;
@@ -227,6 +216,21 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 	}
 
 	public JButton getInfoButton() {
+		if (infoButton == null) {
+			infoButton = new JButton("Info. ");
+			infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			infoButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			infoButton.setDefaultCapable(false);
+			infoButton.setFocusTraversalKeysEnabled(false);
+			infoButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(e.getSource() == infoButton && selectedComponent != null) {			
+						openOfferDialog(parentFrame, selectedComponent);
+					}
+				}
+			});
+		}
 		return infoButton;
 	}
 

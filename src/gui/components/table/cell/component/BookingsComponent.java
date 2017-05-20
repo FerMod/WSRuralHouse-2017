@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
@@ -163,9 +164,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		if(value instanceof CellComponent) {
-			updateData((CellComponent<Booking>) value, isSelected, table);
-		}
+		updateData((CellComponent<Booking>) value, isSelected, table);
 		return panel;
 	}
 
@@ -228,8 +227,9 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 				public void actionPerformed(ActionEvent e) {
 					if(e.getSource() == btnCancelBooking && selectedComponent != null) {
 						if(cancelQuestion()) {
+							bookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowDeleted", selectedComponent, null);
 							MainWindow.getBusinessLogic().remove(selectedComponent.getElement());
-							MainWindow.getPropertyChangeSupport().firePropertyChange("bookingRemoved", selectedComponent, null);
+							//MainWindow.getPropertyChangeSupport().firePropertyChange("bookingRemoved", selectedComponent, null);
 						}
 					}
 				}
