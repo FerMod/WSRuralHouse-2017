@@ -33,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -567,8 +568,8 @@ public class OfferInfoDialog extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
 					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
-//					MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
-					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, booking);
+					//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
+					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, rowContent);
 					frameShader.setEnabled(false);
 					dispose();
 				}

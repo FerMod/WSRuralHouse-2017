@@ -17,6 +17,7 @@ import java.util.Locale;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -34,15 +35,16 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 
 	private static final long serialVersionUID = 2711709042458345572L;
 
-	private BookingsTablePanel bookingsTablePanel;
+	private JFrame parentFrame;
 	private JTextArea titleComponent, descriptionComponent, addressComponent, priceComponent;
 	private JButton btnCancelBooking;
 	private JPanel panel;
 	private CellComponent<Booking> selectedComponent;
+	private int index = -1;
 
-	public BookingsComponent(BookingsTablePanel bookingsTablePanel) {
+	public BookingsComponent(JFrame parent) {
 
-		this.bookingsTablePanel = bookingsTablePanel;
+		this.parentFrame = parent;
 
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
@@ -118,7 +120,8 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	}
 
 	private void updateData(CellComponent<Booking> value, boolean isSelected, JTable table) {
-		value.setCellComponentTable(this);
+		//value.setCellComponentTable(this);
+		selectedComponent = value;
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 		titleComponent.setText(value.getElement().getOffer().getRuralHouse().getName() +"\n"
 				+ date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getStartDate()));
@@ -132,22 +135,20 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		addressComponent.setText(value.getElement().getOffer().getRuralHouse().getCity() + " " + value.getElement().getOffer().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getOffer().getPrice()));
 
-		selectedComponent = value;
 
-		if (isSelected) {
-			panel.setBackground(table.getSelectionBackground());
-		}else{
-			panel.setBackground(table.getBackground());
-		}
+		//		if (isSelected) {
+		//			panel.setBackground(table.getSelectionBackground());
+		//		}else{
+		//			panel.setBackground(table.getBackground());
+		//		}
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if(value instanceof CellComponent) {
-			updateData((CellComponent<Booking>) value, true, table);	
-		}
+		index = row;
+		updateData((CellComponent<Booking>) value, true, table);	
 		return panel;
 	}
 
@@ -164,6 +165,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		index = row;
 		updateData((CellComponent<Booking>) value, isSelected, table);
 		return panel;
 	}
@@ -227,9 +229,10 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 				public void actionPerformed(ActionEvent e) {
 					if(e.getSource() == btnCancelBooking && selectedComponent != null) {
 						if(cancelQuestion()) {
-							bookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowDeleted", selectedComponent, null);
-							MainWindow.getBusinessLogic().remove(selectedComponent.getElement());
-							//MainWindow.getPropertyChangeSupport().firePropertyChange("bookingRemoved", selectedComponent, null);
+							Booking canceledBooking = MainWindow.getBusinessLogic().remove(selectedComponent.getElement());
+							System.out.println("Canceled booking: " + canceledBooking);
+							BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowDeleted", index, null);
+							//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingRemoved", selectedComponent, null);
 						}
 					}
 				}

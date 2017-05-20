@@ -197,7 +197,6 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return dataAccess.getBookings(client);
 	}
 
-
 	public Locale getLocale() {
 		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
 		if(locale == null) {

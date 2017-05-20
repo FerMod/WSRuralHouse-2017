@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
@@ -120,7 +121,8 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 	}
 
 	private void updateData(CellComponent<Offer> value, boolean isSelected, JTable table) {
-		value.setCellComponentTable(this);
+		//value.setCellComponentTable(this);
+		selectedComponent = value;
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 		titleComponent.setText(value.getElement().getRuralHouse().getName() + "\n" + date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getEndDate()));
 		String description = value.getElement().getRuralHouse().getDescription();
@@ -133,13 +135,12 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 		addressComponent.setText(value.getElement().getRuralHouse().getCity() + " " + value.getElement().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getPrice()));
 
-		selectedComponent = value;
-
-		if (isSelected) {
-			panel.setBackground(table.getSelectionBackground());
-		}else{
-			panel.setBackground(table.getBackground());
-		}
+		
+		//		if (isSelected) {
+		//			panel.setBackground(table.getSelectionBackground());
+		//		}else{
+		//			panel.setBackground(table.getBackground());
+		//		}
 
 	}
 
@@ -156,8 +157,8 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		if(value instanceof CellComponent) {
-			updateData((CellComponent<Offer>) value, true, table);	
+		if(value instanceof CellComponent && column >= 1) {
+			updateData((CellComponent<Offer>) value, isSelected, table);	
 		}
 		return panel;
 	}
@@ -169,17 +170,21 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 
 	@Override
 	public boolean isCellEditable(EventObject e){
-		JTable table = (JTable) e.getSource();	
-		if(table.getSelectedColumn() > 0) {
-			return true;
+		if (e instanceof MouseEvent) { 
+			return ((MouseEvent)e).getClickCount() >= 1;
 		}
-		return false;
+		return true;
+//		JTable table = (JTable) e.getSource();	
+//		if(table.getSelectedColumn() > 0) {
+//			return true;
+//		}
+//		return false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-		updateData((CellComponent<Offer>) value, isSelected, table);
+		updateData((CellComponent<Offer>) value, false, table);
 		return panel;
 	}
 

@@ -1000,8 +1000,11 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().begin();
 			double price = getPrice(offer.getPrice(), startDate, endDate);
 			booking = new Booking(client, offer, price, startDate, endDate);
-			client.getBookings().add(booking);
-			offer.setBooked(true);
+			Client clientInstance = db.find(Client.class, client);
+			clientInstance.getBookings().add(booking);
+			clientInstance.getBookings().add(booking);
+			Offer offerInstance = db.find(Offer.class, offer);
+			offerInstance.setBooked(true);
 			db.persist(booking);
 			db.getTransaction().commit();
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
@@ -1010,8 +1013,6 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-		update(offer);
-		update(client);
 		return booking;
 	}
 

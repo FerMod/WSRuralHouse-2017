@@ -7,9 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -37,8 +33,6 @@ import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
-import domain.Booking;
-import domain.Client;
 import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -54,7 +48,7 @@ import gui.user.owner.OwnerRuralHousesPanel;
  *	
  *
  */
-public class MainWindow extends JFrame implements PropertyChangeListener {
+public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = -1810393566512302281L;
 
@@ -65,7 +59,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener {
 	private JTabbedPane tabbedPane;
 	private int lastPaneIndex = 0;
 
-	private static PropertyChangeSupport pcs = new PropertyChangeSupport(MainWindow.class);
+	//private static PropertyChangeSupport pcs = new PropertyChangeSupport(MainWindow.class);//TODO REMOVE
 
 	/**
 	 * Launches the {@code MainWindow} application.</br>
@@ -231,7 +225,6 @@ public class MainWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	private void setupTabs(Role role) {
-		addPropertyChangeListener(this);
 		Map<String, JPanel> panelMap = getRoleTabPanels(role);
 		for (Entry<String, JPanel> entry : panelMap.entrySet()) {
 			tabbedPane.add(entry.getKey(), entry.getValue());
@@ -251,8 +244,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener {
 		switch (role) {
 		case CLIENT:
 			panelMap.put("Rural House Offers", new ClientMainPanel(this));
-			BookingsTablePanel bookingsTablePanel = new BookingsTablePanel(this);
-			panelMap.put("Offer Bookings", bookingsTablePanel);			
+			panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
 			break;
 		case OWNER:
 			//FIXME VERY VERY TEMPORAL!!
@@ -378,6 +370,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener {
 		}
 	}
 
+	/* TODO REMOVE
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		pcs.addPropertyChangeListener(propertyChangeListener);
 	}
@@ -390,16 +383,15 @@ public class MainWindow extends JFrame implements PropertyChangeListener {
 		return pcs;
 	}
 
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName().equals("bookingRemoved")) {
-			System.out.println("### Booking removed ###");
+			System.out.println("### OLD!!  Booking removed ###");
 		} else if(evt.getPropertyName().equals("bookingAdded")) {
-			System.out.println("### Booking Added ###");
+			System.out.println("### OLD!! Booking Added ###");
 			Booking booking = (Booking) evt.getNewValue();
 			System.out.println(booking);
 		}
 	}
-
+	*/
 }

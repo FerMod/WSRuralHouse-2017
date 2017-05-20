@@ -3,21 +3,17 @@ package gui.user.client;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.EventListener;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -27,6 +23,7 @@ import javax.swing.table.TableRowSorter;
 
 import domain.Booking;
 import domain.Client;
+import gui.components.CustomTable;
 import gui.components.table.CellComponent;
 import gui.components.table.CustomTableModel;
 import gui.components.table.cell.component.BookingsComponent;
@@ -50,8 +47,8 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 	private TableRowSorter<CustomTableModel> sorter;
 	private JFrame parentFrame;
 	private JLabel lblBookings;
-	
-	 private static PropertyChangeSupport pcs = new PropertyChangeSupport(BookingsTablePanel.class);
+
+	private static PropertyChangeSupport pcs = new PropertyChangeSupport(BookingsTablePanel.class);
 
 	/**
 	 * Create the panel.
@@ -64,10 +61,7 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 
 		initComponents();
 
-		updateRowHeights();
-		
 		addPropertyChangeListener(this);
-		
 	}
 
 	private void initComponents() {
@@ -114,20 +108,21 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 	private JScrollPane getTableScrollPane() {
 		if (tableScrollPane == null) {
 			tableScrollPane = new JScrollPane(getBookingsTable());
+			updateRowHeights();
 		}
 		return tableScrollPane;
 	}
 
 	private JTable getBookingsTable() {
 
-		boolean needsUpdate = false;
+		boolean needsUpdate = true;
 		List<Booking> bookingList = MainWindow.getBusinessLogic().getBookings((Client)MainWindow.user);
 
 		if(bookingsTable != null) {
 			needsUpdate = bookingsTable.getRowCount() != bookingList.size();
 		}
 
-		if(bookingsTable == null || needsUpdate) {
+		if(needsUpdate) {
 
 			List<CellComponent<Booking>> bookingComponentList = new Vector<>();
 			List<ImageIcon> imageVector = new Vector<ImageIcon>();
@@ -140,7 +135,7 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 
 			tableModel = new CustomTableModel(bookingComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
-			bookingsTable = new JTable(tableModel);
+			bookingsTable = new CustomTable(tableModel);
 			bookingsTable.setRowSorter(sorter);
 			bookingsTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
 			bookingsTable.getTableHeader().setReorderingAllowed(false);
@@ -163,8 +158,8 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(bookingsTable, new double[] {1.0});
-			bookingsTable.setDefaultRenderer(Object.class, new BookingsComponent(this));
-			bookingsTable.setDefaultEditor(Object.class, new BookingsComponent(this));
+			bookingsTable.setDefaultRenderer(Object.class, new BookingsComponent(parentFrame));
+			bookingsTable.setDefaultEditor(Object.class, new BookingsComponent(parentFrame));
 
 			//When selection changes, provide user with row numbers for both view and model.
 			bookingsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -183,16 +178,16 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 
 			});
 
-			bookingsTable.addFocusListener(new FocusListener() {				
-				@Override
-				public void focusGained(FocusEvent e) {
-				}
-
-				@Override
-				public void focusLost(FocusEvent e) {
-					bookingsTable.clearSelection();
-				}
-			});
+			//			bookingsTable.addFocusListener(new FocusListener() {				
+			//				@Override
+			//				public void focusGained(FocusEvent e) {
+			//				}
+			//
+			//				@Override
+			//				public void focusLost(FocusEvent e) {
+			//					bookingsTable.clearSelection();
+			//				}
+			//			});
 
 			/*
 			bookingsTable.addMouseListener(new MouseAdapter() {
@@ -232,27 +227,33 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		pcs.addPropertyChangeListener(propertyChangeListener);
-    }
+	}
 
-    public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
-    	pcs.removePropertyChangeListener(propertyChangeListener);
-    }
-    
-    public static PropertyChangeSupport getPropertyChangeSupport() {
-    	return pcs;
-    }
-    
-    @Override
+	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.removePropertyChangeListener(propertyChangeListener);
+	}
+
+	public static PropertyChangeSupport getPropertyChangeSupport() {
+		return pcs;
+	}
+
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName().equals("rowDeleted")) {
-			System.out.println("### Booking removed ###");
-			((CustomTableModel)bookingsTable.getModel()).fireTableRowsDeleted(bookingsTable.getSelectedRow(), bookingsTable.getSelectedRow());
-		} else if(evt.getPropertyName().equals("rowRemoved")) {
+			System.out.println("### Booking Canceled ###");
+			int index = bookingsTable.getSelectedRow();
+			((CustomTableModel)bookingsTable.getModel()).fireTableRowsDeleted(index, index);
+			JOptionPane.showMessageDialog(parentFrame,	"Booking canceled successfully.", "Booking canceled", JOptionPane.INFORMATION_MESSAGE);
+		} else if(evt.getPropertyName().equals("rowInserted")) {
 			System.out.println("### Booking Added ###");
-			int row = (int)evt.getNewValue();
-			((CustomTableModel)bookingsTable.getModel()).fireTableRowsInserted(row, row);
+			((CustomTableModel)bookingsTable.getModel()).fireTableDataChanged();
+			getTableScrollPane();
+			updateRowHeights();
+			JOptionPane.showMessageDialog(parentFrame,	"Offer booked successfully.", "Booking Information", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
+
+
 
 
 }

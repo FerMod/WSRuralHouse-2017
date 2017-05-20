@@ -163,7 +163,14 @@ public class CustomTableModel extends AbstractTableModel {
 
 	public boolean isCellEditable(int row, int col) {
 		//Note that the data/cell address is constant, no matter where the cell appears on screen.
-		return true;
+		if(data != null) {
+			if(data[row].length > 1) {
+				return col >= 1;
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 
 

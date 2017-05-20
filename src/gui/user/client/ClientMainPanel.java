@@ -9,8 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Hashtable;
@@ -55,6 +53,7 @@ import javax.swing.text.Highlighter;
 
 import domain.Offer;
 import domain.Review.ReviewState;
+import gui.components.CustomTable;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import gui.components.table.CellComponent;
@@ -458,7 +457,7 @@ public class ClientMainPanel extends JPanel {
 
 			tableModel = new CustomTableModel(imageVector, offerComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
-			offersTable = new JTable(tableModel);
+			offersTable = new CustomTable(tableModel);
 			offersTable.setRowSorter(sorter);
 			offersTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
 			offersTable.getTableHeader().setReorderingAllowed(false);
