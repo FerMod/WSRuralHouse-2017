@@ -21,6 +21,7 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -32,6 +33,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -45,6 +47,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 import com.toedter.calendar.JDateChooser;
 
 import domain.Booking;
@@ -57,7 +61,7 @@ import gui.components.TextPrompt;
 import gui.components.table.CellComponent;
 import gui.user.MainWindow;
 
-public class OfferInfoDialog extends JDialog implements PropertyChangeListener {
+public class OfferInfoDialog extends JDialog {
 
 	/**
 	 * Generated serial version UID
@@ -140,7 +144,7 @@ public class OfferInfoDialog extends JDialog implements PropertyChangeListener {
 		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 
-
+		
 		// --------------------------------------------------------------------
 		//  Dialog title bar setup
 		// --------------------------------------------------------------------
@@ -560,17 +564,16 @@ public class OfferInfoDialog extends JDialog implements PropertyChangeListener {
 			btnBookOffer.setEnabled(false);
 			btnBookOffer.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			btnBookOffer.setPreferredSize(new Dimension(150, 40));
-			btnBookOffer.addPropertyChangeListener("bookingAdded", this);
-			//			btnBookOffer.addActionListener(new ActionListener() {
-			//				@Override
-			//				public void actionPerformed(ActionEvent e) {	
-			//					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
-			//					//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
-			//					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, rowContent);
-			//					frameShader.setEnabled(false);
-			//					dispose();
-			//				}
-			//			});
+			btnBookOffer.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {	
+					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
+					//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
+					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, rowContent);
+					frameShader.setEnabled(false);
+					dispose();
+				}
+			});
 		}
 		return btnBookOffer;
 	}
@@ -638,19 +641,6 @@ public class OfferInfoDialog extends JDialog implements PropertyChangeListener {
 
 	public void setParentComponent(Component parentComponent) {
 		this.parentFrame = parentComponent;
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals("bookingAdded")) {
-			Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
-			frameShader.setEnabled(false);
-			dispose();
-		}
-		//Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
-		//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
-		//BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, rowContent);
-
 	}
 
 }

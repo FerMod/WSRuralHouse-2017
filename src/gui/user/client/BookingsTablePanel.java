@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JScrollPane;
@@ -41,11 +42,13 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 	private static final long serialVersionUID = -3609329976279893020L;
 
 	private JScrollPane tableScrollPane;
-	private CustomTable bookingsTable;
+	private JTable bookingsTable;
 	private CustomTableModel tableModel;
 	private TableRowSorter<CustomTableModel> sorter;
 	private JFrame parentFrame;
 	private JLabel lblBookings;
+
+	private static PropertyChangeSupport pcs = new PropertyChangeSupport(BookingsTablePanel.class);
 
 	/**
 	 * Create the panel.
@@ -57,7 +60,8 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 		this.parentFrame = parentFrame;
 
 		initComponents();
-		
+
+		addPropertyChangeListener(this);
 	}
 
 	private void initComponents() {
@@ -221,15 +225,21 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @param evt {@inheritDoc}
-	 * 
-	 */
+	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.addPropertyChangeListener(propertyChangeListener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.removePropertyChangeListener(propertyChangeListener);
+	}
+
+	public static PropertyChangeSupport getPropertyChangeSupport() {
+		return pcs;
+	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(evt.getPropertyName().equals("bookingAdded")) {
+		if(evt.getPropertyName().equals("rowDeleted")) {
 			System.out.println("### Booking Canceled ###");
 			int index = bookingsTable.getSelectedRow();
 			((CustomTableModel)bookingsTable.getModel()).fireTableRowsDeleted(index, index);
@@ -242,5 +252,8 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 			JOptionPane.showMessageDialog(parentFrame,	"Offer booked successfully.", "Booking Information", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
+
+
+
 
 }

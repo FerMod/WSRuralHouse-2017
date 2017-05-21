@@ -26,7 +26,6 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import domain.Booking;
-import gui.components.CustomTable;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
 import gui.user.MainWindow;
@@ -120,8 +119,9 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 
 	}
 
-	private void updateData(JTable table, CellComponent<Booking> value, boolean isSelected) {
+	private void updateData(CellComponent<Booking> value, boolean isSelected, JTable table) {
 		//value.setCellComponentTable(this);
+		selectedComponent = value;
 		SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 		titleComponent.setText(value.getElement().getOffer().getRuralHouse().getName() +"\n"
 				+ date.format(value.getElement().getStartDate()) + " - " + date.format(value.getElement().getStartDate()));
@@ -134,7 +134,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
 		addressComponent.setText(value.getElement().getOffer().getRuralHouse().getCity() + " " + value.getElement().getOffer().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getOffer().getPrice()));
-		selectedComponent = value;
+
 
 		//		if (isSelected) {
 		//			panel.setBackground(table.getSelectionBackground());
@@ -148,7 +148,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		index = row;
-		updateData(table, (CellComponent<Booking>) value, true);	
+		updateData((CellComponent<Booking>) value, true, table);	
 		return panel;
 	}
 
@@ -166,7 +166,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		index = row;
-		updateData(table, (CellComponent<Booking>) value, isSelected);
+		updateData((CellComponent<Booking>) value, isSelected, table);
 		return panel;
 	}
 
@@ -231,7 +231,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 						if(cancelQuestion()) {
 							Booking canceledBooking = MainWindow.getBusinessLogic().remove(selectedComponent.getElement());
 							System.out.println("Canceled booking: " + canceledBooking);
-							//BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowDeleted", index, null);
+							BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowDeleted", index, null);
 							//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingRemoved", selectedComponent, null);
 						}
 					}
