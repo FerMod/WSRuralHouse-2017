@@ -3,8 +3,12 @@ package gui.components.table;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -24,7 +28,7 @@ public class CustomTableModel extends AbstractTableModel {
 
 	private String[] columnNames;
 
-	private Object[][] data; 
+	private List<Object[]> data; 
 
 	public <T> CustomTableModel(List<CellComponent<T>> cellComponent) {
 		this(Arrays.asList("Details"), null, cellComponent);	
@@ -46,10 +50,10 @@ public class CustomTableModel extends AbstractTableModel {
 	}
 
 	private <T> void initData(List<CellComponent<T>> cellComponentList) {
-		data = new Object[cellComponentList.size()][1];
+		data = Collections.synchronizedList(new ArrayList<Object[]>());
 		int i = 0;
 		for (CellComponent<T> component : cellComponentList) {
-			data[i][0] = component;
+			data.add(new Object[] {component});
 			System.out.println("data[" + i + "][0] " + component.toString());
 			i++;					
 		}
@@ -57,12 +61,11 @@ public class CustomTableModel extends AbstractTableModel {
 	}
 
 	private <T> void initData(List<ImageIcon> imageList, List<CellComponent<T>> cellComponentList) {
-		data = new Object[cellComponentList.size()][2];
+		data = Collections.synchronizedList(new ArrayList<Object[]>());
 		int i = 0;
 		for (CellComponent<T> component : cellComponentList) {
-			data[i][0] = getScaledImage(imageList.get(i));
+			data.add(new Object[] {getScaledImage(imageList.get(i)), component});
 			System.out.println("data[" + i + "][0] " + imageList.get(i));
-			data[i][1] = component;
 			System.out.println("data[" + i + "][1] " + component.toString());
 			i++;					
 		}
@@ -98,22 +101,33 @@ public class CustomTableModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 		if(data != null) {
-			return data.length;			
+			return data.size();			
 		}
 		return 0;
 	}
 
+	public List<Object[]> getTableData() {
+		return data;
+	}
+
+	public void setTableData(List<Object[]> data) {
+		this.data = data;
+		fireTableDataChanged();
+	}
+
 	@Override
 	public Object getValueAt(int row, int col) {
-		return data[row][col];
+		return data.get(row)[col];
 	}
 
 	public void setValueAt(int row, int col, ImageIcon value) {
-		data[row][col] = getScaledImage(value);
+		data.get(row)[col] = getScaledImage(value);
+		fireTableCellUpdated(row, col);
 	}
 
 	public void setValueAt(int row, int col, Object value) {
-		data[row][col] = value;
+		data.get(row)[col] = value;
+		fireTableCellUpdated(row, col);
 	}
 
 	@Override
@@ -160,11 +174,10 @@ public class CustomTableModel extends AbstractTableModel {
 		return getValueAt(0, c).getClass();
 	}
 
-
 	public boolean isCellEditable(int row, int col) {
 		//Note that the data/cell address is constant, no matter where the cell appears on screen.
 		if(data != null) {
-			if(data[row].length > 1) {
+			if(data.get(row).length > 1) {
 				return col >= 1;
 			} else {
 				return true;
@@ -173,6 +186,15 @@ public class CustomTableModel extends AbstractTableModel {
 		return false;
 	}
 
+	public void removeRow(int index) {
+		data.remove(index);
+		fireTableDataChanged();
+	}
+
+	public void addRow(Object[] row) {
+		data.add(row);
+		fireTableDataChanged();
+	}
 
 	/*
 	 * Don't need to implement this method unless your table's
@@ -218,11 +240,23 @@ public class CustomTableModel extends AbstractTableModel {
 		for (int i=0; i < numRows; i++) {
 			System.out.print("    row " + i + ":");
 			for (int j=0; j < numCols; j++) {
-				System.out.print("  " + data[i][j]);
+				System.out.print("  " + data.get(i)[j]);
 			}
 			System.out.println();
 		}
 		System.out.println("--------------------------");
+	}
+
+	class DataChangeListener implements PropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent e) {
+			System.out.println("HAsdad");
+			String propertyName = e.getPropertyName();
+			if (propertyName.equals("focusOwner")) {
+			} else if (propertyName.equals("focusedWindow")) {
+			}
+		}
+
 	}
 
 }
