@@ -134,6 +134,10 @@ public class Review implements Serializable {
 		this.reviewState = reviewState;
 		reviewDate = Calendar.getInstance().getTime();
 	}
+	
+	public void setState(ReviewState reviewState) {
+		this.reviewState = reviewState;
+	}
 
 	public String getDescription() {
 		return description;

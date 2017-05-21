@@ -21,6 +21,7 @@ import javax.swing.ButtonGroup;
 import domain.Admin;
 import domain.Review;
 import domain.Review.ReviewState;
+import gui.components.ImagePanel;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import gui.user.MainWindow;
@@ -32,6 +33,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.CompoundBorder;
+import java.awt.Color;
+import javax.swing.UIManager;
 
 
 public class AdminMainPanel extends JPanel {
@@ -52,6 +55,14 @@ public class AdminMainPanel extends JPanel {
 	private JTextPane textPane;
 	private boolean enableButtonGroup = false;
 	private TextPrompt textPanePrompt;
+	private JLabel lblNombre;
+	private JLabel lblCiudad;
+	private JLabel lblDireccin;
+	private JLabel lblNombreAtrib;
+	private JLabel lblCity;
+	private JLabel lblAdress;
+	private JLabel lblDescripcin;
+	private JTextPane textPane_1;
 
 	/**
 	 * Create the panel.
@@ -59,10 +70,10 @@ public class AdminMainPanel extends JPanel {
 	public AdminMainPanel(JFrame frame) {
 		initializeComboBox();
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{107, 105, 155, 0};
-		gridBagLayout.rowHeights = new int[]{24, 36, 24, 21, 0, 14, 131, 23, 0};
+		gridBagLayout.columnWidths = new int[]{107, 105, 151, 0};
+		gridBagLayout.rowHeights = new int[]{24, 36, 24, 21, 0, 14, 131, 0, 24, 0, 207, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 
 		JComboBox<RuralHouse> comboBox = new JComboBox<RuralHouse>();
@@ -75,6 +86,13 @@ public class AdminMainPanel extends JPanel {
 
 				if (comboBox.getSelectedIndex() != -1) {
 					ruralHouse = (RuralHouse)comboBox.getSelectedItem();
+					lblNombreAtrib.setText(ruralHouse.getName());
+					lblCity.setText(ruralHouse.getCity().getName());
+					lblAdress.setText(ruralHouse.getAddress());
+					System.out.println(ruralHouse.getImage(0).getDescription());
+					textPane_1.setEnabled(true);
+					textPane_1.setText(ruralHouse.getDescription());
+					textPane_1.setEnabled(false);
 					enable = true;
 				} else {
 					enable = false;
@@ -217,23 +235,86 @@ public class AdminMainPanel extends JPanel {
 					description = textPane.getText();
 					Review review = ruralHouse.getReview();
 					review.setDescription(description);
-					review.setState(ruralHouse.getReview().getReviewer(), reviewState);
+					review.setState((Admin) MainWindow.user, reviewState);
 					//Send the review
 					MainWindow.getBusinessLogic().updateReview(ruralHouse, review);
 					reviewState = null;
 					buttonGroup.clearSelection();
-					JOptionPane.showMessageDialog(null,	"Se ha enviado la revisión correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);	
+					JOptionPane.showMessageDialog(null,	"Se ha enviado la revisiï¿½n correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);	
 					System.out.println("Review of " + ruralHouse.toString() + ": " + description);
 				} else {	
-					JOptionPane.showMessageDialog(null, "No se puede enviar una revisión sin su estado o su casa rural", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se puede enviar una revisiï¿½n sin su estado o su casa rural", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
+		
+		lblNombre = new JLabel("Nombre");
+		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
+		gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombre.gridx = 0;
+		gbc_lblNombre.gridy = 7;
+		add(lblNombre, gbc_lblNombre);
+		
+		lblCiudad = new JLabel("Ciudad");
+		lblCiudad.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblCiudad = new GridBagConstraints();
+		gbc_lblCiudad.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCiudad.gridx = 1;
+		gbc_lblCiudad.gridy = 7;
+		add(lblCiudad, gbc_lblCiudad);
+		
+		lblDireccin = new JLabel("DirecciÃ³n");
+		lblDireccin.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblDireccin = new GridBagConstraints();
+		gbc_lblDireccin.insets = new Insets(0, 0, 5, 0);
+		gbc_lblDireccin.gridx = 2;
+		gbc_lblDireccin.gridy = 7;
+		add(lblDireccin, gbc_lblDireccin);
+		
+		lblNombreAtrib = new JLabel("");
+		GridBagConstraints gbc_lblNombreAtrib = new GridBagConstraints();
+		gbc_lblNombreAtrib.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreAtrib.gridx = 0;
+		gbc_lblNombreAtrib.gridy = 8;
+		add(lblNombreAtrib, gbc_lblNombreAtrib);
+		
+		lblCity = new JLabel("");
+		GridBagConstraints gbc_lblCity = new GridBagConstraints();
+		gbc_lblCity.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCity.gridx = 1;
+		gbc_lblCity.gridy = 8;
+		add(lblCity, gbc_lblCity);
+		
+		lblAdress = new JLabel("");
+		GridBagConstraints gbc_lblAdress = new GridBagConstraints();
+		gbc_lblAdress.insets = new Insets(0, 0, 5, 0);
+		gbc_lblAdress.gridx = 2;
+		gbc_lblAdress.gridy = 8;
+		add(lblAdress, gbc_lblAdress);
+		
+		lblDescripcin = new JLabel("DescripciÃ³n");
+		lblDescripcin.setFont(new Font("Tahoma", Font.BOLD, 11));
+		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
+		gbc_lblDescripcin.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescripcin.gridx = 0;
+		gbc_lblDescripcin.gridy = 9;
+		add(lblDescripcin, gbc_lblDescripcin);
+		
+		textPane_1 = new JTextPane();
+		textPane_1.setBackground(UIManager.getColor("Button.background"));
+		textPane_1.setEnabled(false);
+		GridBagConstraints gbc_textPane_1 = new GridBagConstraints();
+		gbc_textPane_1.insets = new Insets(0, 0, 0, 5);
+		gbc_textPane_1.fill = GridBagConstraints.BOTH;
+		gbc_textPane_1.gridx = 0;
+		gbc_textPane_1.gridy = 10;
+		add(textPane_1, gbc_textPane_1);
 		GridBagConstraints gbc_btnSend = new GridBagConstraints();
 		gbc_btnSend.anchor = GridBagConstraints.SOUTH;
 		gbc_btnSend.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnSend.gridx = 2;
-		gbc_btnSend.gridy = 7;
+		gbc_btnSend.gridy = 10;
 		add(btnSend, gbc_btnSend);
 
 	}
