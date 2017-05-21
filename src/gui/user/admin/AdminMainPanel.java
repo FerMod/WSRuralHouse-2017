@@ -33,6 +33,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.CompoundBorder;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 
 public class AdminMainPanel extends JPanel {
@@ -66,6 +67,11 @@ public class AdminMainPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public AdminMainPanel(JFrame frame) {
+
+		initComponents();
+	}
+	private void initComponents() {
+		setBorder(new EmptyBorder(5, 5, 5, 5));
 		initializeComboBox();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{107, 105, 151, 0};
@@ -73,8 +79,8 @@ public class AdminMainPanel extends JPanel {
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-
-		JComboBox<RuralHouse> comboBox = new JComboBox<RuralHouse>();
+		
+				JComboBox<RuralHouse> comboBox = new JComboBox<RuralHouse>();
 		comboBox.setModel(ruralHouses);
 		comboBox.addActionListener(new ActionListener() {
 			@Override
@@ -125,8 +131,8 @@ public class AdminMainPanel extends JPanel {
 			}
 
 		});
-
-		JLabel lblCasaRural = new JLabel("Casa rural a revisar");
+		
+				JLabel lblCasaRural = new JLabel("Casa rural a revisar");
 		lblCasaRural.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblCasaRuralA = new GridBagConstraints();
 		gbc_lblCasaRuralA.fill = GridBagConstraints.BOTH;
@@ -142,8 +148,8 @@ public class AdminMainPanel extends JPanel {
 		gbc_comboBox.gridx = 0;
 		gbc_comboBox.gridy = 1;
 		add(comboBox, gbc_comboBox);
-
-		lblReviewState = new JLabel("Estado de revision");
+		
+				lblReviewState = new JLabel("Estado de revision");
 		lblReviewState.setEnabled(false);
 		GridBagConstraints gbc_lblReviewState = new GridBagConstraints();
 		gbc_lblReviewState.anchor = GridBagConstraints.WEST;
@@ -152,9 +158,9 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblReviewState.gridx = 0;
 		gbc_lblReviewState.gridy = 2;
 		add(lblReviewState, gbc_lblReviewState);
-
-
-		rdbtnApproved = new JRadioButton("Approved");
+		
+		
+				rdbtnApproved = new JRadioButton("Approved");
 		rdbtnApproved.setEnabled(false);
 		rdbtnApproved.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -173,8 +179,8 @@ public class AdminMainPanel extends JPanel {
 		gbc_rdbtnNewRadioButton_1.gridx = 0;
 		gbc_rdbtnNewRadioButton_1.gridy = 3;
 		add(rdbtnApproved, gbc_rdbtnNewRadioButton_1);
-
-		rdbtnRejected = new JRadioButton("Rejected");
+		
+				rdbtnRejected = new JRadioButton("Rejected");
 		rdbtnRejected.setEnabled(false);
 		rdbtnRejected.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -192,8 +198,8 @@ public class AdminMainPanel extends JPanel {
 		gbc_rdbtnNewRadioButton.gridx = 0;
 		gbc_rdbtnNewRadioButton.gridy = 4;
 		add(rdbtnRejected, gbc_rdbtnNewRadioButton);
-
-		lblDescription = new JLabel("Descripcion de la revision");
+		
+				lblDescription = new JLabel("Descripcion de la revision");
 		lblDescription.setEnabled(false);
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
 		gbc_lblDescription.anchor = GridBagConstraints.SOUTH;
@@ -203,28 +209,28 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblDescription.gridx = 0;
 		gbc_lblDescription.gridy = 5;
 		add(lblDescription, gbc_lblDescription);
-
-		textPane = new JTextPane();
+		
+				textPane = new JTextPane();
 		textPane.setEnabled(false);
 		RightClickMenu rightClickMenu = new RightClickMenu(textPane);
 		textPane.setComponentPopupMenu(rightClickMenu);
-
-		textPanePrompt = new TextPrompt(textPane);
+		
+				textPanePrompt = new TextPrompt(textPane);
 		textPanePrompt.setBorder(new CompoundBorder());
 		textPanePrompt.setText("(optional)");
 		textPanePrompt.setStyle(Font.BOLD);
 		textPanePrompt.setAlpha(64);
 		textPanePrompt.setVerticalAlignment(SwingConstants.TOP);
-
-		GridBagConstraints gbc_editorPane = new GridBagConstraints();
+		
+				GridBagConstraints gbc_editorPane = new GridBagConstraints();
 		gbc_editorPane.gridwidth = 3;
 		gbc_editorPane.fill = GridBagConstraints.BOTH;
 		gbc_editorPane.insets = new Insets(0, 0, 10, 0);
 		gbc_editorPane.gridx = 0;
 		gbc_editorPane.gridy = 6;
 		add(textPane, gbc_editorPane);
-
-		btnSend = new JButton("Enviar");
+		
+				btnSend = new JButton("Enviar");
 		btnSend.setEnabled(false);
 		btnSend.addActionListener(new ActionListener() {
 			@Override
@@ -314,7 +320,6 @@ public class AdminMainPanel extends JPanel {
 		gbc_btnSend.gridx = 2;
 		gbc_btnSend.gridy = 10;
 		add(btnSend, gbc_btnSend);
-
 	}
 
 	public void initializeComboBox() {
