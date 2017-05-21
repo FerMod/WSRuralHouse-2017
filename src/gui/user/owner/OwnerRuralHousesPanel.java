@@ -15,6 +15,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -43,6 +44,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,7 +55,9 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.ImageIcon;
+import java.awt.SystemColor;
 
 public class OwnerRuralHousesPanel extends JPanel {
 	
@@ -67,14 +72,13 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private JTextField textField_3; //Date init
 	private JTextField textField_4; //Price
 	private JEditorPane editorPane; //Description
-
+	private JFileChooser fileChooser = new JFileChooser();
+	
 	private RuralHouse rh;
 	private City city;
 
 	private DefaultComboBoxModel<RuralHouse> ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
 	private DefaultComboBoxModel<City> someCities = new DefaultComboBoxModel<City>();
-	private ArrayList<RuralHouse> rhs;
-
 
 	private JComboBox<RuralHouse> comboBox;   //RuralHouses
 	private JComboBox<City> comboBox_1; //Cities
@@ -87,6 +91,14 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private JTextField textField_5;
 	private JCheckBox chckbxNuevaCiudad;
 
+	private JLabel lblSeleccionada;
+
+	protected String imagePath;
+
+	private JLabel lblNewLabel_1;
+
+
+
 
 	/**
 	 * Create the panel.
@@ -96,18 +108,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 		
 		initializeRuralHousesComboBox((Owner)MainWindow.user);
 		
-		if(!rhs.isEmpty()){
-			StringBuilder sb = new StringBuilder();
-			
-			for(RuralHouse rh : rhs) {
-				sb.append(rh.getName() + ", ");
-			}
-			
-			JOptionPane.showMessageDialog(null,	"Las casas: " + sb.toString() + " han sido rechazadas. Por favor, edite su información.", "Aviso", JOptionPane.WARNING_MESSAGE);
-		}
-		
 		initializeCitiesComboBox();
-
+		
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -127,6 +129,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 					rh.setCity(city);
 					rh.setAddress(address);
 					rh.setDescription(description);
+					rh.removeImage(0);
+					rh.addImage(new File(imagePath).toURI());
 					Review review = rh.getReview(); 
 					Admin reviewer = review.getReviewer();
 					review.setState(reviewer, ReviewState.AWAITING_REVIEW); //The state of review pass to be awaiting for edit the rural house
@@ -146,6 +150,9 @@ public class OwnerRuralHousesPanel extends JPanel {
 					}
 				} catch(NullPointerException er) {
 					JOptionPane.showMessageDialog(null,	"Compruebe que no se deja ningún campo vacio a la hora de editar la casa", "No se ha podido editar la casa rural", JOptionPane.ERROR_MESSAGE);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -203,6 +210,17 @@ public class OwnerRuralHousesPanel extends JPanel {
 				comboBox_1.setEditable(true);
 				comboBox_1.setSelectedItem(rh.getCity());
 				comboBox_1.setEditable(false);
+				
+				if(rh.getReview().getState() == ReviewState.APPROVED) {
+					lblNewLabel_1.setText("APROBADA");
+					lblNewLabel_1.setForeground(new Color(0, 128, 0));
+				} else if(rh.getReview().getState() == ReviewState.REJECTED) {
+					lblNewLabel_1.setText("DENEGADA");
+					lblNewLabel_1.setForeground(new Color(255, 0, 0));
+				} else if(rh.getReview().getState() == ReviewState.AWAITING_REVIEW) {
+					lblNewLabel_1.setText("EN ESPERA");
+					lblNewLabel_1.setForeground(new Color(255, 140, 0));
+				}
 			}
 		});
 		comboBox.setBounds(25, 44, 260, 52);
@@ -329,7 +347,7 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(OwnerRuralHousesPanel.class.getResource("/img/editrh.gif")));
-		lblNewLabel.setBounds(265, 192, 19, 19);
+		lblNewLabel.setBounds(546, 192, 19, 19);
 		add(lblNewLabel);
 
 		JButton button = new JButton("");
@@ -366,21 +384,40 @@ public class OwnerRuralHousesPanel extends JPanel {
 		textField_5.setBounds(305, 284, 260, 20);
 		add(textField_5);
 		textField_5.setColumns(10);
+		
+		JLabel lblAvatarDeLa = new JLabel("Avatar de la casa");
+		lblAvatarDeLa.setBounds(317, 336, 112, 14);
+		add(lblAvatarDeLa);
+		
+		JButton btnCambiarImagen = new JButton("Cambiar imagen");
+		btnCambiarImagen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				imagePath = getImage();
+			}
+		});
+		btnCambiarImagen.setBounds(317, 358, 128, 26);
+		add(btnCambiarImagen);
+		
+		lblSeleccionada = new JLabel("Seleccionada");
+		lblSeleccionada.setEnabled(false);
+		lblSeleccionada.setVisible(false);
+		lblSeleccionada.setForeground(SystemColor.textHighlight);
+		lblSeleccionada.setBounds(455, 364, 86, 14);
+		add(lblSeleccionada);
+		
+		lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setBounds(305, 225, 260, 14);
+		add(lblNewLabel_1);
 
 	}
 
 	private void initializeRuralHousesComboBox(Owner ow) {
-		rhs = new ArrayList<RuralHouse>();
 		Vector<RuralHouse> rhs = MainWindow.getBusinessLogic().getRuralHouses(ow);
 
 		ruralHousesOfOwner.addElement(null); //For that the owner have selected a RuralHouse
 
 		for(RuralHouse rh : rhs) {
 			ruralHousesOfOwner.addElement(rh);
-			
-			if(rh.getReview().getState() == ReviewState.REJECTED) {
-				rhs.add(rh);
-			}
 		}	
 	}
 
@@ -404,5 +441,16 @@ public class OwnerRuralHousesPanel extends JPanel {
 		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
 		textComponent.setBorder(border);
 		return textComponent;
+	}
+	
+	private String getImage() {
+		int selectFile = fileChooser.showOpenDialog(this);
+		if(selectFile == JFileChooser.APPROVE_OPTION) {
+			lblSeleccionada.setVisible(true);
+			return fileChooser.getSelectedFile().getAbsolutePath();
+		} else {
+			lblSeleccionada.setVisible(false);
+			return null;
+		}
 	}
 }

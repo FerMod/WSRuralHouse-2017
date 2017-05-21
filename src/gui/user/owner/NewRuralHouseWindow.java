@@ -26,8 +26,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 
 import businessLogic.ApplicationFacadeInterface;
+import domain.Admin;
 import domain.City;
 import domain.Owner;
+import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;
@@ -202,16 +204,16 @@ public class NewRuralHouseWindow extends JDialog {
 							rh.addImage(new File(imagePath).toURI());
 							rh.setOwner(owner);
 							
+							rh.getReview().setState(ReviewState.AWAITING_REVIEW);
+							
 							facade.update(rh);
 
 							dispose();
 							JOptionPane.showMessageDialog(null,	"Casa rural añadida exitosamente", "Info", JOptionPane.INFORMATION_MESSAGE);
-						} catch(NullPointerException err) {
-							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningún campo vacio", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
+						} catch(NullPointerException | IOException err) {
+							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningún campo vacio, debe añadir también una foto", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						} catch(DuplicatedEntityException error) {
 							JOptionPane.showMessageDialog(null,	"Tiene un campo repetido con otra casa ya existente, compruebelos de nuevo", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
-						} catch (IOException e1) {
-							JOptionPane.showMessageDialog(null,	"Debe añadir una foto para la casa", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
