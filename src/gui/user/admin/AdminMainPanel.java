@@ -235,7 +235,7 @@ public class AdminMainPanel extends JPanel {
 					description = textPane.getText();
 					Review review = ruralHouse.getReview();
 					review.setDescription(description);
-					review.setState(ruralHouse.getReview().getReviewer(), reviewState);
+					review.setState((Admin) MainWindow.user, reviewState);
 					//Send the review
 					MainWindow.getBusinessLogic().updateReview(ruralHouse, review);
 					reviewState = null;
