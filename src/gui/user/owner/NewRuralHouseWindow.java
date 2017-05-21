@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -26,21 +25,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.JTextComponent;
 
 import businessLogic.ApplicationFacadeInterface;
-import domain.Admin;
 import domain.City;
 import domain.Owner;
 import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;
-import gui.prototypes.NewCity;
 import gui.user.MainWindow;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JCheckBox;
@@ -48,6 +42,9 @@ import java.awt.SystemColor;
 
 public class NewRuralHouseWindow extends JDialog {
 
+	/**
+	 * Generated serial version ID
+	 */
 	private static final long serialVersionUID = 6770177109582209536L;
 
 	private JPanel contentPane;
@@ -180,7 +177,7 @@ public class NewRuralHouseWindow extends JDialog {
 
 	private JButton getBtnCreate() {
 		if(btnAdd == null) {
-			btnAdd = new JButton("AÃ±adir");
+			btnAdd = new JButton("Añadir");
 			btnAdd.setBounds(10, 384, 240, 28);
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -209,9 +206,9 @@ public class NewRuralHouseWindow extends JDialog {
 							facade.update(rh);
 
 							dispose();
-							JOptionPane.showMessageDialog(null,	"Casa rural aÃ±adida exitosamente", "Info", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,	"Casa rural añadida exitosamente", "Info", JOptionPane.INFORMATION_MESSAGE);
 						} catch(NullPointerException | IOException err) {
-							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningÃºn campo vacio, debe aÃ±adir tambiÃ©n una foto", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null,	"Compruebe que no se ha dejado ningún campo vacio, debe añadir tambien una foto", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						} catch(DuplicatedEntityException error) {
 							JOptionPane.showMessageDialog(null,	"Tiene un campo repetido con otra casa ya existente, compruebelos de nuevo", "No se ha podido crear la casa", JOptionPane.ERROR_MESSAGE);
 						}
@@ -280,7 +277,7 @@ public class NewRuralHouseWindow extends JDialog {
 	private JTextField getTextField_2() {
 		if (textField_2 == null) {
 			textField_2 = new JTextField();
-			applyStyle("DirecciÃ³n", textField_2);
+			applyStyle("Dirección", textField_2);
 			textField_2.setBounds(10, 81, 163, 20);
 			textField_2.setColumns(10);
 		}

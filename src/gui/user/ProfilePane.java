@@ -157,7 +157,7 @@ public class ProfilePane extends JPanel {
 			passwordField.setFocusTraversalKeysEnabled(false);
 			passwordField.setOpaque(false);
 			passwordField.setEditable(false);
-			passwordField.setEchoChar('*'); //The character ☺ is making me text encoding problems, i've changed this.
+			passwordField.setEchoChar('☺');
 			passwordField.setFocusable(false);
 
 			Border matterBorder = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.GRAY);

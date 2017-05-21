@@ -21,7 +21,6 @@ import javax.swing.ButtonGroup;
 import domain.Admin;
 import domain.Review;
 import domain.Review.ReviewState;
-import gui.components.ImagePanel;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import gui.user.MainWindow;
@@ -33,7 +32,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.border.CompoundBorder;
-import java.awt.Color;
 import javax.swing.UIManager;
 
 
@@ -145,7 +143,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_comboBox.gridy = 1;
 		add(comboBox, gbc_comboBox);
 
-		lblReviewState = new JLabel("Estado de revisi\u00F3n");
+		lblReviewState = new JLabel("Estado de revision");
 		lblReviewState.setEnabled(false);
 		GridBagConstraints gbc_lblReviewState = new GridBagConstraints();
 		gbc_lblReviewState.anchor = GridBagConstraints.WEST;
@@ -195,7 +193,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_rdbtnNewRadioButton.gridy = 4;
 		add(rdbtnRejected, gbc_rdbtnNewRadioButton);
 
-		lblDescription = new JLabel("Descripci\u00F3n de la revisi\u00F3n");
+		lblDescription = new JLabel("Descripcion de la revision");
 		lblDescription.setEnabled(false);
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
 		gbc_lblDescription.anchor = GridBagConstraints.SOUTH;
@@ -240,10 +238,10 @@ public class AdminMainPanel extends JPanel {
 					MainWindow.getBusinessLogic().updateReview(ruralHouse, review);
 					reviewState = null;
 					buttonGroup.clearSelection();
-					JOptionPane.showMessageDialog(null,	"Se ha enviado la revisi�n correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);	
+					JOptionPane.showMessageDialog(null,	"Se ha enviado la revision correctamente", "Info", JOptionPane.INFORMATION_MESSAGE);	
 					System.out.println("Review of " + ruralHouse.toString() + ": " + description);
 				} else {	
-					JOptionPane.showMessageDialog(null, "No se puede enviar una revisi�n sin su estado o su casa rural", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se puede enviar una revision sin su estado o su casa rural", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -264,7 +262,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblCiudad.gridy = 7;
 		add(lblCiudad, gbc_lblCiudad);
 		
-		lblDireccin = new JLabel("Dirección");
+		lblDireccin = new JLabel("Direccion");
 		lblDireccin.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblDireccin = new GridBagConstraints();
 		gbc_lblDireccin.insets = new Insets(0, 0, 5, 0);
@@ -293,7 +291,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblAdress.gridy = 8;
 		add(lblAdress, gbc_lblAdress);
 		
-		lblDescripcin = new JLabel("Descripción");
+		lblDescripcin = new JLabel("Descripcion");
 		lblDescripcin.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
 		gbc_lblDescripcin.insets = new Insets(0, 0, 5, 5);
