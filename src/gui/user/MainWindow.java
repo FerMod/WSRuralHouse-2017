@@ -198,7 +198,8 @@ public class MainWindow extends JFrame {
 		if(tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setUI(new CustomTabbedPaneUI());
-			setupTabs(MainWindow.user.getRole());
+			setupTabs(MainWindow.user);
+
 
 			ChangeListener changeListener = new ChangeListener() {
 				@Override
@@ -224,8 +225,8 @@ public class MainWindow extends JFrame {
 		return tabbedPane;
 	}
 
-	private void setupTabs(Role role) {
-		Map<String, JPanel> panelMap = getRoleTabPanels(role);
+	private void setupTabs(AbstractUser user) {
+		Map<String, JPanel> panelMap = getRoleTabPanels(user);
 		for (Entry<String, JPanel> entry : panelMap.entrySet()) {
 			tabbedPane.add(entry.getKey(), entry.getValue());
 		}
@@ -234,37 +235,45 @@ public class MainWindow extends JFrame {
 	/**
 	 * Obtain a {@code LinkedHashMap<String, JPanel>} with the tab panels that the user will see
 	 * 
-	 * @param role the role of the user
+	 * @param user the role of the user
 	 * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
 	 * 
 	 * @see Li
 	 */
-	public LinkedHashMap<String, JPanel> getRoleTabPanels(Role role) {
+	public LinkedHashMap<String, JPanel> getRoleTabPanels(AbstractUser user) {
 		LinkedHashMap<String, JPanel> panelMap = new LinkedHashMap<String, JPanel>();
-		switch (role) {
-		case CLIENT:
-			panelMap.put("Rural House Offers", new ClientMainPanel(this));
-			panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
-			break;
-		case OWNER:
-			//FIXME VERY VERY TEMPORAL!!
-			//panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
-			panelMap.put("Ower Main Menu", new OwnerRuralHousesPanel(this));
-			// panelMap.put("Main Menu", new OwnerMainPanel(this));
-			break;
-		case ADMIN:
-			panelMap.put("Admin Main Menu", new AdminMainPanel(this));
-			break;
-		case SUPER_ADMIN:
-			//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
-			break;
-		default:
-			//[TODO]: Throw exception when the user role content pane is not defined 
-			System.exit(1);
-			break;
+		if(user != null) {
+			switch (user.getRole()) {
+			case CLIENT:
+				panelMap.put("Rural House Offers", new ClientMainPanel(this, true));
+				panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
+				break;
+			case OWNER:
+				//FIXME VERY VERY TEMPORAL!!
+				//panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
+				panelMap.put("Ower Main Menu", new OwnerRuralHousesPanel(this));
+				// panelMap.put("Main Menu", new OwnerMainPanel(this));
+				break;
+			case ADMIN:
+				panelMap.put("Admin Main Menu", new AdminMainPanel(this));
+				break;
+			case SUPER_ADMIN:
+				//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
+				break;
+			default:
+				//[TODO]: Throw exception when the user role content pane is not defined 
+				System.exit(1);
+				break;
+			}
+
+			panelMap.put("Profile", getProfilePanel(MainWindow.user));
+
+		} else {
+			panelMap.put("Rural House Offers", new ClientMainPanel(this, false));
 		}
-		panelMap.put("Profile", getProfilePanel(MainWindow.user));
+
 		panelMap.put("Log Out", null);
+
 		return panelMap;
 	}
 
@@ -393,5 +402,5 @@ public class MainWindow extends JFrame {
 			System.out.println(booking);
 		}
 	}
-	*/
+	 */
 }

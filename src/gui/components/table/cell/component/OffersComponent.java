@@ -41,10 +41,12 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 	private JButton infoButton;
 	private JPanel panel;
 	private CellComponent<Offer> selectedComponent;
+	private boolean isLogged; 
 
-	public OffersComponent(JFrame frame) {
+	public OffersComponent(JFrame frame, boolean isLogged) {
 
 		this.parentFrame = frame;
+		this.isLogged = isLogged;
 
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
@@ -135,7 +137,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 		addressComponent.setText(value.getElement().getRuralHouse().getCity() + " " + value.getElement().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getPrice()));
 
-		
+
 		//		if (isSelected) {
 		//			panel.setBackground(table.getSelectionBackground());
 		//		}else{
@@ -174,11 +176,11 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 			return ((MouseEvent)e).getClickCount() >= 1;
 		}
 		return true;
-//		JTable table = (JTable) e.getSource();	
-//		if(table.getSelectedColumn() > 0) {
-//			return true;
-//		}
-//		return false;
+		//		JTable table = (JTable) e.getSource();	
+		//		if(table.getSelectedColumn() > 0) {
+		//			return true;
+		//		}
+		//		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -235,6 +237,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 					}
 				}
 			});
+			infoButton.setEnabled(isLogged);
 		}
 		return infoButton;
 	}

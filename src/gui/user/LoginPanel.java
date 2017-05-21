@@ -74,7 +74,9 @@ public class LoginPanel extends JPanel {
 			btnLoginGuest.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(sharedFrame,	"This feature currently is being developed or is planned to do so.", "WIP", JOptionPane.INFORMATION_MESSAGE);
+					JFrame frame = new MainWindow(null);
+					frame.setVisible(true);
+					sharedFrame.dispose();	
 				}
 			});
 		}
