@@ -80,14 +80,10 @@ public class ApplicationLauncher {
 
 		} catch (Exception e) {
 
-			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\n");
-			try {
-				LogFile.generateFile(e, true);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\nTo show the console output press \"F12\"");
+			LogFile.generateFile(e, true);
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"", "Error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"To show the console output press \"F12\"", "Error!", JOptionPane.ERROR_MESSAGE);
 			
 		}
 

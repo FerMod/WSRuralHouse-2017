@@ -36,6 +36,7 @@ import javax.swing.KeyStroke;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -333,10 +334,12 @@ public class ConsoleWindow extends JFrame {
 			RightClickMenu rightClickMenu = new RightClickMenu(output);
 			output.setComponentPopupMenu(rightClickMenu);
 			output.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+			DefaultCaret caret = (DefaultCaret) output.getCaret();
+			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+			output.setCaret(caret);
 			panel.add(output);
 			scrollPane = new JScrollPane(panel);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-
 
 		}
 
