@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -7,20 +7,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -29,9 +34,14 @@ import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
+import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;
 import gui.debug.ConsoleKeyEventDispatcher;
+import gui.user.admin.AdminMainPanel;
+import gui.user.client.BookingsTablePanel;
+import gui.user.client.ClientMainPanel;
+import gui.user.owner.OwnerRuralHousesPanel;
 
 /**
  * This is the core of the application, from where is choose which panel will be opened for which user.
@@ -47,6 +57,9 @@ public class MainWindow extends JFrame {
 	private JPanel contentPane;
 	public static AbstractUser user;
 	private JTabbedPane tabbedPane;
+	private int lastPaneIndex = 0;
+
+	//private static PropertyChangeSupport pcs = new PropertyChangeSupport(MainWindow.class);//TODO REMOVE
 
 	/**
 	 * Launches the {@code MainWindow} application.</br>
@@ -68,7 +81,14 @@ public class MainWindow extends JFrame {
 					aplicationFacade.setDataAccess(new DataAccess());
 					MainWindow.setBussinessLogic(aplicationFacade);
 
-					AbstractUser user = setupDebugAccount();					
+					AbstractUser user = setupDebugAccount();
+
+					try {
+						UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+					} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+						System.err.println(e.toString());
+					}
+
 					MainWindow frame = new MainWindow(user);
 					frame.setFocusable(true);
 					frame.setVisible(true); 
@@ -91,8 +111,12 @@ public class MainWindow extends JFrame {
 		if(response != null) {
 			try {
 				switch (response) {
-				case CLIENT:
-					return getBusinessLogic().createUser("Client@clientmail.com", "Client", "ClientPassword", response);
+				case CLIENT:					
+					try {
+						return getBusinessLogic().login("client", "client123");
+					} catch (AccountNotFoundException | AuthException e) {
+						e.printStackTrace();
+					}
 				case OWNER:
 					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
 				case ADMIN:
@@ -124,62 +148,19 @@ public class MainWindow extends JFrame {
 
 		MainWindow.user = user;
 
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		getRolePanel(user.getRole());
-		//setJMenuBar(getRoleMenuBar());
-
-
-		contentPane = new JPanel();
-		//		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setUI(new CustomTabbedPaneUI());
-		//contentPane.add(tabbedPane);
-		tabbedPane.addTab("Rural Houses", getRootPane().add(getRolePanel(user.getRole())));
-		tabbedPane.addTab("Profile", getProfilePanel());
-		//		tabbedPane.addTab("Maybe another pane?", new TextArea("Yeh awesome... another pane..."));
-		//		tabbedPane.addTab("Ideas for another pane...",  new JFileChooser());
-
-		//		JButton logOutButton = new JButton("Log Out");
-		//		tabbedPane.setTabComponentAt(tabbedPane.getTabCount(), logOutButton);
-		tabbedPane.addTab("Log Out", null);
-
-		ChangeListener changeListener = new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent changeEvent) {
-				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-				int index = sourceTabbedPane.getSelectedIndex();				
-				System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
-				if(index == sourceTabbedPane.getTabCount()-1) {
-					if(logOutQuestion()) {
-						SharedFrame sharedFrame = new SharedFrame();
-						sharedFrame.setVisible(true);
-						dispose();
-					}
-					tabbedPane.setSelectedIndex(0); //TODO cleanup
-				}
-			}
-		};
-		tabbedPane.addChangeListener(changeListener);
-
-		//		tabbedPane.addMouseMotionListener(new MouseMotionListener() {
-		//			@Override
-		//			public void mouseDragged(MouseEvent e) {}
-		//			@Override
-		//			public void mouseMoved(MouseEvent e){
-		//				adjustCursor(e);
-		//			}
-		//		});
-
-		contentPane.add(tabbedPane);
-
 		setMinimumSize(new Dimension(780, 600));
 		setSize(900, 800);
-		//pack();
 		validate();
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		//setJMenuBar(getRoleMenuBar());
+
+		contentPane = new JPanel();
+		// contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.add(getTabbedPane());
+		setContentPane(contentPane);
+
 
 		//		addComponentListener(new ComponentListener() {
 		//			@Override
@@ -213,85 +194,86 @@ public class MainWindow extends JFrame {
 
 	}
 
-	private JPanel getProfilePanel() {
-		JPanel profilePanel = new JPanel();
-		profilePanel.setLayout(null);
-		//TODO: Make a separate class with the user profile /////////////////
-		JLabel lblUser = new JLabel("User: ");
-		lblUser.setBounds(10, 11, 64, 14);
-		profilePanel.add(lblUser);
+	private JTabbedPane getTabbedPane() {
+		if(tabbedPane == null) {
+			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			tabbedPane.setUI(new CustomTabbedPaneUI());
+			setupTabs(MainWindow.user.getRole());
 
-		JLabel lblNewLabel = new JLabel(user.getUsername());
-		lblNewLabel.setBounds(84, 11, 411, 14);
-		profilePanel.add(lblNewLabel);
-
-		JLabel lblEmail = new JLabel("Password:");
-		lblEmail.setBounds(10, 36, 64, 14);
-		profilePanel.add(lblEmail);
-
-		JPasswordField lblNewLabel_1 = new JPasswordField(user.getPassword().replaceAll(".", "*"));
-		//lblNewLabel_1.setEchoChar('☺');
-		lblNewLabel_1.setBorder(null);
-		lblNewLabel_1.setFocusTraversalKeysEnabled(false);
-		lblNewLabel_1.setFocusable(false);
-		lblNewLabel_1.setEditable(false);
-		lblNewLabel_1.setBounds(84, 36, 190, 19);
-		profilePanel.add(lblNewLabel_1);
-
-		JLabel lblRole = new JLabel("e-mail: ");
-		lblRole.setBounds(10, 61, 64, 14);
-		profilePanel.add(lblRole);
-
-		JLabel lblNewLabel_2 = new JLabel(user.getEmail());
-		lblNewLabel_2.setBounds(84, 61, 411, 19);
-		profilePanel.add(lblNewLabel_2);
-
-		JLabel label = new JLabel("Role: ");
-		label.setBounds(10, 86, 64, 14);
-		profilePanel.add(label);
-
-		JLabel label_1 = new JLabel(user.getRole().toString());
-		label_1.setBounds(84, 84, 411, 19);
-		profilePanel.add(label_1);		
-		///////////////////////////////////////////////
-		return profilePanel;
+			ChangeListener changeListener = new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent changeEvent) {
+					JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+					int index = sourceTabbedPane.getSelectedIndex();	
+					System.out.println("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
+					if(index == sourceTabbedPane.getTabCount()-1) {
+						if(logOutQuestion()) {
+							SharedFrame sharedFrame = new SharedFrame();
+							sharedFrame.setVisible(true);
+							dispose();
+						} else {
+							tabbedPane.setSelectedIndex(lastPaneIndex);
+						}
+					} else {
+						lastPaneIndex = tabbedPane.getSelectedIndex();
+					}
+				}
+			};
+			tabbedPane.addChangeListener(changeListener);			
+		}
+		return tabbedPane;
 	}
 
-	//		private void adjustCursor(MouseEvent e) {
-	//	
-	//			TabbedPaneUI ui = tabbedPane.getUI();
-	//	
-	//			int index = ui.tabForCoordinate(tabbedPane, e.getX(), e.getY());
-	//	
-	//			if (index >= 0) {
-	//				tabbedPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	//			} else {
-	//				tabbedPane.setCursor(null);
-	//			}
-	//	
-	//		}
-
-	public JPanel getRolePanel(Role role) {
-		switch (role) {
-		case CLIENT:
-			return new ClientMainPanel(this);
-		case OWNER:
-			//FIXME VERY VERY TEMPORAL!!
-			return (JPanel) new MainGUI(role).getContentPane();
-			//return new OwnerMainPanel(this);
-		case ADMIN:
-			return new AdminMainPanel(this);
-		case SUPER_ADMIN:
-			//return new SuperAdminMainPanel(this);
-			return null;
-		default:
-			//[TODO]: Throw exception when the user role content pane is not defined 
-			System.exit(1);
-			return null;
+	private void setupTabs(Role role) {
+		Map<String, JPanel> panelMap = getRoleTabPanels(role);
+		for (Entry<String, JPanel> entry : panelMap.entrySet()) {
+			tabbedPane.add(entry.getKey(), entry.getValue());
 		}
 	}
 
+	/**
+	 * Obtain a {@code LinkedHashMap<String, JPanel>} with the tab panels that the user will see
+	 * 
+	 * @param role the role of the user
+	 * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
+	 * 
+	 * @see Li
+	 */
+	public LinkedHashMap<String, JPanel> getRoleTabPanels(Role role) {
+		LinkedHashMap<String, JPanel> panelMap = new LinkedHashMap<String, JPanel>();
+		switch (role) {
+		case CLIENT:
+			panelMap.put("Rural House Offers", new ClientMainPanel(this));
+			panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
+			break;
+		case OWNER:
+			//FIXME VERY VERY TEMPORAL!!
+			//panelMap.put("Ower Main Menu", (JPanel) new MainGUI(role).getContentPane());
+			panelMap.put("Ower Main Menu", new OwnerRuralHousesPanel(this));
+			// panelMap.put("Main Menu", new OwnerMainPanel(this));
+			break;
+		case ADMIN:
+			panelMap.put("Admin Main Menu", new AdminMainPanel(this));
+			break;
+		case SUPER_ADMIN:
+			//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
+			break;
+		default:
+			//[TODO]: Throw exception when the user role content pane is not defined 
+			System.exit(1);
+			break;
+		}
+		panelMap.put("Profile", getProfilePanel(MainWindow.user));
+		panelMap.put("Log Out", null);
+		return panelMap;
+	}
+
+	public JPanel getProfilePanel(AbstractUser user) {
+		return new ProfilePane(user);
+	}
+
 	@SuppressWarnings("unused")
+	@Deprecated
 	private JMenuBar getRoleMenuBar() {
 		//Where the GUI is created:
 		JMenuBar menuBar;
@@ -388,4 +370,28 @@ public class MainWindow extends JFrame {
 		}
 	}
 
+	/* TODO REMOVE
+	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.addPropertyChangeListener(propertyChangeListener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
+		pcs.removePropertyChangeListener(propertyChangeListener);
+	}
+
+	public static PropertyChangeSupport getPropertyChangeSupport() {
+		return pcs;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getPropertyName().equals("bookingRemoved")) {
+			System.out.println("### OLD!!  Booking removed ###");
+		} else if(evt.getPropertyName().equals("bookingAdded")) {
+			System.out.println("### OLD!! Booking Added ###");
+			Booking booking = (Booking) evt.getNewValue();
+			System.out.println(booking);
+		}
+	}
+	*/
 }

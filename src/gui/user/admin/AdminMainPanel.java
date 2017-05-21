@@ -1,4 +1,4 @@
-package gui;
+package gui.user.admin;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
@@ -18,9 +18,12 @@ import javax.swing.JButton;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
+import domain.Admin;
 import domain.Review;
 import domain.Review.ReviewState;
+import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
+import gui.user.MainWindow;
 import domain.RuralHouse;
 
 import java.awt.event.ActionListener;
@@ -187,6 +190,8 @@ public class AdminMainPanel extends JPanel {
 
 		textPane = new JTextPane();
 		textPane.setEnabled(false);
+		RightClickMenu rightClickMenu = new RightClickMenu(textPane);
+		textPane.setComponentPopupMenu(rightClickMenu);
 
 		textPanePrompt = new TextPrompt(textPane);
 		textPanePrompt.setBorder(new CompoundBorder());
@@ -212,7 +217,7 @@ public class AdminMainPanel extends JPanel {
 					description = textPane.getText();
 					Review review = ruralHouse.getReview();
 					review.setDescription(description);
-					review.setState(review.getReviewer(), reviewState);
+					review.setState(ruralHouse.getReview().getReviewer(), reviewState);
 					//Send the review
 					MainWindow.getBusinessLogic().updateReview(ruralHouse, review);
 					reviewState = null;

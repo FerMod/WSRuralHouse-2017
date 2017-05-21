@@ -1,6 +1,7 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ import exceptions.DuplicatedEntityException.Error;
 public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface {
 
 	private DataAccessInterface dataAccess;
+	private Locale locale;
 
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
@@ -40,6 +42,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return dataAccess.update(entity);
 	}
 
+	@Override
+	public <T> T remove(T entity) {
+		return dataAccess.remove(entity);
+	}
+	
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
 		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
 
@@ -67,11 +74,22 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Offer> getOffers() {
 		return dataAccess.getOffers();
 	}
-	
+
+	@Override
 	public Vector<Offer> getOffers(ReviewState reviewState) {
-		 return dataAccess.getOffers(reviewState);
-	 }
-	
+		return dataAccess.getOffers(reviewState);
+	}
+
+	@Override
+	public Vector<Offer> getActiveOffers() {
+		return dataAccess.getActiveOffers();
+	}
+
+	@Override
+	public Vector<Offer> getActiveOffers(ReviewState reviewState) {
+		return dataAccess.getActiveOffers(reviewState);
+	}
+
 	@Override
 	public int getOfferCount() {
 		return dataAccess.getOfferCount();
@@ -81,7 +99,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public double getOffersHighestPrice() {
 		return dataAccess.getOffersHighestPrice();
 	}
-	
+
 	@Override
 	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
@@ -160,44 +178,51 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
 		return dataAccess.login(username, password);
 	}
-	
+
 	public Review createReview(RuralHouse rh) {
 		return dataAccess.createReview(rh);
 	}
-	
+
 	public void updateReview(RuralHouse rh, Review r) {
 		dataAccess.updateReview(rh, r);
 	}
 
 	@Override
-	@Deprecated
-	public Booking createBooking(int idClient, int idOffer) {
-		return dataAccess.createBooking(idClient, idOffer);
-	}
-	
-	@Override
-	public Booking createBooking(Client client, Offer offer) {
-		return createBooking(client.getId(), offer.getId());
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
+		return dataAccess.createBooking(client, offer, startDate, endDate);
 	}
 
 	@Override
-	public Vector<Offer> getOfferById(int idOffer) {
-		return dataAccess.getOfferById(idOffer);
+	public Vector<Booking> getBookings(Client client) {
+		return dataAccess.getBookings(client);
+	}
+
+	public Locale getLocale() {
+		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
+		if(locale == null) {
+			locale = Locale.getDefault();
+		}
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
 	}
 
 	@Override
-	public void offerBookedControl(Offer offer, boolean isBooked) {
-		dataAccess.offerBookedControl(offer, isBooked);
+	public Vector<RuralHouse> getRuralHouses(Owner owner) {
+		return dataAccess.getRuralHouses(owner);
 	}
 
 	@Override
-	public Vector<Offer> getBookingsOfClient(int idClient) {
-		return dataAccess.getBookingsOfClient(idClient);
+	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
+		return dataAccess.getRuralHouses(owner, reviewState);
 	}
 
-	//	private getConfig() {
-	//		return dataAccess.ge
-	//	}
+	@Override
+	public Vector<Booking> getBookings() {
+		return dataAccess.getBookings();
+	}
 
 }
 

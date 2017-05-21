@@ -1,13 +1,16 @@
-package gui;
+package gui.user.client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -18,9 +21,10 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
@@ -28,9 +32,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -38,21 +45,21 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.text.JTextComponent;
 
-import gui.ClientMainPanel.CellDetails;
+import org.omg.Messaging.SyncScopeHelper;
+
+import com.toedter.calendar.JDateChooser;
+
+import domain.Booking;
+import domain.Client;
+import domain.Offer;
 import gui.components.FrameShader;
 import gui.components.ImagePanel;
 import gui.components.InfoTextPane;
-
-import javax.swing.JTextField;
-import java.awt.Cursor;
-import java.awt.Font;
-import com.toedter.calendar.JDateChooser;
-
-import domain.Client;
-
-import java.awt.Rectangle;
-import javax.swing.JLabel;
+import gui.components.TextPrompt;
+import gui.components.table.CellComponent;
+import gui.user.MainWindow;
 
 public class OfferInfoDialog extends JDialog {
 
@@ -73,9 +80,9 @@ public class OfferInfoDialog extends JDialog {
 	private FrameShader frameShader;
 	private JTextField dialogTitle, textFieldPrice;
 	private JDateChooser firstDateChooser, lastDateChooser;
-	private JButton btnX, btnBookOffer, okButton, cancelButton;
+	private JButton btnX, btnBookOffer;
 
-	private CellDetails rowContent;
+	private CellComponent<Offer> rowContent;
 	private Calendar firstDate, lastDate;
 	private JLabel lblPrice;
 
@@ -113,14 +120,14 @@ public class OfferInfoDialog extends JDialog {
 	 * @param parentFrame the parent frame of this dialog
 	 * @param rowContent the object of type {@code CellDetails} that contains all the data, that will be displayed
 	 */
-	public OfferInfoDialog(JFrame parentFrame, CellDetails rowContent) {
+	public OfferInfoDialog(JFrame parentFrame, CellComponent<Offer> rowContent) {
 		super(parentFrame);
 		setUndecorated(true);
 		this.parentFrame = parentFrame;
 		this.rowContent = rowContent;
 		frameShader = new FrameShader(parentFrame);
 
-		System.out.println("[OfferInfoDialog]: Showing " + rowContent.getOffer().toString());
+		System.out.println("[OfferInfoDialog]: Showing " + rowContent.getElement().toString());
 
 		getRootPane().setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.DARK_GRAY));
 		setResizable(true);
@@ -137,6 +144,7 @@ public class OfferInfoDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 
+		
 		// --------------------------------------------------------------------
 		//  Dialog title bar setup
 		// --------------------------------------------------------------------
@@ -306,8 +314,8 @@ public class OfferInfoDialog extends JDialog {
 
 	private JTextField getDialogTitle() {
 		if (dialogTitle == null) {
-			if(rowContent.getOffer().getRuralHouse().getName() != null) {
-				TITLE = rowContent.getOffer().getRuralHouse().getName();				
+			if(rowContent.getElement().getRuralHouse().getName() != null) {
+				TITLE = rowContent.getElement().getRuralHouse().getName();				
 			}
 			dialogTitle = new JTextField(TITLE);
 			dialogTitle.setOpaque(false);
@@ -354,9 +362,12 @@ public class OfferInfoDialog extends JDialog {
 	}
 
 	private ImagePanel getImagePanel() {
-		if(imagePanel == null) {
-			ImageIcon imageIcon = rowContent.getOffer().getRuralHouse().getImage(0);				
-			imagePanel = new ImagePanel(imageIcon);
+		if(imagePanel == null) {	
+			imagePanel = new ImagePanel();
+			Vector<Offer> offer = MainWindow.getBusinessLogic().getOffer(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
+			ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
+			System.out.println("Showing offer: " + offer);
+			imagePanel.setImage(imageIcon);
 			imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			imagePanel.setMinimumSize(imagePanel.getImageSize());
 		}
@@ -367,7 +378,7 @@ public class OfferInfoDialog extends JDialog {
 		if(infoTextPane == null) {
 			infoTextPane = new InfoTextPane();
 
-			String title = rowContent.getOffer().getRuralHouse().getName();
+			String title = rowContent.getElement().getRuralHouse().getName();
 			if(title != null) {
 			} else {		
 				title = "";
@@ -376,12 +387,12 @@ public class OfferInfoDialog extends JDialog {
 			StringBuilder sb = new StringBuilder();
 			sb.append("Address:");
 			sb.append(System.getProperty("line.separator"));
-			sb.append(rowContent.getOffer().getRuralHouse().getAddress());
+			sb.append(rowContent.getElement().getRuralHouse().getAddress());
 			sb.append(System.getProperty("line.separator"));
 			sb.append(System.getProperty("line.separator"));
 			sb.append("Description:");
 			sb.append(System.getProperty("line.separator"));
-			sb.append(rowContent.getOffer().getRuralHouse().getDescription());
+			sb.append(rowContent.getElement().getRuralHouse().getDescription());
 			sb.append(System.getProperty("line.separator"));
 
 			infoTextPane.setText(title, sb.toString());
@@ -456,14 +467,6 @@ public class OfferInfoDialog extends JDialog {
 			gbc_textFieldPrice.gridy = 2;
 			bookOfferTabPanel.add(getTextFieldPrice(), gbc_textFieldPrice);
 
-			//btnBookOffer
-			GridBagConstraints gbc_btnBookOffer = new GridBagConstraints();
-			gbc_btnBookOffer.fill = GridBagConstraints.HORIZONTAL;
-			gbc_btnBookOffer.gridwidth = 2;
-			gbc_btnBookOffer.gridx = 0;
-			gbc_btnBookOffer.gridy = 3;
-			bookOfferTabPanel.add(getBtnBookOffer(), gbc_btnBookOffer);
-
 		}
 		return bookOfferTabPanel;
 	}
@@ -472,23 +475,33 @@ public class OfferInfoDialog extends JDialog {
 		if(firstDateChooser == null) {
 			firstDateChooser = new JDateChooser();
 			//			firstDateChooser.setMinSelectableDate(Calendar.getInstance().getTime());
-			firstDateChooser.setSelectableDateRange(getMinDate(rowContent.getOffer().getStartDate()), rowContent.getOffer().getEndDate());
-			//			firstDateChooser.setDate(firstDateChooser.getMinSelectableDate());
+			firstDateChooser.setSelectableDateRange(getMinDate(rowContent.getElement().getStartDate()), rowContent.getElement().getEndDate());
+
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(rowContent.getElement().getStartDate());
+			firstDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
+
+			firstDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
+			firstDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+
 			firstDateChooser.getJCalendar().setWeekOfYearVisible(true);
 			firstDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
 			firstDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
 				@Override
 				public void propertyChange(PropertyChangeEvent e) {
-					if (e.getPropertyName().equals("date")) {
+					if (e.getPropertyName().equals("date") || e.getPropertyName().equals("day")) {
 						firstDate = new GregorianCalendar();
 						firstDate.setTime((Date) e.getNewValue());
 						lastDateChooser.setMinSelectableDate(firstDate.getTime());
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
 						updatePrice();			
-						System.out.println(e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
+						System.out.println("Property changed! " + e.getPropertyName() + ": " + sdf.format(firstDate.getTime()));
 					}
 				}
 			});
+			TextPrompt tp = new TextPrompt("Select first date", (JTextComponent) firstDateChooser.getDateEditor().getUiComponent());
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
 		}
 		return firstDateChooser;
 	}
@@ -497,8 +510,15 @@ public class OfferInfoDialog extends JDialog {
 		if(lastDateChooser == null) {
 			lastDateChooser = new JDateChooser();
 			//			lastDateChooser.setMinSelectableDate(firstDateChooser.getMinSelectableDate());
-			lastDateChooser.setSelectableDateRange(firstDateChooser.getMinSelectableDate(), rowContent.getOffer().getEndDate());
-			//			lastDateChooser.setDate(lastDateChooser.getMaxSelectableDate());
+			lastDateChooser.setSelectableDateRange(rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
+
+			Calendar calendar = new GregorianCalendar();
+			calendar.setTime(rowContent.getElement().getEndDate());
+			lastDateChooser.setCalendar(calendar); //This launches "calendar" property, we ignore it
+
+			lastDateChooser.getDateEditor().getUiComponent().setBounds(20, 115, 204, 30);
+			lastDateChooser.getDateEditor().getUiComponent().setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+
 			lastDateChooser.getJCalendar().setWeekOfYearVisible(true);
 			lastDateChooser.setBounds(new Rectangle(190, 60, 225, 150));
 			lastDateChooser.addPropertyChangeListener(new PropertyChangeListener() {
@@ -510,18 +530,21 @@ public class OfferInfoDialog extends JDialog {
 						firstDateChooser.setMaxSelectableDate(lastDate.getTime());
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
 						updatePrice();
-						System.out.println(e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
+						System.out.println("Property changed! " + e.getPropertyName() + ": " + sdf.format(lastDate.getTime()));
 					}
 				}
 			});
+			TextPrompt tp = new TextPrompt("Select last date", (JTextComponent) lastDateChooser.getDateEditor().getUiComponent());
+			tp.setStyle(Font.BOLD);
+			tp.setAlpha(128);	
 		}
 		return lastDateChooser;
 	}
 
 	private JLabel getLblPrice() {
 		if(lblPrice == null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
-			lblPrice = new JLabel("Price (" + formatter.format(rowContent.getOffer().getPrice()) + " per night): ");
+			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
+			lblPrice = new JLabel("Price (" + formatter.format(rowContent.getElement().getPrice()) + " per night): ");
 		}
 		return lblPrice;
 	}
@@ -544,7 +567,9 @@ public class OfferInfoDialog extends JDialog {
 			btnBookOffer.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
-					MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getOffer());
+					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
+					//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
+					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, rowContent);
 					frameShader.setEnabled(false);
 					dispose();
 				}
@@ -556,45 +581,16 @@ public class OfferInfoDialog extends JDialog {
 	private JPanel getButtonPane() {
 		if(buttonPane == null) {
 			buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-
-			//okButton
-			buttonPane.add(getOkButton());
-
-			//cancelButton
-			buttonPane.add(getCancelButton());
+			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
+			buttonPane.add(getBtnBookOffer());
 
 		}
 		return buttonPane;
 	}
 
-	private JButton getOkButton() {
-		if(okButton == null) {
-			okButton = new JButton("OK");
-			okButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			okButton.setActionCommand("OK");
-			getRootPane().setDefaultButton(okButton);
-		}
-		return okButton;
-	}
-
-	private JButton getCancelButton() {
-		if (cancelButton == null) {		
-			cancelButton = new JButton("Cancel");
-			cancelButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			cancelButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-				}
-			});
-			cancelButton.setActionCommand("Cancel");
-		}
-		return cancelButton;
-	}
-
 	private void updatePrice() {
 		if(firstDate != null && lastDate != null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
 			textFieldPrice.setText(formatter.format(getPrice()));	
 			btnBookOffer.setEnabled(true);
 		}
@@ -636,7 +632,7 @@ public class OfferInfoDialog extends JDialog {
 
 	private double getPrice() {
 		long days = getDateDiff(firstDate.getTime(), lastDate.getTime(), TimeUnit.DAYS) + 1;
-		return days * rowContent.getOffer().getPrice();
+		return days * rowContent.getElement().getPrice();
 	}
 
 	public Component getParentComponent() {
@@ -646,6 +642,5 @@ public class OfferInfoDialog extends JDialog {
 	public void setParentComponent(Component parentComponent) {
 		this.parentFrame = parentComponent;
 	}
-
 
 }

@@ -1,15 +1,16 @@
 package dataAccess;
 
-import java.awt.List;
 import java.util.Date;
 import java.util.Vector;
 
 import javax.security.auth.login.AccountNotFoundException;
 
+import configuration.ConfigXML;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Booking;
 import domain.City;
+import domain.Client;
 import domain.Offer;
 import domain.Owner;
 import domain.Review;
@@ -21,9 +22,13 @@ import exceptions.OverlappingOfferException;
 
 public interface DataAccessInterface {
 
+	ConfigXML getConfig();
+
 	void initializeDB();
 	
 	<T> T update(T entity);
+	
+	<T> T remove(T entity);
 
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price);
 	
@@ -34,6 +39,10 @@ public interface DataAccessInterface {
 	Vector<Offer> getOffers();
 	
 	Vector<Offer> getOffers(ReviewState reviewState);
+	
+	Vector<Offer> getActiveOffers();
+	
+	Vector<Offer> getActiveOffers(ReviewState reviewState);
 	
 	int getOfferCount();
 	
@@ -47,12 +56,13 @@ public interface DataAccessInterface {
 
 	Vector<RuralHouse> getRuralHouses();
 
+	Vector<RuralHouse> getRuralHouses(Owner owner);
+
 	Vector<RuralHouse> getRuralHouses(ReviewState reviewState);
 	
+	Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState);
+	
 	boolean existsRuralHouse(String description, int city);
-
-	@Deprecated
-	RuralHouse createRuralHouse(Owner owner, String description, City city, String address)	throws DuplicatedEntityException;
 
 	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
@@ -80,16 +90,14 @@ public interface DataAccessInterface {
 	
 	void deleteTableContent(String table);
 	
-	Booking createBooking(int idClient, int idOffer);
-	
-	Vector<Offer> getOfferById(int idOffer);
-	
-	void offerBookedControl(Offer of, boolean booked);
-	
-	Vector<Offer> getBookingsOfClient(int idClient);
-	
 	Review createReview(RuralHouse rh);
 	
 	void updateReview(RuralHouse rh, Review r);
 
+	Booking createBooking(Client client, Offer offer, Date startDate, Date endDate);
+
+	Vector<Booking> getBookings(Client client);
+
+	Vector<Booking> getBookings();
+	
 }

@@ -1,4 +1,4 @@
-package domain;
+package domain.util;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 

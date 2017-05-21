@@ -14,8 +14,6 @@ public class InfoTextPane extends JTextPane {
 	 */
 	private static final long serialVersionUID = -73593325903127059L;
 
-	String title, body;
-
 	public InfoTextPane() {
 		StyledDocument doc = getStyledDocument();
 		addStylesToDocument(doc);

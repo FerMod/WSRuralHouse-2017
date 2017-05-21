@@ -1,4 +1,4 @@
-package gui;
+package gui.user;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -25,6 +25,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -173,13 +175,16 @@ public class SignUpPanel extends JPanel {
 		if(confirmPasswordField == null) {
 			confirmPasswordField = new JPasswordField();
 			confirmPasswordField.setBounds(182, 95, 150, 28);
-			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			TextPrompt textPrompt = new TextPrompt(confirmPasswordField);
+			textPrompt.setText("Confirm password");
+			textPrompt.setStyle(Font.BOLD);
+			textPrompt.setAlpha(128);
+			textPrompt.setIcon(new ImageIcon(img));	
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			confirmPasswordField.setBorder(border);
 			//confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(confirmPasswordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
-			TextPrompt tp = new TextPrompt(confirmPasswordField);
-			tp.setText("Confirm password");
-			tp.setStyle(Font.BOLD);
-			tp.setAlpha(128);	
-			tp.setIcon(new ImageIcon(img));
 		}
 		return confirmPasswordField;
 	}
@@ -223,12 +228,16 @@ public class SignUpPanel extends JPanel {
 								System.err.println(ex.getMessage());
 								System.out.println(ex.getError().toString());
 
+								Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+								Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+								CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+
 								switch(ex.getError().getCode()) {
 								case 1:
-									textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+									textFieldUsername.setBorder(border);
 									break;
 								case 2:
-									textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+									textFieldEmail.setBorder(border);
 									break;
 								default:
 									break;
@@ -248,24 +257,30 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean fieldsFilled() {
+		
 		clearFieldsColors();
+		
+		Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+		Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+		
 		if(textFieldEmail.getText().equals("")) {
-			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldEmail.setBorder(border);
 			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"email\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(textFieldUsername.getText().trim().equals("")){
-			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			textFieldUsername.setBorder(border);
 			textFieldUsername.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"username\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(passwordField.getPassword()).equals("")) {
-			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			passwordField.setBorder(border);
 			passwordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
 		} else if(String.valueOf(confirmPasswordField.getPassword()).equals("")) {
-			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			confirmPasswordField.setBorder(border);
 			confirmPasswordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The field \"confirm password\", cannot be empty.", "Empty field", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -274,9 +289,12 @@ public class SignUpPanel extends JPanel {
 	}
 
 	private boolean passwordMatch() {
-		clearFieldsColors();
+		clearFieldsColors();		
 		if(!Arrays.equals(passwordField.getPassword(), confirmPasswordField.getPassword())) {
-			confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			confirmPasswordField.setBorder(border);
 			confirmPasswordField.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The two passwords does not match.", "Password mismatch", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -287,7 +305,10 @@ public class SignUpPanel extends JPanel {
 	private boolean correctEmailFormat() {
 		clearFieldsColors();
 		if(!textFieldEmail.getText().matches(EMAIL_PATTERN)) {
-			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51)));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, new Color(255, 51, 51));
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			textFieldEmail.setBorder(border);
 			textFieldEmail.requestFocus();
 			JOptionPane.showMessageDialog(sharedFrame,	"The email dont have the correct format.", "Invalid email format", JOptionPane.WARNING_MESSAGE);
 			return false;
@@ -298,14 +319,17 @@ public class SignUpPanel extends JPanel {
 	private JPasswordField getPasswordField() {
 		if(passwordField == null) {
 			passwordField = new JPasswordField();
-			passwordField.setBounds(20, 95, 150, 28);
-			passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-			//passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
-			TextPrompt tp = new TextPrompt(passwordField);
-			tp.setText("Password");
-			tp.setStyle(Font.BOLD);
-			tp.setAlpha(128);	
-			tp.setIcon(new ImageIcon(img));
+			passwordField.setBounds(20, 95, 150, 28);		
+			TextPrompt textPrompt = new TextPrompt(passwordField);
+			textPrompt.setText("Password");
+			textPrompt.setStyle(Font.BOLD);
+			textPrompt.setAlpha(128);
+			textPrompt.setIcon(new ImageIcon(img));
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			passwordField.setBorder(border);
+			//passwordField.setBorder(BorderFactory.createCompoundBorder(passwordField.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));			
 		}
 		return passwordField;
 	}
@@ -316,13 +340,16 @@ public class SignUpPanel extends JPanel {
 			textFieldUsername.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldUsername.setBounds(20, 54, 312, 28);
 			textFieldUsername.setColumns(10);
-			textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			TextPrompt textPrompt = new TextPrompt(textFieldUsername);
+			textPrompt.setText("Username");
+			textPrompt.setStyle(Font.BOLD);
+			textPrompt.setAlpha(128);
+			textPrompt.setIcon(new ImageIcon(img));	
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			textFieldUsername.setBorder(border);
 			//textFieldUsername.setBorder(BorderFactory.createCompoundBorder(textFieldUsername.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
-			TextPrompt tp = new TextPrompt(textFieldUsername);
-			tp.setText("Username");
-			tp.setStyle(Font.BOLD);
-			tp.setAlpha(128);
-			tp.setIcon(new ImageIcon(img));	
 		}
 		return textFieldUsername;
 	}
@@ -368,13 +395,16 @@ public class SignUpPanel extends JPanel {
 			textFieldEmail.setFont(new Font("Segoe UI", Font.BOLD, 12));
 			textFieldEmail.setColumns(10);
 			textFieldEmail.setBounds(20, 13, 312, 28);
-			textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+			TextPrompt textPrompt = new TextPrompt(textFieldEmail);
+			textPrompt.setText("email");
+			textPrompt.setStyle(Font.BOLD);
+			textPrompt.setAlpha(128);
+			textPrompt.setIcon(new ImageIcon(img));	
+			Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+			Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+			CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+			textFieldEmail.setBorder(border);
 			//textFieldEmail.setBorder(BorderFactory.createCompoundBorder(textFieldEmail.getBorder(), BorderFactory.createEmptyBorder(0, 1, 0, 0)));
-			TextPrompt tp = new TextPrompt(textFieldEmail);
-			tp.setText("email");
-			tp.setStyle(Font.BOLD);
-			tp.setAlpha(128);	
-			tp.setIcon(new ImageIcon(img));
 		}
 		return textFieldEmail;
 	}
@@ -397,9 +427,12 @@ public class SignUpPanel extends JPanel {
 	}
 
 	public void clearFieldsColors() {
-		textFieldEmail.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		textFieldUsername.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		passwordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
-		confirmPasswordField.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY));
+		Border outsideBorder = BorderFactory.createMatteBorder(1, 5, 1, 1, Color.GRAY);
+		Border insideBorder = new EmptyBorder(0, 5, 0, 0);
+		CompoundBorder border = new CompoundBorder(outsideBorder, insideBorder);
+		textFieldEmail.setBorder(border);
+		textFieldUsername.setBorder(border);
+		passwordField.setBorder(border);
+		confirmPasswordField.setBorder(border);
 	}
 }

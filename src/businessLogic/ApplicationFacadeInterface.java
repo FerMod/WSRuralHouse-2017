@@ -1,11 +1,11 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
@@ -40,6 +40,14 @@ public interface ApplicationFacadeInterface  {
 	 * @return the managed instance that is updated
 	 */
 	<T> T update(T entity);
+	
+	/**
+	 * Method used to remove a entity from the database
+	 * 
+	 * @param entity the entity that will be removed
+	 * @return the managed instance that has been removed
+	 */	
+	<T> T remove(T entity);
 
 	/**
 	 * Creates an offer and stores it in the database.
@@ -79,7 +87,25 @@ public interface ApplicationFacadeInterface  {
 	 *
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
+	@WebMethod
 	Vector<Offer> getOffers(ReviewState reviewState);
+	
+	/**
+	 * Get all the active offers. This means, that this will query 
+	 * the offers that had not reached the end date.
+	 * 
+	 * @return the {@code Vector} with elements of the type {@code Offer}, that represent the active offers
+	 */
+	@WebMethod
+	Vector<Offer> getActiveOffers();
+
+	/**
+	 * Obtain all the offers stored in the database that haven't ended yet, and matches with the given {@code ReviewState} of their rural house
+	 *
+	 * @return a {@code Vector} with objects of type {@code Offer} containing all the active offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
+	 */
+	@WebMethod
+	Vector<Offer> getActiveOffers(ReviewState reviewState);
 
 	/**
 	 * Returns the number of offers stored in the database
@@ -110,14 +136,17 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
-
+	
 	/**
-	 * This method retrieves the existing rural houses 
+	 * Obtain all the rural houses matching with the entered {@code Owner}
+	 *
+	 * @param owner the owner of the rural house
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses 
+	 * matching with the {@code Owner}, {@code null} if none is found
 	 * 
-	 * @return a {@code Vector} of rural houses
 	 */
 	@WebMethod
-	Vector<RuralHouse> getRuralHouses();
+	Vector<RuralHouse> getRuralHouses(Owner owner);
 
 	/**
 	 * Obtain all the rural houses matching with the entered {@code ReviewState}
@@ -129,6 +158,27 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Vector<RuralHouse> getRuralHouses(ReviewState reviewState);
+	
+	/**
+	 * Obtain all the rural houses matching with the entered {@code Owner} and {@code ReviewState}
+	 *
+	 * @param owner the owner of the rural house
+	 * @param reviewState one of the possible states of a {@code Review}
+	 * @return a {@code Vector} with objects of type {@code RuralHouse} containing all the rural houses 
+	 * matching with the {@code Owner} and {@code ReviewState}, {@code null} if none is found
+	 * 
+	 * @see ReviewState
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState);
+	
+	/**
+	 * This method retrieves the existing rural houses 
+	 * 
+	 * @return a {@code Vector} of rural houses
+	 */
+	@WebMethod
+	Vector<RuralHouse> getRuralHouses();
 
 	/**
 	 * Creates a city and stores it in the database.
@@ -190,56 +240,36 @@ public interface ApplicationFacadeInterface  {
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 	
 	/**
-	 * Return the offer with a id definied
-	 * 
-	 * @param idOffer the id of offer
-	 * @return the offer
-	 */
-	@WebMethod
-	Vector<Offer> getOfferById(int idOffer);
-
-
-	/**
-	 * Control the offers, for see if it's booked or not
-	 * 
-	 * @param offer to set his booked value
-	 * @param boolean to control the state of booking
-	 */
-	@WebMethod
-	void offerBookedControl(Offer of, boolean booked);
-
-
-	/**
-	 * Allow to the client make bookings
-	 * 
-	 * @param idClient the id of client
-	 * @param idOffer the id of offer to book
-	 * 
-	 * @return the booking done
-	 */
-	@WebMethod
-	@Deprecated
-	Booking createBooking(int idClient, int idOffer);
-	
-	/**
 	 * Create a booking for the introduced client of the introduced booking
 	 * 
 	 * @param client the client who is making the booking
 	 * @param offer the offer to book
+	 * @param startDate the first date of the booking
+	 * @param endDate the end date of the booking
 	 * 
 	 * @return the booking done
 	 */
 	@WebMethod
-	Booking createBooking(Client client, Offer offer);
+	Booking createBooking(Client client, Offer offer, Date startDate, Date endDate);
 
 	/**
-	 * Return a list of bookings of the client specified
+	 * Obtain a {@code Vector} filled with bookings made
+	 * by the matching client.
 	 * 
-	 * @param id of a client
-	 * @return a list with his bookings
+	 * @param client the client of the bookings
+	 * @return a {@code Vector} filled with elements of type {@code Booking}, that
+	 * represents the bookings made by the client, returns {@code null} otherwise.
 	 */
 	@WebMethod
-	Vector<Offer> getBookingsOfClient(int idClient);
+	Vector<Booking> getBookings(Client client);
+	
+	/**
+	 * Return a {@code Vector} with all the stored bookings in the ddbb
+	 * 
+	 * @return a {@code Vector} filled with bookings
+	 */
+	@WebMethod
+	Vector<Booking> getBookings();
 	
 	/**
 	 * Create a review for a rural house.
@@ -249,7 +279,7 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	Review createReview(RuralHouse rh);
-	
+
 	/**
 	 * Update a review of a rural house.
 	 * 
@@ -258,5 +288,9 @@ public interface ApplicationFacadeInterface  {
 	 */
 	@WebMethod
 	void updateReview(RuralHouse rh, Review r);
+	
+	Locale getLocale();
+	
+	void setLocale(Locale locale);
 	
 }
