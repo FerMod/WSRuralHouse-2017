@@ -78,15 +78,18 @@ public class ClientMainPanel extends JPanel {
 	//	private GridBagConstraints gbcTopPanel, gbcCenterPanel, gbcBottomPanel;
 	private JButton btnAdd, btnEdit, btnRemove;
 	private JSlider priceSlider;
+	private boolean isLogged;
 
 	private NumberFormat priceFormat;
 
 	/**
 	 * Create the panel.
+	 * @param isLogged 
 	 */
-	public ClientMainPanel(JFrame frame) {
+	public ClientMainPanel(JFrame frame, boolean isLogged) {
 
-		parentFrame = frame;
+		this.parentFrame = frame;
+		this.isLogged = isLogged;
 
 		setLayout(new GridBagLayout());
 
@@ -211,7 +214,7 @@ public class ClientMainPanel extends JPanel {
 	private JSlider getPriceSlider() {
 		if(priceSlider == null) {
 			double maxPrice = MainWindow.getBusinessLogic().getOffersHighestPrice();
-			maxPrice = ((int) ((maxPrice + 99) / 100) * 100);
+			maxPrice = ((int) ((maxPrice + 29) / 30) * 30);
 			priceSlider = new JSlider(JSlider.HORIZONTAL, 0, (int)(maxPrice * 100), (int)(maxPrice* 100));
 			priceSlider.setMajorTickSpacing((priceSlider.getMaximum() * 25) / 100); //each 25% of the value
 			priceSlider.setMinorTickSpacing((priceSlider.getMajorTickSpacing() * 10) / 100); //each 10% of the 25% of the value
@@ -480,8 +483,8 @@ public class ClientMainPanel extends JPanel {
 			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(offersTable, new double[] {0.1, 0.9});
-			offersTable.setDefaultRenderer(Object.class, new OffersComponent(parentFrame));
-			offersTable.setDefaultEditor(Object.class, new OffersComponent(parentFrame));
+			offersTable.setDefaultRenderer(Object.class, new OffersComponent(parentFrame, isLogged));
+			offersTable.setDefaultEditor(Object.class, new OffersComponent(parentFrame, isLogged));
 
 			//When selection changes, provide user with row numbers for both view and model.
 			offersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
