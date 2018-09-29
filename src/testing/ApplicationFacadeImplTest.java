@@ -1,7 +1,10 @@
 package testing;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.jupiter.api.Test;
 
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
@@ -9,10 +12,6 @@ import businessLogic.ApplicationFacadeInterface;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import domain.Booking;
 import domain.City;
@@ -24,6 +23,7 @@ import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
 
 public class ApplicationFacadeImplTest {
+	
 	static RuralHouse rh;
 	static Client client;
 	static Owner ow;
@@ -50,7 +50,7 @@ public class ApplicationFacadeImplTest {
 			Booking resultado = afi.createBooking(client, o, firstDay, lastDay);
 			assertEquals(esperado, resultado);
 		} catch (Exception e) {
-			fail();
+			fail(e);
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class ApplicationFacadeImplTest {
 			Offer o = new Offer(firstDay, lastDay, 550.0, rh);
 			Booking esperado = new Booking(client, o, 550.0, firstDay, lastDay);
 			Booking resultado = afi.createBooking(client, o, firstDay, lastDay);
-			fail();
+			fail("Failed testCreateBooking2");
 		} catch (Exception e) {
 			assertTrue(true);
 		}
@@ -77,7 +77,7 @@ public class ApplicationFacadeImplTest {
 			Offer resultado = afi.createOffer(rh, firstDay, lastDay, 550.0);
 			assertEquals(esperado, resultado);
 		} catch (Exception e) {
-			fail();
+			fail(e);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class ApplicationFacadeImplTest {
 			Date lastDay = dateFormat.parse("1997-10-14");
 			Offer esperado = new Offer(firstDay, lastDay, 500.0, rh);
 			Offer resultado = afi.createOffer(rh, firstDay, lastDay, 500.0);
-			fail();
+			fail("Failed testCreateOffer2");
 		} catch (Exception e) {
 			assertTrue(true);
 		}
@@ -103,7 +103,7 @@ public class ApplicationFacadeImplTest {
 			Offer resultado = afi.createOffer(rh, firstDay, lastDay, 320.0);
 			assertTrue(true);
 		} catch (Exception e) {
-			fail();
+			fail(e);
 		}
 	}
 	
@@ -116,7 +116,7 @@ public class ApplicationFacadeImplTest {
 			Offer resultado = afi.getOffer(rh, firstDay, lastDay).get(0);
 			assertEquals(esperado, resultado);
 		} catch (Exception e) {
-			fail();
+			fail(e);
 		}
 	}
 	
@@ -127,7 +127,7 @@ public class ApplicationFacadeImplTest {
 			Date lastDay = dateFormat.parse("1986-11-09");
 			Offer esperado = new Offer(firstDay, lastDay, 550.0, rh);
 			Offer resultado = afi.getOffer(rh, firstDay, lastDay).get(0);
-			fail();
+			fail("testGetOffer1");
 		} catch (Exception e) {
 			assertTrue(true);
 		}
@@ -139,8 +139,7 @@ public class ApplicationFacadeImplTest {
 			Date firstDay = dateFormat.parse("2018-09-24");
 			Date lastDay = dateFormat.parse("2018-10-12");
 			Offer o = new Offer(firstDay, lastDay, 550.0, rh);
-			afi.remove(new Booking(client, o, 550.0, firstDay, lastDay));
-			
+			afi.remove(new Booking(client, o, 550.0, firstDay, lastDay));			
 			afi.remove(new Offer(firstDay, lastDay, 550.0, rh));
 		} catch (ParseException e) {
 
