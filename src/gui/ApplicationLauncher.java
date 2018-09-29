@@ -1,6 +1,5 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
@@ -15,7 +14,6 @@ import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import gui.debug.ConsoleKeyEventDispatcher;
-import gui.old.MainGUI;
 import gui.user.MainWindow;
 import gui.user.SharedFrame;
 
@@ -75,7 +73,6 @@ public class ApplicationLauncher {
 			//    appFacadeInterface.initializeBD();
 			//}
 
-			MainGUI.setBussinessLogic(aplicationFacade);
 			MainWindow.setBussinessLogic(aplicationFacade);
 
 		} catch (Exception e) {

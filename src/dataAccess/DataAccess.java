@@ -197,13 +197,13 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh1, date.parse("2017/5/2"), date.parse("2017/7/16"), 24);
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
-			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ºA");
+			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ÂºA");
 			rh2.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");	
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ÂºF");	
 			rh3.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
@@ -223,7 +223,7 @@ public class DataAccess implements DataAccessInterface {
 
 			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
 			Owner owner = (Owner)createUser("own@gmail.com", "own", "own", Role.OWNER);
-			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3ºb");
+			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3Âºb");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh);
 			Offer offer1 = createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
