@@ -240,7 +240,7 @@ public interface ApplicationFacadeInterface  {
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
 	
 	/**
-	 * Create a booking for the introduced client of the introduced booking
+	 * Creates a booking for the introduced client of the introduced offer
 	 * 
 	 * @param client the client who is making the booking
 	 * @param offer the offer to book

@@ -1018,7 +1018,15 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
+	 * Creates a booking for the introduced client of the passed offer.
+	 * The booking is made between the passed dates.
 	 * 
+	 * @param client the client who is making the booking
+	 * @param offer the offer to book
+	 * @param startDate the first date of the booking
+	 * @param endDate the end date of the booking
+	 * 
+	 * @return the booking
 	 */
 	@Override
 	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
@@ -1031,14 +1039,12 @@ public class DataAccess implements DataAccessInterface {
 			booking = new Booking(client, offer, price, startDate, endDate);
 			Client clientInstance = db.find(Client.class, client);
 			clientInstance.getBookings().add(booking);
-			clientInstance.getBookings().add(booking);
 			Offer offerInstance = db.find(Offer.class, offer);
 			offerInstance.setBooked(true);
 			db.persist(booking);
 			db.getTransaction().commit();
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
 			LogFile.generateFile(e, true);
 			e.printStackTrace();
 		} finally {
