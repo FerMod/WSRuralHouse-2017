@@ -499,7 +499,7 @@ public class DataAccess implements DataAccessInterface {
 				return true;
 			}
 		} catch (Exception e){
-			System.out.println("Error: " + e.toString());
+			e.printStackTrace();
 			return true;
 		} finally {
 			close();

@@ -22,9 +22,14 @@ public class Offer implements Serializable {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private Date startDate; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
-	private Date endDate;  // because, they are not well stored in db4o as java.util.Date objects
-	private double price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
+	/*
+	* Dates are stored as java.util.Date objects instead of java.sql.Date objects
+	* because, they are not well stored in db4o as java.util.Date objects
+	* This is coherent because objects of java.sql.Date are objects of java.util.Date
+	*/
+	private Date startDate; 
+	private Date endDate;
+	private double price; 
 
 	@XmlIDREF
 	private RuralHouse ruralHouse;

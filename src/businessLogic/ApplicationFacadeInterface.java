@@ -70,9 +70,10 @@ public interface ApplicationFacadeInterface  {
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the ending date of the offer
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
+	 * @throws BadDatesException 
 	 */
 	@WebMethod
-	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay);
+	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
 
 	/**
 	 * Obtain all the offers stored in the database
@@ -248,9 +249,10 @@ public interface ApplicationFacadeInterface  {
 	 * @param endDate the end date of the booking
 	 * 
 	 * @return the booking done
+	 * @throws BadDatesException If the starting date is greater than the end date
 	 */
 	@WebMethod
-	Booking createBooking(Client client, Offer offer, Date startDate, Date endDate);
+	Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) throws BadDatesException;
 
 	/**
 	 * Obtain a {@code Vector} filled with bookings made

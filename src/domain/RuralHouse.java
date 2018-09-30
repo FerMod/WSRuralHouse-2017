@@ -317,14 +317,15 @@ public class RuralHouse implements Serializable {
 	 * @param lastDay, last day in a period range
 	 * @return the first offer that overlaps with those dates, or null if there is no overlapping offer
 	 */
-	public Offer overlapsWith( Date firstDay,  Date lastDay) {
+	public Offer overlapsWith(Date firstDay,  Date lastDay) {
 
-		Iterator<Offer> e=offers.iterator();
-		Offer offer=null;
+		Iterator<Offer> e = offers.iterator();
+		Offer offer = null;
 		while (e.hasNext()){
-			offer=e.next();
-			if ( (offer.getStartDate().compareTo(lastDay)<0) && (offer.getEndDate().compareTo(firstDay)>0))
+			offer = e.next();
+			if (offer.getStartDate().compareTo(lastDay) < 0 && offer.getEndDate().compareTo(firstDay) > 0) {
 				return offer;
+			}
 		}
 		return null;
 	}
@@ -358,7 +359,7 @@ public class RuralHouse implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		//		if (houseNumber != other.houseNumber) // NO COMPARAR ASÕ ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
+		//		if (houseNumber != other.houseNumber) // NO COMPARAR AS√ç ya que houseNumber NO ES "int" sino objeto de "java.lang.Integer"
 		if (!id.equals(other.id))
 			return false;
 		return true;

@@ -46,7 +46,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public <T> T remove(T entity) {
 		return dataAccess.remove(entity);
 	}
-	
+
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
 		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
 
@@ -56,9 +56,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 			throw new BadDatesException();
 		}
 
-		if (!dataAccess.existsOverlappingOffer(ruralHouse,firstDay,lastDay)) {
-			offer = dataAccess.createOffer(ruralHouse,firstDay,lastDay,price);		
+		if (dataAccess.existsOverlappingOffer(ruralHouse, firstDay, lastDay)) {
+			throw new OverlappingOfferException();		
 		}
+		
+		offer = dataAccess.createOffer(ruralHouse, firstDay, lastDay, price);
 
 		System.out.println("<< ApplicationFacadeImpl: createOffer=> O= " + offer);
 		return offer;
@@ -66,7 +68,10 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	@WebMethod
 	@Override
-	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) {
+	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException {
+		if (firstDay.compareTo(lastDay) >= 0) {
+			throw new BadDatesException();
+		}
 		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
 	}
 
@@ -188,7 +193,10 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) throws BadDatesException {
+		if (startDate.compareTo(endDate) >= 0) {
+			throw new BadDatesException();
+		}
 		return dataAccess.createBooking(client, offer, startDate, endDate);
 	}
 
