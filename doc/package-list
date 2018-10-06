@@ -3,5 +3,16 @@ businessLogic.util
 configuration
 dataAccess
 domain
+domain.util
 exceptions
 gui
+gui.components
+gui.components.table
+gui.components.table.cell.component
+gui.components.ui
+gui.debug
+gui.user
+gui.user.admin
+gui.user.client
+gui.user.owner
+testing
