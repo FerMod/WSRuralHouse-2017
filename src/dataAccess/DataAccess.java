@@ -27,6 +27,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -46,7 +47,6 @@ import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
-import exceptions.OverlappingOfferException;
 
 public class DataAccess implements DataAccessInterface {
 
@@ -118,7 +118,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 
 		emf = Persistence.createEntityManagerFactory(DB_PATH, properties);
-		db = ExponentialBackOff.execute( () -> emf.createEntityManager(), "Could not open database.");
+		db = ExponentialBackOff.execute(() -> emf.createEntityManager(), "Could not open database.");
 
 		System.out.println("Database opened");
 	}
@@ -146,10 +146,11 @@ public class DataAccess implements DataAccessInterface {
 	public <T> T update(T entity) {
 		open();
 		db.getTransaction().begin();
-		T managedInstance = db.merge(entity);
+		entity = db.contains(entity) ? entity : db.merge(entity);
+		db.refresh(entity);
 		db.getTransaction().commit();
 		close();
-		return managedInstance;
+		return entity;
 	}
 
 	/**
@@ -162,9 +163,46 @@ public class DataAccess implements DataAccessInterface {
 	public <T> T remove(T entity) {
 		open();
 		db.getTransaction().begin();
-		entity = db.merge(entity);
+		entity = db.contains(entity) ? entity : db.merge(entity);
 		db.remove(entity);
 		db.getTransaction().commit();
+		close();
+		return entity;
+	}
+
+	/**
+	 * Method used to remove a entity from the database with the specified key
+	 * @param <T> the entity type
+	 * @param <K> the entity primary key type
+	 *  
+	 * @param entityClass the entity class type
+	 * @param primaryKey the entity primary key
+	 * @return the managed instance that has been removed
+	 */
+	@Override
+	public <T, K> T remove(Class<T> entityClass, K primaryKey) {
+		open();
+		db.getTransaction().begin();
+		T entity = db.find(entityClass, primaryKey);
+		entity = db.contains(entity) ? entity : db.merge(entity);
+		db.remove(entity);
+		db.getTransaction().commit();
+		close();
+		return entity;
+	}
+
+	/**
+	 * Find by primary key. Search for an entity of the specified class and primary key.
+	 * If the entity instance is contained in the persistence context, it is returned from there. 
+	 * 
+	 * @param entityClass the entity class type
+	 * @param primaryKey the entity primary key
+	 * @return the found entity instance or <code>null</code> if the entity does not exist
+	 */
+	@Override
+	public <T, K> T find(Class<T> entityClass, K primaryKey) {
+		open();
+		T entity = db.find(entityClass, primaryKey);
 		close();
 		return entity;
 	}
@@ -230,7 +268,7 @@ public class DataAccess implements DataAccessInterface {
 			Offer offer2 = createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
 			createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
 			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
-			
+
 			System.out.println("Database initialized");
 
 			for (RuralHouse ruralHouse : getRuralHouses()) {
@@ -257,13 +295,17 @@ public class DataAccess implements DataAccessInterface {
 			System.out.print(">> DataAccess: createOffer(" + ruralHouse + ", " + firstDay + ", " + lastDay + ", " + price + ") -> ");
 			RuralHouse rh = db.find(RuralHouse.class, ruralHouse.getId());
 			db.getTransaction().begin();
-			offer = rh.createOffer(firstDay, lastDay, price);
+			//			offer = rh.createOffer(firstDay, lastDay, price);
+			offer = new Offer(firstDay, lastDay, price, rh);
 			db.persist(offer);
+			db.flush();
+			rh.addOffer(offer);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + offer.getId());
 			return offer;
 		} catch (Exception e){
-			System.err.println("Offer not created: " + e .toString());
+			System.err.print("Offer not created because of: ");
+			e.printStackTrace();
 		} finally {
 			close();
 		}
@@ -271,7 +313,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Vector<Offer> getOffer(RuralHouse rh, Date firstDay,  Date lastDay) {
+	public Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
 		Vector<Offer> result = null;
 		try { 
 			open();
@@ -490,10 +532,9 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws  OverlappingOfferException {
+	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) {
 		try{
 			open();
-
 			RuralHouse ruralHouse = db.find(RuralHouse.class, rh.getId());
 			if (ruralHouse.overlapsWith(firstDay, lastDay) != null) {
 				return true;
@@ -505,6 +546,11 @@ public class DataAccess implements DataAccessInterface {
 			close();
 		}
 		return false;
+	}
+
+	@Override
+	public boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+		return endDate1.compareTo(startDate2) > 0 && startDate1.compareTo(endDate2) < 0;
 	}
 
 	@Override
@@ -983,8 +1029,8 @@ public class DataAccess implements DataAccessInterface {
 	/**
 	 * Modify the user's password.
 	 *  
-	 * @param the user
-	 * @param the password to modify
+	 * @param user the user
+	 * @param password the password to modify
 	 */
 	public void changeUserPassword(AbstractUser user, String password) {
 		user.setPassword(password);
@@ -1150,8 +1196,8 @@ public class DataAccess implements DataAccessInterface {
 	/**
 	 * Update a review of a Rural House
 	 * 
-	 * @param Rural House of a Owner
-	 * @param Review of a Rural House
+	 * @param rh the rural house of a owner
+	 * @param r the review of a rural house
 	 */
 	@Override
 	public void updateReview(RuralHouse rh, Review r) {

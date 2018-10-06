@@ -46,7 +46,18 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public <T> T remove(T entity) {
 		return dataAccess.remove(entity);
 	}
-
+	
+	@Override
+	public <T, K> T remove(Class<T> entityClass, K primaryKey) {
+		return dataAccess.remove(entityClass, primaryKey);
+	}
+	
+	@Override
+	public <T, K> T find(Class<T> entityClass, K primaryKey) {
+		return dataAccess.find(entityClass, primaryKey);
+	}
+	
+	@Override
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
 		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
 
@@ -68,11 +79,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 
 	@WebMethod
 	@Override
-	public Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException {
+	public Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException {
 		if (firstDay.compareTo(lastDay) >= 0) {
 			throw new BadDatesException();
 		}
-		return new Vector<Offer>(dataAccess.getOffer(ruralHouse, firstDay, lastDay));
+		return new Vector<Offer>(dataAccess.getOffers(ruralHouse, firstDay, lastDay));
 	}
 
 	@Override
@@ -230,6 +241,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	@Override
 	public Vector<Booking> getBookings() {
 		return dataAccess.getBookings();
+	}
+	
+	@Override
+	public boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+		return dataAccess.datesRangeOverlap(startDate1, endDate1, startDate2, endDate2);
 	}
 
 }

@@ -28,13 +28,14 @@ import exceptions.OverlappingOfferException;
 public interface ApplicationFacadeInterface  {
 
 	/**
-	 * 
-	 * @param dataAccess
+	 * Set the data access interface
+	 * @param dataAccess the data access interface
 	 */
 	void setDataAccess(DataAccessInterface dataAccess);
 
 	/**
 	 * Method used to update a entity with their changes to the database
+	 * @param <T> the entity type
 	 * 
 	 * @param entity the entity that will be updated
 	 * @return the managed instance that is updated
@@ -43,11 +44,35 @@ public interface ApplicationFacadeInterface  {
 	
 	/**
 	 * Method used to remove a entity from the database
+	 * @param <T> the entity type
 	 * 
 	 * @param entity the entity that will be removed
 	 * @return the managed instance that has been removed
 	 */	
 	<T> T remove(T entity);
+	
+	/**
+	 * Method used to remove a entity from the database with the specified key
+	 * @param <T> The entity type
+	 * @param <K> The entity primary key type
+	 *  
+	 * @param entityClass the entity class type
+	 * @param primaryKey the entity primary key
+	 * @return the removed entity
+	 */
+	<T, K> T remove(Class<T> entityClass, K primaryKey);
+	
+	/**
+	 * Find by primary key. Search for an entity of the specified class and primary key.
+	 * If the entity instance is contained in the persistence context, it is returned from there. 
+	 * @param <T> the entity type
+	 * @param <K> the entity primary key type
+	 * 
+	 * @param entityClass the entity class type
+	 * @param primaryKey the entity primary key
+	 * @return the found entity instance or <code>null</code> if the entity does not exist
+	 */
+	<T, K> T find(Class<T> entityClass, K primaryKey);
 
 	/**
 	 * Creates an offer and stores it in the database.
@@ -57,8 +82,8 @@ public interface ApplicationFacadeInterface  {
 	 * @param lastDay the ending date of the offer
 	 * @param price the price of the offer
 	 * @return the created offer, null if none was created
-	 * @throws OverlappingOfferException If the entered date interval overlaps with already existing offer date
-	 * @throws BadDatesException If the first date is greater than second date
+	 * @throws OverlappingOfferException if the entered date interval overlaps with already existing offer date
+	 * @throws BadDatesException if the first date is greater than second date
 	 */
 	@WebMethod
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException;
@@ -70,10 +95,10 @@ public interface ApplicationFacadeInterface  {
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the ending date of the offer
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
-	 * @throws BadDatesException 
+	 * @throws BadDatesException if the first date is greater than second date
 	 */
 	@WebMethod
-	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
+	Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
 
 	/**
 	 * Obtain all the offers stored in the database
@@ -85,7 +110,8 @@ public interface ApplicationFacadeInterface  {
 
 	/**
 	 * Obtain all the offers stored in the database that matches with the given {@code ReviewState} of their rural house
-	 *
+	 * @param reviewState the review state
+	 * 
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
 	@WebMethod
@@ -102,7 +128,8 @@ public interface ApplicationFacadeInterface  {
 
 	/**
 	 * Obtain all the offers stored in the database that haven't ended yet, and matches with the given {@code ReviewState} of their rural house
-	 *
+	 * @param reviewState the review state
+	 * 
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the active offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
 	@WebMethod
@@ -184,8 +211,9 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * Creates a city and stores it in the database.
 	 * @param name the name of the city
+	 * 
 	 * @return the created city
-	 * @see {@link City}
+	 * @see City
 	 */
 	City createCity(String name);
 
@@ -193,7 +221,7 @@ public interface ApplicationFacadeInterface  {
 	 * Return a vector of all the cities names stored in the database
 	 * 
 	 * @return a vector with all the cities names of type {@code String}
-	 * @see {@link City}
+	 * @see City
 	 */
 	Vector<String> getCitiesNames();
 
@@ -201,13 +229,14 @@ public interface ApplicationFacadeInterface  {
 	 * Return a vector of all the cities stored in the database
 	 * 
 	 * @return a vector with all the cities of type {@code City}
-	 * @see {@link City}
+	 * @see City
 	 */
 	Vector<City> getCities();
 
 	/**
 	 * Creates an user and stores it in the database.
 	 * 
+	 * @param email the user email
 	 * @param username the name of the account
 	 * @param password the password of the account
 	 * @param role the role assigned to the account
@@ -235,7 +264,7 @@ public interface ApplicationFacadeInterface  {
 	 * @throws AccountNotFoundException If no such account is found
 	 * 
 	 * @return the object inherited from {@code AbstractUser} that represents the user which have successfully logged in
-	 * @see {@link AbstractUser}
+	 * @see AbstractUser
 	 */
 	@WebMethod
 	AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException;
@@ -294,5 +323,7 @@ public interface ApplicationFacadeInterface  {
 	Locale getLocale();
 	
 	void setLocale(Locale locale);
+	
+	boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2);
 	
 }

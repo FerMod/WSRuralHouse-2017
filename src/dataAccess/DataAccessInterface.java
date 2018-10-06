@@ -30,9 +30,13 @@ public interface DataAccessInterface {
 	
 	<T> T remove(T entity);
 
+	<T, K> T remove(Class<T> entityClass, K primaryKey);
+	
+	<T, K> T find(Class<T> entityClass, K primaryKey);
+
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price);
 	
-	Vector<Offer> getOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay);
+	Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay, Date lastDay);
 	
 	Vector<Offer> getOffersBetweenPrice(int min, int max);
 	
@@ -52,6 +56,8 @@ public interface DataAccessInterface {
 
 	boolean existsOverlappingOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay) throws OverlappingOfferException;
 
+	boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2);
+	
 	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
 
 	Vector<RuralHouse> getRuralHouses();
