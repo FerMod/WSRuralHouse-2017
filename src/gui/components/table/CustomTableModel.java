@@ -219,7 +219,7 @@ public class CustomTableModel extends AbstractTableModel {
 	 * Set the width of the columns as percentages.
 	 * 
 	 * @param table the {@link JTable} whose columns will be set
-	 * @param percentages the widths of the columns as percentages</p>
+	 * @param percentages the widths of the columns as percentages<p>
 	 * <b>Note</b>: this method does <b>NOT</b> verify that all percentages add up to 100% and for
 	 * the columns to appear properly, it is recommended that the widths for <b>ALL</b> columns be specified.
 	 */

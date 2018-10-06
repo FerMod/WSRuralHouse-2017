@@ -45,20 +45,18 @@ public class Review implements Serializable {
 	/**
 	 * A review state. A review can be in one of the following states:
 	 * <ul>
-	 * <li>{@link #APPROVED}</br>
-	 *     A review is made and the element is marked as valid.
-	 *     </li>
-	 * <li>{@link #AWAITING_REVIEW}</br>
+	 *		<li>{@link #APPROVED}<br>
+	 * 		A review is made and the element is marked as valid.
+	 * 		</li>
+	 * 		<li>{@link #AWAITING_REVIEW}<br>
 	 *      A review have not been made yet, and the element is waiting for one.
-	 *     </li>
-	 * <li>{@link #REJECTED}</br>
+	 *     	</li>
+	 * 		<li>{@link #REJECTED}<br>
 	 *      A review is made and the element is marked as not valid.
-	 *     </li>
+	 *     	</li>
 	 * </ul>
-	 * A review can be in only one state at time.
-	 * 
-	 * @see #getReviewState
-	 * 
+	 *<p>
+	 * A review can be in only one state at time. 
 	 */
 	public enum ReviewState {
 		/**
@@ -104,6 +102,10 @@ public class Review implements Serializable {
 		this.reviewer = reviewer;
 	}
 
+	/**
+	 * Get the current review state
+	 * @return the review state
+	 */
 	public ReviewState getState() {
 		return reviewState;
 	}
@@ -126,7 +128,7 @@ public class Review implements Serializable {
 	 * 
 	 * @param reviewer the administrator who have made the review
 	 * @param description a description for the review
-	 * @param state the state that is currently the review
+	 * @param reviewState the state that is currently the review
 	 */
 	public void setState(Admin reviewer, String description, ReviewState reviewState) {
 		this.reviewer = reviewer;
@@ -134,7 +136,7 @@ public class Review implements Serializable {
 		this.reviewState = reviewState;
 		reviewDate = Calendar.getInstance().getTime();
 	}
-	
+
 	public void setState(ReviewState reviewState) {
 		this.reviewState = reviewState;
 	}

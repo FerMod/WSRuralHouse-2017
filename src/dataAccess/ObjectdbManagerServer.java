@@ -26,9 +26,9 @@ public class ObjectdbManagerServer extends JDialog {
 	JTextArea textArea;
 	ConfigXML c;
 
-
 	/**
-	 * Launch the application.
+	 * Launch the application. 
+	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
 		try {

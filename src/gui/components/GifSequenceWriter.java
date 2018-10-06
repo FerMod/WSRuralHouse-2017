@@ -83,6 +83,8 @@ public class GifSequenceWriter {
 	/**
 	 * Close this GifSequenceWriter object. This does not close the underlying
 	 * stream, just finishes off the GIF.
+	 * 
+	 * @throws IOException if an error occurs during writing.
 	 */
 	public void close() throws IOException {
 		gifWriter.endWriteSequence();    
@@ -110,8 +112,6 @@ public class GifSequenceWriter {
 	 * @param nodeName the name of the child node.
 	 * 
 	 * @return the child node, if found or a new node created with the given name.
-	 * 
-	 * 
 	 */
 	private static IIOMetadataNode getNode(IIOMetadataNode rootNode, String nodeName) {
 		int nNodes = rootNode.getLength();
@@ -124,16 +124,7 @@ public class GifSequenceWriter {
 		rootNode.appendChild(node);
 		return(node);
 	}
-
-	/**
-  public GifSequenceWriter(
-       BufferedOutputStream outputStream,
-       int imageType,
-       int timeBetweenFramesMS,
-       boolean loopContinuously) {
-
-	 */
-
+	
 	public static void main(String[] args) throws Exception {
 		if (args.length > 1) {
 			// grab the output image type from the first image in the sequence

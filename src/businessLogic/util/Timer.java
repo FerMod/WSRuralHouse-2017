@@ -38,7 +38,8 @@ public class Timer {
 	}
 
 	/**
-	 * Get the time string with the format "h m s" </p>
+	 * Get the time string with the format "h m s"
+	 * 
 	 * @return the time formated
 	 */
 	public String getFormattedCurrentTime() {
@@ -82,8 +83,8 @@ public class Timer {
 	}
 
 	/**
-	 * Get the time string with the format <i>"h  m  s"</i> </p>
-	 * If the timer is still running it will stop it
+	 * Get the time string with the format <i>"h  m  s"</i>.<br>
+	 * If the timer is still running it will stop it.
 	 * @return the time formated
 	 */
 	public String getFormattedFinishTime() {
@@ -104,7 +105,7 @@ public class Timer {
 
 
 	/**
-	 * Get the finish time in nanosecond </p>
+	 * Get the finish time in nanosecond<p>
 	 * If the timer is still running it will stop it
 	 * @return time in nanoseconds
 	 */

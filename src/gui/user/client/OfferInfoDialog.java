@@ -367,7 +367,7 @@ public class OfferInfoDialog extends JDialog {
 			imagePanel = new ImagePanel();
 			Vector<Offer> offer;
 			try {
-				offer = MainWindow.getBusinessLogic().getOffer(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
+				offer = MainWindow.getBusinessLogic().getOffers(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
 				ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
 				System.out.println("Showing offer: " + offer);
 				imagePanel.setImage(imageIcon);

@@ -62,12 +62,13 @@ public class MainWindow extends JFrame {
 	//private static PropertyChangeSupport pcs = new PropertyChangeSupport(MainWindow.class);//TODO REMOVE
 
 	/**
-	 * Launches the {@code MainWindow} application.</br>
+	 * Launches the {@code MainWindow} application.<br>
 	 * This will prompt a dialog to choose between which type of user wants to be launched the {@code MainWindow}
 	 * <p>
-	 * This is {@code main} method is only for debugging purposes.</br>
+	 * This is {@code main} method is only for debugging purposes.<br>
 	 * <strong><em>This will be removed in a nearby future,</em></strong> and will be accessed as the designed way.
 	 * 
+	 * @param args the arguments
 	 */
 	@Deprecated
 	public static void main(String[] args) {
@@ -142,7 +143,9 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the frame for the passed user.
+	 * 
+	 * @param user the window user
 	 */
 	public MainWindow(AbstractUser user) {
 
@@ -238,7 +241,6 @@ public class MainWindow extends JFrame {
 	 * @param user the role of the user
 	 * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
 	 * 
-	 * @see Li
 	 */
 	public LinkedHashMap<String, JPanel> getRoleTabPanels(AbstractUser user) {
 		LinkedHashMap<String, JPanel> panelMap = new LinkedHashMap<String, JPanel>();
