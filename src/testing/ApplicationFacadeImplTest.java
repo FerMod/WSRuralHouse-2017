@@ -23,6 +23,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
@@ -49,7 +52,7 @@ class ApplicationFacadeImplTest {
 	static Owner owner;
 	static City city;
 	static ApplicationFacadeInterface afi;
-	static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	static SimpleDateFormat dateFormat;
 
 	Date startDate;
 	Date endDate;
@@ -94,13 +97,15 @@ class ApplicationFacadeImplTest {
 	}
 
 	static void createTestData() {
-		try {
+		try {			
+
+			dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
 			admin = (Admin)afi.createUser("adminTest@admin.com", "adminTest", "adminTest", Role.ADMIN);
 			owner = (Owner)afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER);
 			client = (Client)afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT);
 			city = afi.createCity("TestCity");
-
+			
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			afi.update(rh);
@@ -140,7 +145,7 @@ class ApplicationFacadeImplTest {
 	}
 
 	@BeforeEach
-	public void restoreValues() {
+	void restoreValues() {
 		startDate = null;
 		endDate = null;
 		offer = null;
@@ -148,12 +153,13 @@ class ApplicationFacadeImplTest {
 		price = 550.0;
 	}
 
-	@Test
+	@ParameterizedTest
 	@DisplayName("Create/Delete Offer - Correct Creation/Deletion")
-	public void testCreateDeleteOffer() {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv")
+	void testCreateDeleteOffer(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2018/10/12");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 
 			int currentOffers = afi.getOfferCount();
 			offer = createTestOffer(rh, startDate, endDate, price);
@@ -173,13 +179,14 @@ class ApplicationFacadeImplTest {
 			assumeNoException("Exception thrown when testing the creation\\deletion of an offer.", e);
 		}
 	}
-
-	@Test
+	
+	@ParameterizedTest
 	@DisplayName("CreateBooking - Correct Creation")
-	public void testCreateBooking() {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv")
+	void testCreateBooking(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2018/10/12");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 
 			offer = createTestOffer(rh, startDate, endDate, price);
 			booking = afi.createBooking(client, offer, startDate, endDate);
@@ -189,13 +196,14 @@ class ApplicationFacadeImplTest {
 			assumeNoException("Exception thrown when trying to create booking.", e);
 		}
 	}
-
-	@Test
+	
+	@ParameterizedTest
 	@DisplayName("CreateBooking - BadDatesException")
-	public void testCreateBooking2() {
+	@CsvFileSource(resources = "/testing/BadDates.csv")
+	void testCreateBooking2(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2000/10/12");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 
 			// This should throw an exception later on, but we are not testing that right now
 			offer = new Offer(startDate, endDate, price, rh);
@@ -206,12 +214,13 @@ class ApplicationFacadeImplTest {
 		}		
 	}
 
-	@Test
+	@ParameterizedTest
 	@DisplayName("CreateOffer - Correct Creation")
-	public void testCreateOffer() {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv")
+	void testCreateOffer(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2018/10/12");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 			offer = createTestOffer(rh, startDate, endDate, price);
 			assertNotNull(offer);
 		} catch (Exception e) {
@@ -221,7 +230,7 @@ class ApplicationFacadeImplTest {
 
 	@Test
 	@DisplayName("CreateOffer - OverlappingOfferException")
-	public void testCreateOffer2() {
+	void testCreateOffer2() {
 		try {
 			startDate = parseDate("2018/09/24");
 			endDate = parseDate("2018/10/12");
@@ -236,24 +245,26 @@ class ApplicationFacadeImplTest {
 		}
 	}
 
-	@Test
+	@ParameterizedTest
 	@DisplayName("CreateOffer - BadDatesException")
-	public void testCreateOffer3() {
+	@CsvFileSource(resources = "/testing/BadDates.csv")
+	void testCreateOffer3(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("1997/10/14");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 			assertThrows(BadDatesException.class, () -> offer = afi.createOffer(rh, startDate, endDate, price));
 		} catch (Exception e) {
 			fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
 		}
 	}
 
-	@Test
+	@ParameterizedTest
 	@DisplayName("GetOffer - Get Correct Value")
-	public void testGetOffer() {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv")
+	void testGetOffer(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2018/10/12");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 
 			offer = createTestOffer(rh, startDate, endDate, price);
 
@@ -267,12 +278,13 @@ class ApplicationFacadeImplTest {
 		}
 	}
 
-	@Test
+	@ParameterizedTest
 	@DisplayName("GetOffer - BadDatesException")
-	public void testGetOffer1() {
+	@CsvFileSource(resources = "/testing/BadDates.csv")
+	void testGetOffer1(String date1, String date2) {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("1986/11/09");
+			startDate = parseDate(date1);
+			endDate = parseDate(date2);
 
 			assertAll("Offer BadDatesExceptions",
 				() -> assertThrows(BadDatesException.class, () -> {
@@ -287,7 +299,7 @@ class ApplicationFacadeImplTest {
 		}
 	}
 
-	public Offer createTestOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) {
+	Offer createTestOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) {
 		Offer offer = null;
 		try {
 			offer = afi.createOffer(ruralHouse, firstDay, lastDay, price);
@@ -302,7 +314,7 @@ class ApplicationFacadeImplTest {
 		return offer;
 	}
 
-	public Date parseDate(String dateString) {
+	Date parseDate(String dateString) {
 		Date date = null;
 		try {
 			date = dateFormat.parse(dateString);
