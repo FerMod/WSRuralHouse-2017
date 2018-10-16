@@ -24,6 +24,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.JavaTimeConversionPattern;
@@ -48,7 +49,7 @@ import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
 
 class ApplicationFacadeImplTest {
-
+	
 	static RuralHouse rh;
 	static Admin admin;
 	static Client client;
@@ -156,152 +157,205 @@ class ApplicationFacadeImplTest {
 		price = 550.0;
 	}
 
-	@ParameterizedTest
-	@DisplayName("Create/Delete Offer - Correct Creation/Deletion")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
-	void testCreateDeleteOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
+	@Nested
+	@DisplayName("Offer Test")
+	class OfferTest {
 
-			int currentOffers = afi.getOfferCount();
-			offer = createTestOffer(rh, startDate, endDate, price);
-			currentOffers++;
-			assertEquals(currentOffers, afi.getOfferCount());
-
-			afi.remove(Offer.class, offer.getId());
-			currentOffers--;
-			assertEquals(currentOffers, afi.getOfferCount());
-
-			offer = createTestOffer(rh, startDate, endDate, price);
-			currentOffers++;
-			assertEquals(currentOffers, afi.getOfferCount());
-
-			assertNotNull(offer);
-		} catch (Exception e) {
-			assumeNoException("Exception thrown when testing the creation\\deletion of an offer.", e);
+		@ParameterizedTest
+		@DisplayName("CreateOffer - Correct Creation")
+		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		void testCreateOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+				offer = createTestOffer(rh, startDate, endDate, price);
+				assertNotNull(offer);
+			} catch (Exception e) {
+				assumeNoException("Exception thrown when trying to create offer.", e);
+			}
 		}
-	}
 
-	@ParameterizedTest
-	@DisplayName("CreateBooking - Correct Creation")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
-	void testCreateBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
+		@Test
+		@DisplayName("CreateOffer - OverlappingOfferException")
+		void testCreateOffer2() {
+			try {
+				startDate = parseToDate(LocalDate.of(2018, 9, 24));
+				endDate = parseToDate(LocalDate.of(2018, 10, 12));
+				offer = createTestOffer(rh, startDate, endDate, price);
+				assumeNotNull(offer);
 
-			offer = createTestOffer(rh, startDate, endDate, price);
-			booking = afi.createBooking(client, offer, startDate, endDate);
-
-			assertNotNull(booking);
-		} catch (Exception e) {
-			assumeNoException("Exception thrown when trying to create booking.", e);
+				startDate = parseToDate(LocalDate.of(2018, 9, 24));
+				endDate = parseToDate(LocalDate.of(2018, 10, 12));
+				assertThrows(OverlappingOfferException.class, () -> offer = afi.createOffer(rh, startDate, endDate, price));
+			} catch (Exception e) {
+				fail("Expected exceptions.OverlappingOfferException but got " + e.getClass().getCanonicalName(), e);
+			}
 		}
-	}
 
-	@ParameterizedTest
-	@DisplayName("CreateBooking - BadDatesException")
-	@CsvFileSource(resources = "/testing/BadDates.csv", numLinesToSkip = 1)
-	void testCreateBooking2(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
-
-			// This should throw an exception later on, but we are not testing that right now
-			offer = new Offer(startDate, endDate, price, rh);
-
-			assertThrows(BadDatesException.class, () -> booking = afi.createBooking(client, offer, startDate, endDate));
-		} catch (Exception e) {
-			fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
-		}		
-	}
-
-	@ParameterizedTest
-	@DisplayName("CreateOffer - Correct Creation")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
-	void testCreateOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
-			offer = createTestOffer(rh, startDate, endDate, price);
-			assertNotNull(offer);
-		} catch (Exception e) {
-			assumeNoException("Exception thrown when trying to create offer.", e);
+		@ParameterizedTest
+		@DisplayName("CreateOffer - BadDatesException")
+		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		void testCreateOffer3(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+				assertThrows(BadDatesException.class, () -> offer = afi.createOffer(rh, startDate, endDate, price));
+			} catch (Exception e) {
+				fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
+			}
 		}
-	}
 
-	@Test
-	@DisplayName("CreateOffer - OverlappingOfferException")
-	void testCreateOffer2() {
-		try {
-			startDate = parseDate(LocalDate.of(2018, 9, 24));
-			endDate = parseDate(LocalDate.of(2018, 10, 12));
-			offer = createTestOffer(rh, startDate, endDate, price);
-			assertNotNull(offer);
+		@ParameterizedTest
+		@DisplayName("GetOffer - Get Correct Value")
+		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		void testGetOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
 
-			startDate = parseDate(LocalDate.of(2018, 9, 24));
-			endDate = parseDate(LocalDate.of(2018, 10, 12));
-			assertThrows(OverlappingOfferException.class, () -> offer = afi.createOffer(rh, startDate, endDate, price));
-		} catch (Exception e) {
-			fail("Expected exceptions.OverlappingOfferException but got " + e.getClass().getCanonicalName(), e);
+				offer = createTestOffer(rh, startDate, endDate, price);
+
+				Offer expected = afi.find(Offer.class, offer.getId());
+				assumeTrue(expected.equals(offer), "Assumption is not true");
+
+				Offer obtained = afi.getOffers(rh, startDate, endDate).get(0);			
+				assertEquals(expected, obtained);
+			} catch (Exception e) {
+				assumeNoException("Exception thrown when trying to get offer.", e);
+			}
 		}
-	}
 
-	@ParameterizedTest
-	@DisplayName("CreateOffer - BadDatesException")
-	@CsvFileSource(resources = "/testing/BadDates.csv", numLinesToSkip = 1)
-	void testCreateOffer3(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
-			assertThrows(BadDatesException.class, () -> offer = afi.createOffer(rh, startDate, endDate, price));
-		} catch (Exception e) {
-			fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
+		@ParameterizedTest
+		@DisplayName("GetOffer - BadDatesException")
+		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		void testGetOffer1(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+
+				assertAll("Offer BadDatesExceptions",
+					() -> assertThrows(BadDatesException.class, () -> {
+						offer = afi.createOffer(rh, startDate, endDate, price);
+					}),
+					() -> assertThrows(BadDatesException.class, () -> {
+						assertNotNull(afi.getOffers(rh, startDate, endDate).get(0));
+					})
+				);
+			} catch (Exception e) {
+				fail("Instead of BadDatesException another different has thrown.", e);
+			}
 		}
-	}
 
-	@ParameterizedTest
-	@DisplayName("GetOffer - Get Correct Value")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
-	void testGetOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
-
-			offer = createTestOffer(rh, startDate, endDate, price);
-
-			Offer expected = afi.find(Offer.class, offer.getId());
-			assumeTrue(expected.equals(offer), "Assumption is not true");
-
-			Offer obtained = afi.getOffers(rh, startDate, endDate).get(0);			
-			assertEquals(expected, obtained);
-		} catch (Exception e) {
-			assumeNoException("Exception thrown when trying to get offer.", e);
+		@ParameterizedTest
+		@DisplayName("Delete Offer - Correct Deletion")
+		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		void testDeleteOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+		
+				int currentOffers = afi.getOfferCount();
+				offer = createTestOffer(rh, startDate, endDate, price);
+				currentOffers++;
+				assertEquals(currentOffers, afi.getOfferCount());
+		
+				afi.remove(Offer.class, offer.getId());
+				currentOffers--;
+				assertEquals(currentOffers, afi.getOfferCount());
+		
+				offer = createTestOffer(rh, startDate, endDate, price);
+				currentOffers++;
+				assertEquals(currentOffers, afi.getOfferCount());
+		
+				assertNotNull(offer);
+			} catch (Exception e) {
+				assumeNoException("Exception thrown when testing the deletion of an offer.", e);
+			}
 		}
+
 	}
 
-	@ParameterizedTest
-	@DisplayName("GetOffer - BadDatesException")
-	@CsvFileSource(resources = "/testing/BadDates.csv", numLinesToSkip = 1)
-	void testGetOffer1(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
-		try {
-			startDate = parseDate(date1);
-			endDate = parseDate(date2);
+	@Nested
+	@DisplayName("Booking Test")
+	class BookingTest {
 
-			assertAll("Offer BadDatesExceptions",
-				() -> assertThrows(BadDatesException.class, () -> {
-					offer = afi.createOffer(rh, startDate, endDate, price);
-				}),
-				() -> assertThrows(BadDatesException.class, () -> {
-					assertNotNull(afi.getOffers(rh, startDate, endDate).get(0));
-				})
-			);
-		} catch (Exception e) {
-			fail("Instead of BadDatesException another different has thrown.", e);
+		@ParameterizedTest
+		@DisplayName("CreateBooking - Correct Creation")
+		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		void testCreateBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+
+				offer = createTestOffer(rh, startDate, endDate, price);
+				booking = afi.createBooking(client, offer, startDate, endDate);
+
+				assertNotNull(booking);
+			} catch (Exception e) {
+				assumeNoException("Exception thrown when trying to create booking.", e);
+			}
 		}
-	}
 
+		@ParameterizedTest
+		@DisplayName("CreateBooking - BadDatesException")
+		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		void testCreateBooking2(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+
+				// This should throw an exception later on, but we are not testing that right now
+				offer = new Offer(startDate, endDate, price, rh);
+				assumeNotNull(offer);
+
+				assertThrows(BadDatesException.class, () -> booking = afi.createBooking(client, offer, startDate, endDate));
+			} catch (Exception e) {
+				fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
+			}		
+		}
+		
+		@ParameterizedTest
+		@DisplayName("Delete Booking - Correct Deletion")
+		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		void testDeleteBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
+			try {
+				startDate = parseToDate(date1);
+				endDate = parseToDate(date2);
+				offer = createTestOffer(rh, startDate, endDate, price);
+				
+				int currentBookings = afi.getBookings(client).size();
+				booking = afi.createBooking(client, offer, startDate, endDate);
+				currentBookings++;
+				assertEquals(currentBookings, afi.getBookings(client).size());
+		
+				afi.remove(Booking.class, booking.getId());
+				currentBookings--;
+				assertEquals(currentBookings, afi.getBookings(client).size());
+		
+				booking = afi.createBooking(client, offer, startDate, endDate);
+				currentBookings++;
+				assertEquals(currentBookings, afi.getBookings(client).size());
+		
+				assertNotNull(booking);
+			} catch (Exception e) {
+				assumeNoException("Exception thrown when testing the deletion of a booking.", e);
+			}
+		}
+
+	}
+	
+	/**
+	 * Create and return an <code>offer</code><p>
+	 * Assumes that the created offer will not be <code>null</code> and that the offer 
+	 * will not throw any exceptions.<br>
+	 * If the assumption fails, the test that calls the function will also fail.
+	 * 
+	 * @param ruralHouse the rural house associated to the offer
+	 * @param firstDay the start date of the offer
+	 * @param lastDay the end date of the offer
+	 * @param price the offer price per day
+	 * @return the created <code>Offer</code>
+	 */
 	Offer createTestOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) {
 		Offer offer = null;
 		try {
@@ -317,7 +371,16 @@ class ApplicationFacadeImplTest {
 		return offer;
 	}
 
-	Date parseDate(LocalDate localDate) {
+	/**
+	 * Parse <code>java.util.Date</code> to <code>java.time.LocalDate</code>.<p>
+	 * Assumes that the parsed value will not be <code>null</code> and that the parse 
+	 * will not throw any exceptions.<br>
+	 * If the assumption fails, the test that calls the function will also fail.
+	 * 
+	 * @param localDate value to parse
+	 * @return The date in <code>java.util.Date</code> type
+	 */
+	Date parseToDate(LocalDate localDate) {
 		Date date = null;
 		try {
 			date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
