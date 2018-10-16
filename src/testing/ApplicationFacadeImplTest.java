@@ -10,10 +10,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
@@ -24,6 +26,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.JavaTimeConversionPattern;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 import businessLogic.ApplicationFacadeImpl;
@@ -105,7 +108,7 @@ class ApplicationFacadeImplTest {
 			owner = (Owner)afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER);
 			client = (Client)afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT);
 			city = afi.createCity("TestCity");
-			
+
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			afi.update(rh);
@@ -155,8 +158,8 @@ class ApplicationFacadeImplTest {
 
 	@ParameterizedTest
 	@DisplayName("Create/Delete Offer - Correct Creation/Deletion")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv")
-	void testCreateDeleteOffer(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
+	void testCreateDeleteOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -179,11 +182,11 @@ class ApplicationFacadeImplTest {
 			assumeNoException("Exception thrown when testing the creation\\deletion of an offer.", e);
 		}
 	}
-	
+
 	@ParameterizedTest
 	@DisplayName("CreateBooking - Correct Creation")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv")
-	void testCreateBooking(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
+	void testCreateBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -196,11 +199,11 @@ class ApplicationFacadeImplTest {
 			assumeNoException("Exception thrown when trying to create booking.", e);
 		}
 	}
-	
+
 	@ParameterizedTest
 	@DisplayName("CreateBooking - BadDatesException")
-	@CsvFileSource(resources = "/testing/BadDates.csv")
-	void testCreateBooking2(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/BadDates.csv", numLinesToSkip = 1)
+	void testCreateBooking2(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -216,8 +219,8 @@ class ApplicationFacadeImplTest {
 
 	@ParameterizedTest
 	@DisplayName("CreateOffer - Correct Creation")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv")
-	void testCreateOffer(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
+	void testCreateOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -232,13 +235,13 @@ class ApplicationFacadeImplTest {
 	@DisplayName("CreateOffer - OverlappingOfferException")
 	void testCreateOffer2() {
 		try {
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2018/10/12");
+			startDate = parseDate(LocalDate.of(2018, 9, 24));
+			endDate = parseDate(LocalDate.of(2018, 10, 12));
 			offer = createTestOffer(rh, startDate, endDate, price);
 			assertNotNull(offer);
 
-			startDate = parseDate("2018/09/24");
-			endDate = parseDate("2018/10/12");
+			startDate = parseDate(LocalDate.of(2018, 9, 24));
+			endDate = parseDate(LocalDate.of(2018, 10, 12));
 			assertThrows(OverlappingOfferException.class, () -> offer = afi.createOffer(rh, startDate, endDate, price));
 		} catch (Exception e) {
 			fail("Expected exceptions.OverlappingOfferException but got " + e.getClass().getCanonicalName(), e);
@@ -247,8 +250,8 @@ class ApplicationFacadeImplTest {
 
 	@ParameterizedTest
 	@DisplayName("CreateOffer - BadDatesException")
-	@CsvFileSource(resources = "/testing/BadDates.csv")
-	void testCreateOffer3(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/BadDates.csv", numLinesToSkip = 1)
+	void testCreateOffer3(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -260,8 +263,8 @@ class ApplicationFacadeImplTest {
 
 	@ParameterizedTest
 	@DisplayName("GetOffer - Get Correct Value")
-	@CsvFileSource(resources = "/testing/CorrectDates.csv")
-	void testGetOffer(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/CorrectDates.csv", numLinesToSkip = 1)
+	void testGetOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -280,8 +283,8 @@ class ApplicationFacadeImplTest {
 
 	@ParameterizedTest
 	@DisplayName("GetOffer - BadDatesException")
-	@CsvFileSource(resources = "/testing/BadDates.csv")
-	void testGetOffer1(String date1, String date2) {
+	@CsvFileSource(resources = "/testing/BadDates.csv", numLinesToSkip = 1)
+	void testGetOffer1(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 		try {
 			startDate = parseDate(date1);
 			endDate = parseDate(date2);
@@ -314,11 +317,11 @@ class ApplicationFacadeImplTest {
 		return offer;
 	}
 
-	Date parseDate(String dateString) {
+	Date parseDate(LocalDate localDate) {
 		Date date = null;
 		try {
-			date = dateFormat.parse(dateString);
-		} catch (ParseException e) {
+			date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		} catch (Exception e) {
 			assumeNoException("Exception thrown when trying to parse date.", e);
 		}
 		assumeNotNull(date);
