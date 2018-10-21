@@ -65,7 +65,7 @@ class ApplicationFacadeImplTest {
 
 	@BeforeAll
 	static void beforeAll() {
-		
+
 		LogFile.FILE_NAME = "JUnitTest.log";
 
 		initDataBase();
@@ -244,7 +244,7 @@ class ApplicationFacadeImplTest {
 					})
 				);
 			} catch (Exception e) {
-				fail("Instead of BadDatesException another different has thrown.", e);
+				fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
 			}
 		}
 
@@ -306,8 +306,12 @@ class ApplicationFacadeImplTest {
 				startDate = parseToDate(date1);
 				endDate = parseToDate(date2);
 
-				// This should throw an exception later on, but we are not testing that right now
-				offer = new Offer(startDate, endDate, price, rh);
+				try {
+					// This should throw an exception later on, but we are not testing that right now
+					offer = new Offer(startDate, endDate, price, rh);
+				} catch (Exception e) {
+					assumeNoException(e);
+				}
 				assumeNotNull(offer);
 
 				assertThrows(BadDatesException.class, () -> booking = afi.createBooking(client, offer, startDate, endDate));
