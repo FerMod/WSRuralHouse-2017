@@ -45,11 +45,10 @@ import domain.Owner;
 import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
-import exceptions.DuplicatedEntityException;
 import exceptions.OverlappingOfferException;
 
 class ApplicationFacadeImplTest {
-	
+
 	static RuralHouse rh;
 	static Admin admin;
 	static Client client;
@@ -66,6 +65,8 @@ class ApplicationFacadeImplTest {
 
 	@BeforeAll
 	static void initAll() {
+		
+		LogFile.FILE_NAME = "JUnitTest.log";
 
 		initDataBase();
 		createTestData();
@@ -88,14 +89,15 @@ class ApplicationFacadeImplTest {
 				URL url = new URL(serviceName);
 
 				//1st argument refers to wsdl document above
-				//2nd argument is service name, refer to wsdl document above
+				//2nd argument is the service name, refers to wsdl document above
 				QName qname = new QName("http://businessLogic/", "FacadeImplementationWSService");
 				Service service = Service.create(url, qname);
 				afi = service.getPort(ApplicationFacadeInterface.class);
 			}
 
 		} catch (Exception e) {
-			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\nTo show the console output press \"F12\"");
+			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"");
+			LogFile.log(e, true);
 			e.printStackTrace();
 		}
 	}
@@ -114,8 +116,8 @@ class ApplicationFacadeImplTest {
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			afi.update(rh);
 
-		} catch (DuplicatedEntityException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			assumeNoException("Exception raised when creating the test data.", e);
 		}		
 	}
 
@@ -139,7 +141,7 @@ class ApplicationFacadeImplTest {
 	}
 
 	@AfterEach
-	void tearDown() {
+	void afterEach() {		
 		if (offer != null) {
 			afi.remove(offer);
 		}
@@ -149,7 +151,7 @@ class ApplicationFacadeImplTest {
 	}
 
 	@BeforeEach
-	void restoreValues() {
+	void beforeEach() {
 		startDate = null;
 		endDate = null;
 		offer = null;
@@ -253,20 +255,20 @@ class ApplicationFacadeImplTest {
 			try {
 				startDate = parseToDate(date1);
 				endDate = parseToDate(date2);
-		
+
 				int currentOffers = afi.getOfferCount();
 				offer = createTestOffer(rh, startDate, endDate, price);
 				currentOffers++;
 				assertEquals(currentOffers, afi.getOfferCount());
-		
+
 				afi.remove(Offer.class, offer.getId());
 				currentOffers--;
 				assertEquals(currentOffers, afi.getOfferCount());
-		
+
 				offer = createTestOffer(rh, startDate, endDate, price);
 				currentOffers++;
 				assertEquals(currentOffers, afi.getOfferCount());
-		
+
 				assertNotNull(offer);
 			} catch (Exception e) {
 				assumeNoException("Exception thrown when testing the deletion of an offer.", e);
@@ -313,7 +315,7 @@ class ApplicationFacadeImplTest {
 				fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
 			}		
 		}
-		
+
 		@ParameterizedTest
 		@DisplayName("Delete Booking - Correct Deletion")
 		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
@@ -322,20 +324,20 @@ class ApplicationFacadeImplTest {
 				startDate = parseToDate(date1);
 				endDate = parseToDate(date2);
 				offer = createTestOffer(rh, startDate, endDate, price);
-				
+
 				int currentBookings = afi.getBookings(client).size();
 				booking = afi.createBooking(client, offer, startDate, endDate);
 				currentBookings++;
 				assertEquals(currentBookings, afi.getBookings(client).size());
-		
+
 				afi.remove(Booking.class, booking.getId());
 				currentBookings--;
 				assertEquals(currentBookings, afi.getBookings(client).size());
-		
+
 				booking = afi.createBooking(client, offer, startDate, endDate);
 				currentBookings++;
 				assertEquals(currentBookings, afi.getBookings(client).size());
-		
+
 				assertNotNull(booking);
 			} catch (Exception e) {
 				assumeNoException("Exception thrown when testing the deletion of a booking.", e);
@@ -343,7 +345,7 @@ class ApplicationFacadeImplTest {
 		}
 
 	}
-	
+
 	/**
 	 * Create and return an <code>offer</code><p>
 	 * Assumes that the created offer will not be <code>null</code> and that the offer 
