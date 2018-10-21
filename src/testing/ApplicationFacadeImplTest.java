@@ -64,8 +64,8 @@ class ApplicationFacadeImplTest {
 	double price;
 
 	@BeforeAll
-	static void initAll() {
-		
+	static void beforeAll() {
+
 		LogFile.FILE_NAME = "JUnitTest.log";
 
 		initDataBase();
@@ -173,7 +173,7 @@ class ApplicationFacadeImplTest {
 				offer = createTestOffer(rh, startDate, endDate, price);
 				assertNotNull(offer);
 			} catch (Exception e) {
-				assumeNoException("Exception thrown when trying to create offer.", e);
+				fail("Exception thrown when trying to create offer.", e);
 			}
 		}
 
@@ -223,7 +223,7 @@ class ApplicationFacadeImplTest {
 				Offer obtained = afi.getOffers(rh, startDate, endDate).get(0);			
 				assertEquals(expected, obtained);
 			} catch (Exception e) {
-				assumeNoException("Exception thrown when trying to get offer.", e);
+				fail("Exception thrown when trying to get offer.", e);
 			}
 		}
 
@@ -244,7 +244,7 @@ class ApplicationFacadeImplTest {
 					})
 				);
 			} catch (Exception e) {
-				fail("Instead of BadDatesException another different has thrown.", e);
+				fail("Expected exceptions.BadDatesException but got " + e.getClass().getCanonicalName(), e);
 			}
 		}
 
@@ -271,7 +271,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(offer);
 			} catch (Exception e) {
-				assumeNoException("Exception thrown when testing the deletion of an offer.", e);
+				fail("Exception thrown when testing the deletion of an offer.", e);
 			}
 		}
 
@@ -294,7 +294,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(booking);
 			} catch (Exception e) {
-				assumeNoException("Exception thrown when trying to create booking.", e);
+				fail("Exception thrown when trying to create booking.", e);
 			}
 		}
 
@@ -306,8 +306,12 @@ class ApplicationFacadeImplTest {
 				startDate = parseToDate(date1);
 				endDate = parseToDate(date2);
 
-				// This should throw an exception later on, but we are not testing that right now
-				offer = new Offer(startDate, endDate, price, rh);
+				try {
+					// This should throw an exception later on, but we are not testing that right now
+					offer = new Offer(startDate, endDate, price, rh);
+				} catch (Exception e) {
+					assumeNoException(e);
+				}
 				assumeNotNull(offer);
 
 				assertThrows(BadDatesException.class, () -> booking = afi.createBooking(client, offer, startDate, endDate));
@@ -340,7 +344,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(booking);
 			} catch (Exception e) {
-				assumeNoException("Exception thrown when testing the deletion of a booking.", e);
+				fail("Exception thrown when testing the deletion of a booking.", e);
 			}
 		}
 
