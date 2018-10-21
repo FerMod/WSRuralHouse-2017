@@ -65,11 +65,12 @@ public class AdminMainPanel extends JPanel {
 
 	/**
 	 * Create the panel.
+	 * @param frame the parent frame
 	 */
 	public AdminMainPanel(JFrame frame) {
-
 		initComponents();
 	}
+
 	private void initComponents() {
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		initializeComboBox();
@@ -79,8 +80,8 @@ public class AdminMainPanel extends JPanel {
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
-				JComboBox<RuralHouse> comboBox = new JComboBox<RuralHouse>();
+
+		JComboBox<RuralHouse> comboBox = new JComboBox<RuralHouse>();
 		comboBox.setModel(ruralHouses);
 		comboBox.addActionListener(new ActionListener() {
 			@Override
@@ -131,8 +132,8 @@ public class AdminMainPanel extends JPanel {
 			}
 
 		});
-		
-				JLabel lblCasaRural = new JLabel("Casa rural a revisar");
+
+		JLabel lblCasaRural = new JLabel("Casa rural a revisar");
 		lblCasaRural.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblCasaRuralA = new GridBagConstraints();
 		gbc_lblCasaRuralA.fill = GridBagConstraints.BOTH;
@@ -148,8 +149,8 @@ public class AdminMainPanel extends JPanel {
 		gbc_comboBox.gridx = 0;
 		gbc_comboBox.gridy = 1;
 		add(comboBox, gbc_comboBox);
-		
-				lblReviewState = new JLabel("Estado de revision");
+
+		lblReviewState = new JLabel("Estado de revision");
 		lblReviewState.setEnabled(false);
 		GridBagConstraints gbc_lblReviewState = new GridBagConstraints();
 		gbc_lblReviewState.anchor = GridBagConstraints.WEST;
@@ -158,9 +159,9 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblReviewState.gridx = 0;
 		gbc_lblReviewState.gridy = 2;
 		add(lblReviewState, gbc_lblReviewState);
-		
-		
-				rdbtnApproved = new JRadioButton("Approved");
+
+
+		rdbtnApproved = new JRadioButton("Approved");
 		rdbtnApproved.setEnabled(false);
 		rdbtnApproved.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -179,8 +180,8 @@ public class AdminMainPanel extends JPanel {
 		gbc_rdbtnNewRadioButton_1.gridx = 0;
 		gbc_rdbtnNewRadioButton_1.gridy = 3;
 		add(rdbtnApproved, gbc_rdbtnNewRadioButton_1);
-		
-				rdbtnRejected = new JRadioButton("Rejected");
+
+		rdbtnRejected = new JRadioButton("Rejected");
 		rdbtnRejected.setEnabled(false);
 		rdbtnRejected.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -198,8 +199,8 @@ public class AdminMainPanel extends JPanel {
 		gbc_rdbtnNewRadioButton.gridx = 0;
 		gbc_rdbtnNewRadioButton.gridy = 4;
 		add(rdbtnRejected, gbc_rdbtnNewRadioButton);
-		
-				lblDescription = new JLabel("Descripcion de la revision");
+
+		lblDescription = new JLabel("Descripcion de la revision");
 		lblDescription.setEnabled(false);
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
 		gbc_lblDescription.anchor = GridBagConstraints.SOUTH;
@@ -209,28 +210,28 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblDescription.gridx = 0;
 		gbc_lblDescription.gridy = 5;
 		add(lblDescription, gbc_lblDescription);
-		
-				textPane = new JTextPane();
+
+		textPane = new JTextPane();
 		textPane.setEnabled(false);
 		RightClickMenu rightClickMenu = new RightClickMenu(textPane);
 		textPane.setComponentPopupMenu(rightClickMenu);
-		
-				textPanePrompt = new TextPrompt(textPane);
+
+		textPanePrompt = new TextPrompt(textPane);
 		textPanePrompt.setBorder(new CompoundBorder());
 		textPanePrompt.setText("(optional)");
 		textPanePrompt.setStyle(Font.BOLD);
 		textPanePrompt.setAlpha(64);
 		textPanePrompt.setVerticalAlignment(SwingConstants.TOP);
-		
-				GridBagConstraints gbc_editorPane = new GridBagConstraints();
+
+		GridBagConstraints gbc_editorPane = new GridBagConstraints();
 		gbc_editorPane.gridwidth = 3;
 		gbc_editorPane.fill = GridBagConstraints.BOTH;
 		gbc_editorPane.insets = new Insets(0, 0, 10, 0);
 		gbc_editorPane.gridx = 0;
 		gbc_editorPane.gridy = 6;
 		add(textPane, gbc_editorPane);
-		
-				btnSend = new JButton("Enviar");
+
+		btnSend = new JButton("Enviar");
 		btnSend.setEnabled(false);
 		btnSend.addActionListener(new ActionListener() {
 			@Override
@@ -251,7 +252,7 @@ public class AdminMainPanel extends JPanel {
 				}
 			}
 		});
-		
+
 		lblNombre = new JLabel("Nombre");
 		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
@@ -259,7 +260,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblNombre.gridx = 0;
 		gbc_lblNombre.gridy = 7;
 		add(lblNombre, gbc_lblNombre);
-		
+
 		lblCiudad = new JLabel("Ciudad");
 		lblCiudad.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblCiudad = new GridBagConstraints();
@@ -267,7 +268,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblCiudad.gridx = 1;
 		gbc_lblCiudad.gridy = 7;
 		add(lblCiudad, gbc_lblCiudad);
-		
+
 		lblDireccin = new JLabel("Direccion");
 		lblDireccin.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblDireccin = new GridBagConstraints();
@@ -275,28 +276,28 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblDireccin.gridx = 2;
 		gbc_lblDireccin.gridy = 7;
 		add(lblDireccin, gbc_lblDireccin);
-		
+
 		lblNombreAtrib = new JLabel("");
 		GridBagConstraints gbc_lblNombreAtrib = new GridBagConstraints();
 		gbc_lblNombreAtrib.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombreAtrib.gridx = 0;
 		gbc_lblNombreAtrib.gridy = 8;
 		add(lblNombreAtrib, gbc_lblNombreAtrib);
-		
+
 		lblCity = new JLabel("");
 		GridBagConstraints gbc_lblCity = new GridBagConstraints();
 		gbc_lblCity.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCity.gridx = 1;
 		gbc_lblCity.gridy = 8;
 		add(lblCity, gbc_lblCity);
-		
+
 		lblAdress = new JLabel("");
 		GridBagConstraints gbc_lblAdress = new GridBagConstraints();
 		gbc_lblAdress.insets = new Insets(0, 0, 5, 0);
 		gbc_lblAdress.gridx = 2;
 		gbc_lblAdress.gridy = 8;
 		add(lblAdress, gbc_lblAdress);
-		
+
 		lblDescripcin = new JLabel("Descripcion");
 		lblDescripcin.setFont(new Font("Tahoma", Font.BOLD, 11));
 		GridBagConstraints gbc_lblDescripcin = new GridBagConstraints();
@@ -304,7 +305,7 @@ public class AdminMainPanel extends JPanel {
 		gbc_lblDescripcin.gridx = 0;
 		gbc_lblDescripcin.gridy = 9;
 		add(lblDescripcin, gbc_lblDescripcin);
-		
+
 		textPane_1 = new JTextPane();
 		textPane_1.setBackground(UIManager.getColor("Button.background"));
 		textPane_1.setEnabled(false);

@@ -16,6 +16,7 @@ public class AuthException extends Exception {
 
 	/**
 	 * Constructs a {@code AuthException} with a default message.
+	 * @param s the message
 	 */
 	public AuthException(String s) {
 		super(s);

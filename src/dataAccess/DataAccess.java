@@ -27,6 +27,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -46,7 +47,6 @@ import domain.Review.ReviewState;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
-import exceptions.OverlappingOfferException;
 
 public class DataAccess implements DataAccessInterface {
 
@@ -118,7 +118,7 @@ public class DataAccess implements DataAccessInterface {
 		}
 
 		emf = Persistence.createEntityManagerFactory(DB_PATH, properties);
-		db = ExponentialBackOff.execute( () -> emf.createEntityManager(), "Could not open database.");
+		db = ExponentialBackOff.execute(() -> emf.createEntityManager(), "Could not open database.");
 
 		System.out.println("Database opened");
 	}
@@ -146,10 +146,11 @@ public class DataAccess implements DataAccessInterface {
 	public <T> T update(T entity) {
 		open();
 		db.getTransaction().begin();
-		T managedInstance = db.merge(entity);
+		entity = db.contains(entity) ? entity : db.merge(entity);
+		db.refresh(entity);
 		db.getTransaction().commit();
 		close();
-		return managedInstance;
+		return entity;
 	}
 
 	/**
@@ -162,9 +163,46 @@ public class DataAccess implements DataAccessInterface {
 	public <T> T remove(T entity) {
 		open();
 		db.getTransaction().begin();
-		entity = db.merge(entity);
+		entity = db.contains(entity) ? entity : db.merge(entity);
 		db.remove(entity);
 		db.getTransaction().commit();
+		close();
+		return entity;
+	}
+
+	/**
+	 * Method used to remove a entity from the database with the specified key
+	 * @param <T> the entity type
+	 * @param <K> the entity primary key type
+	 *  
+	 * @param entityClass the entity class type
+	 * @param primaryKey the entity primary key
+	 * @return the managed instance that has been removed
+	 */
+	@Override
+	public <T, K> T remove(Class<T> entityClass, K primaryKey) {
+		open();
+		db.getTransaction().begin();
+		T entity = db.find(entityClass, primaryKey);
+		entity = db.contains(entity) ? entity : db.merge(entity);
+		db.remove(entity);
+		db.getTransaction().commit();
+		close();
+		return entity;
+	}
+
+	/**
+	 * Find by primary key. Search for an entity of the specified class and primary key.
+	 * If the entity instance is contained in the persistence context, it is returned from there. 
+	 * 
+	 * @param entityClass the entity class type
+	 * @param primaryKey the entity primary key
+	 * @return the found entity instance or <code>null</code> if the entity does not exist
+	 */
+	@Override
+	public <T, K> T find(Class<T> entityClass, K primaryKey) {
+		open();
+		T entity = db.find(entityClass, primaryKey);
 		close();
 		return entity;
 	}
@@ -197,13 +235,13 @@ public class DataAccess implements DataAccessInterface {
 			createOffer(rh1, date.parse("2017/5/2"), date.parse("2017/7/16"), 24);
 			createOffer(rh1, date.parse("2017/10/3"), date.parse("2017/12/22"), 23);
 
-			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ºA");
+			RuralHouse rh2 = createRuralHouse(owner1, "Etxetxikia", "Casa en zona tranquila sin trafico", createCity("Iruna"), "Plz. square 1 3ÂºA");
 			rh2.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh2.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh2);
 			createOffer(rh2, date.parse("2013/10/3"), date.parse("2018/2/8"), 19);		
 
-			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ºF");	
+			RuralHouse rh3 = createRuralHouse(owner2, "Udaletxea", "Localizada en un sitio, con gente", createCity("Bilbo"), "Street 3 3ÂºF");	
 			rh3.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh3.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh3);
@@ -223,14 +261,14 @@ public class DataAccess implements DataAccessInterface {
 
 			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
 			Owner owner = (Owner)createUser("own@gmail.com", "own", "own", Role.OWNER);
-			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3ºb");
+			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3Âºb");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh);
 			Offer offer1 = createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
 			Offer offer2 = createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
 			createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
 			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
-			
+
 			System.out.println("Database initialized");
 
 			for (RuralHouse ruralHouse : getRuralHouses()) {
@@ -238,7 +276,7 @@ public class DataAccess implements DataAccessInterface {
 			}
 
 		} catch (Exception e){
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		}
 	}
@@ -257,13 +295,17 @@ public class DataAccess implements DataAccessInterface {
 			System.out.print(">> DataAccess: createOffer(" + ruralHouse + ", " + firstDay + ", " + lastDay + ", " + price + ") -> ");
 			RuralHouse rh = db.find(RuralHouse.class, ruralHouse.getId());
 			db.getTransaction().begin();
-			offer = rh.createOffer(firstDay, lastDay, price);
+			//			offer = rh.createOffer(firstDay, lastDay, price);
+			offer = new Offer(firstDay, lastDay, price, rh);
 			db.persist(offer);
+			db.flush();
+			rh.addOffer(offer);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + offer.getId());
 			return offer;
 		} catch (Exception e){
-			System.err.println("Offer not created: " + e .toString());
+			System.err.print("Offer not created because of: ");
+			e.printStackTrace();
 		} finally {
 			close();
 		}
@@ -271,7 +313,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Vector<Offer> getOffer(RuralHouse rh, Date firstDay,  Date lastDay) {
+	public Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
 		Vector<Offer> result = null;
 		try { 
 			open();
@@ -280,7 +322,7 @@ public class DataAccess implements DataAccessInterface {
 			result = rhn.getOffers(firstDay,lastDay);
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -309,7 +351,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -332,7 +374,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -357,7 +399,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -383,7 +425,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -410,7 +452,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -433,7 +475,7 @@ public class DataAccess implements DataAccessInterface {
 			result = query.getResultList().size();
 			System.out.println(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -457,7 +499,7 @@ public class DataAccess implements DataAccessInterface {
 			result = query.getSingleResult();
 			System.out.println(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -481,7 +523,7 @@ public class DataAccess implements DataAccessInterface {
 			result = query.getSingleResult(); 
 			System.out.println(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -490,21 +532,25 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) throws  OverlappingOfferException {
+	public boolean existsOverlappingOffer(RuralHouse rh, Date firstDay, Date lastDay) {
 		try{
 			open();
-
 			RuralHouse ruralHouse = db.find(RuralHouse.class, rh.getId());
 			if (ruralHouse.overlapsWith(firstDay, lastDay) != null) {
 				return true;
 			}
 		} catch (Exception e){
-			System.out.println("Error: " + e.toString());
+			e.printStackTrace();
 			return true;
 		} finally {
 			close();
 		}
 		return false;
+	}
+
+	@Override
+	public boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+		return endDate1.compareTo(startDate2) > 0 && startDate1.compareTo(endDate2) < 0;
 	}
 
 	@Override
@@ -520,7 +566,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + ruralHouse.getId());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -559,7 +605,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -589,7 +635,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -619,7 +665,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -653,7 +699,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -680,7 +726,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (NoResultException e) {
 			// Dummy catch
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -702,7 +748,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + user.getId());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -769,7 +815,7 @@ public class DataAccess implements DataAccessInterface {
 			role = result.get(0).getRole();
 			System.out.println(role);	
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -795,7 +841,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (NoResultException e) {
 			//Dummy catch
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -823,7 +869,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (NoResultException e) {
 			//Dummy catch.
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -853,7 +899,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch(NoResultException e) {
 			throw new AccountNotFoundException("Account not found.");
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -879,7 +925,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + city.getId());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -908,7 +954,7 @@ public class DataAccess implements DataAccessInterface {
 			found = !result.isEmpty();
 			System.out.println(found);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -930,7 +976,7 @@ public class DataAccess implements DataAccessInterface {
 			found = !result.isEmpty();
 			System.out.println(found);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -948,7 +994,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<City>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -973,7 +1019,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (PersistenceException e) {
 			System.err.println("Could not complete the operation: " + e.getMessage());
 		} catch (Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {			
 			close();
@@ -983,8 +1029,8 @@ public class DataAccess implements DataAccessInterface {
 	/**
 	 * Modify the user's password.
 	 *  
-	 * @param the user
-	 * @param the password to modify
+	 * @param user the user
+	 * @param password the password to modify
 	 */
 	public void changeUserPassword(AbstractUser user, String password) {
 		user.setPassword(password);
@@ -1018,7 +1064,15 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	/**
+	 * Creates a booking for the introduced client of the passed offer.
+	 * The booking is made between the passed dates.
 	 * 
+	 * @param client the client who is making the booking
+	 * @param offer the offer to book
+	 * @param startDate the first date of the booking
+	 * @param endDate the end date of the booking
+	 * 
+	 * @return the booking
 	 */
 	@Override
 	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) {
@@ -1031,15 +1085,13 @@ public class DataAccess implements DataAccessInterface {
 			booking = new Booking(client, offer, price, startDate, endDate);
 			Client clientInstance = db.find(Client.class, client);
 			clientInstance.getBookings().add(booking);
-			clientInstance.getBookings().add(booking);
 			Offer offerInstance = db.find(Offer.class, offer);
 			offerInstance.setBooked(true);
 			db.persist(booking);
 			db.getTransaction().commit();
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1088,7 +1140,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1113,7 +1165,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1133,7 +1185,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created review in Rural House " + rh.toString());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1144,8 +1196,8 @@ public class DataAccess implements DataAccessInterface {
 	/**
 	 * Update a review of a Rural House
 	 * 
-	 * @param Rural House of a Owner
-	 * @param Review of a Rural House
+	 * @param rh the rural house of a owner
+	 * @param r the review of a rural house
 	 */
 	@Override
 	public void updateReview(RuralHouse rh, Review r) {

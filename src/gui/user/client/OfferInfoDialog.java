@@ -54,6 +54,7 @@ import com.toedter.calendar.JDateChooser;
 import domain.Booking;
 import domain.Client;
 import domain.Offer;
+import exceptions.BadDatesException;
 import gui.components.FrameShader;
 import gui.components.ImagePanel;
 import gui.components.InfoTextPane;
@@ -144,7 +145,7 @@ public class OfferInfoDialog extends JDialog {
 		gbl_contentPanel.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		contentPanel.setLayout(gbl_contentPanel);
 
-		
+
 		// --------------------------------------------------------------------
 		//  Dialog title bar setup
 		// --------------------------------------------------------------------
@@ -364,12 +365,17 @@ public class OfferInfoDialog extends JDialog {
 	private ImagePanel getImagePanel() {
 		if(imagePanel == null) {	
 			imagePanel = new ImagePanel();
-			Vector<Offer> offer = MainWindow.getBusinessLogic().getOffer(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
-			ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
-			System.out.println("Showing offer: " + offer);
-			imagePanel.setImage(imageIcon);
-			imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-			imagePanel.setMinimumSize(imagePanel.getImageSize());
+			Vector<Offer> offer;
+			try {
+				offer = MainWindow.getBusinessLogic().getOffers(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
+				ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
+				System.out.println("Showing offer: " + offer);
+				imagePanel.setImage(imageIcon);
+				imagePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+				imagePanel.setMinimumSize(imagePanel.getImageSize());
+			} catch (BadDatesException e) {
+				e.printStackTrace();
+			}			
 		}
 		return imagePanel;
 	}
@@ -567,7 +573,11 @@ public class OfferInfoDialog extends JDialog {
 			btnBookOffer.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {	
-					Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
+					try {
+						Booking booking = MainWindow.getBusinessLogic().createBooking((Client)MainWindow.user, rowContent.getElement(), firstDate.getTime(), lastDate.getTime());
+					} catch (BadDatesException e1) {
+						e1.printStackTrace();
+					}
 					//	MainWindow.getPropertyChangeSupport().firePropertyChange("bookingAdded", null, booking);	
 					BookingsTablePanel.getPropertyChangeSupport().firePropertyChange("rowInserted", null, rowContent);
 					frameShader.setEnabled(false);

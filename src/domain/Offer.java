@@ -5,9 +5,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlIDREF;
@@ -22,11 +27,18 @@ public class Offer implements Serializable {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private Date startDate; // Dates are stored as java.util.Date objects instead of java.sql.Date objects
-	private Date endDate;  // because, they are not well stored in db4o as java.util.Date objects
-	private double price;   // This is coherent because objects of java.sql.Date are objects of java.util.Date 
+	/*
+	 * Dates are stored as java.util.Date objects instead of java.sql.Date objects
+	 * because, they are not well stored in db4o as java.util.Date objects
+	 * This is coherent because objects of java.sql.Date are objects of java.util.Date
+	 */
+	private Date startDate; 
+	private Date endDate;
+	private double price; 
 
-	@XmlIDREF
+	//@XmlIDREF
+	//@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@ManyToOne
 	private RuralHouse ruralHouse;
 	private boolean booked = false;
 
@@ -41,18 +53,18 @@ public class Offer implements Serializable {
 	}
 
 	/**
-	 * Get the house number of the offer
+	 * Get the rural house of the offer
 	 * 
-	 * @return the house number
+	 * @return the rural house
 	 */
 	public RuralHouse getRuralHouse() {
 		return this.ruralHouse;
 	}
 
 	/**
-	 * Set the house number to a offer
+	 * Set the offer rural house
 	 * 
-	 * @param house number
+	 * @param ruralHouse the rural house 
 	 */
 	public void setRuralHouse(RuralHouse ruralHouse) {
 		this.ruralHouse = ruralHouse;
@@ -139,9 +151,9 @@ public class Offer implements Serializable {
 	}
 
 	/**
-	 * Set the price
+	 * Set offer price
 	 * 
-	 * @param price
+	 * @param price the price
 	 */
 	public void setPrice(double price) {
 		this.price = price;
@@ -158,4 +170,19 @@ public class Offer implements Serializable {
 	public String toString(){
 		return id+";"+startDate.toString()+";"+endDate.toString()+";"+price+";"+booked;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Offer other = (Offer) obj;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
 }

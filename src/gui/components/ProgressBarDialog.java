@@ -40,6 +40,8 @@ public class ProgressBarDialog extends JDialog implements ActionListener, Proper
 	/**
 	 * Create the GUI and show it. As with all GUI code, this must run
 	 * on the event-dispatching thread.
+	 * 
+	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
 		//Schedule a job for the event-dispatching thread:

@@ -1,6 +1,5 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
@@ -15,7 +14,6 @@ import businessLogic.util.LogFile;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import gui.debug.ConsoleKeyEventDispatcher;
-import gui.old.MainGUI;
 import gui.user.MainWindow;
 import gui.user.SharedFrame;
 
@@ -75,13 +73,12 @@ public class ApplicationLauncher {
 			//    appFacadeInterface.initializeBD();
 			//}
 
-			MainGUI.setBussinessLogic(aplicationFacade);
 			MainWindow.setBussinessLogic(aplicationFacade);
 
 		} catch (Exception e) {
 
 			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\nTo show the console output press \"F12\"");
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\nTo show the console output press \"F12\"", "Error!", JOptionPane.ERROR_MESSAGE);
 			

@@ -30,6 +30,7 @@ public class BusinessLogicServer extends JDialog {
 
 	/**
 	 * Launch the application.
+	 * @param args arguments
 	 */
 	public static void main(String[] args) {
 		try {

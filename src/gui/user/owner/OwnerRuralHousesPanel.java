@@ -1,31 +1,23 @@
 package gui.user.owner;
 
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTree;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Rectangle;
-
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.text.JTextComponent;
-
-import com.toedter.calendar.JDateChooser;
 
 import domain.Admin;
 import domain.City;
@@ -42,16 +34,11 @@ import exceptions.OverlappingOfferException;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JEditorPane;
@@ -80,8 +67,8 @@ public class OwnerRuralHousesPanel extends JPanel {
 	private DefaultComboBoxModel<RuralHouse> ruralHousesOfOwner = new DefaultComboBoxModel<RuralHouse>();
 	private DefaultComboBoxModel<City> someCities = new DefaultComboBoxModel<City>();
 
-	private JComboBox<RuralHouse> comboBox;   //RuralHouses
-	private JComboBox<City> comboBox_1; //Cities
+	private JComboBox<RuralHouse> comboBox; //RuralHouses
+	private JComboBox<City> comboBox_1; 	//Cities
 
 	private static String pattern = "dd/MM/yyyy";
 	private static SimpleDateFormat format = new SimpleDateFormat(pattern);
@@ -97,14 +84,16 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 	private JLabel lblNewLabel_1;
 
-
+	private JFrame parentFrame;
 
 
 	/**
 	 * Create the panel.
+	 * @param frame the parent frame
 	 */
-	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane
+	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane		
 		
+		this.parentFrame = frame;
 		
 		initializeRuralHousesComboBox((Owner)MainWindow.user);
 		
