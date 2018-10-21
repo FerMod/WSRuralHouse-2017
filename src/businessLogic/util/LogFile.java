@@ -2,18 +2,21 @@ package businessLogic.util;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public final class LogFile {
 
 	public static String PATH = "log/";
 	public static String FILE_NAME = "error.log";
+	public static String CHARSET = "utf8";
+
+	private static DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
 
 	private LogFile() {
 	}
@@ -27,66 +30,58 @@ public final class LogFile {
 		return file.getAbsolutePath();
 	}
 
-	public static void generateFile(Exception exception) {
-		generateFile(exception, false);
+	public static DateTimeFormatter getTimestampFormatter() {
+		return timestampFormatter;
 	}
 
-	public static void generateFile(Exception exception, boolean append) {
+	public static void setTimestampFormatter(DateTimeFormatter timestampFormatter) {
+		LogFile.timestampFormatter = timestampFormatter;
+	}
 
-		File directory = new File(String.valueOf(PATH));
-		if (!directory.exists()){
-			directory.mkdirs();
+	public static void log(String content) {
+		log(content, true);
+	}
+
+	public static void log(String content, boolean append) {
+	
+		createDirectory(PATH);
+	
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(getPath(), append), CHARSET))) {
+			writer.write(String.format("[%s] %s%n", timestampFormatter.format(LocalDateTime.now()), content));			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	
+	}
 
-		try {
+	public static void log(Exception exception) {
+		log(exception, true);
+	}
 
-			Writer w = new FileWriter(getPath(), append);
-			PrintWriter pw = new PrintWriter(new BufferedWriter(w));
-			pw.println("### " + getCurrentDate() + " ###");
-			exception.printStackTrace(pw);
-			pw.print(System.getProperty("line.separator"));
-			pw.close();
+	public static void log(Exception exception, boolean append) {
 
+		createDirectory(PATH);
+
+		try (PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(getPath(), append), CHARSET))){
+			printWriter.println(String.format("### %s ###", timestampFormatter.format(LocalDateTime.now())));
+			exception.printStackTrace(printWriter);
+			printWriter.print(System.lineSeparator());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	public static void generateFile(String content) {
-		generateFile(content, false);
-	}
-
-	public static void generateFile(String content, boolean append) {
-
-		File directory = new File(String.valueOf(PATH));
-		if (!directory.exists()){
+	/**
+	 * Creates the necessary folders if those doesnt exist.
+	 * 
+	 * @param directoryPath the directory path
+	 */
+	private static void createDirectory(String directoryPath) {
+		File directory = new File(String.valueOf(directoryPath));
+		if (!directory.exists() && directory.isDirectory()){
 			directory.mkdirs();
 		}
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(getCurrentDate());
-		sb.append(System.getProperty("line.separator"));
-		sb.append(content);
-		sb.append(System.getProperty("line.separator"));
-
-		try {
-			
-			FileWriter fw = new FileWriter(new File(PATH + FILE_NAME), append);
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(sb.toString());
-			bw.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private static String getCurrentDate(){
-		Calendar cal = Calendar.getInstance();
-		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		return sdf.format(cal.getTime());
 	}
 
 }

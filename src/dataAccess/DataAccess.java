@@ -276,7 +276,7 @@ public class DataAccess implements DataAccessInterface {
 			}
 
 		} catch (Exception e){
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		}
 	}
@@ -322,7 +322,7 @@ public class DataAccess implements DataAccessInterface {
 			result = rhn.getOffers(firstDay,lastDay);
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -351,7 +351,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -374,7 +374,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -399,7 +399,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -425,7 +425,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -452,7 +452,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<Offer>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -475,7 +475,7 @@ public class DataAccess implements DataAccessInterface {
 			result = query.getResultList().size();
 			System.out.println(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -499,7 +499,7 @@ public class DataAccess implements DataAccessInterface {
 			result = query.getSingleResult();
 			System.out.println(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -523,7 +523,7 @@ public class DataAccess implements DataAccessInterface {
 			result = query.getSingleResult(); 
 			System.out.println(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -566,7 +566,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + ruralHouse.getId());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -605,7 +605,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -635,7 +635,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -665,7 +665,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -699,7 +699,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -726,7 +726,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (NoResultException e) {
 			// Dummy catch
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -748,7 +748,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + user.getId());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -815,7 +815,7 @@ public class DataAccess implements DataAccessInterface {
 			role = result.get(0).getRole();
 			System.out.println(role);	
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -841,7 +841,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (NoResultException e) {
 			//Dummy catch
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -869,7 +869,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (NoResultException e) {
 			//Dummy catch.
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -899,7 +899,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch(NoResultException e) {
 			throw new AccountNotFoundException("Account not found.");
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -925,7 +925,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with id " + city.getId());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -954,7 +954,7 @@ public class DataAccess implements DataAccessInterface {
 			found = !result.isEmpty();
 			System.out.println(found);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -976,7 +976,7 @@ public class DataAccess implements DataAccessInterface {
 			found = !result.isEmpty();
 			System.out.println(found);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -994,7 +994,7 @@ public class DataAccess implements DataAccessInterface {
 			result = new Vector<City>(query.getResultList());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1019,7 +1019,7 @@ public class DataAccess implements DataAccessInterface {
 		} catch (PersistenceException e) {
 			System.err.println("Could not complete the operation: " + e.getMessage());
 		} catch (Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {			
 			close();
@@ -1091,7 +1091,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created with client " + booking.getClient().getUsername() + "and with offer " + booking.getOffer().toString());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1140,7 +1140,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1165,7 +1165,7 @@ public class DataAccess implements DataAccessInterface {
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
@@ -1185,7 +1185,7 @@ public class DataAccess implements DataAccessInterface {
 			db.getTransaction().commit();
 			System.out.println("Created review in Rural House " + rh.toString());
 		} catch	(Exception e) {
-			LogFile.generateFile(e, true);
+			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
