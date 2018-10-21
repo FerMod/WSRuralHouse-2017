@@ -64,7 +64,7 @@ class ApplicationFacadeImplTest {
 	double price;
 
 	@BeforeAll
-	static void initAll() {
+	static void beforeAll() {
 		
 		LogFile.FILE_NAME = "JUnitTest.log";
 
