@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
@@ -25,7 +26,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -58,6 +58,7 @@ public class ConsoleWindow extends JFrame {
 	public static void main(String[] args) {
 
 		ConsoleWindow consoleWindow = new ConsoleWindow();
+
 		consoleWindow.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		consoleWindow.setVisible(true);
 
@@ -83,7 +84,7 @@ public class ConsoleWindow extends JFrame {
 		timer.schedule(new TimerTask() {					
 			@Override
 			public void run() {
-				System.out.println("Testing ConsoleWindow");						
+				System.out.println("Testing ConsoleWindow");
 			}
 		}, Calendar.getInstance().getTime(), 1000);
 
@@ -159,11 +160,12 @@ public class ConsoleWindow extends JFrame {
 				try {
 					setTitle(title);
 					initComponents();
+					initOutputStreams();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		});	
+		});
 	}
 
 	private void initComponents() {
@@ -173,9 +175,6 @@ public class ConsoleWindow extends JFrame {
 		//frame.setMinimumSize(new Dimension(272, 39));
 		setSize(650, 350);
 		setLocationRelativeTo(null);
-
-		System.setOut(new PrintStream(new StreamCapturer(capturePane, System.out)));
-		System.setErr(new PrintStream(new StreamCapturer(Color.RED, capturePane, System.err)));
 
 		/*
 		JMenuBar menuBar;
@@ -229,6 +228,23 @@ public class ConsoleWindow extends JFrame {
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
 		 */		
+	}
+
+	private void initOutputStreams() {
+		setOutStream(new StreamCapturer(capturePane, System.out));
+		setErrStream(new StreamCapturer(Color.RED, capturePane, System.err));				
+	}
+
+	public void setInStream(InputStream inputStream) {
+		System.setIn(inputStream);
+	}
+
+	public void setOutStream(OutputStream outputStream) {
+		System.setOut(new PrintStream(outputStream));
+	}
+
+	public void setErrStream(OutputStream outputStream) {
+		System.setErr(new PrintStream(outputStream));
 	}
 
 	@Override
@@ -549,7 +565,7 @@ public class ConsoleWindow extends JFrame {
 
 		@Override
 		public void write(int b) throws IOException {
-			char c = (char) b;
+			char c = (char)b;
 			String value = Character.toString(c);
 			buffer.append(value);
 			if (value.equals("\n")) {
