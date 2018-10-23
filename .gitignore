@@ -85,3 +85,4 @@ local.properties
 #Do not ignore the library .jars
 !lib
 
+/target/
