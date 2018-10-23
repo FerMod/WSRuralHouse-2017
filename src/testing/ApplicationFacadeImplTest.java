@@ -96,9 +96,10 @@ class ApplicationFacadeImplTest {
 			}
 
 		} catch (Exception e) {
-			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"");
 			LogFile.log(e, true);
+			System.err.println("Test aborted, because an error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"");
 			e.printStackTrace();
+			assumeNoException(e);
 		}
 	}
 

@@ -7,8 +7,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JComboBox;
