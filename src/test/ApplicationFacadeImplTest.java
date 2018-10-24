@@ -1,4 +1,4 @@
-package testing;
+package test;
 
 import static org.junit.Assume.assumeNoException;
 import static org.junit.Assume.assumeNotNull;
@@ -166,7 +166,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateOffer - Correct Creation")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
 		void testCreateOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -197,7 +197,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateOffer - BadDatesException")
-		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/BadDates.csv", numLinesToSkip = 1)
 		void testCreateOffer3(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -210,7 +210,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("GetOffer - Get Correct Value")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
 		void testGetOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -230,7 +230,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("GetOffer - BadDatesException")
-		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/BadDates.csv", numLinesToSkip = 1)
 		void testGetOffer1(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -251,7 +251,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("Delete Offer - Correct Deletion")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
 		void testDeleteOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -272,7 +272,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(offer);
 			} catch (Exception e) {
-				fail("Exception thrown when testing the deletion of an offer.", e);
+				fail("Exception thrown when test the deletion of an offer.", e);
 			}
 		}
 
@@ -284,7 +284,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateBooking - Correct Creation")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
 		void testCreateBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -301,14 +301,14 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateBooking - BadDatesException")
-		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/BadDates.csv", numLinesToSkip = 1)
 		void testCreateBooking2(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
 				endDate = parseToDate(date2);
 
 				try {
-					// This should throw an exception later on, but we are not testing that right now
+					// This should throw an exception later on, but we are not test that right now
 					offer = new Offer(startDate, endDate, price, rh);
 				} catch (Exception e) {
 					assumeNoException(e);
@@ -323,7 +323,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("Delete Booking - Correct Deletion")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
 		void testDeleteBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -345,7 +345,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(booking);
 			} catch (Exception e) {
-				fail("Exception thrown when testing the deletion of a booking.", e);
+				fail("Exception thrown when test the deletion of a booking.", e);
 			}
 		}
 
