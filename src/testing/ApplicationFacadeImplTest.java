@@ -48,6 +48,9 @@ import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
 
 class ApplicationFacadeImplTest {
+	
+	final static String BAD_DATES_FILE = "/testing/data/BadDates.csv";
+	final static String CORRECT_DATES_FILE = "/testing/data/CorrectDates.csv";
 
 	static RuralHouse rh;
 	static Admin admin;
@@ -165,7 +168,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateOffer - Correct Creation")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testCreateOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -196,7 +199,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateOffer - BadDatesException")
-		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = BAD_DATES_FILE, numLinesToSkip = 1)
 		void testCreateOffer3(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -209,7 +212,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("GetOffer - Get Correct Value")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testGetOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -229,7 +232,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("GetOffer - BadDatesException")
-		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = BAD_DATES_FILE, numLinesToSkip = 1)
 		void testGetOffer1(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -250,7 +253,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("Delete Offer - Correct Deletion")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testDeleteOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -283,7 +286,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateBooking - Correct Creation")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testCreateBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -300,7 +303,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateBooking - BadDatesException")
-		@CsvFileSource(resources = "/testing/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = BAD_DATES_FILE, numLinesToSkip = 1)
 		void testCreateBooking2(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -322,7 +325,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("Delete Booking - Correct Deletion")
-		@CsvFileSource(resources = "/testing/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testDeleteBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
