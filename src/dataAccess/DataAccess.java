@@ -147,7 +147,6 @@ public class DataAccess implements DataAccessInterface {
 		open();
 		db.getTransaction().begin();
 		entity = db.contains(entity) ? entity : db.merge(entity);
-		db.refresh(entity);
 		db.getTransaction().commit();
 		close();
 		return entity;
