@@ -1,19 +1,15 @@
 package gui;
 
-import java.net.URL;
+import java.util.Currency;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-
 import businessLogic.ApplicationFacadeFactory;
-import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
 import configuration.ConfigXML;
-import dataAccess.DataAccess;
+import configuration.util.CurrencyUtils;
 import gui.debug.ConsoleKeyEventDispatcher;
 import gui.user.MainWindow;
 import gui.user.SharedFrame;
@@ -30,7 +26,7 @@ public class ApplicationLauncher {
 
 			System.out.println(config.getLocale());
 
-			Locale.setDefault(new Locale(config.getLocale()));
+			Locale.setDefault(config.getLocale());
 
 			System.out.println("Locale: " + Locale.getDefault());
 			

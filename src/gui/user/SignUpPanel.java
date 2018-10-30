@@ -31,7 +31,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;

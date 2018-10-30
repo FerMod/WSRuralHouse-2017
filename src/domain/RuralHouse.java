@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
@@ -64,7 +65,7 @@ public class RuralHouse implements Serializable {
 	 * rural house image icon.
 	 */
 	@OneToOne(cascade=CascadeType.ALL)
-	private Vector<byte[]> images;
+	private List<byte[]> images;
 	private String[] tags;
 
 	//@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
@@ -146,7 +147,7 @@ public class RuralHouse implements Serializable {
 	 * 
 	 * @return the image vector
 	 */
-	public Vector<byte[]> getImages() {
+	public List<byte[]> getImages() {
 		return images;
 	}
 
@@ -226,7 +227,7 @@ public class RuralHouse implements Serializable {
 	 * @param image element to be removed from this Vector, if present
 	 * @return true if it contained the specified element
 	 */
-	public boolean removeImage(ImageIcon image) {
+	public boolean removeImage(byte[] image) {
 		return images.remove(image);
 	}
 

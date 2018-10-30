@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +34,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -46,8 +46,6 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
-
-import org.omg.Messaging.SyncScopeHelper;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -549,8 +547,12 @@ public class OfferInfoDialog extends JDialog {
 
 	private JLabel getLblPrice() {
 		if(lblPrice == null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
-			lblPrice = new JLabel("Price (" + formatter.format(rowContent.getElement().getPrice()) + " per night): ");
+			//[FIXME]: Currency Displays Wrong (Issue #14) 
+			// Locale currentLocale = MainWindow.getBusinessLogic().getLocale();
+			// Currency currentCurrency = Currency.getInstance(currentLocale);
+			// NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+			lblPrice = new JLabel("Price (" + currencyFormatter.format(rowContent.getElement().getPrice()) + " per night): ");
 		}
 		return lblPrice;
 	}
@@ -599,10 +601,13 @@ public class OfferInfoDialog extends JDialog {
 	}
 
 	private void updatePrice() {
-		if(firstDate != null && lastDate != null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
-			textFieldPrice.setText(formatter.format(getPrice()));	
-			btnBookOffer.setEnabled(true);
+		if(firstDate != null && lastDate != null) {		
+			//[FIXME]: Currency Displays Wrong (Issue #14) 
+			// Locale currentLocale = MainWindow.getBusinessLogic().getLocale();
+			// NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);	
+			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+			textFieldPrice.setText(currencyFormatter.format(getPrice()));	
+			btnBookOffer.setEnabled(true);			
 		}
 	}
 

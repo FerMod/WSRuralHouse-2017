@@ -54,9 +54,6 @@ public class GifSequenceWriter {
 		graphicsControlExtensionNode.setAttribute("delayTime", Integer.toString(timeBetweenFramesMS / 10));
 		graphicsControlExtensionNode.setAttribute("transparentColorIndex", "0");
 
-		IIOMetadataNode commentsNode = getNode(root, "CommentExtensions");
-		commentsNode.setAttribute("CommentExtension", "Created by MAH");
-
 		IIOMetadataNode appEntensionsNode = getNode(root, "ApplicationExtensions");
 
 		IIOMetadataNode child = new IIOMetadataNode("ApplicationExtension");

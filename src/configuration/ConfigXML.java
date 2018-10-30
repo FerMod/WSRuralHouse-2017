@@ -1,6 +1,8 @@
 package configuration;
 
 import java.io.File;
+import java.util.Currency;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -9,6 +11,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import configuration.util.CurrencyUtils;
 
 public class ConfigXML {
 	
@@ -40,7 +44,7 @@ public class ConfigXML {
 
 	private String password;
 
-	private String locale;
+	private Locale locale;
 	
 	private static ConfigXML theInstance = new ConfigXML();
 
@@ -71,7 +75,18 @@ public class ConfigXML {
 
 			businessLogicName = getTagValue("businessLogicName", config);
 
-			locale = getTagValue("locale", config);
+			//[TODO]: Make adapter class to obtain the correct Locale.
+			//[FIXME]: Currency Displays Wrong (Issue #14) 
+			switch (getTagValue("locale", config)) {
+			case "es":
+			case "eus":
+				locale = new Locale("es", "ES");
+				break;
+			case "en":
+			default:
+				locale = new Locale("en", "EN");
+				break;
+			}
 
 
 
@@ -122,7 +137,7 @@ public class ConfigXML {
 		return showConsole;
 	}
 
-	public String getLocale() {
+	public Locale getLocale() {
 		return locale;
 	}
 
