@@ -1,0 +1,16 @@
+git bisect start
+# good: [4419421196457c41bfb4d8c678507b502e52dc71] Refactor repository
+git bisect good 4419421196457c41bfb4d8c678507b502e52dc71
+# bad: [6ed299dd04cc67bc2205001ddc2facb0701237bf] Add project setting
+git bisect bad 6ed299dd04cc67bc2205001ddc2facb0701237bf
+# bad: [a6b347981f92d7f44fed2d8baa152702c491e093] Change type of Date to LocalDate
+git bisect bad a6b347981f92d7f44fed2d8baa152702c491e093
+# good: [ad4d470ff4280aa79794cd2d09becf34ce992e81] Update and fix documentation
+git bisect good ad4d470ff4280aa79794cd2d09becf34ce992e81
+# bad: [d0bc89fcacc08bb8a9db28c42bd0b56326777a1a] Fix RuralHouse and Offer realationship
+git bisect bad d0bc89fcacc08bb8a9db28c42bd0b56326777a1a
+# good: [ce4bc3d3b556bbee807da6467a8b53873da4b49f] Fix documentation warnings and errors
+git bisect good ce4bc3d3b556bbee807da6467a8b53873da4b49f
+# bad: [27cbfdc3540e8ab4e044d633fb38856c8f068f52] Add new methods and fix issues
+git bisect bad 27cbfdc3540e8ab4e044d633fb38856c8f068f52
+# first bad commit: [27cbfdc3540e8ab4e044d633fb38856c8f068f52] Add new methods and fix issues
