@@ -117,10 +117,7 @@ public class CustomTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		if (getRowCount() > 0 && getColumnCount() > 0) {
-			return data.get(row)[col];
-		}
-		return null;
+		return data.get(row)[col];
 	}
 
 	public void setValueAt(int row, int col, ImageIcon value) {
