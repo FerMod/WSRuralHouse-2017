@@ -117,7 +117,10 @@ public class CustomTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		return data.get(row)[col];
+		if (getRowCount() > 0 && getColumnCount() > 0) {
+			return data.get(row)[col];
+		}
+		return null;
 	}
 
 	public void setValueAt(int row, int col, ImageIcon value) {
@@ -171,7 +174,8 @@ public class CustomTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public Class<?> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+		Object obj = getValueAt(0, c);
+		return obj != null? obj.getClass() : null;
 	}
 
 	public boolean isCellEditable(int row, int col) {
