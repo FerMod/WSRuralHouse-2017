@@ -229,9 +229,7 @@ public class ClientMainPanel extends JPanel {
 					if(e.getSource() == priceSlider) {
 						maxPriceField.setValue(priceSlider.getValue() / 100);
 						//refreshTableContent((Number)minPriceField.getValue(), (Number)maxPriceField.getValue());
-						if(getOffersTable().getColumnCount() > 0 && getOffersTable().getRowCount() > 0) {
-							refreshTableContent(0, (Number)maxPriceField.getValue());
-						}
+						refreshTableContent(0, (Number)maxPriceField.getValue());
 					}
 				}
 			});
