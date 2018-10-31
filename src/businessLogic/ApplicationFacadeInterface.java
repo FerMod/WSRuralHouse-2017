@@ -1,7 +1,9 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.jws.WebMethod;
@@ -98,7 +100,7 @@ public interface ApplicationFacadeInterface  {
 	 * @throws BadDatesException if the first date is greater than second date
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
+	List<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
 
 	/**
 	 * Obtain all the offers stored in the database
@@ -106,7 +108,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database, {@code null} if none is found
 	 */
 	@WebMethod
-	Vector<Offer> getOffers();
+	List<Offer> getOffers();
 
 	/**
 	 * Obtain all the offers stored in the database that matches with the given {@code ReviewState} of their rural house
@@ -115,7 +117,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(ReviewState reviewState);
+	List<Offer> getOffers(ReviewState reviewState);
 	
 	/**
 	 * Get all the active offers. This means, that this will query 
@@ -124,7 +126,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return the {@code Vector} with elements of the type {@code Offer}, that represent the active offers
 	 */
 	@WebMethod
-	Vector<Offer> getActiveOffers();
+	List<Offer> getActiveOffers();
 
 	/**
 	 * Obtain all the offers stored in the database that haven't ended yet, and matches with the given {@code ReviewState} of their rural house
@@ -133,7 +135,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the active offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
 	@WebMethod
-	Vector<Offer> getActiveOffers(ReviewState reviewState);
+	List<Offer> getActiveOffers(ReviewState reviewState);
 
 	/**
 	 * Returns the number of offers stored in the database
@@ -244,7 +246,7 @@ public interface ApplicationFacadeInterface  {
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
 	@WebMethod
-	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+	Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
 
 	/**
 	 * Get the account role.

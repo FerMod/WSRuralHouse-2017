@@ -1,7 +1,9 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -87,22 +89,22 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<Offer> getOffers() {
+	public List<Offer> getOffers() {
 		return dataAccess.getOffers();
 	}
 
 	@Override
-	public Vector<Offer> getOffers(ReviewState reviewState) {
+	public List<Offer> getOffers(ReviewState reviewState) {
 		return dataAccess.getOffers(reviewState);
 	}
 
 	@Override
-	public Vector<Offer> getActiveOffers() {
+	public List<Offer> getActiveOffers() {
 		return dataAccess.getActiveOffers();
 	}
 
 	@Override
-	public Vector<Offer> getActiveOffers(ReviewState reviewState) {
+	public List<Offer> getActiveOffers(ReviewState reviewState) {
 		return dataAccess.getActiveOffers(reviewState);
 	}
 
@@ -173,7 +175,8 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return new Vector<City>(dataAccess.getCities());
 	}
 
-	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+	@Override
+	public Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
 		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
 		if(!dataAccess.existsEmail(email)) {
 			if(!dataAccess.existsUser(username)) {

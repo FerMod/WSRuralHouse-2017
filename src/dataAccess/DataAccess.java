@@ -1,6 +1,5 @@
 package dataAccess;
 
-import java.awt.List;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
@@ -13,7 +12,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -46,6 +47,7 @@ import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
 import domain.RuralHouse;
+import domain.UserFactory;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 
@@ -218,12 +220,12 @@ public class DataAccess implements DataAccessInterface {
 			// deleteTableContent("Owner");
 			// deleteTableContent("Admin");
 
-			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
-			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
-			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
-			Client client = (Client) createUser("client@gamail.com", "client", "client123", Role.CLIENT);
+			Owner owner1 = (Owner) createUser("paco@gmail.com", "paco", "paco123", Role.OWNER).get();
+			Owner owner2 = (Owner) createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER).get();
+			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER).get();
+			Client client = (Client) createUser("client@gamail.com", "client", "client123", Role.CLIENT).get();
 
-			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
+			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN).get();
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -258,16 +260,15 @@ public class DataAccess implements DataAccessInterface {
 			update(rh4);
 			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
-
-			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
-			Owner owner = (Owner)createUser("own@gmail.com", "own", "own", Role.OWNER);
+			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN).get();
+			Owner owner = (Owner) createUser("own@gmail.com", "own", "own", Role.OWNER).get();			
 			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3ºb");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh);
 			Offer offer1 = createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
 			Offer offer2 = createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
 			createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
-			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
+			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));
 
 			System.out.println("Database initialized");
 
@@ -313,8 +314,8 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
-		Vector<Offer> result = null;
+	public List<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
+		List<Offer> result = null;
 		try { 
 			open();
 			System.out.println(">> DataAccess: getOffers");
@@ -536,7 +537,7 @@ public class DataAccess implements DataAccessInterface {
 		try{
 			open();
 			RuralHouse ruralHouse = db.find(RuralHouse.class, rh.getId());
-			if (ruralHouse.overlapsWith(firstDay, lastDay) != null) {
+			if (ruralHouse.overlapsWith(firstDay, lastDay).isPresent()) {
 				return true;
 			}
 		} catch (Exception e){
@@ -737,13 +738,14 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+	public Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
 		AbstractUser user = null;
 		try {
 			open();
 			System.out.print(">> DataAccess: createUser(" + email + ", " + username +", " + password + ", " + role + ") -> ");
 			db.getTransaction().begin();
-			user = getNewUser(email, username, password, role);
+			UserFactory<AbstractUser>  userFactory = getUserFactory(role).get();
+			user = userFactory.create(email, username, password);
 			db.persist(user);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + user.getId());
@@ -753,21 +755,21 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-		return user;
+		return Optional.ofNullable(user);
 	}
 
-	private AbstractUser getNewUser(String email, String username, String password, Role role) {
+	private Optional<UserFactory<AbstractUser>> getUserFactory(Role role) {
 		switch (role) {
 		case CLIENT:
-			return new Client(email, username, password);
+			return Optional.ofNullable(Client::new);
 		case OWNER:
-			return new Owner(email, username, password);
+			return Optional.ofNullable(Owner::new);
 		case ADMIN:
-			return new Admin(email, username, password);
+			return Optional.ofNullable(Admin::new);
 		case SUPER_ADMIN:
-			return null;
+			return Optional.empty();
 		default:
-			return null;
+			return Optional.empty();
 		}
 	}
 

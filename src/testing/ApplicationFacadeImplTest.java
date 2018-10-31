@@ -111,9 +111,9 @@ class ApplicationFacadeImplTest {
 
 			dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-			admin = (Admin)afi.createUser("adminTest@admin.com", "adminTest", "adminTest", Role.ADMIN);
-			owner = (Owner)afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER);
-			client = (Client)afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT);
+			admin = (Admin) afi.createUser("adminTest@admin.com", "adminTest", "adminTest", Role.ADMIN).get();
+			owner = (Owner) afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER).get();
+			client = (Client) afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT).get();
 			city = afi.createCity("TestCity");
 
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");

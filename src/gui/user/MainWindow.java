@@ -119,12 +119,12 @@ public class MainWindow extends JFrame {
 						e.printStackTrace();
 					}
 				case OWNER:
-					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
+					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response).get();
 				case ADMIN:
-					return getBusinessLogic().createUser("Admin@adminmail.com", "Admin", "AdminPassword", response);
+					return getBusinessLogic().createUser("Admin@adminmail.com", "Admin", "AdminPassword", response).get();
 				case SUPER_ADMIN:
 					//Not implemented
-					return getBusinessLogic().createUser("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword", response);
+					return getBusinessLogic().createUser("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword", response).get();
 				}
 			} catch (DuplicatedEntityException e) {
 				e.printStackTrace();

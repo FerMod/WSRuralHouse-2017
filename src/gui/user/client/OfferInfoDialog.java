@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
@@ -363,7 +364,7 @@ public class OfferInfoDialog extends JDialog {
 	private ImagePanel getImagePanel() {
 		if(imagePanel == null) {	
 			imagePanel = new ImagePanel();
-			Vector<Offer> offer;
+			List<Offer> offer;
 			try {
 				offer = MainWindow.getBusinessLogic().getOffers(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
 				ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
