@@ -7,7 +7,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
 import businessLogic.util.LogFile;
-import configuration.ConfigXML;
+import configuration.Config;
 import dataAccess.DataAccess;
 
 public final class ApplicationFacadeFactory {
@@ -15,7 +15,7 @@ public final class ApplicationFacadeFactory {
 	private ApplicationFacadeFactory() {
 	}
 
-	public static ApplicationFacadeInterface createApplicationFacade(ConfigXML config) {
+	public static ApplicationFacadeInterface createApplicationFacade(Config config) {
 		
 		ApplicationFacadeInterface aplicationFacade = null;
 		

@@ -3,7 +3,6 @@ package configuration;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Locale;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -12,7 +11,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class ConfigXML implements Serializable {
+public class ConfigXML implements Serializable, Config {
+
+	private static final String FILE_PATH = "resources/config.xml";
 
 	private boolean showConsole;
 
@@ -44,7 +45,7 @@ public class ConfigXML implements Serializable {
 
 	private Locale locale;
 
-	private volatile static ConfigXML instance;
+	private volatile static Config instance;
 
 	private ConfigXML(){
 
@@ -52,15 +53,15 @@ public class ConfigXML implements Serializable {
 			throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
 		}
 
-		loadConfig();		
+		loadConfig(FILE_PATH);		
 
 	}
 
-	private void loadConfig() {
+	private void loadConfig(String filePath) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(new File("resources/config.xml"));
+			Document doc = dBuilder.parse(new File(filePath));
 			//System.out.println("Opening config.xml: "+getClass().getClassLoader().getResource("../resources/config.xml").getFile());
 			//Document doc = dBuilder.parse(new File(getClass().getClassLoader().getResource("../resources/config.xml").getFile()));
 
@@ -87,11 +88,11 @@ public class ConfigXML implements Serializable {
 			switch (getTagValue("locale", config)) {
 			case "es":
 			case "eus":
-				locale = new Locale("es", "ES");
+				locale = new Locale("es");
 				break;
 			case "en":
 			default:
-				locale = new Locale("en", "EN");
+				locale = new Locale("en");
 				break;
 			}
 
@@ -128,6 +129,7 @@ public class ConfigXML implements Serializable {
 			System.out.println("Exception thrown when trying to load the xml configuration.");
 			e.printStackTrace();
 		}
+
 	}
 
 	private static String getTagValue(String sTag, Element eElement) {
@@ -143,39 +145,67 @@ public class ConfigXML implements Serializable {
 	 * @return the current singleton instance
 	 * @see Serializable
 	 */
-	protected ConfigXML readResolve() {
+	protected Config readResolve() {
 		return getInstance();
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#enableConsole()
+	 */
+	@Override
 	public boolean enableConsole() {
 		return showConsole;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getLocale()
+	 */
+	@Override
 	public Locale getLocale() {
 		return locale;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getDatabasePort()
+	 */
+	@Override
 	public int getDatabasePort() {
 		return databasePort;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getUser()
+	 */
+	@Override
 	public String getUser() {
 		return user;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getPassword()
+	 */
+	@Override
 	public String getPassword() {
 		return password;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#isLocalDatabase()
+	 */
+	@Override
 	public boolean isLocalDatabase() {
 		return databaseLocal;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#isBusinessLogicLocal()
+	 */
+	@Override
 	public boolean isBusinessLogicLocal() {
 		return businessLogicLocal;
 	}
 
-	public synchronized static ConfigXML getInstance() {
+	public synchronized static Config getInstance() {
 		if(instance == null) {
 			synchronized (ConfigXML.class) {
 				if(instance == null) instance = new ConfigXML();
@@ -184,30 +214,58 @@ public class ConfigXML implements Serializable {
 		return instance;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getBusinessLogicNode()
+	 */
+	@Override
 	public String getBusinessLogicNode() {
 		return businessLogicNode;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getBusinessLogicPort()
+	 */
+	@Override
 	public String getBusinessLogicPort() {
 		return businessLogicPort;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getBusinessLogicName()
+	 */
+	@Override
 	public String getBusinessLogicName() {
 		return businessLogicName;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getDbFilename()
+	 */
+	@Override
 	public String getDbFilename(){
 		return databaseFileName;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#initValues()
+	 */
+	@Override
 	public boolean initValues(){
 		return databaseInitValues;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#overwriteFile()
+	 */
+	@Override
 	public boolean overwriteFile(){
 		return databaseOverwriteFile;
 	}
 
+	/* (non-Javadoc)
+	 * @see configuration.Config#getDatabaseNode()
+	 */
+	@Override
 	public String getDatabaseNode() {
 		return databaseNode;
 	}

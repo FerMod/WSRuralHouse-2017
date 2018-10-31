@@ -8,8 +8,8 @@ import javax.swing.UIManager;
 import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
+import configuration.Config;
 import configuration.ConfigXML;
-import configuration.util.CurrencyUtils;
 import gui.debug.ConsoleKeyEventDispatcher;
 import gui.user.MainWindow;
 import gui.user.SharedFrame;
@@ -22,8 +22,8 @@ public class ApplicationLauncher {
 
 			LogFile.FILE_NAME = "error.log";
 
-			ConfigXML config = ConfigXML.getInstance();
-
+			Config config = ConfigXML.getInstance();
+			
 			System.out.println(config.getLocale());
 
 			Locale.setDefault(config.getLocale());

@@ -33,6 +33,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import businessLogic.util.LogFile;
 import businessLogic.util.Timer;
+import configuration.Config;
 import configuration.ConfigXML;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
@@ -50,7 +51,7 @@ import exceptions.DuplicatedEntityException;
 
 public class DataAccess implements DataAccessInterface {
 
-	private final ConfigXML CONFIG;
+	private final Config CONFIG;
 	private static String DB_PATH;
 	private static boolean OVERWRITE_DB_FILE;
 	private static boolean INIT_DB_VALUES;
@@ -132,7 +133,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public ConfigXML getConfig() {
+	public Config getConfig() {
 		return CONFIG;	
 	}
 

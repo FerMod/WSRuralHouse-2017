@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import javax.security.auth.login.AccountNotFoundException;
 
-import configuration.ConfigXML;
+import configuration.Config;
 import domain.AbstractUser;
 import domain.AbstractUser.Role;
 import domain.Booking;
@@ -22,7 +22,7 @@ import exceptions.OverlappingOfferException;
 
 public interface DataAccessInterface {
 
-	ConfigXML getConfig();
+	Config getConfig();
 
 	void initializeDB();
 	

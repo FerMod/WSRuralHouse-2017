@@ -33,6 +33,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
+import configuration.Config;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import domain.AbstractUser.Role;
@@ -79,7 +80,7 @@ class ApplicationFacadeImplTest {
 	static void initDataBase() {
 		try {
 
-			ConfigXML config = ConfigXML.getInstance();
+			Config config = ConfigXML.getInstance();
 			Locale.setDefault(config.getLocale());
 
 			if (config.isBusinessLogicLocal()) {
