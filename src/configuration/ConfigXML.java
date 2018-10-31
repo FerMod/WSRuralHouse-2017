@@ -1,7 +1,7 @@
 package configuration;
 
 import java.io.File;
-import java.util.Currency;
+import java.io.Serializable;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,12 +12,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import configuration.util.CurrencyUtils;
+public class ConfigXML implements Serializable {
 
-public class ConfigXML {
-	
 	private boolean showConsole;
-	
+
 	private String businessLogicNode;
 
 	private String businessLogicPort;
@@ -27,7 +25,7 @@ public class ConfigXML {
 	private static String databaseFileName;
 
 	private boolean databaseInitValues;
-	
+
 	private boolean databaseOverwriteFile;
 
 	//Two possible values: true (no instance of RemoteServer needs to be launched) or false (RemoteServer needs to be run first)
@@ -45,11 +43,20 @@ public class ConfigXML {
 	private String password;
 
 	private Locale locale;
-	
-	private static ConfigXML theInstance = new ConfigXML();
+
+	private volatile static ConfigXML instance;
 
 	private ConfigXML(){
 
+		if (instance != null){
+			throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
+		}
+
+		loadConfig();		
+
+	}
+
+	private void loadConfig() {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -89,7 +96,6 @@ public class ConfigXML {
 			}
 
 
-
 			//javaPolicyPath= getTagValue("javaPolicyPath", config);
 
 			databaseFileName = getTagValue("databaseFileName", config);
@@ -99,7 +105,7 @@ public class ConfigXML {
 			databaseLocal = value.equals("true");
 
 			databaseInitValues = getTagValue("databaseInitValues", config).equals("true");
-			
+
 			databaseOverwriteFile = getTagValue("databaseOverwriteFile", config).equals("true");
 
 			databaseNode = getTagValue("databaseNode", config);
@@ -110,7 +116,7 @@ public class ConfigXML {
 			user=getTagValue("user", config);
 
 			password=getTagValue("password", config);
-			
+
 			showConsole = getTagValue("showConsole", config).equals("true");
 
 			System.out.print("Read from config.xml: ");
@@ -121,16 +127,24 @@ public class ConfigXML {
 		} catch (Exception e) {
 			System.out.println("Error in ConfigXML.java: problems with config.xml");
 			e.printStackTrace();
-		}		
-		
+		}
 	}
 
 	private static String getTagValue(String sTag, Element eElement) {
-		
+
 		NodeList nlList= eElement.getElementsByTagName(sTag).item(0).getChildNodes();
 		Node nValue = (Node) nlList.item(0);
 
 		return nValue.getNodeValue();
+	}
+
+	/**
+	 * Ensure that nobody can create another instance by serializing and deserializing the singleton.
+	 * @return the current singleton instance
+	 * @see Serializable
+	 */
+	protected ConfigXML readResolve() {
+		return getInstance();
 	}
 
 	public boolean enableConsole() {
@@ -161,8 +175,13 @@ public class ConfigXML {
 		return businessLogicLocal;
 	}
 
-	public static ConfigXML getInstance() {
-		return theInstance;
+	public synchronized static ConfigXML getInstance() {
+		if(instance == null) {
+			synchronized (ConfigXML.class) {
+				if(instance == null) instance = new ConfigXML();
+			}
+		}
+		return instance;
 	}
 
 	public String getBusinessLogicNode() {
@@ -184,7 +203,7 @@ public class ConfigXML {
 	public boolean initValues(){
 		return databaseInitValues;
 	}
-	
+
 	public boolean overwriteFile(){
 		return databaseOverwriteFile;
 	}
@@ -192,5 +211,10 @@ public class ConfigXML {
 	public String getDatabaseNode() {
 		return databaseNode;
 	}
+
+	/**
+	 * Auto-generated serial version ID
+	 */
+	private static final long serialVersionUID = 1972352637174060245L;
 
 }
