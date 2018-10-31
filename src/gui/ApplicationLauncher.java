@@ -1,6 +1,5 @@
 package gui;
 
-import java.util.Currency;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
