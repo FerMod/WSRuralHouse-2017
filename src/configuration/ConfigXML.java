@@ -125,7 +125,7 @@ public class ConfigXML implements Serializable {
 			System.out.println("\tdatabaseInitValues = "+ databaseInitValues); 
 
 		} catch (Exception e) {
-			System.out.println("Error in ConfigXML.java: problems with config.xml");
+			System.out.println("Exception thrown when trying to load the xml configuration.");
 			e.printStackTrace();
 		}
 	}
