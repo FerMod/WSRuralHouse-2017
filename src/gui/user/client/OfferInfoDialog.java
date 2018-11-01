@@ -21,12 +21,9 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
@@ -50,6 +47,7 @@ import javax.swing.text.JTextComponent;
 
 import com.toedter.calendar.JDateChooser;
 
+import configuration.ConfigXML;
 import domain.Booking;
 import domain.Client;
 import domain.Offer;
@@ -548,11 +546,7 @@ public class OfferInfoDialog extends JDialog {
 
 	private JLabel getLblPrice() {
 		if(lblPrice == null) {
-			//[FIXME]: Currency Displays Wrong (Issue #14) 
-			// Locale currentLocale = MainWindow.getBusinessLogic().getLocale();
-			// Currency currentCurrency = Currency.getInstance(currentLocale);
-			// NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
-			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+			NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
 			lblPrice = new JLabel("Price (" + currencyFormatter.format(rowContent.getElement().getPrice()) + " per night): ");
 		}
 		return lblPrice;
@@ -602,11 +596,8 @@ public class OfferInfoDialog extends JDialog {
 	}
 
 	private void updatePrice() {
-		if(firstDate != null && lastDate != null) {		
-			//[FIXME]: Currency Displays Wrong (Issue #14) 
-			// Locale currentLocale = MainWindow.getBusinessLogic().getLocale();
-			// NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);	
-			NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+		if(firstDate != null && lastDate != null) {	
+			NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
 			textFieldPrice.setText(currencyFormatter.format(getPrice()));	
 			btnBookOffer.setEnabled(true);			
 		}

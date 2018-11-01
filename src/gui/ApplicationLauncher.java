@@ -25,9 +25,9 @@ public class ApplicationLauncher {
 			
 			System.out.println(config.getLocale());
 
-			Locale.setDefault(config.getLocale());
+			Locale.setDefault(Locale.forLanguageTag(config.getLocale().name()));
 
-			System.out.println("Locale: " + Locale.getDefault());
+			System.out.println("CurrencyLocale: " + Locale.getDefault());
 			
 			ConsoleKeyEventDispatcher consoleKeyEventDispatcher = new ConsoleKeyEventDispatcher();
 			if(config.enableConsole()) {			

@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
-import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
@@ -23,6 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import configuration.ConfigXML;
 import domain.Booking;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
@@ -105,7 +105,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 			description = String.format("%1.140s%1.140s", description, " (...)");
 		}
 		descriptionComponent.setText(description);
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
 		addressComponent.setText(value.getElement().getOffer().getRuralHouse().getCity() + " " + value.getElement().getOffer().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getOffer().getPrice()));
 

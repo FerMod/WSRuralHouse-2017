@@ -220,7 +220,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	public Locale getLocale() {
-		locale = dataAccess.getConfig().getLocale();
+		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale().name());
 		if(locale == null) {
 			locale = Locale.getDefault();
 		}

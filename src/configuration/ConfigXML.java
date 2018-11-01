@@ -2,7 +2,7 @@ package configuration;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Locale;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -10,6 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import configuration.util.CurrencyLocale;
 
 public class ConfigXML implements Serializable, Config {
 
@@ -43,7 +45,7 @@ public class ConfigXML implements Serializable, Config {
 
 	private String password;
 
-	private Locale locale;
+	private CurrencyLocale locale;
 
 	private volatile static Config instance;
 
@@ -83,19 +85,7 @@ public class ConfigXML implements Serializable, Config {
 
 			businessLogicName = getTagValue("businessLogicName", config);
 
-			//[TODO]: Make adapter class to obtain the correct Locale.
-			//[FIXME]: Currency Displays Wrong (Issue #14) 
-			switch (getTagValue("locale", config)) {
-			case "es":
-			case "eus":
-				locale = new Locale("es");
-				break;
-			case "en":
-			default:
-				locale = new Locale("en");
-				break;
-			}
-
+			locale = CurrencyLocale.valueOf(getTagValue("locale", config).toUpperCase());
 
 			//javaPolicyPath= getTagValue("javaPolicyPath", config);
 
@@ -161,7 +151,7 @@ public class ConfigXML implements Serializable, Config {
 	 * @see configuration.Config#getLocale()
 	 */
 	@Override
-	public Locale getLocale() {
+	public CurrencyLocale getLocale() {
 		return locale;
 	}
 

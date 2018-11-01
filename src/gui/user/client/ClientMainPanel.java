@@ -51,6 +51,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
+import configuration.ConfigXML;
 import domain.Offer;
 import domain.Review.ReviewState;
 import gui.components.CustomTable;
@@ -239,7 +240,7 @@ public class ClientMainPanel extends JPanel {
 
 	private Hashtable<Integer, JLabel> getSliderLabelTable(double minPrice, double maxPrice) {
 
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
+		NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
 
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();		
 		labelTable.put(getPriceSlider().getMinimum(), new JLabel(currencyFormatter.format(minPrice)));
@@ -274,13 +275,13 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	private void setupNumberFormat() {
-		priceFormat = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
+		priceFormat = ConfigXML.getInstance().getLocale().getNumberFormatter();
 		priceFormat.setMinimumIntegerDigits(1);
 		priceFormat.setMaximumFractionDigits(2);
 	}
 
 	// Create and set up number formats. These objects also parse numbers input by user.
-	//	private void setUpFormats(Locale currentLocale) {
+	//	private void setUpFormats(CurrencyLocale currentLocale) {
 	//		
 	//		System.out.println(currentLocale.getCountry() + " \\\\ " + currentLocale.getLanguage());
 	//
@@ -424,7 +425,7 @@ public class ClientMainPanel extends JPanel {
 	}
 
 	// Create and set up number formats. These objects also parse numbers input by user.
-	//	private void setUpFormats(Locale currentLocale) {
+	//	private void setUpFormats(CurrencyLocale currentLocale) {
 	//		
 	//		System.out.println(currentLocale.getCountry() + " \\\\ " + currentLocale.getLanguage());
 	//

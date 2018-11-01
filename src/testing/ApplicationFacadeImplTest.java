@@ -81,7 +81,7 @@ class ApplicationFacadeImplTest {
 		try {
 
 			Config config = ConfigXML.getInstance();
-			Locale.setDefault(config.getLocale());
+			Locale.setDefault(Locale.forLanguageTag(config.getLocale().name()));
 
 			if (config.isBusinessLogicLocal()) {
 				afi = new ApplicationFacadeImpl();

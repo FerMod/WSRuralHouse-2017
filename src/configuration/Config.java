@@ -1,12 +1,12 @@
 package configuration;
 
-import java.util.Locale;
+import configuration.util.CurrencyLocale;
 
 public interface Config {
 
 	boolean enableConsole();
 
-	Locale getLocale();
+	CurrencyLocale getLocale();
 
 	int getDatabasePort();
 

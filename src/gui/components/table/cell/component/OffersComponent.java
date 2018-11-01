@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
-import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
@@ -21,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import configuration.ConfigXML;
 import domain.Offer;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
@@ -105,7 +105,7 @@ public class OffersComponent extends AbstractCellEditor implements CellComponent
 			description = String.format("%1.140s%1.140s", description, " (...)");
 		}
 		descriptionComponent.setText(description);
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
 		addressComponent.setText(value.getElement().getRuralHouse().getCity() + " " + value.getElement().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getPrice()));
 
