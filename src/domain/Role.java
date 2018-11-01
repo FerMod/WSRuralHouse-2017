@@ -5,9 +5,11 @@ package domain;
  */
 public enum Role {
 	CLIENT(0),
-	OWNER(1),		
-	ADMIN(2),
-	SUPER_ADMIN(3);
+	PARTICULAR_CLIENT(1),
+	TRAVEL_AGENCY(2),
+	OWNER(3),
+	ADMIN(4),
+	SUPER_ADMIN(5);
 
 	private final int role;
 
