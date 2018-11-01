@@ -251,8 +251,6 @@ public class MainWindow extends JFrame {
 				panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
 				break;
 			case OWNER:
-				//FIXME VERY VERY TEMPORAL!!
-				//panelMap.put("Owner Main Menu", (JPanel) new MainGUI(role).getContentPane());
 				panelMap.put("Owner Main Menu", new OwnerRuralHousesPanel(this));
 				// panelMap.put("Main Menu", new OwnerMainPanel(this));
 				break;
