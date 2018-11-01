@@ -1,9 +1,9 @@
 package domain;
 
 /**
- * Role of the user
+ * UserType of the user
  */
-public enum Role {
+public enum UserType {
 	CLIENT(0),
 	PARTICULAR_CLIENT(1),
 	TRAVEL_AGENCY(2),
@@ -11,14 +11,14 @@ public enum Role {
 	ADMIN(4),
 	SUPER_ADMIN(5);
 
-	private final int role;
+	private final int type;
 
-	private Role(int role) {
-		this.role = role;
+	private UserType(int type) {
+		this.type = type;
 	}
 
 	public int getValue() {
-		return this.role;
+		return this.type;
 	}
 
 }

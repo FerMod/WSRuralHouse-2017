@@ -43,7 +43,7 @@ import domain.Client;
 import domain.Offer;
 import domain.Owner;
 import domain.Review.ReviewState;
-import domain.Role;
+import domain.UserType;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
@@ -111,9 +111,9 @@ class ApplicationFacadeImplTest {
 
 			dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-			admin = (Admin) afi.createUser("adminTest@admin.com", "adminTest", "adminTest", Role.ADMIN).get();
-			owner = (Owner) afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER).get();
-			client = (Client) afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT).get();
+			admin = (Admin) afi.createUser("adminTest@admin.com", "adminTest", "adminTest", UserType.ADMIN).get();
+			owner = (Owner) afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", UserType.OWNER).get();
+			client = (Client) afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", UserType.CLIENT).get();
 			city = afi.createCity("TestCity");
 
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");

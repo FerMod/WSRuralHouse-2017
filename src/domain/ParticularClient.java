@@ -16,7 +16,7 @@ public class ParticularClient extends AbstractUser {
 	private List<Booking> bookings;
 
 	public ParticularClient(String email, String username, String password) {
-		super(email, username, password, Role.PARTICULAR_CLIENT);
+		super(email, username, password, UserType.PARTICULAR_CLIENT);
 		bookings = new ArrayList<Booking>();
 	}
 
@@ -26,8 +26,8 @@ public class ParticularClient extends AbstractUser {
 	}
 
 	@Override
-	public Role getRole() {
-		return Role.CLIENT;
+	public UserType getRole() {
+		return UserType.CLIENT;
 	}
 
 	public List<Booking> getBookings() {

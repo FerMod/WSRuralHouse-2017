@@ -19,7 +19,7 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
-import domain.Role;
+import domain.UserType;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
@@ -241,21 +241,21 @@ public interface ApplicationFacadeInterface  {
 	 * @param email the user email
 	 * @param username the name of the account
 	 * @param password the password of the account
-	 * @param role the role assigned to the account
+	 * @param userType the type of user of the account
 	 * @return the created user, null if none was created
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
 	@WebMethod
-	Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+	Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException;
 
 	/**
-	 * Get the account role.
+	 * Get the account user type.
 	 * 
 	 * @param username the name of the account
-	 * @return the role assigned to the account
+	 * @return the user type of the account
 	 */
 	@WebMethod
-	Role getRole(String username);
+	UserType getUserTypeOf(String username);
 
 	/**
 	 * Login the user with the account that matches the entered user name and password

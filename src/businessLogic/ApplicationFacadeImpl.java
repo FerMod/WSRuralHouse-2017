@@ -19,7 +19,7 @@ import domain.Review;
 import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.Review.ReviewState;
-import domain.Role;
+import domain.UserType;
 import domain.City;
 import domain.Client;
 import exceptions.AuthException;
@@ -176,11 +176,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
+	public Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException {
+		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " userType=" + userType);
 		if(!dataAccess.existsEmail(email)) {
 			if(!dataAccess.existsUser(username)) {
-				return dataAccess.createUser(email, username, password, role);
+				return dataAccess.createUser(email, username, password, userType);
 			} else {
 				throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
 			}
@@ -189,9 +189,9 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		}
 	}
 
-	public Role getRole(String username) {
-		Role role = dataAccess.getRole(username);
-		return role;
+	public UserType getUserTypeOf(String username) {
+		UserType userType = dataAccess.getRole(username);
+		return userType;
 	}
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {

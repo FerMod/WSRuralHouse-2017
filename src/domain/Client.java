@@ -15,7 +15,7 @@ public class Client extends AbstractUser {
 	private Vector<Booking> bookings;
 
 	public Client(String email, String username, String password) {
-		super(email, username, password, Role.CLIENT);
+		super(email, username, password, UserType.CLIENT);
 		bookings = new Vector<Booking>();
 	}
 
@@ -25,8 +25,8 @@ public class Client extends AbstractUser {
 	}
 
 	@Override
-	public Role getRole() {
-		return Role.CLIENT;
+	public UserType getRole() {
+		return UserType.CLIENT;
 	}
 
 	public Vector<Booking> getBookings() {

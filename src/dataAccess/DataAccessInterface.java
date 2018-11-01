@@ -16,7 +16,7 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
-import domain.Role;
+import domain.UserType;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -72,13 +72,13 @@ public interface DataAccessInterface {
 	
 	boolean existsRuralHouse(String description, int city);
 
-	Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+	Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException;
 
 	AbstractUser getUser(String username, String password);
 
 	boolean validDni(String dni);
 
-	Role getRole(String username);
+	UserType getRole(String username);
 
 	boolean existsUser(String username);
 

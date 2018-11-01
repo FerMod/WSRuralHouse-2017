@@ -45,7 +45,7 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
-import domain.Role;
+import domain.UserType;
 import domain.RuralHouse;
 import domain.UserFactory;
 import exceptions.AuthException;
@@ -220,12 +220,12 @@ public class DataAccess implements DataAccessInterface {
 			// deleteTableContent("Owner");
 			// deleteTableContent("Admin");
 
-			Owner owner1 = (Owner) createUser("paco@gmail.com", "paco", "paco123", Role.OWNER).get();
-			Owner owner2 = (Owner) createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER).get();
-			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER).get();
-			Client client = (Client) createUser("client@gamail.com", "client", "client123", Role.CLIENT).get();
+			Owner owner1 = (Owner) createUser("paco@gmail.com", "paco", "paco123", UserType.OWNER).get();
+			Owner owner2 = (Owner) createUser("imowner@gmail.com", "imowner", "imowner", UserType.OWNER).get();
+			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", UserType.OWNER).get();
+			Client client = (Client) createUser("client@gamail.com", "client", "client123", UserType.CLIENT).get();
 
-			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN).get();
+			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", UserType.ADMIN).get();
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -260,8 +260,8 @@ public class DataAccess implements DataAccessInterface {
 			update(rh4);
 			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
-			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN).get();
-			Owner owner = (Owner) createUser("own@gmail.com", "own", "own", Role.OWNER).get();			
+			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", UserType.ADMIN).get();
+			Owner owner = (Owner) createUser("own@gmail.com", "own", "own", UserType.OWNER).get();			
 			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3ºb");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh);
@@ -738,13 +738,13 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Optional<AbstractUser> createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+	public Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException {
 		AbstractUser user = null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createUser(" + email + ", " + username +", " + password + ", " + role + ") -> ");
+			System.out.print(">> DataAccess: createUser(" + email + ", " + username +", " + password + ", " + userType + ") -> ");
 			db.getTransaction().begin();
-			UserFactory<AbstractUser>  userFactory = getUserFactory(role).get();
+			UserFactory<AbstractUser>  userFactory = getUserFactory(userType).get();
 			user = userFactory.create(email, username, password);
 			db.persist(user);
 			db.getTransaction().commit();
@@ -758,8 +758,8 @@ public class DataAccess implements DataAccessInterface {
 		return Optional.ofNullable(user);
 	}
 
-	private Optional<UserFactory<AbstractUser>> getUserFactory(Role role) {
-		switch (role) {
+	private Optional<UserFactory<AbstractUser>> getUserFactory(UserType userType) {
+		switch (userType) {
 		case CLIENT:
 			return Optional.ofNullable(Client::new);
 		case OWNER:
@@ -804,8 +804,8 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Role getRole(String username) {
-		Role role = null;
+	public UserType getRole(String username) {
+		UserType userType = null;
 		try {
 			open();
 			System.out.print(">> DataAccess: getRole(" + username + ") -> ");
@@ -814,15 +814,15 @@ public class DataAccess implements DataAccessInterface {
 					+ "WHERE u.username = :username", AbstractUser.class)
 					.setParameter("username", username);
 			Vector<AbstractUser> result = new Vector<AbstractUser>(new Vector<AbstractUser>(query.getResultList()));
-			role = result.get(0).getRole();
-			System.out.println(role);	
+			userType = result.get(0).getRole();
+			System.out.println(userType);	
 		} catch	(Exception e) {
 			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return role;
+		return userType;
 	}
 
 	@Override
