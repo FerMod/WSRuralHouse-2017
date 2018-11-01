@@ -31,7 +31,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import domain.AbstractUser.Role;
+import domain.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;

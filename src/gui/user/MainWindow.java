@@ -33,7 +33,7 @@ import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
-import domain.AbstractUser.Role;
+import domain.Role;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;

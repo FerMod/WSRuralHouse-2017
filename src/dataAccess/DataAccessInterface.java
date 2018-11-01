@@ -9,7 +9,6 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import configuration.Config;
 import domain.AbstractUser;
-import domain.AbstractUser.Role;
 import domain.Booking;
 import domain.City;
 import domain.Client;
@@ -17,6 +16,7 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
+import domain.Role;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
