@@ -7,6 +7,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import configuration.Config;
 import configuration.ConfigXML;
 
 import javax.swing.JTextArea;
@@ -24,7 +25,7 @@ public class ObjectdbManagerServer extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	JTextArea textArea;
-	ConfigXML c;
+	Config c;
 
 	/**
 	 * Launch the application. 

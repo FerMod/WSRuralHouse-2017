@@ -171,7 +171,8 @@ public class CustomTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public Class<?> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+		Object obj = getValueAt(0, c);
+		return obj != null? obj.getClass() : null;
 	}
 
 	public boolean isCellEditable(int row, int col) {

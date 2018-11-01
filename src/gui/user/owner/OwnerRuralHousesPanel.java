@@ -1,20 +1,34 @@
 package gui.user.owner;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.text.JTextComponent;
 
 import domain.Admin;
@@ -23,26 +37,11 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
-import gui.components.TextPrompt;
-import gui.user.MainWindow;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
-
-import javax.swing.JCheckBox;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Vector;
-import java.awt.event.ActionEvent;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.ImageIcon;
-import java.awt.SystemColor;
+import gui.components.TextPrompt;
+import gui.user.MainWindow;
 
 public class OwnerRuralHousesPanel extends JPanel {
 	
@@ -84,14 +83,13 @@ public class OwnerRuralHousesPanel extends JPanel {
 
 	private JFrame parentFrame;
 
-
 	/**
 	 * Create the panel.
 	 * @param frame the parent frame
 	 */
 	public OwnerRuralHousesPanel(JFrame frame) { //Need a JScrollPane		
 		
-		this.parentFrame = frame;
+		this.setParentFrame(frame);
 		
 		initializeRuralHousesComboBox((Owner)MainWindow.user);
 		
@@ -399,23 +397,22 @@ public class OwnerRuralHousesPanel extends JPanel {
 	}
 
 	private void initializeRuralHousesComboBox(Owner ow) {
+		
 		Vector<RuralHouse> rhs = MainWindow.getBusinessLogic().getRuralHouses(ow);
-
-		ruralHousesOfOwner.addElement(null); //For that the owner have selected a RuralHouse
-
 		for(RuralHouse rh : rhs) {
 			ruralHousesOfOwner.addElement(rh);
 		}	
+		
 	}
 
 	private void initializeCitiesComboBox() {
+		
 		Vector<City> cities = MainWindow.getBusinessLogic().getCities();
-
-		someCities.addElement(null); //For that the owner have selected a city
-
+		
 		for(City city : cities) {
 			someCities.addElement(city);
 		}	
+		
 	}
 
 	private JTextComponent applyStyle(String tipText, JTextComponent textComponent) {
@@ -439,5 +436,13 @@ public class OwnerRuralHousesPanel extends JPanel {
 			lblSeleccionada.setVisible(false);
 			return null;
 		}
+	}
+
+	public JFrame getParentFrame() {
+		return parentFrame;
+	}
+
+	public void setParentFrame(JFrame parentFrame) {
+		this.parentFrame = parentFrame;
 	}
 }

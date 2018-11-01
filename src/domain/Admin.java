@@ -11,12 +11,12 @@ public class Admin extends AbstractUser {
 	private static final long serialVersionUID = 9196192939959320700L;
 
 	public Admin(String email, String username, String password) {
-		super(email, username, password, Role.ADMIN);
+		super(email, username, password, UserType.ADMIN);
 	}
 	
 	@Override
-	public Role getRole() {
-		return Role.ADMIN;
+	public UserType getRole() {
+		return UserType.ADMIN;
 	}
 
 	@Override

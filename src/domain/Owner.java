@@ -16,13 +16,13 @@ public class Owner extends AbstractUser {
 	private List<RuralHouse> ruralHouses;
 
 	public Owner(String email, String username, String password) {
-		super(email, username, password, Role.OWNER);
+		super(email, username, password, UserType.OWNER);
 		ruralHouses = new Vector<RuralHouse>();
 	}
 
 	@Override
-	public Role getRole() {
-		return Role.OWNER;
+	public UserType getRole() {
+		return UserType.OWNER;
 	}
 
 	@Override

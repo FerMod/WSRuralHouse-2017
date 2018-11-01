@@ -33,9 +33,9 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
+import configuration.Config;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
-import domain.AbstractUser.Role;
 import domain.Admin;
 import domain.Booking;
 import domain.City;
@@ -43,11 +43,15 @@ import domain.Client;
 import domain.Offer;
 import domain.Owner;
 import domain.Review.ReviewState;
+import domain.UserType;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
 
 class ApplicationFacadeImplTest {
+	
+	final static String BAD_DATES_FILE = "/testing/data/BadDates.csv";
+	final static String CORRECT_DATES_FILE = "/testing/data/CorrectDates.csv";
 
 	static RuralHouse rh;
 	static Admin admin;
@@ -76,8 +80,8 @@ class ApplicationFacadeImplTest {
 	static void initDataBase() {
 		try {
 
-			ConfigXML config = ConfigXML.getInstance();
-			Locale.setDefault(new Locale(config.getLocale()));
+			Config config = ConfigXML.getInstance();
+			Locale.setDefault(Locale.forLanguageTag(config.getLocale().name()));
 
 			if (config.isBusinessLogicLocal()) {
 				afi = new ApplicationFacadeImpl();
@@ -108,9 +112,9 @@ class ApplicationFacadeImplTest {
 
 			dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-			admin = (Admin)afi.createUser("adminTest@admin.com", "adminTest", "adminTest", Role.ADMIN);
-			owner = (Owner)afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER);
-			client = (Client)afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT);
+			admin = (Admin) afi.createUser("adminTest@admin.com", "adminTest", "adminTest", UserType.ADMIN).get();
+			owner = (Owner) afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", UserType.OWNER).get();
+			client = (Client) afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", UserType.CLIENT).get();
 			city = afi.createCity("TestCity");
 
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");
@@ -166,7 +170,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateOffer - Correct Creation")
-		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testCreateOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -197,7 +201,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateOffer - BadDatesException")
-		@CsvFileSource(resources = "/test/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = BAD_DATES_FILE, numLinesToSkip = 1)
 		void testCreateOffer3(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -210,7 +214,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("GetOffer - Get Correct Value")
-		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testGetOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -230,7 +234,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("GetOffer - BadDatesException")
-		@CsvFileSource(resources = "/test/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = BAD_DATES_FILE, numLinesToSkip = 1)
 		void testGetOffer1(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -251,7 +255,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("Delete Offer - Correct Deletion")
-		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testDeleteOffer(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -284,7 +288,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateBooking - Correct Creation")
-		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testCreateBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -301,7 +305,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("CreateBooking - BadDatesException")
-		@CsvFileSource(resources = "/test/data/BadDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = BAD_DATES_FILE, numLinesToSkip = 1)
 		void testCreateBooking2(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);
@@ -323,7 +327,7 @@ class ApplicationFacadeImplTest {
 
 		@ParameterizedTest
 		@DisplayName("Delete Booking - Correct Deletion")
-		@CsvFileSource(resources = "/test/data/CorrectDates.csv", numLinesToSkip = 1)
+		@CsvFileSource(resources = CORRECT_DATES_FILE, numLinesToSkip = 1)
 		void testDeleteBooking(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2) {
 			try {
 				startDate = parseToDate(date1);

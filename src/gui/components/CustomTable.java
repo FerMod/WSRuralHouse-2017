@@ -24,6 +24,7 @@ public class CustomTable extends JTable {
 		addMouseListener(rollOverListener);
 	}
 
+	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 		Component component = super.prepareRenderer(renderer, row, column);
 		if(isRowSelected(row) || (row == rollOverRowIndex)) {

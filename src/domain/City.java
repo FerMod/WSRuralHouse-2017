@@ -1,14 +1,16 @@
 package domain;
 
 import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import domain.util.IntegerAdapter;
-
-import javax.persistence.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

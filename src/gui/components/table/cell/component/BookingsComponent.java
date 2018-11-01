@@ -7,12 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.EventObject;
-import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
@@ -25,6 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import configuration.ConfigXML;
 import domain.Booking;
 import gui.components.table.CellComponent;
 import gui.components.table.CellComponentInterface;
@@ -44,7 +42,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 
 	public BookingsComponent(JFrame parent) {
 
-		this.parentFrame = parent;
+		this.setParentFrame(parent);
 
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(2, 5, 2, 5));
@@ -56,59 +54,35 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0};
 		panel.setLayout(gridBagLayout);
 
-		titleComponent = new JTextArea();
-		titleComponent.setText("title\nDate: startDate - endDate");
-		titleComponent.setOpaque(false);
-		titleComponent.setEditable(false);
-		titleComponent.setFocusable(false);
-		titleComponent.setRows(2);
 		GridBagConstraints gbcTitle = new GridBagConstraints();
 		gbcTitle.insets = new Insets(0, 0, 5, 5);
 		gbcTitle.fill = GridBagConstraints.HORIZONTAL;
 		gbcTitle.gridx = 0;
 		gbcTitle.gridy = 0;
-		panel.add(titleComponent, gbcTitle);
+		panel.add(getTitleComponent(), gbcTitle);
 
-		descriptionComponent = new JTextArea("description");
-		descriptionComponent.setOpaque(false);
-		descriptionComponent.setEditable(false);
-		descriptionComponent.setFocusable(false);
-		descriptionComponent.setLineWrap(true);
-		descriptionComponent.setWrapStyleWord(true);
-		descriptionComponent.setRows(3);
 		GridBagConstraints gbcDescription = new GridBagConstraints();
 		gbcDescription.gridwidth = 2;
 		gbcDescription.insets = new Insets(5, 0, 5, 5);
 		gbcDescription.fill = GridBagConstraints.BOTH;
 		gbcDescription.gridx = 0;
 		gbcDescription.gridy = 1;
-		panel.add(descriptionComponent, gbcDescription);
+		panel.add(getDescriptionComponent(), gbcDescription);
 
-		addressComponent = new JTextArea("address [ city/address ]");
-		addressComponent.setOpaque(false);
-		addressComponent.setEditable(false);
-		addressComponent.setFocusable(false);
 		GridBagConstraints gbcAdress = new GridBagConstraints();
 		gbcAdress.gridwidth = 1;
 		gbcAdress.insets = new Insets(0, 0, 0, 5);
 		gbcAdress.fill = GridBagConstraints.HORIZONTAL;
 		gbcAdress.gridx = 0;
 		gbcAdress.gridy = 2;
-		panel.add(addressComponent, gbcAdress);
-		addressComponent.setColumns(10);
-
-		priceComponent = new JTextArea("price");
-		priceComponent.setOpaque(false);
-		priceComponent.setEditable(false);
-		priceComponent.setFocusable(false);
-		priceComponent.setColumns(4);
+		panel.add(getAddressComponent(), gbcAdress);
 
 		GridBagConstraints gbcPrice = new GridBagConstraints();
 		gbcPrice.fill = GridBagConstraints.HORIZONTAL;
 		gbcPrice.insets = new Insets(0, 0, 0, 5);
 		gbcPrice.gridx = 1;
 		gbcPrice.gridy = 2;
-		panel.add(priceComponent, gbcPrice);
+		panel.add(getPriceComponent(), gbcPrice);
 
 		GridBagConstraints gbcCancelButton = new GridBagConstraints();
 		gbcCancelButton.anchor = GridBagConstraints.NORTHEAST;
@@ -131,7 +105,7 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 			description = String.format("%1.140s%1.140s", description, " (...)");
 		}
 		descriptionComponent.setText(description);
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault());
+		NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
 		addressComponent.setText(value.getElement().getOffer().getRuralHouse().getCity() + " " + value.getElement().getOffer().getRuralHouse().getAddress());
 		priceComponent.setText(currencyFormatter.format(value.getElement().getOffer().getPrice()));
 
@@ -169,6 +143,14 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 		updateData((CellComponent<Booking>) value, isSelected, table);
 		return panel;
 	}
+	
+	public JFrame getParentFrame() {
+		return parentFrame;
+	}
+
+	public void setParentFrame(JFrame parentFrame) {
+		this.parentFrame = parentFrame;
+	}
 
 	public JPanel getPanel() {
 		return panel;
@@ -177,8 +159,29 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	public void setPanel(JPanel panel) {
 		this.panel = panel;
 	}
+	
+	public JTextArea getTitleComponent() {
+		if (titleComponent == null) {
+			titleComponent = new JTextArea();
+			titleComponent.setText("title\nDate: startDate - endDate");
+			titleComponent.setOpaque(false);
+			titleComponent.setEditable(false);
+			titleComponent.setFocusable(false);
+			titleComponent.setRows(2);
+		}
+		return titleComponent;
+	}
 
 	public JTextArea getDescriptionComponent() {
+		if (descriptionComponent == null) {
+			descriptionComponent = new JTextArea("description");
+			descriptionComponent.setOpaque(false);
+			descriptionComponent.setEditable(false);
+			descriptionComponent.setFocusable(false);
+			descriptionComponent.setLineWrap(true);
+			descriptionComponent.setWrapStyleWord(true);
+			descriptionComponent.setRows(3);
+		}
 		return descriptionComponent;
 	}
 
@@ -187,6 +190,13 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	}
 
 	public JTextArea getAddressComponent() {
+		if (addressComponent == null) {
+			addressComponent = new JTextArea("address [ city/address ]");
+			addressComponent.setOpaque(false);
+			addressComponent.setEditable(false);
+			addressComponent.setFocusable(false);
+			addressComponent.setColumns(10);
+		}
 		return addressComponent;
 	}
 
@@ -195,6 +205,13 @@ public class BookingsComponent extends AbstractCellEditor implements CellCompone
 	}
 
 	public JTextArea getPriceComponent() {
+		if (priceComponent == null) {
+			priceComponent = new JTextArea("price");
+			priceComponent.setOpaque(false);
+			priceComponent.setEditable(false);
+			priceComponent.setFocusable(false);
+			priceComponent.setColumns(4);
+		}
 		return priceComponent;
 	}
 

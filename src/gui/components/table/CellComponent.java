@@ -4,7 +4,7 @@ public class CellComponent<T> {
 
 	private CellComponentInterface cellComponentInterface;
 	private T t;
-	
+
 	public CellComponent(T t) {
 		this.t = t;
 	}
@@ -24,5 +24,5 @@ public class CellComponent<T> {
 	public void setElement(T t) {
 		this.t = t;
 	}
-	
+
 }

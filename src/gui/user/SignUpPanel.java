@@ -31,8 +31,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import domain.AbstractUser;
-import domain.AbstractUser.Role;
+import domain.UserType;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.TextPrompt;
@@ -78,7 +77,7 @@ public class SignUpPanel extends JPanel {
 
 	private Image img;
 
-	private Role role;
+	private UserType userType;
 	private JPanel panel;
 	private JTextField textFieldEmail;
 	//	private JScrollPane scrollPane;
@@ -132,12 +131,12 @@ public class SignUpPanel extends JPanel {
 		if(rbClient == null) {
 			rbClient = new JRadioButton("Client");
 			rbClient.setSelected(true);
-			role = Role.CLIENT;
+			userType = UserType.CLIENT;
 			rbClient.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						role = Role.CLIENT;
+						userType = UserType.CLIENT;
 					}
 				}
 			});
@@ -152,7 +151,7 @@ public class SignUpPanel extends JPanel {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						role = Role.OWNER;
+						userType = UserType.OWNER;
 					}
 				}
 			});
@@ -218,7 +217,7 @@ public class SignUpPanel extends JPanel {
 							String username = textFieldUsername.getText();
 							String password = String.valueOf(passwordField.getPassword());
 							try {
-								MainWindow.getBusinessLogic().createUser(email, username, password, role);
+								MainWindow.getBusinessLogic().createUser(email, username, password, userType);
 								JFrame jframe = new MainWindow(MainWindow.getBusinessLogic().login(username, password));
 								jframe.setVisible(true);
 								sharedFrame.dispose();								
