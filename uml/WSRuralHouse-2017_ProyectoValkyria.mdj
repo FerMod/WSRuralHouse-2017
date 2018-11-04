@@ -321,7 +321,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "+Role",
+											"text": "+UserType",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -7135,7 +7135,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFbKtYuFld9M0s="
 							},
-							"name": "Role",
+							"name": "UserType",
 							"visibility": "public",
 							"isStatic": false,
 							"isLeaf": false,

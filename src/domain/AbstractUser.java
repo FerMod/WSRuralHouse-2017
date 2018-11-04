@@ -34,28 +34,7 @@ public abstract class AbstractUser implements UserInterface, Serializable {
 	private String username;
 	private String password;
 	@Enumerated
-	private Role role;
-
-	/**
-	 * Role of the user account
-	 */
-	public enum Role {
-		CLIENT(0),
-		OWNER(1),
-		ADMIN(2),
-		SUPER_ADMIN(3);
-
-		private final int role;
-
-		private Role(int role) {
-			this.role = role;
-		}
-
-		public int getValue() {
-			return this.role;
-		}
-
-	}
+	private UserType userType;
 
 	/**
 	 * Protected to only make it visible for the child class
@@ -63,13 +42,13 @@ public abstract class AbstractUser implements UserInterface, Serializable {
 	 * @param email
 	 * @param username
 	 * @param password
-	 * @param role
+	 * @param userType
 	 */
-	protected AbstractUser(String email, String username, String password, Role role) {
+	protected AbstractUser(String email, String username, String password, UserType userType) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
-		this.role = role;
+		this.userType = userType;
 	}
 
 	public Integer getId() {
@@ -102,7 +81,7 @@ public abstract class AbstractUser implements UserInterface, Serializable {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "User [id=" + id + ", email=" + email + ", username=" + username + ", password=" + password + ", userType=" + userType + "]";
 	}
 
 	@Override

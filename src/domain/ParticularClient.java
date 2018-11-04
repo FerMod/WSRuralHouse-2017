@@ -1,6 +1,7 @@
 package domain;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -8,15 +9,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class Client extends AbstractUser {
+public class ParticularClient extends AbstractUser {
 
 	private static final long serialVersionUID = -1989696498234692075L;
 	
-	private Vector<Booking> bookings;
+	private List<Booking> bookings;
 
-	public Client(String email, String username, String password) {
-		super(email, username, password, UserType.CLIENT);
-		bookings = new Vector<Booking>();
+	public ParticularClient(String email, String username, String password) {
+		super(email, username, password, UserType.PARTICULAR_CLIENT);
+		bookings = new ArrayList<Booking>();
 	}
 
 	@Override
@@ -29,11 +30,11 @@ public class Client extends AbstractUser {
 		return UserType.CLIENT;
 	}
 
-	public Vector<Booking> getBookings() {
+	public List<Booking> getBookings() {
 		return bookings;
 	}
 
-	public void setBookings(Vector<Booking> bookings) {
+	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
 	}
 

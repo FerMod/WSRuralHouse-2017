@@ -204,7 +204,7 @@ public class ProfilePane extends JPanel {
 
 	private JTextField getLblRole() {
 		if(lblRole == null) {
-			lblRole = new JTextField("Role");
+			lblRole = new JTextField("UserType");
 			lblRole.setFont(new Font("Tahoma", Font.BOLD, 11));
 			lblRole.setOpaque(false);
 			lblRole.setFocusable(false);

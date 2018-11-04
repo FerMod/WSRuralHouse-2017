@@ -21,10 +21,9 @@ import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Vector;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
@@ -33,7 +32,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -47,10 +45,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
 
-import org.omg.Messaging.SyncScopeHelper;
-
 import com.toedter.calendar.JDateChooser;
 
+import configuration.ConfigXML;
 import domain.Booking;
 import domain.Client;
 import domain.Offer;
@@ -365,7 +362,7 @@ public class OfferInfoDialog extends JDialog {
 	private ImagePanel getImagePanel() {
 		if(imagePanel == null) {	
 			imagePanel = new ImagePanel();
-			Vector<Offer> offer;
+			List<Offer> offer;
 			try {
 				offer = MainWindow.getBusinessLogic().getOffers(rowContent.getElement().getRuralHouse(), rowContent.getElement().getStartDate(), rowContent.getElement().getEndDate());
 				ImageIcon imageIcon = offer.get(0).getRuralHouse().getImage(0);
@@ -549,8 +546,8 @@ public class OfferInfoDialog extends JDialog {
 
 	private JLabel getLblPrice() {
 		if(lblPrice == null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
-			lblPrice = new JLabel("Price (" + formatter.format(rowContent.getElement().getPrice()) + " per night): ");
+			NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
+			lblPrice = new JLabel("Price (" + currencyFormatter.format(rowContent.getElement().getPrice()) + " per night): ");
 		}
 		return lblPrice;
 	}
@@ -599,10 +596,10 @@ public class OfferInfoDialog extends JDialog {
 	}
 
 	private void updatePrice() {
-		if(firstDate != null && lastDate != null) {
-			NumberFormat formatter = NumberFormat.getCurrencyInstance(MainWindow.getBusinessLogic().getLocale());
-			textFieldPrice.setText(formatter.format(getPrice()));	
-			btnBookOffer.setEnabled(true);
+		if(firstDate != null && lastDate != null) {	
+			NumberFormat currencyFormatter = ConfigXML.getInstance().getLocale().getNumberFormatter();
+			textFieldPrice.setText(currencyFormatter.format(getPrice()));	
+			btnBookOffer.setEnabled(true);			
 		}
 	}
 

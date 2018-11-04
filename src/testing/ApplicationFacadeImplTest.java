@@ -33,9 +33,9 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
+import configuration.Config;
 import configuration.ConfigXML;
 import dataAccess.DataAccess;
-import domain.AbstractUser.Role;
 import domain.Admin;
 import domain.Booking;
 import domain.City;
@@ -43,6 +43,7 @@ import domain.Client;
 import domain.Offer;
 import domain.Owner;
 import domain.Review.ReviewState;
+import domain.UserType;
 import domain.RuralHouse;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
@@ -79,8 +80,8 @@ class ApplicationFacadeImplTest {
 	static void initDataBase() {
 		try {
 
-			ConfigXML config = ConfigXML.getInstance();
-			Locale.setDefault(new Locale(config.getLocale()));
+			Config config = ConfigXML.getInstance();
+			Locale.setDefault(Locale.forLanguageTag(config.getLocale().name()));
 
 			if (config.isBusinessLogicLocal()) {
 				afi = new ApplicationFacadeImpl();
@@ -110,9 +111,9 @@ class ApplicationFacadeImplTest {
 
 			dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-			admin = (Admin)afi.createUser("adminTest@admin.com", "adminTest", "adminTest", Role.ADMIN);
-			owner = (Owner)afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", Role.OWNER);
-			client = (Client)afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", Role.CLIENT);
+			admin = (Admin) afi.createUser("adminTest@admin.com", "adminTest", "adminTest", UserType.ADMIN).get();
+			owner = (Owner) afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", UserType.OWNER).get();
+			client = (Client) afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", UserType.CLIENT).get();
 			city = afi.createCity("TestCity");
 
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");

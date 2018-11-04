@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import configuration.Config;
 import configuration.ConfigXML;
 
 import javax.swing.JTextArea;
@@ -79,7 +80,7 @@ public class BusinessLogicServer extends JDialog {
 		cancelButton.setActionCommand("Cancel");
 		buttonPane.add(cancelButton);
 
-		ConfigXML c=ConfigXML.getInstance();
+		Config c = ConfigXML.getInstance();
 
 
 		if (c.isBusinessLogicLocal()) {
