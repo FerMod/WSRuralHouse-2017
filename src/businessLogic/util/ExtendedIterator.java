@@ -1,8 +1,8 @@
-package domain.util;
+package businessLogic.util;
 
 import java.util.Iterator;
 
-public interface ExtendedIterator extends Iterator {
+public interface ExtendedIterator<E> extends Iterator {
 	
 	//devuelve el elemento actual y pasa al anterior
 	public Object previous();

@@ -10,6 +10,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
+import businessLogic.util.ExtendedIterator;
 import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.Booking;
@@ -205,10 +206,10 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * This method retrieves the existing rural houses 
 	 * 
-	 * @return a {@code Vector} of rural houses
+	 * @return a {@code Iterator} of rural houses
 	 */
 	@WebMethod
-	Vector<RuralHouse> getRuralHouses();
+	ExtendedIterator<RuralHouse> ruralHouseIterator();
 
 	/**
 	 * Creates a city and stores it in the database.

@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.security.auth.login.AccountNotFoundException;
 
+import businessLogic.util.ExtendedIterator;
 import configuration.Config;
 import domain.AbstractUser;
 import domain.Booking;
@@ -62,7 +63,7 @@ public interface DataAccessInterface {
 	
 	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
 
-	Vector<RuralHouse> getRuralHouses();
+	ExtendedIterator<RuralHouse> ruralHouseIterator();
 
 	Vector<RuralHouse> getRuralHouses(Owner owner);
 

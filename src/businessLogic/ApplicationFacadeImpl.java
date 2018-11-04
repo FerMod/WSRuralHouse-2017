@@ -11,6 +11,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
+import businessLogic.util.ExtendedIterator;
 import dataAccess.DataAccessInterface;
 import domain.Booking;
 import domain.Offer;
@@ -135,9 +136,9 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<RuralHouse> getRuralHouses()  {
-		System.out.println(">> ApplicationFacadeImpl: getRuralHouses");
-		return dataAccess.getRuralHouses();
+	public ExtendedIterator<RuralHouse> ruralHouseIterator()  {
+		System.out.println(">> ApplicationFacadeImpl: ruralHouseIterator");
+		return dataAccess.ruralHouseIterator();
 	}
 
 	@Override

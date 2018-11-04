@@ -32,6 +32,8 @@ import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
+import businessLogic.util.ExtendedItRhs;
+import businessLogic.util.ExtendedIterator;
 import businessLogic.util.LogFile;
 import businessLogic.util.Timer;
 import configuration.Config;
@@ -271,9 +273,11 @@ public class DataAccess implements DataAccessInterface {
 			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));
 
 			System.out.println("Database initialized");
-
-			for (RuralHouse ruralHouse : getRuralHouses()) {
-				System.out.println(ruralHouse.getReview().toString());
+			
+			ExtendedIterator<RuralHouse> rhs = ruralHouseIterator();
+			
+			while (rhs.hasNext()) {
+				System.out.println(((RuralHouse) rhs.next()).getReview().toString());
 			}
 
 		} catch (Exception e){
@@ -595,14 +599,14 @@ public class DataAccess implements DataAccessInterface {
 	//	}
 
 	@Override
-	public Vector<RuralHouse> getRuralHouses() {
-		Vector<RuralHouse> result = null;
+	public ExtendedIterator<RuralHouse> ruralHouseIterator() {
+		ArrayList<RuralHouse> result = null;
 		try {
 			open();
-			System.out.println(">> DataAccess: getRuralHouses()");
+			System.out.println(">> DataAccess: ruralHouseIterator()");
 			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
 					+ "FROM RuralHouse rh ", RuralHouse.class);
-			result = new Vector<RuralHouse>(query.getResultList());
+			result = new ArrayList<RuralHouse>(query.getResultList());
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
@@ -611,7 +615,7 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-		return result;
+		return new ExtendedItRhs(result);
 	}
 
 	/**

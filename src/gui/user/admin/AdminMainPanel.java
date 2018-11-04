@@ -35,6 +35,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import businessLogic.util.ExtendedIterator;
+
 
 public class AdminMainPanel extends JPanel {
 
@@ -324,12 +326,12 @@ public class AdminMainPanel extends JPanel {
 	}
 
 	public void initializeComboBox() {
-		Vector<RuralHouse> rhs = MainWindow.getBusinessLogic().getRuralHouses();
+		ExtendedIterator<RuralHouse> rhs = MainWindow.getBusinessLogic().ruralHouseIterator();
 
 		ruralHouses.addElement(null); //For that the user have selected a RuralHouse
 
-		for(RuralHouse rh : rhs) {
-			ruralHouses.addElement(rh);
+		while(rhs.hasNext()) {
+			ruralHouses.addElement((RuralHouse) rhs.next());
 		}
 
 	}
