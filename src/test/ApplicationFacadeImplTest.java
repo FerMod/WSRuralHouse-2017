@@ -1,4 +1,4 @@
-package testing;
+package test;
 
 import static org.junit.Assume.assumeNoException;
 import static org.junit.Assume.assumeNotNull;
@@ -50,8 +50,8 @@ import exceptions.OverlappingOfferException;
 
 class ApplicationFacadeImplTest {
 	
-	final static String BAD_DATES_FILE = "/testing/data/BadDates.csv";
-	final static String CORRECT_DATES_FILE = "/testing/data/CorrectDates.csv";
+	final static String BAD_DATES_FILE = "/test/data/BadDates.csv";
+	final static String CORRECT_DATES_FILE = "/test/data/CorrectDates.csv";
 
 	static RuralHouse rh;
 	static Admin admin;
@@ -275,7 +275,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(offer);
 			} catch (Exception e) {
-				fail("Exception thrown when testing the deletion of an offer.", e);
+				fail("Exception thrown when test the deletion of an offer.", e);
 			}
 		}
 
@@ -311,7 +311,7 @@ class ApplicationFacadeImplTest {
 				endDate = parseToDate(date2);
 
 				try {
-					// This should throw an exception later on, but we are not testing that right now
+					// This should throw an exception later on, but we are not test that right now
 					offer = new Offer(startDate, endDate, price, rh);
 				} catch (Exception e) {
 					assumeNoException(e);
@@ -348,7 +348,7 @@ class ApplicationFacadeImplTest {
 
 				assertNotNull(booking);
 			} catch (Exception e) {
-				fail("Exception thrown when testing the deletion of a booking.", e);
+				fail("Exception thrown when test the deletion of a booking.", e);
 			}
 		}
 
