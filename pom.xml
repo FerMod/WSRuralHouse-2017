@@ -4,19 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wsruralhouse</groupId>
 	<artifactId>wsruralhouse</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1.2</version>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-
+	
 		<plugins>
 
 			<!-- Maven compiler -->
@@ -31,14 +22,25 @@
 			</plugin>
 
 			<!-- JUnit Surefire -->
+			<!-- <plugin> <artifactId>maven-surefire-plugin</artifactId> <version>2.22.1</version> 
+				<configuration> <excludes> <exclude /> </excludes> </configuration> </plugin> -->
+
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.1</version>
-				<configuration>
-					<excludes>
-						<exclude />
-					</excludes>
-				</configuration>
+				<version>2.19.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.1.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>5.1.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 
 		</plugins>
@@ -114,9 +116,10 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>

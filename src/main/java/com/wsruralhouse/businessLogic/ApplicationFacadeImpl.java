@@ -1,0 +1,252 @@
+package com.wsruralhouse.businessLogic;
+
+import java.util.Date;
+import java.util.Locale;
+import java.util.Vector;
+import java.util.stream.Collectors;
+
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.wsruralhouse.dataAccess.DataAccessInterface;
+import com.wsruralhouse.domain.AbstractUser;
+import com.wsruralhouse.domain.Booking;
+import com.wsruralhouse.domain.City;
+import com.wsruralhouse.domain.Client;
+import com.wsruralhouse.domain.Offer;
+import com.wsruralhouse.domain.Owner;
+import com.wsruralhouse.domain.Review;
+import com.wsruralhouse.domain.RuralHouse;
+import com.wsruralhouse.domain.AbstractUser.Role;
+import com.wsruralhouse.domain.Review.ReviewState;
+import com.wsruralhouse.exceptions.AuthException;
+import com.wsruralhouse.exceptions.BadDatesException;
+import com.wsruralhouse.exceptions.DuplicatedEntityException;
+import com.wsruralhouse.exceptions.OverlappingOfferException;
+import com.wsruralhouse.exceptions.DuplicatedEntityException.Error;
+
+//Service Implementation
+@WebService(endpointInterface = "com.wsruralhouse.businessLogic.ApplicationFacadeInterface")
+public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface {
+
+	private DataAccessInterface dataAccess;
+	private Locale locale;
+
+	public void setDataAccess(DataAccessInterface dataAccess) {
+		this.dataAccess = dataAccess;
+	}
+
+	@Override
+	public <T> T update(T entity) {
+		return dataAccess.update(entity);
+	}
+
+	@Override
+	public <T> T remove(T entity) {
+		return dataAccess.remove(entity);
+	}
+	
+	@Override
+	public <T, K> T remove(Class<T> entityClass, K primaryKey) {
+		return dataAccess.remove(entityClass, primaryKey);
+	}
+	
+	@Override
+	public <T, K> T find(Class<T> entityClass, K primaryKey) {
+		return dataAccess.find(entityClass, primaryKey);
+	}
+	
+	@Override
+	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
+		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
+
+		Offer offer = null;
+
+		if (firstDay.compareTo(lastDay) >= 0) {
+			throw new BadDatesException();
+		}
+
+		if (dataAccess.existsOverlappingOffer(ruralHouse, firstDay, lastDay)) {
+			throw new OverlappingOfferException();		
+		}
+		
+		offer = dataAccess.createOffer(ruralHouse, firstDay, lastDay, price);
+
+		System.out.println("<< ApplicationFacadeImpl: createOffer=> O= " + offer);
+		return offer;
+	}
+
+	@WebMethod
+	@Override
+	public Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException {
+		if (firstDay.compareTo(lastDay) >= 0) {
+			throw new BadDatesException();
+		}
+		return new Vector<Offer>(dataAccess.getOffers(ruralHouse, firstDay, lastDay));
+	}
+
+	@Override
+	public Vector<Offer> getOffers() {
+		return dataAccess.getOffers();
+	}
+
+	@Override
+	public Vector<Offer> getOffers(ReviewState reviewState) {
+		return dataAccess.getOffers(reviewState);
+	}
+
+	@Override
+	public Vector<Offer> getActiveOffers() {
+		return dataAccess.getActiveOffers();
+	}
+
+	@Override
+	public Vector<Offer> getActiveOffers(ReviewState reviewState) {
+		return dataAccess.getActiveOffers(reviewState);
+	}
+
+	@Override
+	public int getOfferCount() {
+		return dataAccess.getOfferCount();
+	}
+
+	@Override
+	public double getOffersHighestPrice() {
+		return dataAccess.getOffersHighestPrice();
+	}
+
+	@Override
+	public RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException {
+		System.out.println(">> ApplicationFacadeImpl: createRuralHouse=> description= " + description + " city= " + city);
+
+		RuralHouse ruralHouse = null;
+
+		if(!dataAccess.existsRuralHouse(description, city.getId())) {
+			ruralHouse = dataAccess.createRuralHouse(owner, name, description, city, address);
+		} else {
+			throw new DuplicatedEntityException();
+		}
+
+		System.out.println("<< ApplicationFacadeImpl: createRuralHouse => " + ruralHouse);
+		return ruralHouse;
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses()  {
+		System.out.println(">> ApplicationFacadeImpl: getRuralHouses");
+		return dataAccess.getRuralHouses();
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(ReviewState reviewState) {
+		return dataAccess.getRuralHouses(reviewState);
+	}
+
+	@Override
+	public City createCity(String name) {
+		System.out.println(">> ApplicationFacadeImpl: createCity=> name= " + name);
+
+		City city = null;
+
+		if (!dataAccess.existsCity(name)) {
+			city = dataAccess.createCity(name);		
+		}
+
+		System.out.println("<< ApplicationFacadeImpl: createCity=> City [id=" + city.getId() + ", " + city.getName() + "]");
+		return city;
+	}
+
+	@Override
+	public Vector<String> getCitiesNames() {
+		System.out.println(">> ApplicationFacadeImpl: getCitiesNames()");
+		//Get the city name list from the city object list, and parse it to vector
+		Vector<String> namesVector = new Vector<String>(dataAccess.getCities().stream()
+				.map(City::getName)
+				.collect(Collectors.toList()));
+		return namesVector;
+	}
+
+	@Override
+	public Vector<City> getCities() {
+		System.out.println(">> ApplicationFacadeImpl: getCities()");
+		return new Vector<City>(dataAccess.getCities());
+	}
+
+	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
+		if(!dataAccess.existsEmail(email)) {
+			if(!dataAccess.existsUser(username)) {
+				return dataAccess.createUser(email, username, password, role);
+			} else {
+				throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
+			}
+		} else {
+			throw new DuplicatedEntityException(Error.DUPLICATED_EMAIL);
+		}
+	}
+
+	public Role getRole(String username) {
+		Role role = dataAccess.getRole(username);
+		return role;
+	}
+
+	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
+		return dataAccess.login(username, password);
+	}
+
+	public Review createReview(RuralHouse rh) {
+		return dataAccess.createReview(rh);
+	}
+
+	public void updateReview(RuralHouse rh, Review r) {
+		dataAccess.updateReview(rh, r);
+	}
+
+	@Override
+	public Booking createBooking(Client client, Offer offer, Date startDate, Date endDate) throws BadDatesException {
+		if (startDate.compareTo(endDate) >= 0) {
+			throw new BadDatesException();
+		}
+		return dataAccess.createBooking(client, offer, startDate, endDate);
+	}
+
+	@Override
+	public Vector<Booking> getBookings(Client client) {
+		return dataAccess.getBookings(client);
+	}
+
+	public Locale getLocale() {
+		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
+		if(locale == null) {
+			locale = Locale.getDefault();
+		}
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner) {
+		return dataAccess.getRuralHouses(owner);
+	}
+
+	@Override
+	public Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState) {
+		return dataAccess.getRuralHouses(owner, reviewState);
+	}
+
+	@Override
+	public Vector<Booking> getBookings() {
+		return dataAccess.getBookings();
+	}
+	
+	@Override
+	public boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+		return dataAccess.datesRangeOverlap(startDate1, endDate1, startDate2, endDate2);
+	}
+
+}
+
