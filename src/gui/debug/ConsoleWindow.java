@@ -195,20 +195,20 @@ public class ConsoleWindow extends JFrame {
 		menuItem.addActionListener(new ActionListener() {						
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for (int index = 0; index < declaredMethods.length; index++) {
-					System.out.println(declaredMethods[index].toString());
+				for (int i = 0; i < declaredMethods.length; i++) {
+					System.out.println(declaredMethods[i].toString());
 				}
 				Method method = (Method)JOptionPane.showInputDialog(null, "Choose the method to test: ", "Choose method", JOptionPane.QUESTION_MESSAGE, null, declaredMethods, declaredMethods[0]);
-				//						for (int index = 0; index < declaredMethods.length; index++) {
-				//							method = declaredMethods[index];
+				//						for (int i = 0; i < declaredMethods.length; i++) {
+				//							method = declaredMethods[i];
 				//						}
 
 				if(method != null) {
 					Class<?>[] paramTypes = method.getParameterTypes();
 					Object[] params = new Object[method.getParameterCount()];
-					for (int index = 0; index < params.length ; index++) {
-						String input = JOptionPane.showInputDialog("Enter " + paramTypes[index].getName() + ": ");
-						params[index] = input;
+					for (int i = 0; i < params.length ; i++) {
+						String input = JOptionPane.showInputDialog("Enter " + paramTypes[i].getName() + ": ");
+						params[i] = input;
 
 					}
 

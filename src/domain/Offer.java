@@ -58,7 +58,7 @@ public class Offer implements Serializable {
 	}
 
 	/**
-	 * Set the offer rural house
+	 * Set an offer for the rural house 
 	 * 
 	 * @param ruralHouse the rural house 
 	 */

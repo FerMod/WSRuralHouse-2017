@@ -579,14 +579,14 @@ public class DataAccess implements DataAccessInterface {
 		return ruralHouse;
 	}
 
-	//	public Review createReview(RuralHouse ruralHouseList) {
+	//	public Review createReview(RuralHouse ruralHouse) {
 	//		Review review= null;
 	//		try {
 	//			open();
-	//			System.out.print(">> DataAccess: createReview(" + ruralHouseList + ") -> ");
+	//			System.out.print(">> DataAccess: createReview(" + ruralHouse + ") -> ");
 	//			db.getTransaction().begin();
-	//			review = new Review(ruralHouseList);
-	//			db.persist(ruralHouseList);
+	//			review = new Review(ruralHouse);
+	//			db.persist(ruralHouse);
 	//			db.getTransaction().commit();
 	//			System.out.println("Created with id " + review.getId());
 	//		} catch	(Exception e) {

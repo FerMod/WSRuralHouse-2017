@@ -82,7 +82,7 @@ public class ConsoleKeyEventDispatcher implements KeyEventDispatcher {
 			message = "Last warning... You don't wanna see what can I do...\nDON'T DO THIS AGAIN.";
 			break;
 		case 6:
-			message = "I   d index d   t e l l   y o u,   a n d   y o u   d index d ' t   s t o p . . .";
+			message = "I   d i d   t e l l   y o u,   a n d   y o u   d i d ' t   s t o p . . .";
 			audioFile = "/img/major_puzzle_solved_reversed.wav";
 			millis = 10000;
 			fade = false;

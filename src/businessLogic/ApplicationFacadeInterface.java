@@ -80,7 +80,7 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * Creates an offer and stores it in the database.
 	 * 
-	 * @param ruralHouseList the rural house that the offer is going to apply
+	 * @param ruralHouse the rural house that the offer is going to apply
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the ending date of the offer
 	 * @param price the price of the offer
@@ -94,7 +94,7 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * This method obtains the offers of a ruralHouseList in the provided date interval
 	 * 
-	 * @param ruralHouseList the rural house that the offer is applied to
+	 * @param ruralHouse the rural house that the offer is applied to
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the ending date of the offer
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
