@@ -1,19 +1,35 @@
 package businessLogic.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public interface ExtendedIterator<E> extends Iterator {
+public interface ExtendedIterator<E> extends Iterator<E> {
 	
-	//devuelve el elemento actual y pasa al anterior
-	public Object previous();
+	/**
+	 * Returns the previous element in the iteration.
+	 * 
+	 * @return the previous element in the iteration
+	 * @throws NoSuchElementException if the iteration has no more elements
+	 */
+	E previous();
 	
-	//true si existe el elemento anterior
-	public boolean hasPrevious();
+	 /**
+     * Returns {@code true} if the iteration has more elements.
+     * (In other words, returns {@code true} if {@link #previous} would
+     * return an element rather than throwing an exception.)
+     *
+     * @return {@code true} if the iteration has more elements
+     */
+	boolean hasPrevious();
 	
-	//Se posiciona en el primer elemento
-	public void goFirst();
+	/**
+	 * Moves to the first element of the iterator
+	 */
+	void goFirst();
 	
-	//Se posiciona en el último elemento
-	public void goLast();
+	/**
+	 * Moves to the last element of the iterator
+	 */
+	void goLast();
 	
 }
