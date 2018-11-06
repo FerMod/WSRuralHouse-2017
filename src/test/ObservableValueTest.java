@@ -97,7 +97,7 @@ class ObservableValueTest {
 			assumeNoException(e);
 		}
 
-		assertEquals(expected, (boolean)value.get());
+		assertEquals(expected, value.get());
 
 	}
 
@@ -321,7 +321,7 @@ class ObservableValueTest {
 			assumeNoException(e);
 		}
 
-		assertEquals(expected, (String)value.get());
+		assertEquals(expected, value.get());
 
 	}
 
@@ -349,8 +349,8 @@ class ObservableValueTest {
 		} catch (Exception e) {
 			assumeNoException(e);
 		}
+		
 		assertEquals(expectedTestClass, value.get(), "" + observedValue.get().hashCode() + " " + value.get().hashCode());				
-
 	}
 
 	private <T> void serialiceToFile(File file, T value) {

@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import domain.observer.ObservedValue;
 import domain.util.IntegerAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -75,9 +76,12 @@ public class RuralHouse implements Serializable {
 	@OneToMany(mappedBy = "ruralHouse", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Map<Integer, Offer> offers;
 
+	private transient ObservedValue<Offer> lastOffer; 
+
 	public RuralHouse() {
 		this.review = new Review(this);
 		this.offers =  Collections.synchronizedMap(new HashMap<Integer, Offer>());
+		this.lastOffer = new ObservedValue<>();
 	}
 
 	/**
@@ -94,14 +98,13 @@ public class RuralHouse implements Serializable {
 	 * @see Review.ReviewState
 	 */
 	public RuralHouse(Owner owner, String name, String description, City city, String address) {
+		this();
 		this.owner = owner;
 		owner.getRuralHouses().add(this);
 		this.name = name;
 		this.description = description;
 		this.city = city;
 		this.address = address;
-		this.review = new Review(this);
-		this.offers =  Collections.synchronizedMap(new HashMap<Integer, Offer>());
 		this.images = new Vector<byte[]>();
 	}
 
@@ -265,6 +268,7 @@ public class RuralHouse implements Serializable {
 	 */
 	public void addOffer(Offer offer) {
 		offers.put(offer.getId(), offer);
+		lastOffer.set(offer);
 	}
 
 	/**
@@ -281,8 +285,8 @@ public class RuralHouse implements Serializable {
 	/**
 	 * This method obtains available offers for a concrete house in a certain period 
 	 * 
-	 * @param firstDay, first day in a period range 
-	 * @param lastDay, last day in a period range
+	 * @param firstDay first day in a period range 
+	 * @param lastDay last day in a period range
 	 * @return a vector of offers(Offer class)  available  in this period
 	 */
 	public List<Offer> getOffers(Date firstDay,  Date lastDay) {
@@ -307,8 +311,8 @@ public class RuralHouse implements Serializable {
 	/**
 	 * This method obtains the first offer that overlaps with the provided dates
 	 * 
-	 * @param firstDay, first day in a period range 
-	 * @param lastDay, last day in a period range
+	 * @param firstDay first day in a period range 
+	 * @param lastDay last day in a period range
 	 * @return the first offer that overlaps with those dates, or null if there is no overlapping offer
 	 */
 	public Optional<Offer> overlapsWith(Date firstDay,  Date lastDay) {
@@ -318,6 +322,10 @@ public class RuralHouse implements Serializable {
 				.filter((offer) -> offer.getEndDate().after(firstDay) && offer.getStartDate().before(lastDay))
 				.findFirst();
 		return optOffer;
+	}
+	
+	public ObservedValue<Offer> getOfferObserver() {
+		return lastOffer;		
 	}
 
 	public String toDetailedString() {
