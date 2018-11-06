@@ -1,4 +1,4 @@
-package businessLogic.util;
+package domain.util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

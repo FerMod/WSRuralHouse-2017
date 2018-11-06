@@ -1,10 +1,11 @@
-package businessLogic.util;
+package test;
 
 import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
 import configuration.Config;
 import configuration.ConfigXML;
 import domain.RuralHouse;
+import domain.util.ExtendedIterator;
 
 public class MainExtIterator {
 

@@ -10,7 +10,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
-import businessLogic.util.ExtendedIterator;
 import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
 import domain.Booking;
@@ -20,6 +19,7 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
+import domain.util.ExtendedIterator;
 import domain.UserType;
 import domain.RuralHouse;
 import exceptions.AuthException;

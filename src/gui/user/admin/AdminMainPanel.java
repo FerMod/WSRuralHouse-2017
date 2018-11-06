@@ -21,6 +21,7 @@ import javax.swing.ButtonGroup;
 import domain.Admin;
 import domain.Review;
 import domain.Review.ReviewState;
+import domain.util.ExtendedIterator;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import gui.user.MainWindow;
@@ -34,8 +35,6 @@ import java.awt.Insets;
 import javax.swing.border.CompoundBorder;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
-
-import businessLogic.util.ExtendedIterator;
 
 
 public class AdminMainPanel extends JPanel {

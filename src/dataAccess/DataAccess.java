@@ -32,8 +32,6 @@ import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
-import businessLogic.util.ExtendedItRhs;
-import businessLogic.util.ExtendedIterator;
 import businessLogic.util.LogFile;
 import businessLogic.util.Timer;
 import configuration.Config;
@@ -47,6 +45,8 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
+import domain.util.ExtendedItRhs;
+import domain.util.ExtendedIterator;
 import domain.UserType;
 import domain.RuralHouse;
 import domain.UserFactory;
