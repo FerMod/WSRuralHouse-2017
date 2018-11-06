@@ -1,8 +1,11 @@
 package test;
 
 import static org.junit.Assume.assumeNoException;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,27 +13,32 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import domain.observer.ObservedValue;
+import test.data.PersonTest;
 
 class ObservableValueTest {
 
 	static Optional<File> tempFile;
+	boolean eventInvoked;
 
 	@BeforeEach
 	void beforeEach() {
+		initTempFile("SerializedObjectTest");
+		eventInvoked = false;
+	}
+
+	private void initTempFile(String fileName) {
 		File file = null;
 		try {
-			file = File.createTempFile("SerializedObjectTest", ".tmp");
+			file = File.createTempFile(fileName, ".tmp");
 			file.deleteOnExit();
 			tempFile = Optional.ofNullable(file);
 		} catch (IOException e) {
@@ -39,7 +47,30 @@ class ObservableValueTest {
 			if(tempFile.isPresent()) {
 				tempFile.get().delete();
 			}
-		}		
+		}
+	}
+
+	@DisplayName("Test Event - Method Invocation")
+	@ParameterizedTest
+	@CsvSource({"30, 10", "-2, 10", "11, 10"})
+	void testEventMethodInvocation(int expected, int value, TestInfo testInfo) {
+
+		try {
+			ObservedValue<Integer> observedValue = new ObservedValue<>(10);
+			observedValue.registerListener(event -> {
+				eventInvoked = true;
+				assertAll("EventValues",
+					() -> assertEquals(event.getOldValue().get(), value, () -> "New value missmatch in event invocation."),
+					() -> assertEquals(event.getNewValue().get(), expected, () -> "Old value missmatch in event invocation.")
+				);
+			});
+
+			observedValue.set(expected);
+
+			assertTrue(eventInvoked, () -> "Event method not invoked.");
+		} catch (Exception e) {
+			fail("Unexpected exception thrown in " + testInfo.getClass().getSimpleName() + "\n\tCase: " + testInfo.getDisplayName(), e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -293,33 +324,32 @@ class ObservableValueTest {
 		assertEquals(expected, (String)value.get());
 
 	}
-	
-	@Disabled
+
 	@SuppressWarnings("unchecked")
 	@DisplayName("Test Serialization - Object")
-	@Test	
-	void testSerialization() {
-
-		TestClass expectedTestClass = new TestClass("Test of class");
-		ObservedValue<TestClass> expected = new ObservedValue<TestClass>(expectedTestClass);
+	@ParameterizedTest
+	@CsvSource({"Paco, 44", "Lola, 41"})
+	void testSerialization(String name, int age) {
 
 		assumeTrue(tempFile.isPresent());
 		File file = tempFile.get();
 
-		serialiceToFile(file, expected);
+		PersonTest expectedTestClass = new PersonTest(name, age);
+		ObservedValue<PersonTest> observedValue = new ObservedValue<PersonTest>(expectedTestClass);
+
+		serialiceToFile(file, observedValue);
 		assumeTrue(file.length() > 0);
 
-		ObservedValue<TestClass> value = null;
+		ObservedValue<PersonTest> value = null;
 		try {
 			FileInputStream fileInputStream = new FileInputStream(file);
 			try(ObjectInputStream objectInputStream	= new ObjectInputStream(fileInputStream)) {
-				value = (ObservedValue<TestClass>) objectInputStream.readObject();
+				value = (ObservedValue<PersonTest>) objectInputStream.readObject();
 			}
 		} catch (Exception e) {
 			assumeNoException(e);
 		}
-
-		assertEquals(expectedTestClass, value.get());				
+		assertEquals(expectedTestClass, value.get(), "" + observedValue.get().hashCode() + " " + value.get().hashCode());				
 
 	}
 
@@ -333,22 +363,6 @@ class ObservableValueTest {
 		} catch (Exception e) {
 			assumeNoException(e);
 		}
-	}
-
-	class TestClass implements Serializable {
-
-		String value = "Test of class";
-
-		public TestClass(String value) {
-			this.value = value;
-		}
-
-		String getValue() {
-			return value;	
-		}
-
-		private static final long serialVersionUID = -8858049414160214232L;
-
 	}
 
 	//		try{
@@ -380,7 +394,7 @@ class ObservableValueTest {
 	//		} catch (Exception e) {
 	//			// TODO: handle exception
 	//		}
-	//		test.addListener(new ValueChangedListener() {
+	//		test.addListener(new ValueChangeListener() {
 	//
 	//			@Override
 	//			public <T> void onValueChanged(T oldValue, T newValue) {
