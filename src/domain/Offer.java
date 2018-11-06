@@ -60,7 +60,7 @@ public class Offer implements Serializable {
 	/**
 	 * Set the offer rural house
 	 * 
-	 * @param ruralHouseList the rural house 
+	 * @param ruralHouse the rural house 
 	 */
 	public void setRuralHouse(RuralHouse ruralHouse) {
 		this.ruralHouse = ruralHouse;

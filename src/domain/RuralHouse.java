@@ -65,7 +65,7 @@ public class RuralHouse implements Serializable {
 	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	private Review review;
 	/**
-	 * The image in the first position (<index>index 0</index>) of the {@code Vector} will be used as the
+	 * The image in the first position (<i>index 0</i>) of the {@code Vector} will be used as the
 	 * rural house image icon.
 	 */
 	@OneToOne(cascade=CascadeType.ALL)
@@ -73,7 +73,7 @@ public class RuralHouse implements Serializable {
 	private String[] tags;
 
 	//@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
-	@OneToMany(mappedBy = "ruralHouseList", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "ruralHouse", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Map<Integer, Offer> offers;
 
 	private transient ObservedValue<Offer> lastOffer; 

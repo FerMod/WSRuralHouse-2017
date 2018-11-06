@@ -360,7 +360,7 @@ class ApplicationFacadeImplTest {
 	 * will not throw any exceptions.<br>
 	 * If the assumption fails, the test that calls the function will also fail.
 	 * 
-	 * @param ruralHouseList the rural house associated to the offer
+	 * @param ruralHouse the rural house associated to the offer
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the end date of the offer
 	 * @param price the offer price per day

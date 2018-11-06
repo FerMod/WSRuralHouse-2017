@@ -62,7 +62,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	
 	@Override
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
-		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouseList= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
+		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
 
 		Offer offer = null;
 
