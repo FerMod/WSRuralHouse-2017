@@ -80,7 +80,7 @@ public interface ApplicationFacadeInterface  {
 	/**
 	 * Creates an offer and stores it in the database.
 	 * 
-	 * @param ruralHouse the rural house that the offer is going to apply
+	 * @param ruralHouseList the rural house that the offer is going to apply
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the ending date of the offer
 	 * @param price the price of the offer
@@ -92,9 +92,9 @@ public interface ApplicationFacadeInterface  {
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException;
 
 	/**
-	 * This method obtains the offers of a ruralHouse in the provided date interval
+	 * This method obtains the offers of a ruralHouseList in the provided date interval
 	 * 
-	 * @param ruralHouse the rural house that the offer is applied to
+	 * @param ruralHouseList the rural house that the offer is applied to
 	 * @param firstDay the start date of the offer
 	 * @param lastDay the ending date of the offer
 	 * @return a {@code Vector} of offers that are contained in those date range, or {@code null} if there is no offers
@@ -204,7 +204,7 @@ public interface ApplicationFacadeInterface  {
 	Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState);
 	
 	/**
-	 * This method retrieves the existing rural houses 
+	 * This method retrieves the rural houses iterator
 	 * 
 	 * @return a {@code Iterator} of rural houses
 	 */

@@ -343,7 +343,7 @@ public class ClientMainPanel extends JPanel {
 		RowFilter<? super CustomTableModel, ? super Integer> rf = null;
 		//If current expression can't parse, don't update.
 		try {
-			//Case insensitive flag   (?i)
+			//Case insensitive flag   (?index)
 
 			//^[a-zA-Z0-9]*$
 			//

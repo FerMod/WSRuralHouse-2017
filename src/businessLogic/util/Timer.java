@@ -83,7 +83,7 @@ public class Timer {
 	}
 
 	/**
-	 * Get the time string with the format <i>"h  m  s"</i>.<br>
+	 * Get the time string with the format <index>"h  m  s"</index>.<br>
 	 * If the timer is still running it will stop it.
 	 * @return the time formated
 	 */

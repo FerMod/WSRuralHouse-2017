@@ -274,8 +274,8 @@ public class OwnerMainPanel extends JPanel {
 		RowFilter<TableModel, Object> rf = null;
 		//If current expression can't parse, don't update.
 		try {
-			//Case insensitive flag   (?i)
-			rf = RowFilter.regexFilter("(?i)" + searchField.getText());
+			//Case insensitive flag   (?index)
+			rf = RowFilter.regexFilter("(?index)" + searchField.getText());
 			sorter.setRowFilter(rf);
 		} catch (PatternSyntaxException e) {
 			System.err.println("Info: Expression could not parse. Syntax error in a regular-expression pattern.");
@@ -406,10 +406,10 @@ public class OwnerMainPanel extends JPanel {
 		}
 
 		//			// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
-		//			for (int i = 0; i < data.length; i++) {
+		//			for (int index = 0; index < data.length; index++) {
 		//				int randomNum = ThreadLocalRandom.current().nextInt(0, data.length);
 		//				System.out.println(images[randomNum]);
-		//				setValueAt(i, 0, new ImageIcon(images[randomNum]));
+		//				setValueAt(index, 0, new ImageIcon(images[randomNum]));
 		//			}
 
 		private ImageIcon getImage(String path) {

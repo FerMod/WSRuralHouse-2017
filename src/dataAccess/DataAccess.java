@@ -45,7 +45,7 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
-import domain.util.ExtendedItRhs;
+import domain.util.RuralHouseIterator;
 import domain.util.ExtendedIterator;
 import domain.UserType;
 import domain.RuralHouse;
@@ -579,14 +579,14 @@ public class DataAccess implements DataAccessInterface {
 		return ruralHouse;
 	}
 
-	//	public Review createReview(RuralHouse ruralHouse) {
+	//	public Review createReview(RuralHouse ruralHouseList) {
 	//		Review review= null;
 	//		try {
 	//			open();
-	//			System.out.print(">> DataAccess: createReview(" + ruralHouse + ") -> ");
+	//			System.out.print(">> DataAccess: createReview(" + ruralHouseList + ") -> ");
 	//			db.getTransaction().begin();
-	//			review = new Review(ruralHouse);
-	//			db.persist(ruralHouse);
+	//			review = new Review(ruralHouseList);
+	//			db.persist(ruralHouseList);
 	//			db.getTransaction().commit();
 	//			System.out.println("Created with id " + review.getId());
 	//		} catch	(Exception e) {
@@ -615,7 +615,7 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-		return new ExtendedItRhs(result);
+		return new RuralHouseIterator(result);
 	}
 
 	/**
