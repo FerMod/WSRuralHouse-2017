@@ -9,16 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Locale;
-
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,12 +24,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.JavaTimeConversionPattern;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import businessLogic.ApplicationFacadeImpl;
+import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
-import configuration.Config;
 import configuration.ConfigXML;
-import dataAccess.DataAccess;
 import domain.Admin;
 import domain.Booking;
 import domain.City;
@@ -49,7 +41,7 @@ import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
 
 class ApplicationFacadeImplTest {
-	
+
 	final static String BAD_DATES_FILE = "/test/data/BadDates.csv";
 	final static String CORRECT_DATES_FILE = "/test/data/CorrectDates.csv";
 
@@ -79,26 +71,7 @@ class ApplicationFacadeImplTest {
 
 	static void initDataBase() {
 		try {
-
-			Config config = ConfigXML.getInstance();
-			Locale.setDefault(Locale.forLanguageTag(config.getLocale().name()));
-
-			if (config.isBusinessLogicLocal()) {
-				afi = new ApplicationFacadeImpl();
-				DataAccess dataAccess = new DataAccess();
-				afi.setDataAccess(dataAccess);
-			} else {
-
-				String serviceName = "http://" + config.getBusinessLogicNode() + ":" + config.getBusinessLogicPort() + "/ws/" + config.getBusinessLogicName() + "?wsdl";
-				URL url = new URL(serviceName);
-
-				//1st argument refers to wsdl document above
-				//2nd argument is the service name, refers to wsdl document above
-				QName qname = new QName("http://businessLogic/", "FacadeImplementationWSService");
-				Service service = Service.create(url, qname);
-				afi = service.getPort(ApplicationFacadeInterface.class);
-			}
-
+			afi = ApplicationFacadeFactory.createApplicationFacade(ConfigXML.getInstance());
 		} catch (Exception e) {
 			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"");
 			LogFile.log(e, true);
