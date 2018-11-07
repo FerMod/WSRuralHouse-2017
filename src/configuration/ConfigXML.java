@@ -232,7 +232,7 @@ public class ConfigXML implements Serializable, Config {
 	 * @see configuration.Config#getDbFilename()
 	 */
 	@Override
-	public String getDbFilename(){
+	public String getDBFilename(){
 		return databaseFileName;
 	}
 

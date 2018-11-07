@@ -24,7 +24,7 @@ public interface Config {
 
 	String getBusinessLogicName();
 
-	String getDbFilename();
+	String getDBFilename();
 
 	boolean initValues();
 

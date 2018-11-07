@@ -73,7 +73,7 @@ public class DataAccess implements DataAccessInterface {
 		timer = new Timer();
 
 		CONFIG = ConfigXML.getInstance();
-		DB_PATH = CONFIG.getDbFilename();
+		DB_PATH = CONFIG.getDBFilename();
 		OVERWRITE_DB_FILE = CONFIG.overwriteFile();
 		INIT_DB_VALUES = CONFIG.initValues();
 
