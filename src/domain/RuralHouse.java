@@ -10,12 +10,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Vector;
 import java.util.stream.Collectors;
@@ -34,12 +32,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import domain.event.EventListeners;
+import domain.event.ValueAddedListener;
 import domain.observer.ObservedValue;
 import domain.util.IntegerAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class RuralHouse implements Serializable {
+public class RuralHouse extends EventListeners<ValueAddedListener> implements Serializable {
 
 	/**
 	 * Generated serial version ID
@@ -76,12 +76,9 @@ public class RuralHouse implements Serializable {
 	@OneToMany(mappedBy = "ruralHouse", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Map<Integer, Offer> offers;
 
-	private transient ObservedValue<Offer> lastOffer; 
-
 	public RuralHouse() {
 		this.review = new Review(this);
 		this.offers =  Collections.synchronizedMap(new HashMap<Integer, Offer>());
-		this.lastOffer = new ObservedValue<>();
 	}
 
 	/**
@@ -268,7 +265,8 @@ public class RuralHouse implements Serializable {
 	 */
 	public void addOffer(Offer offer) {
 		offers.put(offer.getId(), offer);
-		lastOffer.set(offer);
+		// Notify the list of registered listeners
+		this.notifyListeners((listener) -> listener.onValueAdded(Optional.ofNullable(offer)));
 	}
 
 	/**
@@ -322,10 +320,6 @@ public class RuralHouse implements Serializable {
 				.filter((offer) -> offer.getEndDate().after(firstDay) && offer.getStartDate().before(lastDay))
 				.findFirst();
 		return optOffer;
-	}
-	
-	public ObservedValue<Offer> getOfferObserver() {
-		return lastOffer;		
 	}
 
 	public String toDetailedString() {
