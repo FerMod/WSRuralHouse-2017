@@ -57,11 +57,11 @@ class ObservableValueTest {
 
 		try {
 			ObservedValue<Integer> observedValue = new ObservedValue<>(10);
-			observedValue.registerListener(event -> {
+			observedValue.registerListener((oldVAlue, newValue) -> {
 				eventInvoked = true;
 				assertAll("EventValues",
-					() -> assertEquals(event.getOldValue().get(), value, () -> "New value missmatch in event invocation."),
-					() -> assertEquals(event.getNewValue().get(), expected, () -> "Old value missmatch in event invocation.")
+					() -> assertEquals(oldVAlue.get(), value, () -> "New value missmatch in event invocation."),
+					() -> assertEquals(newValue.get(), expected, () -> "Old value missmatch in event invocation.")
 				);
 			});
 

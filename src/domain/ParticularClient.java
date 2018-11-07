@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import domain.event.ValueChangeEvent;
 import domain.event.ValueChangeListener;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -43,8 +42,8 @@ public class ParticularClient extends AbstractUser {
 	}
 
 	public void enableOfferAlert(RuralHouse ruralHouse) {		
-		ruralHouse.getOfferObserver().registerListener(eventListener = event -> {
-			System.out.println("Nueva oferta! " + event.getNewValue());
+		ruralHouse.getOfferObserver().registerListener(eventListener = (oldValue, newValue) -> {
+			System.out.println("Nueva oferta! " + newValue);
 		});
 	}
 

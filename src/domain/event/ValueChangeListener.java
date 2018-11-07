@@ -1,10 +1,10 @@
 package domain.event;
 
-import java.io.Serializable;
+import java.util.Optional;
 
 @FunctionalInterface
-public interface ValueChangeListener extends Serializable {
+public interface ValueChangeListener {
 
-	void onValueChanged(ValueChangeEvent<?> event);
+	void onValueChanged(Optional<?> oldValue, Optional<?> newValue);
 	
 }
