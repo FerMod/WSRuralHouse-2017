@@ -5,10 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Optional;
-import domain.event.EventListeners;
+
+import domain.event.EventPublisher;
 import domain.event.ValueChangeListener;
 
-public class ObservedValue<T> extends EventListeners<ValueChangeListener> implements Serializable {
+public class ObservedValue<T> extends EventPublisher<ValueChangeListener> implements Serializable {
 
 	private Optional<T> value;
 

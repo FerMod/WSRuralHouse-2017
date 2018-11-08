@@ -32,14 +32,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import domain.event.EventListeners;
+import domain.event.EventPublisher;
 import domain.event.ValueAddedListener;
-import domain.observer.ObservedValue;
 import domain.util.IntegerAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class RuralHouse extends EventListeners<ValueAddedListener> implements Serializable {
+public class RuralHouse extends EventPublisher<ValueAddedListener> implements Serializable {
 
 	/**
 	 * Generated serial version ID

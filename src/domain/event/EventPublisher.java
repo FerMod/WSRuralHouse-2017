@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
-public abstract class EventListeners<T> {
+public abstract class EventPublisher<T> {
 
 	private transient final ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 	protected transient final Lock readLock = readWriteLock.readLock();
