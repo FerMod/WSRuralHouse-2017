@@ -274,7 +274,7 @@ public class DataAccess implements DataAccessInterface {
 
 			System.out.println("Database initialized");
 			
-			ExtendedIterator<RuralHouse> rhs = ruralHouseIterator();
+			ExtendedIterator<RuralHouse> rhs = new RuralHouseIterator(getRuralHouses());
 			
 			while (rhs.hasNext()) {
 				System.out.println(((RuralHouse) rhs.next()).getReview().toString());
@@ -599,14 +599,14 @@ public class DataAccess implements DataAccessInterface {
 	//	}
 
 	@Override
-	public ExtendedIterator<RuralHouse> ruralHouseIterator() {
-		ArrayList<RuralHouse> result = null;
+	public Vector<RuralHouse> getRuralHouses() {
+		Vector<RuralHouse> result = null;
 		try {
 			open();
 			System.out.println(">> DataAccess: ruralHouseIterator()");
 			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
 					+ "FROM RuralHouse rh ", RuralHouse.class);
-			result = new ArrayList<RuralHouse>(query.getResultList());
+			result = new Vector<RuralHouse>(query.getResultList());
 			System.out.println("Found " + query.getResultList().size());
 			printCollection(result);
 		} catch	(Exception e) {
@@ -615,7 +615,7 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-		return new RuralHouseIterator(result);
+		return result;
 	}
 
 	/**
