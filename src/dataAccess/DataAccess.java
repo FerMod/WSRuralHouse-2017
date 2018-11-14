@@ -224,10 +224,10 @@ public class DataAccess implements DataAccessInterface {
 			// deleteTableContent("Owner");
 			// deleteTableContent("Admin");
 
-			Owner owner1 = (Owner) createUser("paco@gmail.com", "paco", "paco123", UserType.OWNER).get();
-			Owner owner2 = (Owner) createUser("imowner@gmail.com", "imowner", "imowner", UserType.OWNER).get();
-			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", UserType.OWNER).get();
-			Client client = (Client) createUser("client@gamail.com", "client", "client123", UserType.CLIENT).get();
+			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", UserType.OWNER).get();
+			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", UserType.OWNER).get();
+			// Owner owner3 = (Owner)createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", UserType.OWNER).get();
+			Client client = (Client)createUser("client@gamail.com", "client", "client123", UserType.CLIENT).get();
 
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", UserType.ADMIN).get();
 
@@ -262,7 +262,7 @@ public class DataAccess implements DataAccessInterface {
 			rh4.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
-			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
+			// Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", UserType.ADMIN).get();
 			Owner owner = (Owner) createUser("own@gmail.com", "own", "own", UserType.OWNER).get();			
@@ -275,9 +275,9 @@ public class DataAccess implements DataAccessInterface {
 			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));
 
 			System.out.println("Database initialized");
-			
+
 			ExtendedIterator<RuralHouse> rhs = new RuralHouseIterator(getRuralHouses());
-			
+
 			while (rhs.hasNext()) {
 				System.out.println(((RuralHouse) rhs.next()).getReview().toString());
 			}
