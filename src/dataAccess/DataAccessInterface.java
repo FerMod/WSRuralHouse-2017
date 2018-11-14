@@ -63,7 +63,7 @@ public interface DataAccessInterface {
 	
 	RuralHouse createRuralHouse(Owner owner, String name, String description, City city, String address) throws DuplicatedEntityException;
 
-	ExtendedIterator<RuralHouse> ruralHouseIterator();
+	Vector<RuralHouse> getRuralHouses();
 
 	Vector<RuralHouse> getRuralHouses(Owner owner);
 

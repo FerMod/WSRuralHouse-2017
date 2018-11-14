@@ -20,6 +20,7 @@ import domain.RuralHouse;
 import domain.AbstractUser;
 import domain.Review.ReviewState;
 import domain.util.ExtendedIterator;
+import domain.util.RuralHouseIterator;
 import domain.UserType;
 import domain.City;
 import domain.Client;
@@ -138,7 +139,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	@Override
 	public ExtendedIterator<RuralHouse> ruralHouseIterator()  {
 		System.out.println(">> ApplicationFacadeImpl: ruralHouseIterator");
-		return dataAccess.ruralHouseIterator();
+		return new RuralHouseIterator(dataAccess.getRuralHouses());
 	}
 
 	@Override

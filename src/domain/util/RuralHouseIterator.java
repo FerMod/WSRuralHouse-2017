@@ -1,15 +1,16 @@
 package domain.util;
 
 import java.util.List;
+import java.util.Vector;
 
 import domain.RuralHouse;
 
 public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 
-	private List<RuralHouse> ruralHouseList;
+	private Vector<RuralHouse> ruralHouseList;
 	private int index = 0;
 
-	public RuralHouseIterator(List<RuralHouse> ruralHouseList) {
+	public RuralHouseIterator(Vector<RuralHouse> ruralHouseList) {
 		this.ruralHouseList = ruralHouseList;
 	}
 
