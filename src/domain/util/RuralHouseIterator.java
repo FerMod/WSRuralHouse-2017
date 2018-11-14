@@ -1,5 +1,7 @@
 package domain.util;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Vector;
 
@@ -7,10 +9,14 @@ import domain.RuralHouse;
 
 public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 
-	private Vector<RuralHouse> ruralHouseList;
+	private List<RuralHouse> ruralHouseList;
 	private int index = 0;
 
 	public RuralHouseIterator(Vector<RuralHouse> ruralHouseList) {
+		this(new ArrayList<>(ruralHouseList));
+	}
+
+	public RuralHouseIterator(List<RuralHouse> ruralHouseList) {
 		this.ruralHouseList = ruralHouseList;
 	}
 
@@ -28,6 +34,9 @@ public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 
 	@Override
 	public RuralHouse previous() {
+		if (index < 0) {
+            throw new ConcurrentModificationException();
+		}
 		RuralHouse ruralHouse = ruralHouseList.get(index);
 		index--;
 		return ruralHouse;
