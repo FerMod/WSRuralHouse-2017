@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import domain.event.ValueAddedListener;
-import domain.event.ValueChangeListener;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -42,10 +41,14 @@ public class ParticularClient extends AbstractUser {
 		this.bookings = bookings;
 	}
 
-	public void enableOfferAlert(RuralHouse ruralHouse) {		
+	public void enableOfferAlert(RuralHouse ruralHouse) {
 		ruralHouse.registerListener(eventListener = (offer) -> {
 			System.out.println("New offer added! " + offer);
 		});
+	}
+	
+	public void offerAlert(Offer offer) {
+		
 	}
 
 	public void disableOfferAlert(RuralHouse ruralHouse) {
