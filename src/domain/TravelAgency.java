@@ -19,7 +19,7 @@ public class TravelAgency extends AbstractUser {
 	private ValueAddedListener eventListener;
 
 	public TravelAgency(String email, String username, String password) {
-		super(email, username, password, UserType.PARTICULAR_CLIENT);
+		super(email, username, password, UserType.TRAVEL_AGENCY);
 		bookings = new ArrayList<Booking>();
 	}
 
@@ -30,7 +30,7 @@ public class TravelAgency extends AbstractUser {
 
 	@Override
 	public UserType getRole() {
-		return UserType.CLIENT;
+		return UserType.TRAVEL_AGENCY;
 	}
 
 	public List<Booking> getBookings() {
@@ -42,9 +42,15 @@ public class TravelAgency extends AbstractUser {
 	}
 
 	public void enableOfferAlert(RuralHouse ruralHouse) {		
-		ruralHouse.registerListener(eventListener = (offer) -> {
-			System.out.println("New offer added! " + offer);
+		ruralHouse.registerListener(eventListener = (optValue) -> {
+			if(optValue.isPresent()) {
+				offerAlert((Offer) optValue.get());
+			}
 		});
+	}
+
+	public void offerAlert(Offer offer) {
+		System.out.println("New offer added! " + offer);
 	}
 
 	public void disableOfferAlert(RuralHouse ruralHouse) {

@@ -2,23 +2,20 @@ package test;
 
 import static org.junit.Assume.assumeNoException;
 import static org.junit.Assume.assumeNotNull;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+
+import javax.jws.Oneway;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +24,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.JavaTimeConversionPattern;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import businessLogic.ApplicationFacadeFactory;
@@ -36,22 +35,25 @@ import configuration.ConfigXML;
 import domain.Admin;
 import domain.Booking;
 import domain.City;
-import domain.Client;
 import domain.Offer;
 import domain.Owner;
+import domain.ParticularClient;
 import domain.RuralHouse;
+import domain.TravelAgency;
 import domain.UserType;
+import domain.event.ValueAddedListener;
 import domain.Review.ReviewState;
-import domain.observer.ObservedValue;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
-import test.data.PersonTest;
 
 class EventPublisherValueTest {
 	
+	final static String TEST_DATA_FILE = "/test/data/CorrectDates.csv";
+	
 	static RuralHouse rh;
 	static Admin admin;
-	static Client client;
+	static ParticularClient particularClient;
+	static TravelAgency travelAgency;
 	static Owner owner;
 	static City city;
 	static ApplicationFacadeInterface afi;
@@ -59,20 +61,17 @@ class EventPublisherValueTest {
 
 	Date startDate;
 	Date endDate;
-	Offer offer;
+	List<Offer> offers;
 	Booking booking;
 	double price;
 	
+	int invocationCount;
 	boolean eventInvoked;
 	
 	@BeforeAll
 	static void beforeAll() {
-
-		LogFile.FILE_NAME = "JUnitTest.log";
-
 		initDataBase();
 		createTestData();
-
 	}
 	
 	static void initDataBase() {
@@ -92,7 +91,8 @@ class EventPublisherValueTest {
 
 			admin = (Admin) afi.createUser("adminTest@admin.com", "adminTest", "adminTest", UserType.ADMIN).get();
 			owner = (Owner) afi.createUser("ownerTest@gmail.com", "ownerTest", "ownerTest", UserType.OWNER).get();
-			client = (Client) afi.createUser("clientTest@gamail.com", "clientTest", "clientTest", UserType.CLIENT).get();
+			particularClient = (ParticularClient) afi.createUser("particularClient@gamail.com", "ParticularClientTest", "ParticularClientTest", UserType.PARTICULAR_CLIENT).get();
+			travelAgency = (TravelAgency) afi.createUser("travelagencytest@gamail.com", "TravelAgencyTest", "TravelAgencyTest", UserType.TRAVEL_AGENCY).get();
 			city = afi.createCity("TestCity");
 
 			rh = afi.createRuralHouse(owner, "Casa Test", "Descripción Test", city, "Calle Test / 12Test");
@@ -108,12 +108,14 @@ class EventPublisherValueTest {
 	void beforeEach() {
 		
 		eventInvoked = false;
+		invocationCount = 0;
 		
 		startDate = null;
 		endDate = null;
-		offer = null;
+		offers = new ArrayList<>();
 		booking = null;
 		price = 550.0;
+		
 	}
 	
 	@AfterAll
@@ -124,8 +126,11 @@ class EventPublisherValueTest {
 		if (admin != null) {
 			afi.remove(admin);
 		}
-		if (client != null) {
-			afi.remove(client);
+		if (particularClient != null) {
+			afi.remove(particularClient);
+		}
+		if (travelAgency != null) {
+			afi.remove(travelAgency);
 		}
 		if (owner != null) {
 			afi.remove(owner);
@@ -136,8 +141,8 @@ class EventPublisherValueTest {
 	}
 
 	@AfterEach
-	void afterEach() {		
-		if (offer != null) {
+	void afterEach() {
+		for (Offer offer : offers) {
 			afi.remove(offer);
 		}
 		if (booking != null) {
@@ -147,24 +152,67 @@ class EventPublisherValueTest {
 
 	@DisplayName("Test Event - Method Invocation")
 	@ParameterizedTest
-	@CsvSource({"30, 10", "-2, 10", "11, 10"})
-	void testEventMethodInvocation(int expected, int value, TestInfo testInfo) {
-
+	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
+	void testEventMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
 		try {
-			rh.addOffer(createTestOffer(ruralHouse, firstDay, lastDay, value));
+			
+			startDate = parseToDate(date1);
+			endDate = parseToDate(date2);
+			offers.add(createTestOffer(rh, startDate, endDate, price));
+			
+			rh.addOffer(offers.get(0));
 			rh.registerListener((optValue) -> {
 				eventInvoked = true;
-				assertAll("EventValues",
-					() -> assertEquals(optValue.get(), value, () -> "New value missmatch in event invocation."),
-					() -> assertEquals(optValue.get(), expected, () -> "Old value missmatch in event invocation.")
-				);
+				assertEquals(optValue.get(), offers.get(0), () -> "Value missmatch in event invocation.");
 			});
 
-			observedValue.set(expected);
-
 			assertTrue(eventInvoked, () -> "Event method not invoked.");
+			
 		} catch (Exception e) {
 			fail("Unexpected exception thrown in " + testInfo.getClass().getSimpleName() + "\n\tCase: " + testInfo.getDisplayName(), e);
+		}
+	}
+	
+	@DisplayName("Test Event - Multiple Invocations")
+	@ParameterizedTest
+	@CsvSource({
+		"12/09/2018, 13/09/2018, 24/09/2018, 12/10/2018"
+	})
+	void testEventMultipleMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1Offer1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2Offer1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1Offer2, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2Offer2, TestInfo testInfo) {
+		try {
+			
+			int expectedInvocations = 2;
+
+			startDate = parseToDate(date1Offer1);
+			endDate = parseToDate(date2Offer1);			
+			offers.add(createTestOffer(rh, startDate, endDate, price));
+			
+			startDate = parseToDate(date1Offer2);
+			endDate = parseToDate(date2Offer2);
+			offers.add(createTestOffer(rh, startDate, endDate, price));
+			
+			invocationCount = 0;
+			rh.registerListener((optValue) -> {
+				eventInvoked = true;
+				assertEquals(optValue.get(), offers.get(invocationCount), () -> "Value missmatch in event invocation.");
+				invocationCount++;
+			});
+			
+			particularClient.enableOfferAlert(rh);
+			travelAgency.enableOfferAlert(rh);
+			
+			for (Offer offer : offers) {
+				rh.addOffer(offer);
+			}
+
+			assumeTrue(eventInvoked, () -> "Event method not invoked.");
+			assertEquals(expectedInvocations, invocationCount, () -> "Unexpected ammount of method invocations made.");
+			
+		} catch (Exception e) {
+			fail("Unexpected exception thrown in " + testInfo.getClass().getSimpleName() + "\n\tCase: " + testInfo.getDisplayName(), e);
+		} finally {
+			particularClient.disableOfferAlert(rh);
+			travelAgency.disableOfferAlert(rh);
 		}
 	}
 

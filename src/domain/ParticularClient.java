@@ -30,7 +30,7 @@ public class ParticularClient extends AbstractUser {
 
 	@Override
 	public UserType getRole() {
-		return UserType.CLIENT;
+		return UserType.PARTICULAR_CLIENT;
 	}
 
 	public List<Booking> getBookings() {
@@ -42,13 +42,15 @@ public class ParticularClient extends AbstractUser {
 	}
 
 	public void enableOfferAlert(RuralHouse ruralHouse) {
-		ruralHouse.registerListener(eventListener = (offer) -> {
-			System.out.println("New offer added! " + offer);
+		ruralHouse.registerListener(eventListener = (optValue) -> {
+			if(optValue.isPresent()) {
+				offerAlert((Offer) optValue.get());
+			}
 		});
 	}
-	
+
 	public void offerAlert(Offer offer) {
-		
+		System.out.println("New offer added! " + offer);
 	}
 
 	public void disableOfferAlert(RuralHouse ruralHouse) {

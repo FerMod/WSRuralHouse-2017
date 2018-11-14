@@ -43,12 +43,14 @@ import domain.City;
 import domain.Client;
 import domain.Offer;
 import domain.Owner;
+import domain.ParticularClient;
 import domain.Review;
 import domain.Review.ReviewState;
 import domain.util.RuralHouseIterator;
 import domain.util.ExtendedIterator;
 import domain.UserType;
 import domain.RuralHouse;
+import domain.TravelAgency;
 import domain.UserFactory;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
@@ -766,12 +768,15 @@ public class DataAccess implements DataAccessInterface {
 		switch (userType) {
 		case CLIENT:
 			return Optional.ofNullable(Client::new);
+		case PARTICULAR_CLIENT:
+			return Optional.ofNullable(ParticularClient::new);
+		case TRAVEL_AGENCY:
+			return Optional.ofNullable(TravelAgency::new);
 		case OWNER:
 			return Optional.ofNullable(Owner::new);
 		case ADMIN:
 			return Optional.ofNullable(Admin::new);
 		case SUPER_ADMIN:
-			return Optional.empty();
 		default:
 			return Optional.empty();
 		}
