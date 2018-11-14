@@ -10,12 +10,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-
-import javax.jws.Oneway;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -26,7 +22,6 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.converter.JavaTimeConversionPattern;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
@@ -38,18 +33,17 @@ import domain.City;
 import domain.Offer;
 import domain.Owner;
 import domain.ParticularClient;
+import domain.Review.ReviewState;
 import domain.RuralHouse;
 import domain.TravelAgency;
 import domain.UserType;
-import domain.event.ValueAddedListener;
-import domain.Review.ReviewState;
 import exceptions.BadDatesException;
 import exceptions.OverlappingOfferException;
 
 class EventPublisherValueTest {
-	
+
 	final static String TEST_DATA_FILE = "/test/data/CorrectDates.csv";
-	
+
 	static RuralHouse rh;
 	static Admin admin;
 	static ParticularClient particularClient;
@@ -61,19 +55,21 @@ class EventPublisherValueTest {
 
 	Date startDate;
 	Date endDate;
-	List<Offer> offers;
+	Offer offer;
 	Booking booking;
 	double price;
-	
+
 	int invocationCount;
 	boolean eventInvoked;
-	
+	boolean particularClientEventInvoked;
+	boolean travelAgencyEventInvoked;
+
 	@BeforeAll
 	static void beforeAll() {
 		initDataBase();
 		createTestData();
 	}
-	
+
 	static void initDataBase() {
 		try {
 			afi = ApplicationFacadeFactory.createApplicationFacade(ConfigXML.getInstance());
@@ -106,18 +102,20 @@ class EventPublisherValueTest {
 
 	@BeforeEach
 	void beforeEach() {
-		
+
 		eventInvoked = false;
+		particularClientEventInvoked = false;
+		travelAgencyEventInvoked = false;
 		invocationCount = 0;
-		
+
 		startDate = null;
 		endDate = null;
-		offers = new ArrayList<>();
+		offer = null;
 		booking = null;
 		price = 550.0;
-		
+
 	}
-	
+
 	@AfterAll
 	static void afterAll() {
 		if (rh != null) {
@@ -142,78 +140,128 @@ class EventPublisherValueTest {
 
 	@AfterEach
 	void afterEach() {
-		for (Offer offer : offers) {
+		if (offer != null) {
 			afi.remove(offer);
 		}
 		if (booking != null) {
 			afi.remove(booking);
+		}
+		if(rh != null) {
+			rh.unregisterAllListeners();
+		}
+		if(particularClient != null) {
+			particularClient.disableAllAlerts();
+		}
+		if(travelAgency != null) {
+			travelAgency.disableAllAlerts();
 		}
 	}
 
 	@DisplayName("Test Event - Method Invocation")
 	@ParameterizedTest
 	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
-	void testEventMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
+	void testMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
 		try {
-			
+
 			startDate = parseToDate(date1);
 			endDate = parseToDate(date2);
-			offers.add(createTestOffer(rh, startDate, endDate, price));
-			
-			rh.addOffer(offers.get(0));
+			offer = createTestOffer(rh, startDate, endDate, price);
+
 			rh.registerListener((optValue) -> {
 				eventInvoked = true;
-				assertEquals(optValue.get(), offers.get(0), () -> "Value missmatch in event invocation.");
+				assertEquals(optValue.get(), offer, () -> "Value missmatch in event invocation.");
 			});
+
+			rh.addOffer(offer);
 
 			assertTrue(eventInvoked, () -> "Event method not invoked.");
-			
+
 		} catch (Exception e) {
-			fail("Unexpected exception thrown in " + testInfo.getClass().getSimpleName() + "\n\tCase: " + testInfo.getDisplayName(), e);
-		}
+			fail(getFailMessage(e, testInfo), e);
+		}		
 	}
 	
-	@DisplayName("Test Event - Multiple Invocations")
+	@DisplayName("Test Event - Method Invocation Correct Value")
 	@ParameterizedTest
-	@CsvSource({
-		"12/09/2018, 13/09/2018, 24/09/2018, 12/10/2018"
-	})
-	void testEventMultipleMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1Offer1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2Offer1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1Offer2, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2Offer2, TestInfo testInfo) {
+	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
+	void testMethodInvocationCorrectValue(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
 		try {
-			
-			int expectedInvocations = 2;
 
-			startDate = parseToDate(date1Offer1);
-			endDate = parseToDate(date2Offer1);			
-			offers.add(createTestOffer(rh, startDate, endDate, price));
-			
-			startDate = parseToDate(date1Offer2);
-			endDate = parseToDate(date2Offer2);
-			offers.add(createTestOffer(rh, startDate, endDate, price));
-			
-			invocationCount = 0;
+			startDate = parseToDate(date1);
+			endDate = parseToDate(date2);
+			offer = createTestOffer(rh, startDate, endDate, price);
+
 			rh.registerListener((optValue) -> {
 				eventInvoked = true;
-				assertEquals(optValue.get(), offers.get(invocationCount), () -> "Value missmatch in event invocation.");
-				invocationCount++;
+				assertEquals(optValue.get(), offer, () -> "Value missmatch in event invocation.");
 			});
-			
-			particularClient.enableOfferAlert(rh);
-			travelAgency.enableOfferAlert(rh);
-			
-			for (Offer offer : offers) {
-				rh.addOffer(offer);
-			}
 
-			assumeTrue(eventInvoked, () -> "Event method not invoked.");
-			assertEquals(expectedInvocations, invocationCount, () -> "Unexpected ammount of method invocations made.");
-			
+			rh.addOffer(offer);
+
+			assertTrue(eventInvoked, () -> "Event method not invoked.");
+
 		} catch (Exception e) {
-			fail("Unexpected exception thrown in " + testInfo.getClass().getSimpleName() + "\n\tCase: " + testInfo.getDisplayName(), e);
-		} finally {
-			particularClient.disableOfferAlert(rh);
-			travelAgency.disableOfferAlert(rh);
+			fail(getFailMessage(e, testInfo), e);
+		}		
+	}
+
+
+	@DisplayName("Test Event - User Method Invocation")
+	@ParameterizedTest
+	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
+	void testUserMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
+		try {
+
+			startDate = parseToDate(date1);
+			endDate = parseToDate(date2);			
+			offer = createTestOffer(rh, startDate, endDate, price);
+
+			invocationCount = 0;			
+			particularClient.enableOfferAlert(rh, this::particularClientAlert);
+			travelAgency.enableOfferAlert(rh, this::travelAgencyAlert);
+
+			rh.addOffer(offer);
+
+			assertTrue(particularClientEventInvoked, () -> "ParticularClient event method not invoked.");
+			assertTrue(travelAgencyEventInvoked, () -> "TravelAgency event method not invoked.");
+
+		} catch (Exception e) {
+			fail(getFailMessage(e, testInfo), e);
 		}
+	}
+
+	@DisplayName("Test Event - User Method Invocation Correct Value")
+	@ParameterizedTest
+	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
+	void testUserMethodInvocationCorrectValue(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
+		try {
+
+			startDate = parseToDate(date1);
+			endDate = parseToDate(date2);			
+			offer = createTestOffer(rh, startDate, endDate, price);
+		
+			particularClient.enableOfferAlert(rh, this::particularClientAlert);
+			travelAgency.enableOfferAlert(rh, this::travelAgencyAlert);
+
+			rh.addOffer(offer);
+
+			assumeTrue(particularClientEventInvoked, () -> "ParticularClient event method not invoked.");
+			assumeTrue(travelAgencyEventInvoked, () -> "TravelAgency event method not invoked.");
+
+		} catch (Exception e) {
+			fail(getFailMessage(e, testInfo), e);
+		}
+
+	}
+
+	private void particularClientAlert(Optional<Offer> optOffer) {
+		particularClientEventInvoked = true;
+		assertEquals(optOffer.get(), offer, () -> "Value missmatch in  ParticularClient event invocation.");
+	}
+
+	private void travelAgencyAlert(Optional<Offer> optOffer) {
+		travelAgencyEventInvoked = true;
+		assertEquals(optOffer.get(), offer, () -> "Value missmatch in TravelAgency event invocation.");
 	}
 
 	/**
@@ -242,7 +290,7 @@ class EventPublisherValueTest {
 		assumeNotNull(offer);
 		return offer;
 	}
-	
+
 	/**
 	 * Parse <code>java.util.Date</code> to <code>java.time.LocalDate</code>.<p>
 	 * Assumes that the parsed value will not be <code>null</code> and that the parse 
@@ -262,5 +310,15 @@ class EventPublisherValueTest {
 		assumeNotNull(date);
 		return date;
 	}
-	
+
+	private String getFailMessage(Exception e, TestInfo testInfo) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Unexpected exception thrown");
+		if(testInfo.getTestMethod().isPresent()) {
+			sb.append(" in " + testInfo.getTestMethod().get().getName());
+		}
+		sb.append("\n\tCase: " + testInfo.getDisplayName());
+		return sb.toString();
+	}
+
 }
