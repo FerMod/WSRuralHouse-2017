@@ -28,7 +28,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -46,12 +45,12 @@ import domain.Owner;
 import domain.ParticularClient;
 import domain.Review;
 import domain.Review.ReviewState;
-import domain.util.RuralHouseIterator;
-import domain.util.ExtendedIterator;
-import domain.UserType;
 import domain.RuralHouse;
 import domain.TravelAgency;
 import domain.UserFactory;
+import domain.UserType;
+import domain.util.ExtendedIterator;
+import domain.util.RuralHouseIterator;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 
@@ -63,7 +62,7 @@ public class DataAccess implements DataAccessInterface {
 	private static boolean INIT_DB_VALUES;
 
 	private EntityManagerFactory emf;
-	private EntityManager  db;
+	private EntityManager db;
 
 	private Timer timer;
 
@@ -71,7 +70,7 @@ public class DataAccess implements DataAccessInterface {
 	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 	public DataAccess()  {
-
+		
 		timer = new Timer();
 
 		CONFIG = ConfigXML.getInstance();
