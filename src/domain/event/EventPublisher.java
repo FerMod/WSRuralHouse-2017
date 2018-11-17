@@ -61,14 +61,14 @@ public abstract class EventPublisher<T> {
 
 	}
 
-	public void notifyListeners(Consumer<? super T> algorithm) {
+	public void notifyListeners(Consumer<? super T> action) {
 
 		// Lock the list of listeners for writing
 		this.writeLock.lock();
 
 		try {
 			// Execute some function on each of the listeners
-			this.listeners.forEach(algorithm);
+			this.listeners.forEach(action);
 		} finally {
 			// Unlock the writer lock
 			this.writeLock.unlock();

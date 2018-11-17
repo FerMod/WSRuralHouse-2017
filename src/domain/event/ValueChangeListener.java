@@ -3,8 +3,8 @@ package domain.event;
 import java.util.Optional;
 
 @FunctionalInterface
-public interface ValueChangeListener {
+public interface ValueChangeListener<T> {
 
-	void onValueChanged(Optional<?> oldValue, Optional<?> newValue);
+	void onValueChanged(Optional<T> oldValue, Optional<T> newValue);
 	
 }

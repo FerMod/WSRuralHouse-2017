@@ -38,7 +38,7 @@ import domain.util.IntegerAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class RuralHouse extends EventPublisher<ValueAddedListener> implements Serializable {
+public class RuralHouse extends EventPublisher<ValueAddedListener<Offer>> implements Serializable {
 
 	/**
 	 * Generated serial version ID

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.jdo.annotations.NotPersistent;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -19,8 +18,7 @@ import domain.event.ValueAddedListener;
 public class TravelAgency extends AbstractUser {
 
 	private List<Booking> bookings;
-	@NotPersistent
-	transient private Map<RuralHouse, ValueAddedListener> eventListenersMap;
+	transient private Map<RuralHouse, ValueAddedListener<Offer>> eventListenersMap;
 
 	public TravelAgency(String email, String username, String password) {
 		super(email, username, password, UserType.TRAVEL_AGENCY);
@@ -51,8 +49,7 @@ public class TravelAgency extends AbstractUser {
 	}
 	
 	public void enableOfferAlert(RuralHouse ruralHouse, Consumer<Optional<Offer>> consumer) {	
-		@SuppressWarnings("unchecked")
-		ValueAddedListener listener = ruralHouse.registerListener((optValue) -> consumer.accept((Optional<Offer>) optValue));
+		ValueAddedListener<Offer> listener = ruralHouse.registerListener((optValue) -> consumer.accept(optValue));
 		eventListenersMap.put(ruralHouse, listener);
 	}
 
