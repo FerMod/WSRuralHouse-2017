@@ -59,7 +59,6 @@ class EventPublisherValueTest {
 	Booking booking;
 	double price;
 
-	int invocationCount;
 	boolean eventInvoked;
 	boolean particularClientEventInvoked;
 	boolean travelAgencyEventInvoked;
@@ -106,7 +105,6 @@ class EventPublisherValueTest {
 		eventInvoked = false;
 		particularClientEventInvoked = false;
 		travelAgencyEventInvoked = false;
-		invocationCount = 0;
 
 		startDate = null;
 		endDate = null;
@@ -206,7 +204,7 @@ class EventPublisherValueTest {
 	}
 
 
-	@DisplayName("Test Event - User Method Invocation")
+	@DisplayName("Test Event - User Alert Method Invocation")
 	@ParameterizedTest
 	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
 	void testUserMethodInvocation(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
@@ -215,8 +213,7 @@ class EventPublisherValueTest {
 			startDate = parseToDate(date1);
 			endDate = parseToDate(date2);			
 			offer = createTestOffer(rh, startDate, endDate, price);
-
-			invocationCount = 0;			
+			
 			particularClient.enableOfferAlert(rh, this::particularClientAlert);
 			travelAgency.enableOfferAlert(rh, this::travelAgencyAlert);
 
@@ -230,7 +227,7 @@ class EventPublisherValueTest {
 		}
 	}
 
-	@DisplayName("Test Event - User Method Invocation Correct Value")
+	@DisplayName("Test Event - User Alert Method Invocation Correct Value")
 	@ParameterizedTest
 	@CsvFileSource(resources = TEST_DATA_FILE, numLinesToSkip = 1)
 	void testUserMethodInvocationCorrectValue(@JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date1, @JavaTimeConversionPattern("dd/MM/yyyy") LocalDate date2, TestInfo testInfo) {
