@@ -18,8 +18,6 @@ import domain.event.ValueAddedListener;
 @Entity
 public class ParticularClient extends AbstractUser {
 
-	private static final long serialVersionUID = -1989696498234692075L;
-
 	private List<Booking> bookings;
 	@NotPersistent
 	transient private Map<RuralHouse, ValueAddedListener> eventListenersMap;
@@ -69,5 +67,7 @@ public class ParticularClient extends AbstractUser {
 	public void disableAllAlerts() {
 		eventListenersMap.keySet().forEach(rh -> rh.unregisterListener(eventListenersMap.get(rh)));
 	}
+
+	private static final long serialVersionUID = -1989696498234692075L;
 
 }
