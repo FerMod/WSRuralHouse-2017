@@ -28,7 +28,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -43,13 +42,15 @@ import domain.City;
 import domain.Client;
 import domain.Offer;
 import domain.Owner;
+import domain.ParticularClient;
 import domain.Review;
 import domain.Review.ReviewState;
-import domain.util.RuralHouseIterator;
-import domain.util.ExtendedIterator;
-import domain.UserType;
 import domain.RuralHouse;
+import domain.TravelAgency;
 import domain.UserFactory;
+import domain.UserType;
+import domain.util.ExtendedIterator;
+import domain.util.RuralHouseIterator;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 
@@ -61,7 +62,7 @@ public class DataAccess implements DataAccessInterface {
 	private static boolean INIT_DB_VALUES;
 
 	private EntityManagerFactory emf;
-	private EntityManager  db;
+	private EntityManager db;
 
 	private Timer timer;
 
@@ -69,7 +70,7 @@ public class DataAccess implements DataAccessInterface {
 	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 	public DataAccess()  {
-
+		
 		timer = new Timer();
 
 		CONFIG = ConfigXML.getInstance();
@@ -222,10 +223,10 @@ public class DataAccess implements DataAccessInterface {
 			// deleteTableContent("Owner");
 			// deleteTableContent("Admin");
 
-			Owner owner1 = (Owner) createUser("paco@gmail.com", "paco", "paco123", UserType.OWNER).get();
-			Owner owner2 = (Owner) createUser("imowner@gmail.com", "imowner", "imowner", UserType.OWNER).get();
-			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", UserType.OWNER).get();
-			Client client = (Client) createUser("client@gamail.com", "client", "client123", UserType.CLIENT).get();
+			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", UserType.OWNER).get();
+			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", UserType.OWNER).get();
+			// Owner owner3 = (Owner)createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", UserType.OWNER).get();
+			Client client = (Client)createUser("client@gamail.com", "client", "client123", UserType.CLIENT).get();
 
 			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", UserType.ADMIN).get();
 
@@ -260,7 +261,7 @@ public class DataAccess implements DataAccessInterface {
 			rh4.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
-			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
+			// Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
 			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", UserType.ADMIN).get();
 			Owner owner = (Owner) createUser("own@gmail.com", "own", "own", UserType.OWNER).get();			
@@ -273,9 +274,9 @@ public class DataAccess implements DataAccessInterface {
 			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));
 
 			System.out.println("Database initialized");
-			
+
 			ExtendedIterator<RuralHouse> rhs = new RuralHouseIterator(getRuralHouses());
-			
+
 			while (rhs.hasNext()) {
 				System.out.println(((RuralHouse) rhs.next()).getReview().toString());
 			}
@@ -766,12 +767,15 @@ public class DataAccess implements DataAccessInterface {
 		switch (userType) {
 		case CLIENT:
 			return Optional.ofNullable(Client::new);
+		case PARTICULAR_CLIENT:
+			return Optional.ofNullable(ParticularClient::new);
+		case TRAVEL_AGENCY:
+			return Optional.ofNullable(TravelAgency::new);
 		case OWNER:
 			return Optional.ofNullable(Owner::new);
 		case ADMIN:
 			return Optional.ofNullable(Admin::new);
 		case SUPER_ADMIN:
-			return Optional.empty();
 		default:
 			return Optional.empty();
 		}

@@ -5,6 +5,6 @@ import java.util.Optional;
 @FunctionalInterface
 public interface ValueAddedListener {
 
-	void onValueAdded(Optional<?> value);
+	void onValueAdded(Optional<?> optValue);
 	
 }

@@ -1,14 +1,18 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
 
+import javax.jdo.annotations.NotPersistent;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import domain.event.ValueAddedListener;
-import domain.event.ValueChangeListener;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -17,11 +21,13 @@ public class ParticularClient extends AbstractUser {
 	private static final long serialVersionUID = -1989696498234692075L;
 
 	private List<Booking> bookings;
-	private ValueAddedListener eventListener;
+	@NotPersistent
+	transient private Map<RuralHouse, ValueAddedListener> eventListenersMap;
 
 	public ParticularClient(String email, String username, String password) {
 		super(email, username, password, UserType.PARTICULAR_CLIENT);
 		bookings = new ArrayList<Booking>();
+		eventListenersMap = new HashMap<>();
 	}
 
 	@Override
@@ -31,7 +37,7 @@ public class ParticularClient extends AbstractUser {
 
 	@Override
 	public UserType getRole() {
-		return UserType.CLIENT;
+		return UserType.PARTICULAR_CLIENT;
 	}
 
 	public List<Booking> getBookings() {
@@ -42,14 +48,26 @@ public class ParticularClient extends AbstractUser {
 		this.bookings = bookings;
 	}
 
-	public void enableOfferAlert(RuralHouse ruralHouse) {		
-		ruralHouse.registerListener(eventListener = (offer) -> {
-			System.out.println("New offer added! " + offer);
-		});
+	public void enableOfferAlert(RuralHouse ruralHouse) {
+		enableOfferAlert(ruralHouse, this::alert);
+	}
+	
+	public void enableOfferAlert(RuralHouse ruralHouse, Consumer<Optional<Offer>> consumer) {	
+		@SuppressWarnings("unchecked")
+		ValueAddedListener listener = ruralHouse.registerListener((optValue) -> consumer.accept((Optional<Offer>) optValue));
+		eventListenersMap.put(ruralHouse, listener);
 	}
 
-	public void disableOfferAlert(RuralHouse ruralHouse) {
-		ruralHouse.unregisterListener(eventListener);
+	private void alert(Optional<Offer> offer) {
+		System.out.println("(default) New offer added! " + offer);
+	}
+
+	public void disableOfferAlert(RuralHouse ruralHouse) {		
+		ruralHouse.unregisterListener(eventListenersMap.get(ruralHouse));
+	}
+	
+	public void disableAllAlerts() {
+		eventListenersMap.keySet().forEach(rh -> rh.unregisterListener(eventListenersMap.get(rh)));
 	}
 
 }

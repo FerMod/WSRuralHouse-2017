@@ -45,8 +45,23 @@ public abstract class EventPublisher<T> {
 		}
 
 	}
+	
+	public void unregisterAllListeners() {
 
-	public void notifyListeners (Consumer<? super T> algorithm) {
+		// Lock the list of listeners for writing
+		this.writeLock.lock();
+
+		try {
+			// Remove all the listeners from the list of the registered listeners
+			this.listeners.clear();
+		} finally {
+			// Unlock the writer lock
+			this.writeLock.unlock();
+		}
+
+	}
+
+	public void notifyListeners(Consumer<? super T> algorithm) {
 
 		// Lock the list of listeners for writing
 		this.writeLock.lock();

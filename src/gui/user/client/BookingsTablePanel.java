@@ -137,32 +137,33 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 			tableModel = new CustomTableModel(bookingComponentList);
 			sorter = new TableRowSorter<CustomTableModel>(tableModel);
 			bookingsTable = new CustomTable(tableModel);
+			
 			bookingsTable.setRowSorter(sorter);
 			bookingsTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
 			bookingsTable.getTableHeader().setReorderingAllowed(false);
-			//table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			// table.getTableHeader().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			bookingsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			bookingsTable.setFocusable(false);
 			bookingsTable.getTableHeader().setUI(null); //Hide the header
 			bookingsTable.setShowVerticalLines(false);
 			bookingsTable.setIntercellSpacing(new Dimension(0, 1));
 			bookingsTable.setUpdateSelectionOnSort(true);
-			//			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-			//			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-			//			table.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
+			// DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			// centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+			// table.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
 
 			//Center the content in the column
 			DefaultTableCellRenderer centerCellRenderer = new DefaultTableCellRenderer();
 			centerCellRenderer.setHorizontalAlignment(JLabel.CENTER);	
-			//			table.setDefaultRenderer(Double.class, centerCellRenderer);
-			//			table.setDefaultRenderer(String.class, centerCellRenderer);
-			//table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
+			// table.setDefaultRenderer(Double.class, centerCellRenderer);
+			// table.setDefaultRenderer(String.class, centerCellRenderer);
+			// table.getColumnModel().getColumn(1).setCellRenderer(leftCellRenderer);
 
 			setTableColumnWidthPercentages(bookingsTable, new double[] {1.0});
 			bookingsTable.setDefaultRenderer(Object.class, new BookingsComponent(parentFrame));
 			bookingsTable.setDefaultEditor(Object.class, new BookingsComponent(parentFrame));
 
-			//When selection changes, provide user with row numbers for both view and model.
+			// When selection changes, provide user with row numbers for both view and model.
 			bookingsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent event) {
@@ -179,30 +180,33 @@ public class BookingsTablePanel extends JPanel implements PropertyChangeListener
 
 			});
 
-			//			bookingsTable.addFocusListener(new FocusListener() {				
-			//				@Override
-			//				public void focusGained(FocusEvent e) {
-			//				}
-			//
-			//				@Override
-			//				public void focusLost(FocusEvent e) {
-			//					bookingsTable.clearSelection();
-			//				}
-			//			});
+			/*
+			bookingsTable.addFocusListener(new FocusListener() {				
+				@Override
+				public void focusGained(FocusEvent e) {
+				}
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					bookingsTable.clearSelection();
+				}
+			});
+			 */
 
 			/*
 			bookingsTable.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent me) {
-//					JTable table =(JTable) me.getSource();
-//					Point p = me.getPoint();
-//					int row = table.rowAtPoint(p);
+					// JTable table =(JTable) me.getSource();
+					// Point p = me.getPoint();
+					// int row = table.rowAtPoint(p);
 					if (me.getClickCount() == 2) {
 						JOptionPane.showMessageDialog(null,	"Double clicked the row.\nWhen implemented, info window will show...", "WIP", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});
 			 */
+
 		}
 		return bookingsTable;
 	}
