@@ -47,8 +47,8 @@ public class ParticularClient extends AbstractUser {
 	public void enableOfferAlert(RuralHouse ruralHouse) {
 		enableOfferAlert(ruralHouse, this::alert);
 	}
-	
-	public void enableOfferAlert(RuralHouse ruralHouse, Consumer<Optional<Offer>> consumer) {	
+
+	public void enableOfferAlert(RuralHouse ruralHouse, Consumer<Optional<Offer>> consumer) {
 		ValueAddedListener<Offer> listener = ruralHouse.registerListener((optValue) -> consumer.accept(optValue));
 		eventListenersMap.put(ruralHouse, listener);
 	}
@@ -60,7 +60,7 @@ public class ParticularClient extends AbstractUser {
 	public void disableOfferAlert(RuralHouse ruralHouse) {		
 		ruralHouse.unregisterListener(eventListenersMap.get(ruralHouse));
 	}
-	
+
 	public void disableAllAlerts() {
 		eventListenersMap.keySet().forEach(rh -> rh.unregisterListener(eventListenersMap.get(rh)));
 	}

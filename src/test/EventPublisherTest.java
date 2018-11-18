@@ -37,7 +37,7 @@ import domain.TravelAgency;
 import domain.UserType;
 import test.util.TestUtilities;
 
-class EventPublisherValueTest {
+class EventPublisherTest {
 
 	final static String TEST_DATA_FILE = "/test/data/CorrectDates.csv";
 
