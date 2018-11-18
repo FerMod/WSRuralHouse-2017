@@ -406,10 +406,10 @@ public class OwnerMainPanel extends JPanel {
 		}
 
 		//			// nextInt is normally exclusive of the top value, so add 1 to make it inclusive
-		//			for (int i = 0; i < data.length; i++) {
+		//			for (int  = 0;  < data.length; ++) {
 		//				int randomNum = ThreadLocalRandom.current().nextInt(0, data.length);
 		//				System.out.println(images[randomNum]);
-		//				setValueAt(i, 0, new ImageIcon(images[randomNum]));
+		//				setValueAt(, 0, new ImageIcon(images[randomNum]));
 		//			}
 
 		private ImageIcon getImage(String path) {

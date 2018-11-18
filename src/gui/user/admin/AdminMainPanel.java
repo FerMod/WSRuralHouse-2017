@@ -21,6 +21,7 @@ import javax.swing.ButtonGroup;
 import domain.Admin;
 import domain.Review;
 import domain.Review.ReviewState;
+import domain.util.ExtendedIterator;
 import gui.components.RightClickMenu;
 import gui.components.TextPrompt;
 import gui.user.MainWindow;
@@ -324,12 +325,12 @@ public class AdminMainPanel extends JPanel {
 	}
 
 	public void initializeComboBox() {
-		Vector<RuralHouse> rhs = MainWindow.getBusinessLogic().getRuralHouses();
+		ExtendedIterator<RuralHouse> rhs = MainWindow.getBusinessLogic().ruralHouseIterator();
 
 		ruralHouses.addElement(null); //For that the user have selected a RuralHouse
 
-		for(RuralHouse rh : rhs) {
-			ruralHouses.addElement(rh);
+		while(rhs.hasNext()) {
+			ruralHouses.addElement((RuralHouse) rhs.next());
 		}
 
 	}

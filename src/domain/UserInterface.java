@@ -1,10 +1,8 @@
 package domain;
 
-import domain.AbstractUser.Role;
-
 public interface UserInterface {
 	
-	public Role getRole();
+	public UserType getRole();
 	
 	public String toString();
 

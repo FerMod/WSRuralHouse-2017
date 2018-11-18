@@ -1,7 +1,9 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.jws.WebMethod;
@@ -10,7 +12,6 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import dataAccess.DataAccessInterface;
 import domain.AbstractUser;
-import domain.AbstractUser.Role;
 import domain.Booking;
 import domain.City;
 import domain.Client;
@@ -18,6 +19,8 @@ import domain.Offer;
 import domain.Owner;
 import domain.Review;
 import domain.Review.ReviewState;
+import domain.util.ExtendedIterator;
+import domain.UserType;
 import domain.RuralHouse;
 import exceptions.AuthException;
 import exceptions.BadDatesException;
@@ -89,7 +92,7 @@ public interface ApplicationFacadeInterface  {
 	Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException;
 
 	/**
-	 * This method obtains the offers of a ruralHouse in the provided date interval
+	 * This method obtains the offers of a ruralHouseList in the provided date interval
 	 * 
 	 * @param ruralHouse the rural house that the offer is applied to
 	 * @param firstDay the start date of the offer
@@ -98,7 +101,7 @@ public interface ApplicationFacadeInterface  {
 	 * @throws BadDatesException if the first date is greater than second date
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
+	List<Offer> getOffers(RuralHouse ruralHouse, Date firstDay,  Date lastDay) throws BadDatesException;
 
 	/**
 	 * Obtain all the offers stored in the database
@@ -106,7 +109,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database, {@code null} if none is found
 	 */
 	@WebMethod
-	Vector<Offer> getOffers();
+	List<Offer> getOffers();
 
 	/**
 	 * Obtain all the offers stored in the database that matches with the given {@code ReviewState} of their rural house
@@ -115,7 +118,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
 	@WebMethod
-	Vector<Offer> getOffers(ReviewState reviewState);
+	List<Offer> getOffers(ReviewState reviewState);
 	
 	/**
 	 * Get all the active offers. This means, that this will query 
@@ -124,7 +127,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return the {@code Vector} with elements of the type {@code Offer}, that represent the active offers
 	 */
 	@WebMethod
-	Vector<Offer> getActiveOffers();
+	List<Offer> getActiveOffers();
 
 	/**
 	 * Obtain all the offers stored in the database that haven't ended yet, and matches with the given {@code ReviewState} of their rural house
@@ -133,7 +136,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return a {@code Vector} with objects of type {@code Offer} containing all the active offers in the database matching with the given {@code ReviewState} of their rural house, {@code null} if none is found
 	 */
 	@WebMethod
-	Vector<Offer> getActiveOffers(ReviewState reviewState);
+	List<Offer> getActiveOffers(ReviewState reviewState);
 
 	/**
 	 * Returns the number of offers stored in the database
@@ -201,12 +204,12 @@ public interface ApplicationFacadeInterface  {
 	Vector<RuralHouse> getRuralHouses(Owner owner, ReviewState reviewState);
 	
 	/**
-	 * This method retrieves the existing rural houses 
+	 * This method retrieves the rural houses iterator
 	 * 
-	 * @return a {@code Vector} of rural houses
+	 * @return a {@code Iterator} of rural houses
 	 */
 	@WebMethod
-	Vector<RuralHouse> getRuralHouses();
+	ExtendedIterator<RuralHouse> ruralHouseIterator();
 
 	/**
 	 * Creates a city and stores it in the database.
@@ -239,21 +242,21 @@ public interface ApplicationFacadeInterface  {
 	 * @param email the user email
 	 * @param username the name of the account
 	 * @param password the password of the account
-	 * @param role the role assigned to the account
+	 * @param userType the type of user of the account
 	 * @return the created user, null if none was created
 	 * @throws DuplicatedEntityException If is attempted to create an existing entity
 	 */
 	@WebMethod
-	AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException;
+	Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException;
 
 	/**
-	 * Get the account role.
+	 * Get the account user type.
 	 * 
 	 * @param username the name of the account
-	 * @return the role assigned to the account
+	 * @return the user type of the account
 	 */
 	@WebMethod
-	Role getRole(String username);
+	UserType getUserTypeOf(String username);
 
 	/**
 	 * Login the user with the account that matches the entered user name and password

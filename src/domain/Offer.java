@@ -1,21 +1,17 @@
 package domain;
 
-import java.io.*;
+
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlIDREF;
 
 
 @SuppressWarnings("serial")
@@ -62,7 +58,7 @@ public class Offer implements Serializable {
 	}
 
 	/**
-	 * Set the offer rural house
+	 * Set an offer for the rural house 
 	 * 
 	 * @param ruralHouse the rural house 
 	 */

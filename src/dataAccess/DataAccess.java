@@ -1,6 +1,5 @@
 package dataAccess;
 
-import java.awt.List;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.AbstractCollection;
@@ -13,7 +12,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -27,36 +28,41 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.AccountNotFoundException;
 
 import businessLogic.util.LogFile;
 import businessLogic.util.Timer;
+import configuration.Config;
 import configuration.ConfigXML;
 import domain.AbstractUser;
-import domain.AbstractUser.Role;
 import domain.Admin;
 import domain.Booking;
 import domain.City;
 import domain.Client;
 import domain.Offer;
 import domain.Owner;
+import domain.ParticularClient;
 import domain.Review;
 import domain.Review.ReviewState;
 import domain.RuralHouse;
+import domain.TravelAgency;
+import domain.UserFactory;
+import domain.UserType;
+import domain.util.ExtendedIterator;
+import domain.util.RuralHouseIterator;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 
 public class DataAccess implements DataAccessInterface {
 
-	private final ConfigXML CONFIG;
+	private final Config CONFIG;
 	private static String DB_PATH;
 	private static boolean OVERWRITE_DB_FILE;
 	private static boolean INIT_DB_VALUES;
 
 	private EntityManagerFactory emf;
-	private EntityManager  db;
+	private EntityManager db;
 
 	private Timer timer;
 
@@ -64,11 +70,11 @@ public class DataAccess implements DataAccessInterface {
 	private String[] images = {"/img/house00.png", "/img/house01.png", "/img/house02.png", "/img/house03.png", "/img/house04.png"};
 
 	public DataAccess()  {
-
+		
 		timer = new Timer();
 
 		CONFIG = ConfigXML.getInstance();
-		DB_PATH = CONFIG.getDbFilename();
+		DB_PATH = CONFIG.getDBFilename();
 		OVERWRITE_DB_FILE = CONFIG.overwriteFile();
 		INIT_DB_VALUES = CONFIG.initValues();
 
@@ -132,7 +138,7 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public ConfigXML getConfig() {
+	public Config getConfig() {
 		return CONFIG;	
 	}
 
@@ -147,7 +153,6 @@ public class DataAccess implements DataAccessInterface {
 		open();
 		db.getTransaction().begin();
 		entity = db.contains(entity) ? entity : db.merge(entity);
-		db.refresh(entity);
 		db.getTransaction().commit();
 		close();
 		return entity;
@@ -218,12 +223,12 @@ public class DataAccess implements DataAccessInterface {
 			// deleteTableContent("Owner");
 			// deleteTableContent("Admin");
 
-			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", Role.OWNER);
-			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", Role.OWNER);
-			createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", Role.OWNER);
-			Client client = (Client) createUser("client@gamail.com", "client", "client123", Role.CLIENT);
+			Owner owner1 = (Owner)createUser("paco@gmail.com", "paco", "paco123", UserType.OWNER).get();
+			Owner owner2 = (Owner)createUser("imowner@gmail.com", "imowner", "imowner", UserType.OWNER).get();
+			// Owner owner3 = (Owner)createUser("myaccount@hotmal.com", "acount", "my.account_is_nic3", UserType.OWNER).get();
+			Client client = (Client)createUser("client@gamail.com", "client", "client123", UserType.CLIENT).get();
 
-			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", Role.ADMIN);
+			Admin admin = (Admin)createUser("admin@admin.com", "admin", "admin", UserType.ADMIN).get();
 
 			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -256,23 +261,24 @@ public class DataAccess implements DataAccessInterface {
 			rh4.addImage(DataAccess.class.getResource(getRandomImage()).toURI());
 			rh4.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh4);
-			Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
+			// Offer offer = createOffer(rh4, date.parse("2017/5/3"), date.parse("2017/6/3"), 20);		
 			createOffer(rh4, date.parse("2017/6/7"), date.parse("2017/6/20"), 13);		
-
-			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", Role.ADMIN);
-			Owner owner = (Owner)createUser("own@gmail.com", "own", "own", Role.OWNER);
+			admin = (Admin) createUser("adminTemp@admin.com", "adminTemp", "adminTemp", UserType.ADMIN).get();
+			Owner owner = (Owner) createUser("own@gmail.com", "own", "own", UserType.OWNER).get();			
 			RuralHouse rh = createRuralHouse(owner, "Rural House Name", "Descripcion de la casa bonita", createCity("Donostia"), "La calle larga 4 - 3ºb");
 			rh.getReview().setState(admin, ReviewState.APPROVED);
 			update(rh);
 			Offer offer1 = createOffer(rh, date.parse("2017/1/20"), date.parse("2017/3/23"), 13);
 			Offer offer2 = createOffer(rh, date.parse("2017/5/7"), date.parse("2017/9/16"), 24);
 			createBooking(client, offer1, date.parse("2017/1/4"), date.parse("2019/2/20"));
-			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));						
+			createBooking(client, offer2, date.parse("2017/6/13"), date.parse("2019/8/2"));
 
 			System.out.println("Database initialized");
 
-			for (RuralHouse ruralHouse : getRuralHouses()) {
-				System.out.println(ruralHouse.getReview().toString());
+			ExtendedIterator<RuralHouse> rhs = new RuralHouseIterator(getRuralHouses());
+
+			while (rhs.hasNext()) {
+				System.out.println(((RuralHouse) rhs.next()).getReview().toString());
 			}
 
 		} catch (Exception e){
@@ -313,8 +319,8 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Vector<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
-		Vector<Offer> result = null;
+	public List<Offer> getOffers(RuralHouse rh, Date firstDay,  Date lastDay) {
+		List<Offer> result = null;
 		try { 
 			open();
 			System.out.println(">> DataAccess: getOffers");
@@ -536,7 +542,7 @@ public class DataAccess implements DataAccessInterface {
 		try{
 			open();
 			RuralHouse ruralHouse = db.find(RuralHouse.class, rh.getId());
-			if (ruralHouse.overlapsWith(firstDay, lastDay) != null) {
+			if (ruralHouse.overlapsWith(firstDay, lastDay).isPresent()) {
 				return true;
 			}
 		} catch (Exception e){
@@ -598,7 +604,7 @@ public class DataAccess implements DataAccessInterface {
 		Vector<RuralHouse> result = null;
 		try {
 			open();
-			System.out.println(">> DataAccess: getRuralHouses()");
+			System.out.println(">> DataAccess: ruralHouseIterator()");
 			TypedQuery<RuralHouse> query = db.createQuery("SELECT rh "
 					+ "FROM RuralHouse rh ", RuralHouse.class);
 			result = new Vector<RuralHouse>(query.getResultList());
@@ -737,13 +743,14 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
+	public Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException {
 		AbstractUser user = null;
 		try {
 			open();
-			System.out.print(">> DataAccess: createUser(" + email + ", " + username +", " + password + ", " + role + ") -> ");
+			System.out.print(">> DataAccess: createUser(" + email + ", " + username +", " + password + ", " + userType + ") -> ");
 			db.getTransaction().begin();
-			user = getNewUser(email, username, password, role);
+			UserFactory<AbstractUser>  userFactory = getUserFactory(userType).get();
+			user = userFactory.create(email, username, password);
 			db.persist(user);
 			db.getTransaction().commit();
 			System.out.println("Created with id " + user.getId());
@@ -753,21 +760,24 @@ public class DataAccess implements DataAccessInterface {
 		} finally {
 			close();
 		}
-		return user;
+		return Optional.ofNullable(user);
 	}
 
-	private AbstractUser getNewUser(String email, String username, String password, Role role) {
-		switch (role) {
+	private Optional<UserFactory<AbstractUser>> getUserFactory(UserType userType) {
+		switch (userType) {
 		case CLIENT:
-			return new Client(email, username, password);
+			return Optional.ofNullable(Client::new);
+		case PARTICULAR_CLIENT:
+			return Optional.ofNullable(ParticularClient::new);
+		case TRAVEL_AGENCY:
+			return Optional.ofNullable(TravelAgency::new);
 		case OWNER:
-			return new Owner(email, username, password);
+			return Optional.ofNullable(Owner::new);
 		case ADMIN:
-			return new Admin(email, username, password);
+			return Optional.ofNullable(Admin::new);
 		case SUPER_ADMIN:
-			return null;
 		default:
-			return null;
+			return Optional.empty();
 		}
 	}
 
@@ -802,8 +812,8 @@ public class DataAccess implements DataAccessInterface {
 	}
 
 	@Override
-	public Role getRole(String username) {
-		Role role = null;
+	public UserType getRole(String username) {
+		UserType userType = null;
 		try {
 			open();
 			System.out.print(">> DataAccess: getRole(" + username + ") -> ");
@@ -812,15 +822,15 @@ public class DataAccess implements DataAccessInterface {
 					+ "WHERE u.username = :username", AbstractUser.class)
 					.setParameter("username", username);
 			Vector<AbstractUser> result = new Vector<AbstractUser>(new Vector<AbstractUser>(query.getResultList()));
-			role = result.get(0).getRole();
-			System.out.println(role);	
+			userType = result.get(0).getRole();
+			System.out.println(userType);	
 		} catch	(Exception e) {
 			LogFile.log(e, true);
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return role;
+		return userType;
 	}
 
 	@Override

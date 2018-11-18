@@ -1,7 +1,9 @@
 package businessLogic;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -16,8 +18,10 @@ import domain.Owner;
 import domain.Review;
 import domain.RuralHouse;
 import domain.AbstractUser;
-import domain.AbstractUser.Role;
 import domain.Review.ReviewState;
+import domain.util.ExtendedIterator;
+import domain.util.RuralHouseIterator;
+import domain.UserType;
 import domain.City;
 import domain.Client;
 import exceptions.AuthException;
@@ -33,6 +37,13 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	private DataAccessInterface dataAccess;
 	private Locale locale;
 
+	public ApplicationFacadeImpl() {
+	}
+	
+	public ApplicationFacadeImpl(DataAccessInterface dataAccess) {
+		setDataAccess(dataAccess);
+	}
+	
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
 	}
@@ -87,22 +98,22 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<Offer> getOffers() {
+	public List<Offer> getOffers() {
 		return dataAccess.getOffers();
 	}
 
 	@Override
-	public Vector<Offer> getOffers(ReviewState reviewState) {
+	public List<Offer> getOffers(ReviewState reviewState) {
 		return dataAccess.getOffers(reviewState);
 	}
 
 	@Override
-	public Vector<Offer> getActiveOffers() {
+	public List<Offer> getActiveOffers() {
 		return dataAccess.getActiveOffers();
 	}
 
 	@Override
-	public Vector<Offer> getActiveOffers(ReviewState reviewState) {
+	public List<Offer> getActiveOffers(ReviewState reviewState) {
 		return dataAccess.getActiveOffers(reviewState);
 	}
 
@@ -133,9 +144,9 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	@Override
-	public Vector<RuralHouse> getRuralHouses()  {
-		System.out.println(">> ApplicationFacadeImpl: getRuralHouses");
-		return dataAccess.getRuralHouses();
+	public ExtendedIterator<RuralHouse> ruralHouseIterator()  {
+		System.out.println(">> ApplicationFacadeImpl: ruralHouseIterator");
+		return new RuralHouseIterator(dataAccess.getRuralHouses());
 	}
 
 	@Override
@@ -173,11 +184,12 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		return new Vector<City>(dataAccess.getCities());
 	}
 
-	public AbstractUser createUser(String email, String username, String password, Role role) throws DuplicatedEntityException {
-		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " role=" + role);
+	@Override
+	public Optional<AbstractUser> createUser(String email, String username, String password, UserType userType) throws DuplicatedEntityException {
+		System.out.println(">> ApplicationFacadeImpl: createUser=> email=" + email + "username= " + username + " password= " + password + " userType=" + userType);
 		if(!dataAccess.existsEmail(email)) {
 			if(!dataAccess.existsUser(username)) {
-				return dataAccess.createUser(email, username, password, role);
+				return dataAccess.createUser(email, username, password, userType);
 			} else {
 				throw new DuplicatedEntityException(Error.DUPLICATED_USERNAME);
 			}
@@ -186,9 +198,9 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		}
 	}
 
-	public Role getRole(String username) {
-		Role role = dataAccess.getRole(username);
-		return role;
+	public UserType getUserTypeOf(String username) {
+		UserType userType = dataAccess.getRole(username);
+		return userType;
 	}
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
@@ -217,7 +229,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	}
 
 	public Locale getLocale() {
-		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale());
+		locale = Locale.forLanguageTag(dataAccess.getConfig().getLocale().name());
 		if(locale == null) {
 			locale = Locale.getDefault();
 		}

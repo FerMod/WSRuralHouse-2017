@@ -99,7 +99,7 @@ public class ImagePanel extends JPanel {
 		if(imageIcon != null) {
 			int x = (this.getWidth() - imageIcon.getIconWidth()) / 2;
 			int y = (this.getHeight() - imageIcon.getIconHeight()) / 2;
-			g.drawImage(imageIcon.getImage(), x, y, this);  // see javadoc for more info on the parameters    
+			g.drawImage(imageIcon.getImage(), x, y, this);  // See javadoc for more info about the parameters    
 		}
 	}
 

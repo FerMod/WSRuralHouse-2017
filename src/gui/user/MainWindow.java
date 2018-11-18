@@ -29,11 +29,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
+import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
-import domain.AbstractUser.Role;
+import domain.UserType;
 import exceptions.AuthException;
 import exceptions.DuplicatedEntityException;
 import gui.components.ui.CustomTabbedPaneUI;
@@ -78,9 +80,7 @@ public class MainWindow extends JFrame {
 
 					new ConsoleKeyEventDispatcher();
 
-					ApplicationFacadeImpl aplicationFacade = new ApplicationFacadeImpl();
-					aplicationFacade.setDataAccess(new DataAccess());
-					MainWindow.setBussinessLogic(aplicationFacade);
+					MainWindow.setBussinessLogic(ApplicationFacadeFactory.createApplicationFacade(ConfigXML.getInstance()));
 
 					AbstractUser user = setupDebugAccount();
 
@@ -107,8 +107,8 @@ public class MainWindow extends JFrame {
 	 */
 	@Deprecated
 	private static AbstractUser setupDebugAccount() {
-		Role[] options = new Role[] {Role.CLIENT, Role.OWNER, Role.ADMIN, Role.SUPER_ADMIN};
-		Role response = (Role)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+		UserType[] options = new UserType[] {UserType.CLIENT, UserType.OWNER, UserType.ADMIN, UserType.SUPER_ADMIN};
+		UserType response = (UserType)JOptionPane.showInputDialog(null, "Open the window as: ", "Choose option", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 		if(response != null) {
 			try {
 				switch (response) {
@@ -119,12 +119,12 @@ public class MainWindow extends JFrame {
 						e.printStackTrace();
 					}
 				case OWNER:
-					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response);
+					return getBusinessLogic().createUser("Owner@ownermail.com", "Owner", "OwnerPassword", response).get();
 				case ADMIN:
-					return getBusinessLogic().createUser("Admin@adminmail.com", "Admin", "AdminPassword", response);
+					return getBusinessLogic().createUser("Admin@adminmail.com", "Admin", "AdminPassword", response).get();
 				case SUPER_ADMIN:
 					//Not implemented
-					return getBusinessLogic().createUser("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword", response);
+					return getBusinessLogic().createUser("SuperAdmin@superadminmail.com", "SuperAdmin", "SuperAdminPassword", response).get();
 				}
 			} catch (DuplicatedEntityException e) {
 				e.printStackTrace();
@@ -238,7 +238,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * Obtain a {@code LinkedHashMap<String, JPanel>} with the tab panels that the user will see
 	 * 
-	 * @param user the role of the user
+	 * @param user the user
 	 * @return a {@code LinkedHashMap<String, JPanel>} of elements in the order that where added
 	 * 
 	 */
@@ -251,8 +251,6 @@ public class MainWindow extends JFrame {
 				panelMap.put("Offer Bookings", new BookingsTablePanel(this));			
 				break;
 			case OWNER:
-				//FIXME VERY VERY TEMPORAL!!
-				//panelMap.put("Owner Main Menu", (JPanel) new MainGUI(role).getContentPane());
 				panelMap.put("Owner Main Menu", new OwnerRuralHousesPanel(this));
 				// panelMap.put("Main Menu", new OwnerMainPanel(this));
 				break;
@@ -263,7 +261,7 @@ public class MainWindow extends JFrame {
 				//panelMap.put("Super Admin Main Menu", new SuperAdminMainPanel(this));
 				break;
 			default:
-				//[TODO]: Throw exception when the user role content pane is not defined 
+				//[TODO]: Throw exception when the user content pane for the type of user is not defined 
 				System.exit(1);
 				break;
 			}

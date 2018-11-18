@@ -12,9 +12,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
@@ -30,11 +32,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import domain.event.EventPublisher;
+import domain.event.ValueAddedListener;
 import domain.util.IntegerAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-public class RuralHouse implements Serializable {
+public class RuralHouse extends EventPublisher<ValueAddedListener<Offer>> implements Serializable {
 
 	/**
 	 * Generated serial version ID
@@ -64,7 +68,7 @@ public class RuralHouse implements Serializable {
 	 * rural house image icon.
 	 */
 	@OneToOne(cascade=CascadeType.ALL)
-	private Vector<byte[]> images;
+	private List<byte[]> images;
 	private String[] tags;
 
 	//@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
@@ -90,14 +94,13 @@ public class RuralHouse implements Serializable {
 	 * @see Review.ReviewState
 	 */
 	public RuralHouse(Owner owner, String name, String description, City city, String address) {
+		this();
 		this.owner = owner;
 		owner.getRuralHouses().add(this);
 		this.name = name;
 		this.description = description;
 		this.city = city;
 		this.address = address;
-		this.review = new Review(this);
-		this.offers =  Collections.synchronizedMap(new HashMap<Integer, Offer>());
 		this.images = new Vector<byte[]>();
 	}
 
@@ -146,7 +149,7 @@ public class RuralHouse implements Serializable {
 	 * 
 	 * @return the image vector
 	 */
-	public Vector<byte[]> getImages() {
+	public List<byte[]> getImages() {
 		return images;
 	}
 
@@ -226,7 +229,7 @@ public class RuralHouse implements Serializable {
 	 * @param image element to be removed from this Vector, if present
 	 * @return true if it contained the specified element
 	 */
-	public boolean removeImage(ImageIcon image) {
+	public boolean removeImage(byte[] image) {
 		return images.remove(image);
 	}
 
@@ -261,6 +264,8 @@ public class RuralHouse implements Serializable {
 	 */
 	public void addOffer(Offer offer) {
 		offers.put(offer.getId(), offer);
+		// Notify the list of registered listeners
+		this.notifyListeners((listener) -> listener.onValueAdded(Optional.ofNullable(offer)));
 	}
 
 	/**
@@ -277,18 +282,16 @@ public class RuralHouse implements Serializable {
 	/**
 	 * This method obtains available offers for a concrete house in a certain period 
 	 * 
-	 * @param firstDay, first day in a period range 
-	 * @param lastDay, last day in a period range
+	 * @param firstDay first day in a period range 
+	 * @param lastDay last day in a period range
 	 * @return a vector of offers(Offer class)  available  in this period
 	 */
-	public Vector<Offer> getOffers(Date firstDay,  Date lastDay) {
-		Vector<Offer> availableOffers = new Vector<Offer>();
-		for (Entry<Integer, Offer> entry : offers.entrySet()) {
-			Offer offer = entry.getValue();
-			if (offer.getStartDate().compareTo(firstDay) >= 0 && offer.getEndDate().compareTo(lastDay) <= 0  ) {
-				availableOffers.add(offer);
-			}
-		}
+	public List<Offer> getOffers(Date firstDay,  Date lastDay) {
+		List<Offer> availableOffers = offers.entrySet()
+				.stream()
+				.map(entry -> entry.getValue())
+				.filter((offer) -> offer.getStartDate().compareTo(firstDay) >= 0 && offer.getEndDate().compareTo(lastDay) <= 0)
+				.collect(Collectors.toList());
 		return availableOffers;
 	}
 
@@ -305,18 +308,17 @@ public class RuralHouse implements Serializable {
 	/**
 	 * This method obtains the first offer that overlaps with the provided dates
 	 * 
-	 * @param firstDay, first day in a period range 
-	 * @param lastDay, last day in a period range
+	 * @param firstDay first day in a period range 
+	 * @param lastDay last day in a period range
 	 * @return the first offer that overlaps with those dates, or null if there is no overlapping offer
 	 */
-	public Offer overlapsWith(Date firstDay,  Date lastDay) {
-		for (Entry<Integer, Offer> entry : offers.entrySet()) {
-			Offer offer = entry.getValue();
-			if (offer.getEndDate().compareTo(firstDay) > 0 && offer.getStartDate().compareTo(lastDay) < 0) {
-				return offer;
-			}
-		}
-		return null;
+	public Optional<Offer> overlapsWith(Date firstDay,  Date lastDay) {
+		Optional<Offer> optOffer = offers.entrySet()
+				.stream()
+				.map(entry -> entry.getValue())
+				.filter((offer) -> offer.getEndDate().after(firstDay) && offer.getStartDate().before(lastDay))
+				.findFirst();
+		return optOffer;
 	}
 
 	public String toDetailedString() {
