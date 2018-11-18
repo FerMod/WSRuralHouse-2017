@@ -183,10 +183,12 @@ class ExtendedIteratorTest {
 		try {
 
 			List<RuralHouse> resultRuralHouse = new ArrayList<>();
+			
 			it.goFirst();
 			while (it.hasNext()){
 				resultRuralHouse.add(it.next());
 			}
+			
 			assertEquals(ruralHouseList, resultRuralHouse);
 
 		} catch (Exception e) {
@@ -200,13 +202,14 @@ class ExtendedIteratorTest {
 		try {
 
 			List<RuralHouse> resultRuralHouse = new ArrayList<>();
+			List<RuralHouse> expectedList = new ArrayList<>(ruralHouseList);
+			Collections.reverse(expectedList);
+			
 			it.goLast();
 			while (it.hasPrevious()){
 				resultRuralHouse.add(it.previous());
-			}
+			}		
 			
-			List<RuralHouse> expectedList = new ArrayList<>(ruralHouseList);
-			Collections.reverse(expectedList);
 			assertEquals(expectedList, resultRuralHouse);
 
 		} catch (Exception e) {
