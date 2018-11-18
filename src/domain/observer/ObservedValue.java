@@ -9,7 +9,7 @@ import java.util.Optional;
 import domain.event.EventPublisher;
 import domain.event.ValueChangeListener;
 
-public class ObservedValue<T> extends EventPublisher<ValueChangeListener> implements Serializable {
+public class ObservedValue<T> extends EventPublisher<ValueChangeListener<T>> implements Serializable {
 
 	private Optional<T> value;
 
