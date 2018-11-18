@@ -1,7 +1,8 @@
 package domain.util;
 
-import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import domain.RuralHouse;
 
 public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
@@ -14,33 +15,29 @@ public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 	}
 
 	@Override
-	public boolean hasNext() {
-		return index <= ruralHouseList.size()-1;
+	public boolean hasPrevious() {
+		return index > 0;
 	}
 
 	@Override
-	public RuralHouse next() {
-		if(!hasNext()) {
-			 throw new ConcurrentModificationException();
-		}
-		RuralHouse ruralHouse = ruralHouseList.get(index);
-		index++;
-		return ruralHouse;
+	public boolean hasNext() {
+		return index < ruralHouseList.size();
 	}
 
 	@Override
 	public RuralHouse previous() {
 		if (!hasPrevious()) {
-            throw new ConcurrentModificationException();
+			throw new NoSuchElementException();
 		}
-		RuralHouse ruralHouse = ruralHouseList.get(index);
-		index--;
-		return ruralHouse;
+		return ruralHouseList.get(--index);
 	}
 
 	@Override
-	public boolean hasPrevious() {
-		return index >= 0;
+	public RuralHouse next() {
+		if(!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		return ruralHouseList.get(index++);
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 
 	@Override
 	public void goLast() {
-		index = ruralHouseList.size()-1;
+		index = ruralHouseList.size();
 	}
 
 }
