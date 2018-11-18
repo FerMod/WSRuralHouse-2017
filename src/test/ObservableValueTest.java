@@ -60,8 +60,8 @@ class ObservableValueTest {
 			observedValue.registerListener((oldVAlue, newValue) -> {
 				eventInvoked = true;
 				assertAll("EventValues",
-					() -> assertEquals(oldVAlue.get(), value, () -> "New value missmatch in event invocation."),
-					() -> assertEquals(newValue.get(), expected, () -> "Old value missmatch in event invocation.")
+					() -> assertEquals(oldVAlue.get(), (Integer)value, () -> "New value missmatch in event invocation."),
+					() -> assertEquals(newValue.get(), (Integer)expected, () -> "Old value missmatch in event invocation.")
 				);
 			});
 

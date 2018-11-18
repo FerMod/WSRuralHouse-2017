@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.jdo.annotations.NotPersistent;
 import javax.persistence.Entity;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,11 +17,8 @@ import domain.event.ValueAddedListener;
 @Entity
 public class ParticularClient extends AbstractUser {
 
-	private static final long serialVersionUID = -1989696498234692075L;
-
 	private List<Booking> bookings;
-	@NotPersistent
-	transient private Map<RuralHouse, ValueAddedListener> eventListenersMap;
+	transient private Map<RuralHouse, ValueAddedListener<Offer>> eventListenersMap;
 
 	public ParticularClient(String email, String username, String password) {
 		super(email, username, password, UserType.PARTICULAR_CLIENT);
@@ -51,10 +47,9 @@ public class ParticularClient extends AbstractUser {
 	public void enableOfferAlert(RuralHouse ruralHouse) {
 		enableOfferAlert(ruralHouse, this::alert);
 	}
-	
-	public void enableOfferAlert(RuralHouse ruralHouse, Consumer<Optional<Offer>> consumer) {	
-		@SuppressWarnings("unchecked")
-		ValueAddedListener listener = ruralHouse.registerListener((optValue) -> consumer.accept((Optional<Offer>) optValue));
+
+	public void enableOfferAlert(RuralHouse ruralHouse, Consumer<Optional<Offer>> consumer) {
+		ValueAddedListener<Offer> listener = ruralHouse.registerListener((optValue) -> consumer.accept(optValue));
 		eventListenersMap.put(ruralHouse, listener);
 	}
 
@@ -65,9 +60,11 @@ public class ParticularClient extends AbstractUser {
 	public void disableOfferAlert(RuralHouse ruralHouse) {		
 		ruralHouse.unregisterListener(eventListenersMap.get(ruralHouse));
 	}
-	
+
 	public void disableAllAlerts() {
 		eventListenersMap.keySet().forEach(rh -> rh.unregisterListener(eventListenersMap.get(rh)));
 	}
+
+	private static final long serialVersionUID = -1989696498234692075L;
 
 }

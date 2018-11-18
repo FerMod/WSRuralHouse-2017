@@ -37,6 +37,13 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	private DataAccessInterface dataAccess;
 	private Locale locale;
 
+	public ApplicationFacadeImpl() {
+	}
+	
+	public ApplicationFacadeImpl(DataAccessInterface dataAccess) {
+		setDataAccess(dataAccess);
+	}
+	
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
 	}
