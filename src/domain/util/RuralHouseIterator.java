@@ -16,12 +16,12 @@ public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 
 	@Override
 	public boolean hasPrevious() {
-		return index > 0;
+		return index >= 0;
 	}
 
 	@Override
 	public boolean hasNext() {
-		return index < ruralHouseList.size();
+		return index <= ruralHouseList.size()-1;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 		if (!hasPrevious()) {
 			throw new NoSuchElementException();
 		}
-		return ruralHouseList.get(--index);
+		return ruralHouseList.get(index--);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class RuralHouseIterator implements ExtendedIterator<RuralHouse> {
 
 	@Override
 	public void goLast() {
-		index = ruralHouseList.size();
+		index = ruralHouseList.size()-1;
 	}
 
 }

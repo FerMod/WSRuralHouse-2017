@@ -121,14 +121,37 @@ class ExtendedIteratorTest {
 		}	
 	}
 
+	@DisplayName("HasNext - True")
+	void testHasNextTrue(TestInfo testInfo) {
+		try {
+
+			it.goFirst();
+			assertTrue(it.hasNext(), () -> "Returned wrong value.");
+
+		} catch (Exception e) {
+			fail(TestUtilities.getFailMessage(e, testInfo), e);
+		}	
+	}
+
+	@DisplayName("HasNext - False")
+	void testHasNextFalse(TestInfo testInfo) {
+		try {
+
+			it.goFirst();
+			assertFalse(it.hasNext(), () -> "Returned wrong value.");
+
+		} catch (Exception e) {
+			fail(TestUtilities.getFailMessage(e, testInfo), e);
+		}	
+	}
+
 	@DisplayName("Previous - Return Previous Element")
 	@Test
 	void testPrevious(TestInfo testInfo) {
 		try {
 
-			assumeTrue(it.hasNext());
-			RuralHouse rh = it.next();
-			assertEquals(rh, it.previous(), () -> "Previous element not equal.");
+			RuralHouse expected = ruralHouseList.get(0);
+			assertEquals(expected, it.previous(), () -> "Previous element not equal.");
 
 		} catch (Exception e) {
 			fail(TestUtilities.getFailMessage(e, testInfo), e);
@@ -139,7 +162,47 @@ class ExtendedIteratorTest {
 	@Test
 	void testPreviousNoSuchElementException() {
 		try {
+
+			try {
+				it.previous();
+			} catch (Exception e) {
+				assumeNoException("Assumed no exception but unexpected exception has thrown.", e);
+			}
+
 			assertThrows(NoSuchElementException.class, () -> it.previous());
+
+		} catch (Exception e) {
+			fail("Expected java.util.NoSuchElementException but got " + e.getClass().getCanonicalName(), e);
+		}
+	}
+
+	@DisplayName("Next - Return Next Element")
+	@Test
+	void testNext(TestInfo testInfo) {
+		try {
+
+			RuralHouse expected = ruralHouseList.get(0);
+			assertEquals(expected, it.next(), () -> "Previous element not equal.");
+
+		} catch (Exception e) {
+			fail(TestUtilities.getFailMessage(e, testInfo), e);
+		}	
+	}
+
+	@DisplayName("Next - NoSuchElementException")
+	@Test
+	void testNextNoSuchElementException() {
+		try {
+
+			it.goLast();
+			try {
+				it.next();
+			} catch (Exception e) {
+				assumeNoException("Assumed no exception but unexpected exception has thrown.", e);
+			}
+
+			assertThrows(NoSuchElementException.class, () -> it.next());
+
 		} catch (Exception e) {
 			fail("Expected java.util.NoSuchElementException but got " + e.getClass().getCanonicalName(), e);
 		}
@@ -151,10 +214,16 @@ class ExtendedIteratorTest {
 		try {
 
 			it.goFirst();
+			try {
+				it.previous();
+			} catch (Exception e) {
+				assumeNoException("Assumed no exception but unexpected exception has thrown.", e);
+			}
+
 			assertAll("GoFirst",
-					() -> assertTrue(it.hasNext(), () -> "Not moved correctly to first element. Has Next"),
-					() -> assertFalse(it.hasPrevious(), () -> "Not moved correctly to first element. Has Previous")
-					);
+				() -> assertTrue(it.hasNext(), () -> "Not moved correctly to first element. Has Next"),
+				() -> assertFalse(it.hasPrevious(), () -> "Not moved correctly to first element. Has Previous")
+			);
 
 		} catch (Exception e) {
 			fail(TestUtilities.getFailMessage(e, testInfo), e);
@@ -167,6 +236,12 @@ class ExtendedIteratorTest {
 		try {
 
 			it.goLast();
+			try {
+				it.next();
+			} catch (Exception e) {
+				assumeNoException("Assumed no exception but unexpected exception has thrown.", e);
+			}
+
 			assertAll("GoLast",
 				() -> assertFalse(it.hasNext(), () -> "Not moved correctly to last element. Has Next"),
 				() -> assertTrue(it.hasPrevious(), () -> "Not moved correctly to last element. Has Previous")
@@ -183,12 +258,12 @@ class ExtendedIteratorTest {
 		try {
 
 			List<RuralHouse> resultRuralHouse = new ArrayList<>();
-			
+
 			it.goFirst();
 			while (it.hasNext()){
 				resultRuralHouse.add(it.next());
 			}
-			
+
 			assertEquals(ruralHouseList, resultRuralHouse);
 
 		} catch (Exception e) {
@@ -204,12 +279,12 @@ class ExtendedIteratorTest {
 			List<RuralHouse> resultRuralHouse = new ArrayList<>();
 			List<RuralHouse> expectedList = new ArrayList<>(ruralHouseList);
 			Collections.reverse(expectedList);
-			
+
 			it.goLast();
 			while (it.hasPrevious()){
 				resultRuralHouse.add(it.previous());
 			}		
-			
+
 			assertEquals(expectedList, resultRuralHouse);
 
 		} catch (Exception e) {
