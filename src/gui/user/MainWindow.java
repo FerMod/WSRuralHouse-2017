@@ -29,8 +29,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeImpl;
 import businessLogic.ApplicationFacadeInterface;
+import configuration.ConfigXML;
 import dataAccess.DataAccess;
 import domain.AbstractUser;
 import domain.UserType;
@@ -78,9 +80,7 @@ public class MainWindow extends JFrame {
 
 					new ConsoleKeyEventDispatcher();
 
-					ApplicationFacadeImpl aplicationFacade = new ApplicationFacadeImpl();
-					aplicationFacade.setDataAccess(new DataAccess());
-					MainWindow.setBussinessLogic(aplicationFacade);
+					MainWindow.setBussinessLogic(ApplicationFacadeFactory.createApplicationFacade(ConfigXML.getInstance()));
 
 					AbstractUser user = setupDebugAccount();
 
