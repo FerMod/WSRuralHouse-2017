@@ -198,7 +198,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		}
 	}
 
-	public UserType getUserTypeOf(String username) {
+	public UserType getTypeOfUser(String username) {
 		UserType userType = dataAccess.getRole(username);
 		return userType;
 	}

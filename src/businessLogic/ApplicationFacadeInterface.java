@@ -256,7 +256,7 @@ public interface ApplicationFacadeInterface  {
 	 * @return the user type of the account
 	 */
 	@WebMethod
-	UserType getUserTypeOf(String username);
+	UserType getTypeOfUser(String username);
 
 	/**
 	 * Login the user with the account that matches the entered user name and password
