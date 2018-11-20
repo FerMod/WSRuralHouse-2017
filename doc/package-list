@@ -1,8 +1,11 @@
 businessLogic
 businessLogic.util
 configuration
+configuration.util
 dataAccess
 domain
+domain.event
+domain.observer
 domain.util
 exceptions
 gui
@@ -15,4 +18,7 @@ gui.user
 gui.user.admin
 gui.user.client
 gui.user.owner
-testing
+test
+test.contract
+test.data
+test.util
