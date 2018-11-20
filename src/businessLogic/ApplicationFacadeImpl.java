@@ -11,6 +11,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.security.auth.login.AccountNotFoundException;
 
+import dataAccess.DataAccess;
 import dataAccess.DataAccessInterface;
 import domain.Booking;
 import domain.Offer;
@@ -38,10 +39,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	private Locale locale;
 
 	public ApplicationFacadeImpl() {
-	}
-	
-	public ApplicationFacadeImpl(DataAccessInterface dataAccess) {
-		setDataAccess(dataAccess);
+		dataAccess = new DataAccess();
 	}
 	
 	public void setDataAccess(DataAccessInterface dataAccess) {

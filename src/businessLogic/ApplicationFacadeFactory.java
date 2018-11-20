@@ -21,7 +21,7 @@ public final class ApplicationFacadeFactory {
 		
 		if (config.isBusinessLogicLocal()) {
 			
-			aplicationFacade = new ApplicationFacadeImpl(new DataAccess());
+			aplicationFacade = new ApplicationFacadeImpl();
 			
 		} else { //Si es remoto
 
