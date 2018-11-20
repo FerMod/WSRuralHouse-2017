@@ -15,7 +15,7 @@ import configuration.util.CurrencyLocale;
 
 public class ConfigXML implements Serializable, Config {
 
-	private static final String FILE_PATH = "resources/config.xml";
+	public static String configFilePath = "resources/config.xml";
 
 	private boolean showConsole;
 
@@ -50,16 +50,20 @@ public class ConfigXML implements Serializable, Config {
 	private volatile static Config instance;
 
 	private ConfigXML(){
+		this(configFilePath);
+	}
+	
+	private ConfigXML(String configFilePath){
 
 		if (instance != null){
 			throw new RuntimeException("Use getInstance() method to get the single instance of this class.");
 		}
 
-		loadConfig(FILE_PATH);		
+		loadFileConfig(configFilePath);		
 
 	}
 
-	private void loadConfig(String filePath) {
+	private void loadFileConfig(String filePath) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -194,7 +198,17 @@ public class ConfigXML implements Serializable, Config {
 	public boolean isBusinessLogicLocal() {
 		return businessLogicLocal;
 	}
+	
+	public String getFilePath() {
+		return ConfigXML.configFilePath;
+	}
 
+	/**
+	 * Return the current instance of the object. <br>
+	 * Creates a new instance with none exists.
+	 * 
+	 * @return the current or new instance of this object
+	 */
 	public synchronized static Config getInstance() {
 		if(instance == null) {
 			synchronized (ConfigXML.class) {
@@ -202,6 +216,17 @@ public class ConfigXML implements Serializable, Config {
 			}
 		}
 		return instance;
+	}
+	
+	/**
+	 * Loads the configuration file and return a new instance of this object with configuration loaded.
+	 * 
+	 * @param filePath the configuration file path
+	 * @return the new instance with the loaded configuration
+	 */
+	public synchronized static Config loadConfig(String filePath) {
+		ConfigXML.configFilePath = filePath;
+		return getInstance();
 	}
 
 	/* (non-Javadoc)
