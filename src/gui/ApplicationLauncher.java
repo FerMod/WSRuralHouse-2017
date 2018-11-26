@@ -52,10 +52,10 @@ public class ApplicationLauncher {
 
 		} catch (Exception e) {
 
-			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\nTo show the console output press \"F12\"");
+			System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getFile().getAbsolutePath() + "\"\nTo show the console output press \"F12\"");
 			LogFile.log(e, true);
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"\nTo show the console output press \"F12\"", "Error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,	"An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getFile().getAbsolutePath() + "\"\nTo show the console output press \"F12\"", "Error!", JOptionPane.ERROR_MESSAGE);
 			
 		}
 

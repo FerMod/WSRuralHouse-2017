@@ -37,7 +37,7 @@ public final class TestUtilities {
 			try {
 				afi = ApplicationFacadeFactory.createApplicationFacade(ConfigXML.getInstance());
 			} catch (Exception e) {
-				System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getAbsolutePath() + "\"");
+				System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getFile().getAbsolutePath() + "\"");
 				LogFile.log(e, true);
 				e.printStackTrace();
 			}
