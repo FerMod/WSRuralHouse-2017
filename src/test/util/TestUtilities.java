@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.TestInfo;
 
+import businessLogic.AppFacade;
 import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
@@ -35,7 +36,7 @@ public final class TestUtilities {
 	public static ApplicationFacadeInterface getApplicationFacadeInstance() {
 		if(afi == null) {
 			try {
-				afi = ApplicationFacadeFactory.createApplicationFacade(ConfigXML.getInstance());
+				afi = AppFacade.loadConfig(ConfigXML.getInstance());
 			} catch (Exception e) {
 				System.err.println("An error has occurred.\nTo see more detailed information, go to \"" + LogFile.getFile().getAbsolutePath() + "\"");
 				LogFile.log(e, true);

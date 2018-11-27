@@ -10,6 +10,7 @@ import businessLogic.util.LogFile;
 import configuration.Config;
 import dataAccess.DataAccess;
 
+@Deprecated
 public final class ApplicationFacadeFactory {
 
 	private ApplicationFacadeFactory() {

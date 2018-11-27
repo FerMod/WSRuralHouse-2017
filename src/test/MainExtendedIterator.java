@@ -1,5 +1,6 @@
 package test;
 
+import businessLogic.AppFacade;
 import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
 import configuration.Config;
@@ -11,8 +12,7 @@ public class MainExtendedIterator {
 
 	public static void main(String[] args) {
 		
-		Config config = ConfigXML.getInstance();
-		ApplicationFacadeInterface facadeInterface = ApplicationFacadeFactory.createApplicationFacade(config);
+		ApplicationFacadeInterface facadeInterface = AppFacade.loadConfig(ConfigXML.getInstance());
 		ExtendedIterator<RuralHouse> it = facadeInterface.ruralHouseIterator();
 
 		RuralHouse rh;

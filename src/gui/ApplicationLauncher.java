@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+
+import businessLogic.AppFacade;
 import businessLogic.ApplicationFacadeFactory;
 import businessLogic.ApplicationFacadeInterface;
 import businessLogic.util.LogFile;
@@ -42,7 +44,7 @@ public class ApplicationLauncher {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
-			ApplicationFacadeInterface aplicationFacade = ApplicationFacadeFactory.createApplicationFacade(config);
+			ApplicationFacadeInterface aplicationFacade = AppFacade.loadConfig(config);
 
 			//if (c.getDataBaseOpenMode().equals("initialize")) {
 			//    appFacadeInterface.initializeBD();
