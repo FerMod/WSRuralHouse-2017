@@ -16,7 +16,7 @@ public class AppFacade implements Serializable {
 
 	private volatile static ApplicationFacadeInterface instance;
 
-	public static String CONFIG_FILEPATH = "db/config.xml";
+	public static String CONFIG_FILEPATH = "resources/config.xml";
 	private static Config config;
 
 	private AppFacade(){		
@@ -56,7 +56,7 @@ public class AppFacade implements Serializable {
 	/**
 	 * Loads the configuration file and return a new instance of this object with the configuration loaded.
 	 * 
-	 * @param filePath the configuration file path
+	 * @param config the configuration instance
 	 * @return the new instance with the loaded configuration
 	 */
 	public synchronized static ApplicationFacadeInterface loadConfig(Config config) {
