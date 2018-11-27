@@ -46,7 +46,7 @@ public class AppFacade implements Serializable {
 	 */
 	public synchronized static ApplicationFacadeInterface getInstance() {
 		if(instance == null) {
-			synchronized (AppFacade.class) {
+			synchronized (ApplicationFacadeInterface.class) {
 				if(instance == null) instance = createApplicationFacade(config);
 			}
 		}
