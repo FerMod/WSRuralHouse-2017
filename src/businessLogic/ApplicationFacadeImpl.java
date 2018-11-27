@@ -41,7 +41,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public ApplicationFacadeImpl() {
 		dataAccess = new DataAccess();
 	}
-	
+
 	public void setDataAccess(DataAccessInterface dataAccess) {
 		this.dataAccess = dataAccess;
 	}
@@ -55,17 +55,17 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public <T> T remove(T entity) {
 		return dataAccess.remove(entity);
 	}
-	
+
 	@Override
 	public <T, K> T remove(Class<T> entityClass, K primaryKey) {
 		return dataAccess.remove(entityClass, primaryKey);
 	}
-	
+
 	@Override
 	public <T, K> T find(Class<T> entityClass, K primaryKey) {
 		return dataAccess.find(entityClass, primaryKey);
 	}
-	
+
 	@Override
 	public Offer createOffer(RuralHouse ruralHouse, Date firstDay, Date lastDay, double price) throws OverlappingOfferException, BadDatesException {
 		System.out.println(">> ApplicationFacadeImpl: createOffer=> ruralHouse= "+ruralHouse+" firstDay= "+firstDay+" lastDay="+lastDay+" price="+price);
@@ -79,7 +79,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		if (dataAccess.existsOverlappingOffer(ruralHouse, firstDay, lastDay)) {
 			throw new OverlappingOfferException();		
 		}
-		
+
 		offer = dataAccess.createOffer(ruralHouse, firstDay, lastDay, price);
 
 		System.out.println("<< ApplicationFacadeImpl: createOffer=> O= " + offer);
@@ -196,9 +196,11 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 		}
 	}
 
-	public UserType getTypeOfUser(String username) {
-		UserType userType = dataAccess.getRole(username);
-		return userType;
+	public UserType getTypeOfUser(String username) throws AccountNotFoundException {
+		if(!dataAccess.existsUser(username)) {
+			throw new AccountNotFoundException();
+		}
+		return dataAccess.getRole(username);
 	}
 
 	public AbstractUser login(String username, String password) throws AuthException, AccountNotFoundException {
@@ -252,7 +254,7 @@ public final class ApplicationFacadeImpl  implements ApplicationFacadeInterface 
 	public Vector<Booking> getBookings() {
 		return dataAccess.getBookings();
 	}
-	
+
 	@Override
 	public boolean datesRangeOverlap(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
 		return dataAccess.datesRangeOverlap(startDate1, endDate1, startDate2, endDate2);

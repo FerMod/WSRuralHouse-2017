@@ -254,9 +254,10 @@ public interface ApplicationFacadeInterface  {
 	 * 
 	 * @param username the name of the account
 	 * @return the user type of the account
+	 * @throws AccountNotFoundException If any account with that username is not found 
 	 */
 	@WebMethod
-	UserType getTypeOfUser(String username);
+	UserType getTypeOfUser(String username) throws AccountNotFoundException;
 
 	/**
 	 * Login the user with the account that matches the entered user name and password
