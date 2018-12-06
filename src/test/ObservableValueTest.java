@@ -22,7 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import domain.observer.ObservedValue;
-import test.data.PersonTest;
+import test.data.serializable.PersonTest;
 
 class ObservableValueTest {
 
@@ -349,7 +349,7 @@ class ObservableValueTest {
 		} catch (Exception e) {
 			assumeNoException(e);
 		}
-		
+
 		assertEquals(expectedTestClass, value.get(), "" + observedValue.get().hashCode() + " " + value.get().hashCode());				
 	}
 
@@ -365,45 +365,4 @@ class ObservableValueTest {
 		}
 	}
 
-	//		try{
-	//
-	//
-	//			temp.deleteOnExit();
-	//			System.out.println("Temp file : " + temp.getAbsolutePath());
-	//
-	//		}catch(IOException e){
-	//
-	//			e.printStackTrace();
-	//
-	//		}
-	//		ObservedValue<String> test = new ObservedValue<String>("test cosa");
-	//		try {
-	//			FileOutputStream fileOutputStream = new FileOutputStream(tempFile.get());
-	//			try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-	//				objectOutputStream.writeObject(test);
-	//				objectOutputStream.flush();
-	//			}
-	//			System.out.println(test.get());
-	//
-	//			FileInputStream fileInputStream = new FileInputStream("D:\\Users\\Ferran Tudela\\Desktop\\TestSerializacion.txt");
-	//			ObjectInputStream objectInputStream	= new ObjectInputStream(fileInputStream);
-	//			ObservedValue<String> test2 = (ObservedValue<String>) objectInputStream.readObject();
-	//			objectInputStream.close(); 
-	//			System.out.println(test2.get());
-	//
-	//		} catch (Exception e) {
-	//			// TODO: handle exception
-	//		}
-	//		test.addListener(new ValueChangeListener() {
-	//
-	//			@Override
-	//			public <T> void onValueChanged(T oldValue, T newValue) {
-	//				System.out.println("He cambiado" +oldValue + "ahora" + newValue);
-	//
-	//			}
-	//		});
-	//
-	//
-	//		test.set("HOLAAAAAAAAAAAAAAAAAa");
-	//	}
 }
